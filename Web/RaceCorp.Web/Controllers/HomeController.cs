@@ -1,10 +1,10 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
+    using System;
     using System.Diagnostics;
 
-    using RaceCorp.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+    using RaceCorp.Web.ViewModels;
 
     public class HomeController : BaseController
     {

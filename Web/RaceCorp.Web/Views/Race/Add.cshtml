@@ -1,0 +1,32 @@
+﻿@model AddRaceInputModel
+
+
+<div>
+    <form method="post" class="form-control col-3">
+    <div>
+            <label class="label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control-sm align-content-center col-5 mb-1" />
+    </div>
+   <div>
+            <label class="label" asp-for="Location"></label>
+            <input asp-for="Location" class="form-control-sm  col-5 mb-1" />
+   </div>
+        <div>
+            <label class="label" asp-for="Length"></label>
+            <input asp-for="Length" class="form-control-sm  col-5 mb-1" />
+        </div>
+        <div>
+            <label class="label" asp-for="Date"></label>
+            <input asp-for="Date" class="form-control-sm  col-5 mb-1" />
+        </div>
+        <div>
+            <label class="label" asp-for="TrackUrl"></label>
+            <input asp-for="TrackUrl" class="form-control-sm  col-5 mb-1" />
+        </div>
+
+        <div>
+            <input type="submit" value="Add"/>
+        </div>
+   </form>
+</div>
+

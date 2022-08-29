@@ -40,4 +40,8 @@
     <ProjectReference Include="..\RaceCorp.Web.Infrastructure\RaceCorp.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\RaceCorp.Web.ViewModels\RaceCorp.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Maps\" />
+  </ItemGroup>
 </Project>
