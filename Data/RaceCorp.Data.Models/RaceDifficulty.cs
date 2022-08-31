@@ -17,5 +17,9 @@
         public int DifficultyId { get; set; }
 
         public virtual Difficulty Difficulty { get; set; }
+
+        public int Length { get; set; }
+
+        // TODO: add race length here
     }
 }

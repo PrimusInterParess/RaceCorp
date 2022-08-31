@@ -436,9 +436,6 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Length")
-                        .HasColumnType("int");
-
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
@@ -472,6 +469,9 @@ namespace RaceCorp.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("DifficultyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Length")
                         .HasColumnType("int");
 
                     b.Property<int>("RaceId")

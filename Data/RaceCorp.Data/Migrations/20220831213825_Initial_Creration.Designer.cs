@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220831114600_addDateToRaceEntity")]
-    partial class AddDateToRaceEntity
+    [Migration("20220831213825_Initial_Creration")]
+    partial class Initial_Creration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -438,9 +438,6 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Length")
-                        .HasColumnType("int");
-
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
@@ -474,6 +471,9 @@ namespace RaceCorp.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("DifficultyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Length")
                         .HasColumnType("int");
 
                     b.Property<int>("RaceId")

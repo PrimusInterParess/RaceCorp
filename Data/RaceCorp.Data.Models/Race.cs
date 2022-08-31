@@ -12,8 +12,6 @@
     {
         public string Name { get; set; }
 
-        public int Length { get; set; }
-
         public string TrackUrl { get; set; }
 
         public TimeSpan ControlTime { get; set; }
