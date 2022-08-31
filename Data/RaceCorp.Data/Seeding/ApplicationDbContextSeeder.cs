@@ -27,6 +27,8 @@
                           {
                               new RolesSeeder(),
                               new SettingsSeeder(),
+                              new DifficultySeeder(),
+                              new FormatSeeder(),
                           };
 
             foreach (var seeder in seeders)

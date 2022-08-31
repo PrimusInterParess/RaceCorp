@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RaceCorp.Web.InputViewModels
+﻿namespace RaceCorp.Web.InputViewModels
 {
+    using System;
+
     public class RaceProfileViewModel
     {
         public string Name { get; set; }

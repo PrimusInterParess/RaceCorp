@@ -2,9 +2,8 @@
 {
     using System.Linq;
 
-    using RaceCorp.Data.Common.Models;
-
     using Microsoft.EntityFrameworkCore;
+    using RaceCorp.Data.Common.Models;
 
     internal static class EntityIndexesConfiguration
     {

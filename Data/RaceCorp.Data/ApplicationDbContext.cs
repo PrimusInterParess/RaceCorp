@@ -6,11 +6,10 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using RaceCorp.Data.Common.Models;
-    using RaceCorp.Data.Models;
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using RaceCorp.Data.Common.Models;
+    using RaceCorp.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -23,6 +22,24 @@
             : base(options)
         {
         }
+
+        public DbSet<Race> Races { get; set; }
+
+        public DbSet<Location> Locations { get; set; }
+
+        public DbSet<Difficulty> Difficulties { get; set; }
+
+        public DbSet<Format> Formats { get; set; }
+
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<Town> Towns { get; set; }
+
+        public DbSet<Mountain> Mountains { get; set; }
+
+        public DbSet<RaceDifficulty> RaceDifficulties { get; set; }
+
+        public DbSet<RaceFormat> RaceFormats { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 
@@ -72,6 +89,11 @@
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            builder.Entity<Race>()
+                .HasOne(r => r.Location)
+                .WithOne(l => l.Race)
+                .HasForeignKey<Location>(l => l.RaceId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

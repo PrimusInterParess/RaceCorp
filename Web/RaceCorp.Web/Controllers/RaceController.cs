@@ -16,17 +16,7 @@
         [HttpPost]
         public IActionResult Add(AddRaceInputModel model)
         {
-            var modelData = new RaceProfileViewModel()
-            {
-                Name = model.Name,
-                Location = model.Location,
-                TrackUrl = model.TrackUrl,
-                Length = model.Length,
-                Date = model.Date,
-
-            };
-
-            return this.RedirectToAction(nameof(RaceController.RaceProfile),model);
+            return this.View(model);
         }
 
         [HttpGet]

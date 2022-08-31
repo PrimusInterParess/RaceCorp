@@ -3,12 +3,11 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data;
     using RaceCorp.Web.ViewModels.Settings;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class SettingsController : BaseController
     {
