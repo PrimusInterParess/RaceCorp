@@ -16,11 +16,11 @@
         [HttpPost]
         public IActionResult Add(AddRaceInputModel model)
         {
-            return this.View(model);
+            return this.RedirectToAction("RaceProfile", model);
         }
 
         [HttpGet]
-        public IActionResult RaceProfile(RaceProfileViewModel model)
+        public IActionResult RaceProfile(AddRaceInputModel model)
         {
             return this.View(model);
         }

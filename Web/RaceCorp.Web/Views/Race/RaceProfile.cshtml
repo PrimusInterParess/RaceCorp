@@ -1,12 +1,15 @@
-﻿@model RaceProfileViewModel
+﻿@model AddRaceInputModel
 
 <div>
-    <h1>Race Profile Page</h1>
-</div>
+    <div>
+        <h1>Race Profile Page</h1>
+    </div>
 
-<div>
-    <p>@Model.Name
-    </p>
+    <div>
+        <p>@Model.Name</p>
+    </div>
+
+    <iframe src=@Model.TrackUrl width="500" height="500" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 
