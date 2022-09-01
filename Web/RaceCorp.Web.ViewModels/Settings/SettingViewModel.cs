@@ -1,9 +1,8 @@
 ﻿namespace RaceCorp.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

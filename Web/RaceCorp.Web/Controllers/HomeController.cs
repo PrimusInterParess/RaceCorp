@@ -2,15 +2,39 @@
 {
     using System;
     using System.Diagnostics;
-
+    using System.Web.Mvc;
     using Microsoft.AspNetCore.Mvc;
+    using RaceCorp.Services.Data;
     using RaceCorp.Web.ViewModels;
+    using RaceCorp.Web.ViewModels.HomeViewModels;
+    using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+    using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
     public class HomeController : BaseController
     {
+        private readonly IGetIndexPageCategoriesList getCattegoryListService;
+
+        public HomeController(IGetIndexPageCategoriesList getCattegoryListService)
+        {
+            this.getCattegoryListService = getCattegoryListService;
+        }
+
+        [HttpGet]
         public IActionResult Index()
         {
-            return this.View();
+            var indexViewModel = this.getCattegoryListService.GetCategories();
+
+            return this.View(indexViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Index(FormCollection collection)
+        {
+
+
+            var indexViewModel = this.getCattegoryListService.GetCategories();
+
+            return this.View(indexViewModel);
         }
 
         public IActionResult Privacy()

@@ -29,6 +29,8 @@
                               new SettingsSeeder(),
                               new DifficultySeeder(),
                               new FormatSeeder(),
+                              new TownSeeder(),
+                              new MountainSeeder(),
                           };
 
             foreach (var seeder in seeders)

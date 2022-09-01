@@ -1,7 +1,77 @@
-﻿@using RaceCorp.Common
+﻿@model IndexViewModel
+
 @{
     this.ViewData["Title"] = "Home Page";
+
+    var towns = Model.Towns.Select(t => new SelectListItem(t.Value, t.Key));
+    var mountains = Model.Mountains.Select(t => new SelectListItem(t.Value, t.Key));
+    var formats = Model.Formats.Select(t => new SelectListItem(t.Value, t.Key));
+    var difficulties = Model.Difficulties.Select(t => new SelectListItem(t.Value, t.Key));
+
 }
 
 
-
+<div class="row">
+    <div class="col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Towns</h5>
+                <p class="card-text">You can select races from @Model.Towns.Count() towns around the country !</p>
+                <div class="form-group">
+                    <form id="towns" method="post">
+                        <select class="form-control text-center" asp-items="@towns">
+                        </select>
+                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Mountains</h5>
+                <p class="card-text">Our contry mountain range is wide and beautiful.We have races in @Model.Mountains.Count() different mountain ranges! </p>
+                <div class="form-group">
+                    <form id="towns" method="post">
+                        <select class="form-control text-center" asp-items="@mountains">
+                        </select>
+                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Formats</h5>
+                <p class="card-text">There are @Model.Formats.Count() race formats you can select! </p>
+                 <div class="form-group">
+                    <form id="towns" method="post">
+                        <select class="form-control text-center" asp-items="@formats">
+                        </select>
+                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select"/>
+                    </form>
+                </div>
+              
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Difficulties</h5>
+                <p class="card-text">If you want challenges pick race difficulty!</p>
+                <div class="form-group">
+                    <form id="towns" method="post">
+                        <select class="form-control text-center" asp-items="@difficulties">
+                        </select>
+                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select" />
+                    </form>
+                </div>
+              
+            </div>
+        </div>
+    </div>
+</div>
