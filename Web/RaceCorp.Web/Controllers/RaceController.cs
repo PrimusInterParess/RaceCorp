@@ -3,7 +3,7 @@
     using System;
 
     using Microsoft.AspNetCore.Mvc;
-    using RaceCorp.Web.InputViewModels;
+    using RaceCorp.Web.ViewModels.RaceViewModels;
 
     public class RaceController : Controller
     {
@@ -14,15 +14,10 @@
         }
 
         [HttpPost]
-        public IActionResult Add(AddRaceInputModel model)
+        public IActionResult Add(AddRaceInputViewModel model)
         {
-            return this.RedirectToAction("RaceProfile", model);
-        }
-
-        [HttpGet]
-        public IActionResult RaceProfile(AddRaceInputModel model)
-        {
-            return this.View(model);
+            // TODO:Redirect to ProfilePage;
+            return this.Redirect("/");
         }
     }
 }

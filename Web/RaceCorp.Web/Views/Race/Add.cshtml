@@ -1,39 +1,61 @@
-﻿@model AddRaceInputModel
+﻿@model AddRaceInputViewModel
 
 
 <div class="text-center">
-    <h1>Create Race</h1>
+    <h1>Add Race</h1>
     <div class="col-md-4 offset-md-4">
         <form method="post" class="form-group">
             <div>
                 <label class="label" asp-for="Name"></label>
                 <input asp-for="Name" class="form-control  mb-1" />
+                <span></span>
             </div>
             <div>
                 <label class="label" asp-for="Town"></label>
                 <input asp-for="Town" class="form-control  mb-1" />
+                <span></span>
+
+            </div>
+            <div>
+                <label class="label" asp-for="Mountain"></label>
+                <input asp-for="Mountain" class="form-control mb-1" />
+                <span></span>
             </div>
             <div>
                 <label class="label" asp-for="Length"></label>
                 <input asp-for="Length" class="form-control mb-1" />
+                <span></span>
+            </div>
+            <div>
+                <label class="label" asp-for="ControlTime"></label>
+                <input asp-for="ControlTime" class="form-control mb-1" />
+                <span></span>
             </div>
             <div>
                 <label class="label" asp-for="Date"></label>
                 <input asp-for="Date" class="form-control mb-1" />
+                <span></span>
             </div>
             <div>
                 <label class="label" asp-for="TrackUrl"></label>
                 <input asp-for="TrackUrl" class="form-control mb-1" />
+                <span></span>
             </div>
             <div>
                 <label class="label" asp-for="Description"></label>
-                <input asp-for="Description" class="form-control mb-1" />
+                <textarea asp-for="Description" class="form-control mb-1"></textarea>
             </div>
+           @* <div>
+                <label class="label" asp-for="Difficulty"></label>
+                <input asp-for="Difficulty" class="form-control mb-1" />
+                <span></span>
+            </div>*@
             <div>
-                <label class="label" asp-for="Description"></label>
-                <input asp-for="Description" class="form-control mb-1" />
-            </div>
+                <label class="label" asp-for="Format"></label>
+                <input asp-for="Format" class="form-control mb-1" />
+                <span></span>
 
+            </div>
             <div>
                 <input type="submit" value="Add" />
             </div>

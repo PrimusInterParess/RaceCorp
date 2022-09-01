@@ -1,7 +1,6 @@
 ﻿namespace RaceCorp.Web.ViewModels.HomeViewModels
 {
     using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class IndexViewModel
     {
@@ -16,6 +15,5 @@
         public string Id { get; set; }
 
         public string Type { get; set; }
-
     }
 }

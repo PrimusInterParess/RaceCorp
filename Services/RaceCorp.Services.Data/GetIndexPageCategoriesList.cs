@@ -13,21 +13,22 @@
 
     public class GetIndexPageCategoriesList : IGetIndexPageCategoriesList
     {
+        private readonly IDifficultiesServiceList getDifficultiesServiceList;
+        private readonly IFormatServicesList formatServicesList;
         private readonly IDeletableEntityRepository<Town> townsRepo;
-        private readonly IDeletableEntityRepository<Difficulty> difficultiesRepo;
-        private readonly IDeletableEntityRepository<Mountain> mountansRepo;
+        private readonly IDeletableEntityRepository<Mountain> mountainsRepo;
         private readonly IDeletableEntityRepository<Format> formatRepo;
 
         public GetIndexPageCategoriesList(
+            IDifficultiesServiceList getDifficultiesServiceList,
+            IFormatServicesList formatServicesList,
             IDeletableEntityRepository<Town> townsRepo,
-            IDeletableEntityRepository<Difficulty> difficultiesRepo,
-            IDeletableEntityRepository<Mountain> mountansRepo,
-            IDeletableEntityRepository<Format> formatRepo)
+            IDeletableEntityRepository<Mountain> mountainsRepo)
         {
+            this.getDifficultiesServiceList = getDifficultiesServiceList;
+            this.formatServicesList = formatServicesList;
             this.townsRepo = townsRepo;
-            this.difficultiesRepo = difficultiesRepo;
-            this.mountansRepo = mountansRepo;
-            this.formatRepo = formatRepo;
+            this.mountainsRepo = mountainsRepo;
         }
 
         public IndexViewModel GetCategories()
@@ -38,23 +39,15 @@
                 Name = t.Name,
             }).ToHashSet();
 
-            var mountains = this.mountansRepo.All().Select(m => new MountainIndexViewModel
+            var mountains = this.mountainsRepo.All().Select(m => new MountainIndexViewModel
             {
                 Id = m.Id,
                 Name = m.Name,
             }).ToHashSet();
 
-            var formats = this.formatRepo.All().Select(f => new FormatIndexViewModel
-            {
-                Id = f.Id,
-                Name = f.Name,
-            }).ToHashSet();
+            var formats = this.formatServicesList.GetFormats();
 
-            var difficulties = this.difficultiesRepo.All().Select(d => new DifficultyIndexViewModel
-            {
-                Id = d.Id,
-                Name = d.Level.ToString(),
-            }).ToHashSet();
+            var difficulties = this.getDifficultiesServiceList.GetDifficulties();
 
             return new IndexViewModel
             {
@@ -64,6 +57,5 @@
                 Difficulties = difficulties.Select(d => new KeyValuePair<string, string>(d.Id.ToString(), d.Name)),
             };
         }
-
     }
 }

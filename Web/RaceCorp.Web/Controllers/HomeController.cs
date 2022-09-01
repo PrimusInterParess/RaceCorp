@@ -2,13 +2,11 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Web.Mvc;
+
     using Microsoft.AspNetCore.Mvc;
+
     using RaceCorp.Services.Data;
     using RaceCorp.Web.ViewModels;
-    using RaceCorp.Web.ViewModels.HomeViewModels;
-    using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-    using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
     public class HomeController : BaseController
     {
@@ -28,10 +26,8 @@
         }
 
         [HttpPost]
-        public IActionResult Index(FormCollection collection)
+        public IActionResult Index(string inputData)
         {
-
-
             var indexViewModel = this.getCattegoryListService.GetCategories();
 
             return this.View(indexViewModel);

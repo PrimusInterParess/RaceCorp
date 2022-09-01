@@ -3,9 +3,9 @@ namespace RaceCorp.Data.Models
 {
     using System;
 
-    using RaceCorp.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+
+    using RaceCorp.Data.Common.Models;
 
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity
     {
