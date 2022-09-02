@@ -1,14 +1,11 @@
 ﻿namespace RaceCorp.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
-    using RaceCorp.Data.Models.Enums;
+
     using RaceCorp.Web.ViewModels.HomeViewModels;
 
     public class GetIndexPageCategoriesList : IGetIndexPageCategoriesList
@@ -17,7 +14,6 @@
         private readonly IFormatServicesList formatServicesList;
         private readonly IDeletableEntityRepository<Town> townsRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainsRepo;
-        private readonly IDeletableEntityRepository<Format> formatRepo;
 
         public GetIndexPageCategoriesList(
             IDifficultiesServiceList getDifficultiesServiceList,
@@ -54,7 +50,7 @@
                 Towns = towns.Select(t => new KeyValuePair<string, string>(t.Id.ToString(), t.Name)),
                 Mountains = mountains.Select(m => new KeyValuePair<string, string>(m.Id.ToString(), m.Name)),
                 Formats = formats.Select(f => new KeyValuePair<string, string>(f.Id.ToString(), f.Name)),
-                Difficulties = difficulties.Select(d => new KeyValuePair<string, string>(d.Id.ToString(), d.Name)),
+                Difficulties = difficulties.Select(d => new KeyValuePair<string, string>(d.Id.ToString(), d.Level)),
             };
         }
     }

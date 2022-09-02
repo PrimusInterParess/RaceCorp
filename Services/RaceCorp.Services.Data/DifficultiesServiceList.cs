@@ -1,10 +1,7 @@
 ﻿namespace RaceCorp.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
@@ -21,10 +18,10 @@
 
         public HashSet<DifficultyViewModel> GetDifficulties()
         {
-           return this.difficultiesRepo.All().Select(d => new DifficultyViewModel
+            return this.difficultiesRepo.All().Select(d => new DifficultyViewModel
             {
                 Id = d.Id,
-                Name = d.Level.ToString(),
+                Level = d.Level.ToString(),
             }).ToHashSet();
         }
     }

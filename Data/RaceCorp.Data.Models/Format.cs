@@ -12,6 +12,6 @@
     {
         public string Name { get; set; }
 
-        public virtual ICollection<RaceFormat> Races { get; set; } = new HashSet<RaceFormat>();
+        public virtual ICollection<Race> Races { get; set; } = new HashSet<Race>();
     }
 }

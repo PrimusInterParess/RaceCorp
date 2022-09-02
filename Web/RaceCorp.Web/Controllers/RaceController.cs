@@ -16,8 +16,21 @@
         [HttpPost]
         public IActionResult Add(AddRaceInputViewModel model)
         {
+            int raceId = 0;
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
             // TODO:Redirect to ProfilePage;
-            return this.Redirect("/");
+
+            return this.RedirectToAction(nameof(RaceController.RaceProfile), nameof(RaceController), new { raceId = raceId });
+        }
+
+        public IActionResult RaceProfile(int raceId)
+        {
+            return this.View();
         }
     }
 }

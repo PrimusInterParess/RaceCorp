@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RaceCorp.Data.Common.Repositories;
-using RaceCorp.Data.Models;
-using RaceCorp.Web.ViewModels.FormatViewModels;
-using RaceCorp.Web.ViewModels.HomeViewModels;
-
-namespace RaceCorp.Services.Data
+﻿namespace RaceCorp.Services.Data
 {
-    public class FormatServiceList:IFormatServicesList
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using RaceCorp.Data.Common.Repositories;
+    using RaceCorp.Data.Models;
+    using RaceCorp.Web.ViewModels.FormatViewModels;
+
+    public class FormatServiceList : IFormatServicesList
     {
         private readonly IDeletableEntityRepository<Format> formatRepo;
 
@@ -21,11 +18,11 @@ namespace RaceCorp.Services.Data
 
         public HashSet<FormatViewModel> GetFormats()
         {
-           return this.formatRepo.All().Select(f => new FormatViewModel()
-           {
-               Id = f.Id,
-               Name = f.Name,
-           }).ToHashSet();
+            return this.formatRepo.All().Select(f => new FormatViewModel()
+            {
+                Id = f.Id,
+                Name = f.Name,
+            }).ToHashSet();
         }
     }
 }

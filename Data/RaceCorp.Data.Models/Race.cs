@@ -12,9 +12,9 @@
     {
         public string Name { get; set; }
 
-        public string TrackUrl { get; set; }
+        public int FormatId { get; set; }
 
-        public TimeSpan ControlTime { get; set; }
+        public virtual Format Format { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -24,14 +24,16 @@
 
         public virtual ApplicationUser User { get; set; }
 
-        public int LocationId { get; set; }
+        public int TownId { get; set; }
 
-        public virtual Location Location { get; set; }
+        public virtual Town Town { get; set; }
+
+        public int MointainId { get; set; }
+
+        public virtual Mountain Mountain { get; set; }
 
         public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
 
         public virtual ICollection<RaceDifficulty> Difficulties { get; set; } = new HashSet<RaceDifficulty>();
-
-        public virtual ICollection<RaceFormat> Formats { get; set; } = new HashSet<RaceFormat>();
     }
 }

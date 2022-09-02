@@ -20,6 +20,12 @@
 
         public int Length { get; set; }
 
+        public TimeSpan ControlTime { get; set; }
+
+        public string TrackUrl { get; set; }
+
+        public DateTime StartTime { get; set; }
+
         // TODO: add race length here
     }
 }

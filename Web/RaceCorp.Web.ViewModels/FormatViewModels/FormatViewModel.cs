@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RaceCorp.Web.ViewModels.FormatViewModels
+﻿namespace RaceCorp.Web.ViewModels.FormatViewModels
 {
     public class FormatViewModel
     {
