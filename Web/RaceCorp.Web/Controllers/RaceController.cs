@@ -9,10 +9,12 @@
     public class RaceController : Controller
     {
         private readonly IFormatServices formatsList;
+        private readonly IDifficultyService difficultyService;
 
-        public RaceController(IFormatServices formatsList)
+        public RaceController(IFormatServices formatsList, IDifficultyService difficultyService)
         {
             this.formatsList = formatsList;
+            this.difficultyService = difficultyService;
         }
 
         [HttpGet]
@@ -21,6 +23,7 @@
             var model = new AddRaceInputViewModel()
             {
                 Formats = this.formatsList.GetFormatKVP(),
+                DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
             };
 
             return this.View(model);

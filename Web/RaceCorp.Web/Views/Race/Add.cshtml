@@ -1,12 +1,13 @@
 ﻿@model AddRaceInputViewModel
 
 @{
-    this.ViewData["Title"] = "Add Race";
+    this.ViewData["Title"] = "Create Race";
     var formats = Model.Formats.Select(t => new SelectListItem(t.Value, t.Key));
+    var difficulties = Model.DifficultiesKVP.Select(t => new SelectListItem(t.Value, t.Key));
 }
 
 <div class="text-center">
-    <h1>Add Race</h1>
+    <h1>@ViewData["Title"]</h1>
     <div class="col-md-4 offset-md-4">
         <form method="post" class="form-group" enctype="multipart/form-data">
             <div class="form-group">
@@ -40,24 +41,63 @@
                 <textarea asp-for="Description" class="form-control row="5"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-control" id="DifficultiesContainer">
-                <label asp-for="Difficulties"></label>
-                <a class="btn btn-succsess" onclick="addAnotherItem()">+</a>
+           
+                <label class="mb-2 mt-2"><b>Traces</b></label>
+            
+          <div>
+                <button class="btn border border-dark" onclick="addAnotherItem(event)">add</button>
+                <button class="btn border border-dark"  onclick="removeElement(event)">remove</button>
+            </div>
+            <div class="mb-2 mt-2" id="ol">
             </div>
             <div>
-                <input type="submit" value="Add" />
+                <button class="btn border border-dark mt-2" type="submit">Create</button>
             </div>
         </form>
     </div>
 </div>
 @section Scripts{
     <script>
+        var count = 0;
 
-        function addAnotherItem() {
+        function addAnotherItem(event) {
 
-            console.log('cfnsdjbnfsa');
-            var childElement = $("<input type="text" name='' id='' />")
-            $("#DifficultiesContainer").append(childElement);
+            event.preventDefault();
+
+            count += 1;
+            var childElement = $(`<div class="form-control mb-3" id=${count}><div  class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1">Length</span>
+  <input type="text" class="form-control" placeholder="Trace Length" aria-label="Trace Length in kilometers" aria-describedby="basic-addon1">
+</div>
+
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon2">Control time</span>
+  <input type="text" class="form-control" placeholder="Trace Control time in hours" aria-label="ControlTime" aria-describedby="basic-addon2">
+</div>
+
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon3">Start Time</span>
+  <input type="text" class="form-control" placeholder="Start time : hh:MM:ss" id="basic-url" aria-describedby="basic-addon3">
+</div>
+
+<div class="input-group mb-3">
+  <span class="input-group-text">Trace URL</span>
+  <input type="text" class="form-control" placeholder="Trace url" >
+</div>
+</div>`);
+            $("#ol").append(childElement);
+        }
+
+        function removeElement(event) {
+
+            event.preventDefault();
+
+            if (count > 0) {
+                var childElement = document.getElementById(count);
+                childElement.remove();
+                count -= 1;
+            }
+
         }
     </script>
 }
