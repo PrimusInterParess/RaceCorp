@@ -5,52 +5,36 @@
 
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
-
-    using RaceCorp.Web.ViewModels.HomeViewModels;
+    using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.CommonViewModels;
 
     public class GetIndexPageCategoriesList : IGetIndexPageCategoriesList
     {
-        private readonly IDifficultiesServiceList getDifficultiesServiceList;
-        private readonly IFormatServicesList formatServicesList;
-        private readonly IDeletableEntityRepository<Town> townsRepo;
-        private readonly IDeletableEntityRepository<Mountain> mountainsRepo;
+        private readonly IDifficultyService getDifficultiesServiceList;
+        private readonly IFormatServices formatServicesList;
+        private readonly ITownService townService;
+        private readonly IMountanService mountanService;
 
         public GetIndexPageCategoriesList(
-            IDifficultiesServiceList getDifficultiesServiceList,
-            IFormatServicesList formatServicesList,
-            IDeletableEntityRepository<Town> townsRepo,
-            IDeletableEntityRepository<Mountain> mountainsRepo)
+            IDifficultyService getDifficultiesServiceList,
+            IFormatServices formatServicesList,
+            ITownService townService,
+            IMountanService mountanService)
         {
             this.getDifficultiesServiceList = getDifficultiesServiceList;
             this.formatServicesList = formatServicesList;
-            this.townsRepo = townsRepo;
-            this.mountainsRepo = mountainsRepo;
+            this.townService = townService;
+            this.mountanService = mountanService;
         }
 
         public IndexViewModel GetCategories()
         {
-            var towns = this.townsRepo.All().Select(t => new TownIndexViewModel
-            {
-                Id = t.Id,
-                Name = t.Name,
-            }).ToHashSet();
-
-            var mountains = this.mountainsRepo.All().Select(m => new MountainIndexViewModel
-            {
-                Id = m.Id,
-                Name = m.Name,
-            }).ToHashSet();
-
-            var formats = this.formatServicesList.GetFormats();
-
-            var difficulties = this.getDifficultiesServiceList.GetDifficulties();
-
             return new IndexViewModel
             {
-                Towns = towns.Select(t => new KeyValuePair<string, string>(t.Id.ToString(), t.Name)),
-                Mountains = mountains.Select(m => new KeyValuePair<string, string>(m.Id.ToString(), m.Name)),
-                Formats = formats.Select(f => new KeyValuePair<string, string>(f.Id.ToString(), f.Name)),
-                Difficulties = difficulties.Select(d => new KeyValuePair<string, string>(d.Id.ToString(), d.Level)),
+                Towns = this.townService.GetTownsKVP(),
+                Mountains = this.mountanService.GetMountainsKVP(),
+                Formats = this.formatServicesList.GetFormatKVP(),
+                Difficulties = this.getDifficultiesServiceList.GetDifficultiesKVP(),
             };
         }
     }

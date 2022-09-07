@@ -4,8 +4,7 @@
     using System.Diagnostics;
 
     using Microsoft.AspNetCore.Mvc;
-
-    using RaceCorp.Services.Data;
+    using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels;
 
     public class HomeController : BaseController

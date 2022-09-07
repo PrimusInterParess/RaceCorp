@@ -5,6 +5,7 @@
 
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
+    using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
 
     public class SettingsService : ISettingsService

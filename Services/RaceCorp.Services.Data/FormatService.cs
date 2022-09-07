@@ -5,13 +5,14 @@
 
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
+    using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.FormatViewModels;
 
-    public class FormatServiceList : IFormatServicesList
+    public class FormatService : IFormatServices
     {
         private readonly IDeletableEntityRepository<Format> formatRepo;
 
-        public FormatServiceList(IDeletableEntityRepository<Format> formatRepo)
+        public FormatService(IDeletableEntityRepository<Format> formatRepo)
         {
             this.formatRepo = formatRepo;
         }
@@ -23,6 +24,16 @@
                 Id = f.Id,
                 Name = f.Name,
             }).ToHashSet();
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> GetFormatKVP()
+        {
+            return this.formatRepo.All()
+                .Select(f => new FormatViewModel()
+            {
+                Id = f.Id,
+                Name = f.Name,
+            }).Select(f => new KeyValuePair<string, string>(f.Id.ToString(), f.Name));
         }
     }
 }

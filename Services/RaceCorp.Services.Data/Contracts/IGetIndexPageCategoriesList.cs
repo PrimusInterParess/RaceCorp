@@ -1,6 +1,6 @@
-﻿namespace RaceCorp.Services.Data
+﻿namespace RaceCorp.Services.Data.Contracts
 {
-    using RaceCorp.Web.ViewModels.HomeViewModels;
+    using RaceCorp.Web.ViewModels.CommonViewModels;
 
     public interface IGetIndexPageCategoriesList
     {

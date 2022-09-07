@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
-    using RaceCorp.Services.Data;
+    using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Settings;
 
     public class SettingsController : BaseController

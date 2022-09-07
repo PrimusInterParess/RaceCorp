@@ -5,30 +5,43 @@
     using System.ComponentModel.DataAnnotations;
 
     using Microsoft.AspNetCore.Http;
-
+    using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Web.ViewModels.DifficultyViewModels;
+    using RaceCorp.Web.ViewModels.FormatViewModels;
+
+    using static RaceCorp.Web.ViewModels.Constants.Formating;
+    using static RaceCorp.Web.ViewModels.Constants.Messages;
+    using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
+    using static RaceCorp.Web.ViewModels.Constants.StringValues;
 
     public class AddRaceInputViewModel
     {
-        [Display(Name = "Race name")]
-        [MinLength(3)]
+        [Required]
+        [Display(Name = DisplayNameRace)]
+        [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Name { get; set; }
 
-        [MinLength(3)]
+        [Required]
+        [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Town { get; set; }
 
-        [MinLength(3)]
+        [Required]
+        [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Mountain { get; set; }
 
         public DateTime Date { get; set; }
 
-        [MinLength(20)]
+        [StringLength(DefaultFormatMaxValue, MinimumLength = DefaultFormatMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
+
+        [Display(Name = DisplayNameFormat)]
+        public string FormatId { get; set; }
+
+        [StringLength(DefaultDescriptionMaxValue, MinimumLength = DefaultDescriptionMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Description { get; set; }
 
-        public ICollection<RaceDifficultyViewModel> Difficulties { get; set; }
+        public ICollection<RaceDifficultyViewModel> Difficulties { get; set; } = new List<RaceDifficultyViewModel>();
 
-        [MinLength(1)]
-        public string Format { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> Formats { get; set; } = new List<KeyValuePair<string, string>>();
 
         // TODO: input for image uploads
     }

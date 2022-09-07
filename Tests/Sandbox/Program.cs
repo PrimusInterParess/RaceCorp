@@ -17,6 +17,7 @@
     using RaceCorp.Data.Repositories;
     using RaceCorp.Data.Seeding;
     using RaceCorp.Services.Data;
+    using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Messaging;
 
     public static class Program

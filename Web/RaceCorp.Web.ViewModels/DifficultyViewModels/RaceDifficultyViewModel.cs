@@ -4,14 +4,17 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
+    using static RaceCorp.Web.ViewModels.Constants.Messages;
+    using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
+
     public class RaceDifficultyViewModel
     {
         [Required]
-        [MinLength(1)]
+        [MinLength(DefaultRaceMinLength, ErrorMessage = DefaultRaceLengthErrorMessage)]
         public int Length { get; set; }
 
         [Required]
-        [MinLength(1)]
+        [Range(DefaultControlTimeMinValue, DefaultControlTimeMaxValue, ErrorMessage = DefaultControlTimeErrorMessage)]
         public TimeSpan ControlTime { get; set; }
 
         [Required]
@@ -20,7 +23,6 @@
 
         [Required]
         public DateTime StartTime { get; set; }
-
 
         public int DifficultyId { get; set; }
 

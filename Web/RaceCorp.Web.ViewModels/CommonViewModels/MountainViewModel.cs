@@ -1,6 +1,6 @@
-﻿namespace RaceCorp.Web.ViewModels.HomeViewModels
+﻿namespace RaceCorp.Web.ViewModels.CommonViewModels
 {
-    public class TownIndexViewModel
+    public class MountainViewModel
     {
         public int Id { get; set; }
 

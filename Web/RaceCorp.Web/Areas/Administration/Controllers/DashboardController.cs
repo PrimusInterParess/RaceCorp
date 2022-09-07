@@ -1,7 +1,7 @@
 ﻿namespace RaceCorp.Web.Areas.Administration.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using RaceCorp.Services.Data;
+    using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Administration.Dashboard;
 
     public class DashboardController : AdministrationController

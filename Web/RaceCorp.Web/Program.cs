@@ -15,7 +15,9 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Data.Repositories;
     using RaceCorp.Data.Seeding;
+    using RaceCorp.Services;
     using RaceCorp.Services.Data;
+    using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Services.Messaging;
     using RaceCorp.Web.ViewModels;
@@ -65,8 +67,10 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetIndexPageCategoriesList, GetIndexPageCategoriesList>();
-            services.AddTransient<IDifficultiesServiceList, DifficultiesServiceList>();
-            services.AddTransient<IFormatServicesList, FormatServiceList>();
+            services.AddTransient<IDifficultyService, DifficultyService>();
+            services.AddTransient<IFormatServices, FormatService>();
+            services.AddTransient<ITownService, TownService>();
+            services.AddTransient<IMountanService, MountainService>();
         }
 
         private static void Configure(WebApplication app)

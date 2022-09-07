@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.HomeViewModels
+﻿namespace RaceCorp.Web.ViewModels.CommonViewModels
 {
     using System.Collections.Generic;
 

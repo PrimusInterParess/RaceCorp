@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Services.Data
+﻿namespace RaceCorp.Services.Data.Contracts
 {
     using System.Collections.Generic;
 
