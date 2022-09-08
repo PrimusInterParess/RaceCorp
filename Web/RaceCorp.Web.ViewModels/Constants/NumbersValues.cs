@@ -2,7 +2,6 @@
 {
     public static class NumbersValues
     {
-
         // race formats
         public const int DefaultFormatMinValue = 1;
         public const int DefaultFormatMaxValue = 10;

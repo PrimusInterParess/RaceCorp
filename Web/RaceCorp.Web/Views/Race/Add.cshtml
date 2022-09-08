@@ -3,7 +3,7 @@
 @{
     this.ViewData["Title"] = "Create Race";
     var formats = Model.Formats.Select(t => new SelectListItem(t.Value, t.Key));
-    var difficulties = Model.DifficultiesKVP.Select(t => new SelectListItem(t.Value, t.Key));
+    var json =new JsonResult(Model.DifficultiesKVP.Select(t => new SelectListItem(t.Value, t.Key)));
 }
 
 <div class="text-center">
@@ -61,31 +61,52 @@
         var count = 0;
 
         function addAnotherItem(event) {
-
             event.preventDefault();
+            //Difficulties
+            //Difficulties[${count}].Length
+            //Difficulties[${count}].ControlTime
+            //Difficulties[${count}].TrackUrl
+            //Difficulties[${count}].StartTime
+            //Difficulties[${count}].DifficultyId
+            //Difficulties
 
-            count += 1;
+
+            
             var childElement = $(`<div class="form-control mb-3" id=${count}><div  class="input-group mb-3">
   <span class="input-group-text" id="basic-addon1">Length</span>
-  <input type="text" class="form-control" placeholder="Trace Length" aria-label="Trace Length in kilometers" aria-describedby="basic-addon1">
+  <input type="text" class="form-control" name='Difficulties[${count}].Length' placeholder="Trace Length in kilometers">
+  <span asp-validation-for="Difficulties[${count}].Length" class="text-danger"></span>
 </div>
 
 <div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon3">Difficulty</span>
+  <input type="text" class="form-control" name='Difficulties[${count}].Difficulty' placeholder="Hard,Middium,Normal,Easy">
+  <span asp-validation-for="Difficulties[${count}].Difficulty" class="text-danger"></span>
+
+</div>
+<div class="input-group mb-3">
   <span class="input-group-text" id="basic-addon2">Control time</span>
-  <input type="text" class="form-control" placeholder="Trace Control time in hours" aria-label="ControlTime" aria-describedby="basic-addon2">
+  <input type="text" class="form-control" name='Difficulties[${count}].ControlTime'  placeholder="Trace Control time in hours">
+  <span asp-validation-for="Difficulties[${count}].ControlTime" class="text-danger"></span>
+
 </div>
 
 <div class="input-group mb-3">
   <span class="input-group-text" id="basic-addon3">Start Time</span>
-  <input type="text" class="form-control" placeholder="Start time : hh:MM:ss" id="basic-url" aria-describedby="basic-addon3">
+  <input type="text" class="form-control" name='Difficulties[${count}].StartTime' placeholder="Start time : hh:MM:ss">
+  <span asp-validation-for="Difficulties[${count}].StartTime" class="text-danger"></span>
+
 </div>
 
 <div class="input-group mb-3">
   <span class="input-group-text">Trace URL</span>
-  <input type="text" class="form-control" placeholder="Trace url" >
+  <input type="text" name='Difficulties[${count}].TrackUrl' class="form-control" placeholder="Trace url" >
+  <span asp-validation-for="Difficulties[${count}].TrackUrl" class="text-danger"></span>
+
 </div>
 </div>`);
             $("#ol").append(childElement);
+            count += 1;
         }
 
         function removeElement(event) {
@@ -99,6 +120,9 @@
             }
 
         }
+
+
+
     </script>
 }
 

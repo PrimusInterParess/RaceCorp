@@ -10,22 +10,21 @@
     public class RaceDifficultyViewModel
     {
         [Required]
-        [MinLength(DefaultRaceMinLength, ErrorMessage = DefaultRaceLengthErrorMessage)]
-        public int Length { get; set; }
+        [Range(DefaultRaceMinLength, 200)]
+        public double Length { get; set; }
 
         [Required]
-        [Range(DefaultControlTimeMinValue, DefaultControlTimeMaxValue, ErrorMessage = DefaultControlTimeErrorMessage)]
-        public TimeSpan ControlTime { get; set; }
+        [StringLength(DefaultStrMaxValue,MinimumLength = DefaultStrMinValue,ErrorMessage = DefaultStringLengthErrorMessage)]
+        public string Difficulty { get; set; }
 
         [Required]
-        [Url]
-        public string TrackUrl { get; set; }
+        public int ControlTime { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }
 
-        public int DifficultyId { get; set; }
-
-        public IEnumerable<DifficultyViewModel> Difficulties { get; set; } = new List<DifficultyViewModel>();
+        [Required]
+        [Url]
+        public string TrackUrl { get; set; }
     }
 }
