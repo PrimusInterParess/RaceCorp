@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Services.Data.Contracts;
@@ -10,11 +11,13 @@
     {
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
+        private readonly ICreateRaceService createRaceService;
 
-        public RaceController(IFormatServices formatsList, IDifficultyService difficultyService)
+        public RaceController(IFormatServices formatsList, IDifficultyService difficultyService, ICreateRaceService createRaceService)
         {
             this.formatsList = formatsList;
             this.difficultyService = difficultyService;
+            this.createRaceService = createRaceService;
         }
 
         [HttpGet]
@@ -30,19 +33,19 @@
         }
 
         [HttpPost]
-        public IActionResult Add(AddRaceInputViewModel model)
+        public async Task<IActionResult> Add(AddRaceInputViewModel model)
         {
-            // TODD: validate Data!
-            int raceId = 0;
-
             if (!this.ModelState.IsValid)
             {
                 model.Formats = this.formatsList.GetFormatKVP();
+
                 return this.View(model);
             }
 
+            await this.createRaceService.CreateAsync(model);
+
             // TODO:Redirect to ProfilePage;
-            return this.RedirectToAction(nameof(RaceController.RaceProfile), nameof(RaceController), new { raceId = raceId });
+            return this.Redirect("/");
         }
 
         public IActionResult RaceProfile(int raceId)

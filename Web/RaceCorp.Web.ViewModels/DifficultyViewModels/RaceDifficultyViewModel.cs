@@ -11,14 +11,13 @@
     {
         [Required]
         [Range(DefaultRaceMinLength, 200)]
-        public double Length { get; set; }
+        public int Length { get; set; }
 
         [Required]
-        [StringLength(DefaultStrMaxValue,MinimumLength = DefaultStrMinValue,ErrorMessage = DefaultStringLengthErrorMessage)]
-        public string Difficulty { get; set; }
+        public string DifficultyId { get; set; }
 
         [Required]
-        public int ControlTime { get; set; }
+        public TimeSpan ControlTime { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }

@@ -12,7 +12,7 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220902060621_InitialCreation")]
+    [Migration("20220908121726_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -447,6 +447,9 @@ namespace RaceCorp.Data.Migrations
 
                     b.Property<int>("RaceId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TrackUrl")
                         .HasColumnType("nvarchar(max)");

@@ -331,7 +331,8 @@ namespace RaceCorp.Data.Migrations
                     DifficultyId = table.Column<int>(type: "int", nullable: false),
                     Length = table.Column<int>(type: "int", nullable: false),
                     ControlTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    TrackUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TrackUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
