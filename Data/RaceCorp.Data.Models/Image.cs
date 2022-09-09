@@ -1,28 +1,13 @@
 ﻿namespace RaceCorp.Data.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     using RaceCorp.Data.Common.Models;
 
-    public class Image : BaseModel<string>
+    public class Image : BaseDeletableModel<int>
     {
-        public Image()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
+        public string ImagePath { get; set; }
 
         public int RaceId { get; set; }
 
         public virtual Race Race { get; set; }
-
-        public string AddByUserId { get; set; }
-
-        public virtual ApplicationUser AddByUser { get; set; }
-
-        public string Extension { get; set; }
     }
 }

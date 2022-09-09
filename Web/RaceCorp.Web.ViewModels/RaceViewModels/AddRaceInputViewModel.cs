@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using RaceCorp.Data.Models;
     using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.FormatViewModels;
 
@@ -38,6 +39,8 @@
 
         [StringLength(DefaultDescriptionMaxValue, MinimumLength = DefaultDescriptionMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Description { get; set; }
+
+        public IFormFile RaceLogo { get; set; }
 
         public ICollection<RaceDifficultyViewModel> Difficulties { get; set; } = new List<RaceDifficultyViewModel>();
 

@@ -260,8 +260,8 @@ namespace RaceCorp.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TownId = table.Column<int>(type: "int", nullable: false),
-                    MointainId = table.Column<int>(type: "int", nullable: false),
-                    MountainId = table.Column<int>(type: "int", nullable: true),
+                    MountainId = table.Column<int>(type: "int", nullable: false),
+                    RaceLogo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -285,7 +285,8 @@ namespace RaceCorp.Data.Migrations
                         name: "FK_Races_Mountains_MountainId",
                         column: x => x.MountainId,
                         principalTable: "Mountains",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Races_Towns_TownId",
                         column: x => x.TownId,
@@ -298,21 +299,18 @@ namespace RaceCorp.Data.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RaceId = table.Column<int>(type: "int", nullable: false),
-                    AddByUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Images_AspNetUsers_AddByUserId",
-                        column: x => x.AddByUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Images_Races_RaceId",
                         column: x => x.RaceId,
@@ -411,9 +409,9 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_AddByUserId",
+                name: "IX_Images_IsDeleted",
                 table: "Images",
-                column: "AddByUserId");
+                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_RaceId",

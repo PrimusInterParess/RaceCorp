@@ -29,13 +29,13 @@
 
         public DbSet<Format> Formats { get; set; }
 
-        public DbSet<Image> Images { get; set; }
-
         public DbSet<Town> Towns { get; set; }
 
         public DbSet<Mountain> Mountains { get; set; }
 
         public DbSet<RaceDifficulty> RaceDifficulties { get; set; }
+
+        public DbSet<Image> Images { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 

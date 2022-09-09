@@ -45,11 +45,17 @@
             await this.createRaceService.CreateAsync(model);
 
             // TODO:Redirect to ProfilePage;
-            return this.Redirect("/");
+            return this.RedirectToAction(nameof(this.RaceProfile));
         }
 
         public IActionResult RaceProfile(int raceId)
         {
+            return this.View();
+        }
+
+        public IActionResult AllRaces()
+        {
+
             return this.View();
         }
     }

@@ -28,12 +28,14 @@
 
         public virtual Town Town { get; set; }
 
-        public int MointainId { get; set; }
+        public int MountainId { get; set; }
+
+        public string RaceLogo { get; set; }
 
         public virtual Mountain Mountain { get; set; }
 
         public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
 
-        public virtual ICollection<RaceDifficulty> Difficulties { get; set; } = new HashSet<RaceDifficulty>();
+        public virtual ICollection<RaceDifficulty> Traces { get; set; } = new HashSet<RaceDifficulty>();
     }
 }

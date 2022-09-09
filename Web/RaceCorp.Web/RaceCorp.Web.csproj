@@ -43,5 +43,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Maps\" />
+    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 </Project>
