@@ -2,9 +2,9 @@
 {
     using RaceCorp.Data.Common.Models;
 
-    public class Image : BaseDeletableModel<int>
+    public class Logo : BaseDeletableModel<int>
     {
-        public string ImagePath { get; set; }
+        public string Path { get; set; }
 
         public int RaceId { get; set; }
 

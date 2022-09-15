@@ -3,28 +3,28 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Net.Security;
     using System.Threading.Tasks;
+    using System.Web;
 
     using Microsoft.AspNetCore.Hosting;
-
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
-
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     public class CreateRaceService : ICreateRaceService
     {
-        private readonly IDeletableEntityRepository<Image> imageRepo;
+        private readonly IDeletableEntityRepository<Logo> logoRepo;
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
         private readonly IDeletableEntityRepository<Difficulty> difficultyRepo;
         private readonly IRepository<RaceDifficulty> traceRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
 
-        public CreateRaceService(IDeletableEntityRepository<Image> imageRepo, IDeletableEntityRepository<Race> raceRepo, IDeletableEntityRepository<Mountain> mountainRepo, IDeletableEntityRepository<Difficulty> difficultyRepo, IRepository<RaceDifficulty> traceRepo, IDeletableEntityRepository<Town> townRepo)
+        public CreateRaceService(IDeletableEntityRepository<Logo> imageRepo, IDeletableEntityRepository<Race> raceRepo, IDeletableEntityRepository<Mountain> mountainRepo, IDeletableEntityRepository<Difficulty> difficultyRepo, IRepository<RaceDifficulty> traceRepo, IDeletableEntityRepository<Town> townRepo)
         {
-            this.imageRepo = imageRepo;
+            this.logoRepo = imageRepo;
             this.raceRepo = raceRepo;
             this.mountainRepo = mountainRepo;
             this.difficultyRepo = difficultyRepo;
@@ -102,14 +102,14 @@
                 await model.RaceLogo.CopyToAsync(fs);
             }
 
-            var image = new Image()
+            var logo = new Logo()
             {
-                ImagePath = path,
+                Path = path,
             };
 
-            await this.imageRepo.AddAsync(image);
+            await this.logoRepo.AddAsync(logo);
 
-            race.RaceLogo = path;
+            race.Logo = logo;
 
             await this.raceRepo.AddAsync(race);
 

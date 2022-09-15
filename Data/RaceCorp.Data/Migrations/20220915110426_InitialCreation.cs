@@ -249,6 +249,24 @@ namespace RaceCorp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Logos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RaceId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Races",
                 columns: table => new
                 {
@@ -261,7 +279,7 @@ namespace RaceCorp.Data.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TownId = table.Column<int>(type: "int", nullable: false),
                     MountainId = table.Column<int>(type: "int", nullable: false),
-                    RaceLogo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -282,6 +300,11 @@ namespace RaceCorp.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Races_Logos_LogoId",
+                        column: x => x.LogoId,
+                        principalTable: "Logos",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Races_Mountains_MountainId",
                         column: x => x.MountainId,
                         principalTable: "Mountains",
@@ -291,30 +314,6 @@ namespace RaceCorp.Data.Migrations
                         name: "FK_Races_Towns_TownId",
                         column: x => x.TownId,
                         principalTable: "Towns",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RaceId = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Images_Races_RaceId",
-                        column: x => x.RaceId,
-                        principalTable: "Races",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -409,13 +408,13 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_IsDeleted",
-                table: "Images",
+                name: "IX_Logos_IsDeleted",
+                table: "Logos",
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_RaceId",
-                table: "Images",
+                name: "IX_Logos_RaceId",
+                table: "Logos",
                 column: "RaceId");
 
             migrationBuilder.CreateIndex(
@@ -444,6 +443,12 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Races_LogoId",
+                table: "Races",
+                column: "LogoId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Races_MountainId",
                 table: "Races",
                 column: "MountainId");
@@ -467,10 +472,26 @@ namespace RaceCorp.Data.Migrations
                 name: "IX_Towns_IsDeleted",
                 table: "Towns",
                 column: "IsDeleted");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Logos_Races_RaceId",
+                table: "Logos",
+                column: "RaceId",
+                principalTable: "Races",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Races_AspNetUsers_UserId",
+                table: "Races");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Logos_Races_RaceId",
+                table: "Logos");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -487,9 +508,6 @@ namespace RaceCorp.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Images");
-
-            migrationBuilder.DropTable(
                 name: "RaceDifficulties");
 
             migrationBuilder.DropTable(
@@ -502,13 +520,16 @@ namespace RaceCorp.Data.Migrations
                 name: "Difficulties");
 
             migrationBuilder.DropTable(
-                name: "Races");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Races");
+
+            migrationBuilder.DropTable(
                 name: "Formats");
+
+            migrationBuilder.DropTable(
+                name: "Logos");
 
             migrationBuilder.DropTable(
                 name: "Mountains");
