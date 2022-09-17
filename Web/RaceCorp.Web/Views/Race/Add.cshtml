@@ -4,7 +4,6 @@
     this.ViewData["Title"] = "Create Race";
     this.ViewData["KVP"] = Newtonsoft.Json.JsonConvert.SerializeObject(Model.DifficultiesKVP);
     var formats = Model.Formats.Select(t => new SelectListItem(t.Value, t.Key));
-
 }
 
 <div class="text-center">

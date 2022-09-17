@@ -95,11 +95,13 @@
                 throw new Exception("invalid file size. It needs to be max 10mb.");
             }
 
-            var path = "C:\\Users\\yborisov\\Desktop\\RaceCorp\\RaceCrop\\Web\\RaceCorp.Web\\wwwroot\\Images\\" + model.Name + ".jpg";
+            var path = Path.GetFullPath("wwwroot\\Images\\");
 
-            using (FileStream fs = new FileStream(path, FileMode.Create))
+            using (FileStream fs = new FileStream(path + model.RaceLogo.FileName, FileMode.Create))
             {
                 await model.RaceLogo.CopyToAsync(fs);
+
+                path = fs.Name;
             }
 
             var image = new Image()

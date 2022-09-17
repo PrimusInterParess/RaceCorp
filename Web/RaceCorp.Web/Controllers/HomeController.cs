@@ -1,4 +1,6 @@
-﻿namespace RaceCorp.Web.Controllers
+﻿using System.IO;
+
+namespace RaceCorp.Web.Controllers
 {
     using System;
     using System.Diagnostics;

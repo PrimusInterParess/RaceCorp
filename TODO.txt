@@ -1,0 +1,14 @@
+1.Make additional folder for logo images;
+2.Validate input data for RaceInputViewModel;
+3.Refactor - clear names for DifficultyRace for the properties change them to Traces;
+4.Race images should be uploaded from RaceProfile page;
+5.Find a way to read images and display them
+6.Make avatar pictures??
+7.Make add/remove buttons for each of the Trace forms;
+8.Add name field of the Trace forms;
+9.Race should have idit page for it self;
+10.Each trace should have it's own edit page;
+11.Add year entity and connect it to the races (many to many ?);
+12.Add gxp-file upload field for RaceInputModelView page;
+13.For RaceProfile page make download button for the gxp-file;
+14.Add race page should have information for 'How to get gps-track link from gxp.studio';
