@@ -12,7 +12,7 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220909111212_InitialCreation")]
+    [Migration("20220915110426_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,7 +310,7 @@ namespace RaceCorp.Data.Migrations
                     b.ToTable("Formats");
                 });
 
-            modelBuilder.Entity("RaceCorp.Data.Models.Image", b =>
+            modelBuilder.Entity("RaceCorp.Data.Models.Logo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -324,14 +324,14 @@ namespace RaceCorp.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RaceId")
                         .HasColumnType("int");
@@ -342,7 +342,7 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasIndex("RaceId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Logos");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Mountain", b =>
@@ -401,6 +401,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("LogoId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -408,9 +411,6 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RaceLogo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TownId")
@@ -424,6 +424,9 @@ namespace RaceCorp.Data.Migrations
                     b.HasIndex("FormatId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LogoId")
+                        .IsUnique();
 
                     b.HasIndex("MountainId");
 
@@ -583,15 +586,13 @@ namespace RaceCorp.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RaceCorp.Data.Models.Image", b =>
+            modelBuilder.Entity("RaceCorp.Data.Models.Logo", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.Race", "Race")
+                    b.HasOne("RaceCorp.Data.Models.Race", null)
                         .WithMany("Images")
                         .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Race");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
@@ -600,6 +601,12 @@ namespace RaceCorp.Data.Migrations
                         .WithMany("Races")
                         .HasForeignKey("FormatId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RaceCorp.Data.Models.Logo", "Logo")
+                        .WithOne("Race")
+                        .HasForeignKey("RaceCorp.Data.Models.Race", "LogoId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("RaceCorp.Data.Models.Mountain", "Mountain")
@@ -619,6 +626,8 @@ namespace RaceCorp.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Format");
+
+                    b.Navigation("Logo");
 
                     b.Navigation("Mountain");
 
@@ -663,6 +672,11 @@ namespace RaceCorp.Data.Migrations
             modelBuilder.Entity("RaceCorp.Data.Models.Format", b =>
                 {
                     b.Navigation("Races");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Logo", b =>
+                {
+                    b.Navigation("Race");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Mountain", b =>

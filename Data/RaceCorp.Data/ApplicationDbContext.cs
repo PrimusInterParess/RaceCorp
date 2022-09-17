@@ -35,7 +35,7 @@
 
         public DbSet<RaceDifficulty> RaceDifficulties { get; set; }
 
-        public DbSet<Image> Images { get; set; }
+        public DbSet<Logo> Logos { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 
@@ -85,6 +85,8 @@
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            builder.Entity<Race>().HasOne(r => r.Logo).WithOne(l => l.Race).HasForeignKey<Race>(r => r.LogoId).OnDelete(DeleteBehavior.NoAction);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

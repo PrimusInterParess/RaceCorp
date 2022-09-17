@@ -30,11 +30,13 @@
 
         public int MountainId { get; set; }
 
-        public string RaceLogo { get; set; }
+        public int LogoId { get; set; }
+
+        public Logo Logo { get; set; }
 
         public virtual Mountain Mountain { get; set; }
 
-        public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
+        public virtual ICollection<Logo> Images { get; set; } = new HashSet<Logo>();
 
         public virtual ICollection<RaceDifficulty> Traces { get; set; } = new HashSet<RaceDifficulty>();
     }
