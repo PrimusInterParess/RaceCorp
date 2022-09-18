@@ -17,10 +17,12 @@
         public string DifficultyId { get; set; }
 
         [Required]
-        public TimeSpan ControlTime { get; set; }
+        [Range(1, 36)]
+        [Display(Name = "Control time (in minutes)")]
+        public double ControlTime { get; set; }
 
         [Required]
-        public DateTime StartTime { get; set; }
+        public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
         [Required]
         [Url]

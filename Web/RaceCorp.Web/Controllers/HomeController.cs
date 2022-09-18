@@ -1,9 +1,8 @@
-﻿using System.IO;
-
-namespace RaceCorp.Web.Controllers
+﻿namespace RaceCorp.Web.Controllers
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
 
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Services.Data.Contracts;

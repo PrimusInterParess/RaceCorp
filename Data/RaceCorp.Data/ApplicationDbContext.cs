@@ -86,7 +86,15 @@
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            builder.Entity<Race>().HasOne(r => r.Logo).WithOne(l => l.Race).HasForeignKey<Race>(r => r.LogoId).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Race>()
+                .HasOne(r => r.Logo)
+                .WithOne(l => l.Race)
+                .HasForeignKey<Logo>(l => l.RaceId);
+
+            builder.Entity<Logo>()
+                .HasOne(l => l.Race)
+                .WithOne(r => r.Logo)
+                .HasForeignKey<Race>(r => r.LogoId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

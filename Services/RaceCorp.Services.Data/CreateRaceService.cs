@@ -15,30 +15,41 @@
 
     public class CreateRaceService : ICreateRaceService
     {
-        private readonly IDeletableEntityRepository<Logo> logoRepo;
+        private const string LogosFolderName = "logos";
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
         private readonly IDeletableEntityRepository<Difficulty> difficultyRepo;
         private readonly IRepository<RaceDifficulty> traceRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
+        private readonly IImageService imageService;
 
-        public CreateRaceService(IDeletableEntityRepository<Logo> imageRepo, IDeletableEntityRepository<Race> raceRepo, IDeletableEntityRepository<Mountain> mountainRepo, IDeletableEntityRepository<Difficulty> difficultyRepo, IRepository<RaceDifficulty> traceRepo, IDeletableEntityRepository<Town> townRepo)
+        public CreateRaceService(
+            IDeletableEntityRepository<Race> raceRepo,
+            IDeletableEntityRepository<Mountain> mountainRepo,
+            IDeletableEntityRepository<Difficulty> difficultyRepo,
+            IRepository<RaceDifficulty> traceRepo,
+            IDeletableEntityRepository<Town> townRepo,
+            IImageService imageService)
         {
-            this.logoRepo = imageRepo;
             this.raceRepo = raceRepo;
             this.mountainRepo = mountainRepo;
             this.difficultyRepo = difficultyRepo;
             this.traceRepo = traceRepo;
             this.townRepo = townRepo;
+            this.imageService = imageService;
         }
 
-        public async Task CreateAsync(AddRaceInputViewModel model)
+        public async Task CreateAsync(
+            AddRaceInputViewModel model,
+            string imagePath,
+            string userId)
         {
             var race = new Race();
             race.Name = model.Name;
             race.Date = model.Date;
             race.Description = model.Description;
             race.FormatId = int.Parse(model.FormatId);
+            race.UserId = userId;
 
             var mountainData = this.mountainRepo.All().FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
 
@@ -70,10 +81,9 @@
 
             foreach (var trace in model.Difficulties)
             {
-                var dificultyData = this.difficultyRepo.All().FirstOrDefault(d => d.Id == int.Parse(trace.DifficultyId));
                 var raceTrace = new RaceDifficulty()
                 {
-                    ControlTime = trace.ControlTime,
+                    ControlTime = TimeSpan.FromHours(trace.ControlTime),
                     DifficultyId = int.Parse(trace.DifficultyId),
                     Length = trace.Length,
                     Race = race,
@@ -82,12 +92,15 @@
                 };
 
                 race.Traces.Add(raceTrace);
-                await this.traceRepo.AddAsync(raceTrace);
             }
 
-            if (!model.RaceLogo.FileName.EndsWith(".png") && !model.RaceLogo.FileName.EndsWith(".jpg") && !model.RaceLogo.FileName.EndsWith(".jpg"))
+            var extension = Path.GetExtension(model.RaceLogo.FileName).TrimStart('.');
+
+            var validateImageExtension = this.imageService.ValidateImageExtension(extension);
+
+            if (validateImageExtension == false)
             {
-                throw new Exception("invalid file");
+                throw new Exception($"Invalid image extension {extension}");
             }
 
             if (model.RaceLogo.Length > 10 * 1024 * 1024)
@@ -95,37 +108,32 @@
                 throw new Exception("invalid file size. It needs to be max 10mb.");
             }
 
-            var path = Path.GetFullPath("wwwroot\\Images\\");
-
-            using (FileStream fs = new FileStream(path + model.RaceLogo.FileName, FileMode.Create))
-            {
-                await model.RaceLogo.CopyToAsync(fs);
-
-                path = fs.Name;
-            }
-
             var logo = new Logo()
             {
-                Path = path,
+                Extension = extension,
+                UserId = userId,
             };
 
-            await this.logoRepo.AddAsync(logo);
+            await this.imageService
+                 .SaveImageIntoFileSystem(
+                     model.RaceLogo,
+                     imagePath,
+                     LogosFolderName,
+                     logo.Id,
+                     extension);
 
             race.Logo = logo;
 
-            await this.raceRepo.AddAsync(race);
-
             try
             {
-                await this.townRepo.SaveChangesAsync();
-                await this.mountainRepo.SaveChangesAsync();
-                var result = await this.raceRepo.SaveChangesAsync();
-                await this.traceRepo.SaveChangesAsync();
+                await this.raceRepo.AddAsync(race);
+                await this.raceRepo.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw new Exception(ex.Message);
+                throw new Exception(e.Message);
             }
+
         }
     }
 }

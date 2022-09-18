@@ -6,6 +6,6 @@
 
     public interface ICreateRaceService
     {
-        Task CreateAsync(AddRaceInputViewModel model);
+        Task CreateAsync(AddRaceInputViewModel model, string imagePath, string userId);
     }
 }

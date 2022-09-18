@@ -1,4 +1,6 @@
-﻿namespace RaceCorp.Data.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace RaceCorp.Data.Models
 {
     using System;
     using System.Collections.Generic;
@@ -28,16 +30,15 @@
 
         public virtual Town Town { get; set; }
 
-        public int MountainId { get; set; }
-
-        public int LogoId { get; set; }
+        public string LogoId { get; set; }
 
         public Logo Logo { get; set; }
 
+        public int MountainId { get; set; }
+
         public virtual Mountain Mountain { get; set; }
 
-        public virtual ICollection<Logo> Images { get; set; } = new HashSet<Logo>();
-
+        // public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
         public virtual ICollection<RaceDifficulty> Traces { get; set; } = new HashSet<RaceDifficulty>();
     }
 }

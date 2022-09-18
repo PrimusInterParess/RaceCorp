@@ -310,35 +310,27 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Logo", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("RaceId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("RaceId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Logos");
                 });
@@ -399,8 +391,8 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LogoId")
-                        .HasColumnType("int");
+                    b.Property<string>("LogoId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -424,7 +416,8 @@ namespace RaceCorp.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("LogoId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[LogoId] IS NOT NULL");
 
                     b.HasIndex("MountainId");
 
@@ -586,11 +579,11 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Logo", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.Race", null)
-                        .WithMany("Images")
-                        .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
@@ -603,9 +596,7 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasOne("RaceCorp.Data.Models.Logo", "Logo")
                         .WithOne("Race")
-                        .HasForeignKey("RaceCorp.Data.Models.Race", "LogoId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("RaceCorp.Data.Models.Race", "LogoId");
 
                     b.HasOne("RaceCorp.Data.Models.Mountain", "Mountain")
                         .WithMany("Races")
@@ -684,8 +675,6 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
                 {
-                    b.Navigation("Images");
-
                     b.Navigation("Traces");
                 });
 

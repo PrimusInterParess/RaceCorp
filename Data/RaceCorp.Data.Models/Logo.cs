@@ -1,10 +1,21 @@
-﻿namespace RaceCorp.Data.Models
+﻿using System;
+
+namespace RaceCorp.Data.Models
 {
     using RaceCorp.Data.Common.Models;
 
-    public class Logo : BaseDeletableModel<int>
+    public class Logo : BaseModel<string>
     {
-        public string Path { get; set; }
+        public Logo()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
+        public string Extension { get; set; }
+
+        public string UserId { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
 
         public int RaceId { get; set; }
 

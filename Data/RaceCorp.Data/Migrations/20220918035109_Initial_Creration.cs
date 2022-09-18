@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class Initial_Creration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -252,18 +252,21 @@ namespace RaceCorp.Data.Migrations
                 name: "Logos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     RaceId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Logos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Logos_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -278,8 +281,8 @@ namespace RaceCorp.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TownId = table.Column<int>(type: "int", nullable: false),
+                    LogoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     MountainId = table.Column<int>(type: "int", nullable: false),
-                    LogoId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -408,14 +411,9 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Logos_IsDeleted",
+                name: "IX_Logos_UserId",
                 table: "Logos",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Logos_RaceId",
-                table: "Logos",
-                column: "RaceId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Mountains_IsDeleted",
@@ -446,7 +444,8 @@ namespace RaceCorp.Data.Migrations
                 name: "IX_Races_LogoId",
                 table: "Races",
                 column: "LogoId",
-                unique: true);
+                unique: true,
+                filter: "[LogoId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Races_MountainId",
@@ -472,26 +471,10 @@ namespace RaceCorp.Data.Migrations
                 name: "IX_Towns_IsDeleted",
                 table: "Towns",
                 column: "IsDeleted");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Logos_Races_RaceId",
-                table: "Logos",
-                column: "RaceId",
-                principalTable: "Races",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Races_AspNetUsers_UserId",
-                table: "Races");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Logos_Races_RaceId",
-                table: "Logos");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -520,9 +503,6 @@ namespace RaceCorp.Data.Migrations
                 name: "Difficulties");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Races");
 
             migrationBuilder.DropTable(
@@ -536,6 +516,9 @@ namespace RaceCorp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Towns");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
