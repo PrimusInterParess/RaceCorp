@@ -17,22 +17,23 @@
         [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = InvalidLengthFieldErrorMessage)]
         [Display(Name = "Race length")]
         [Range(DefaultRaceMinLength, DefaultRaceMaxength, ErrorMessage = DefaultRaceLengthErrorMessage)]
-        public int Length { get; set; }
+        public int? Length { get; set; }
 
         [Required]
         public string DifficultyId { get; set; }
 
+        [Required(ErrorMessage = InvalidControlTimeFieldErrorMessage)]
         [Display(Name = "Control time (in hours)")]
         [Range(DefaultControlTimeMinValue, DefaultControlTimeMaxValue, ErrorMessage = DefaultControlTimeErrorMessage)]
-        public double ControlTime { get; set; }
+        public double? ControlTime { get; set; }
 
+        [Required(ErrorMessage = InvalidStartDateErrorMessage)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "H")]
         [Display(Name = "Start Date")]
-        [Required(ErrorMessage ="Start date is Required!")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
 
         [Display(Name = "Track url")]
         [Required]

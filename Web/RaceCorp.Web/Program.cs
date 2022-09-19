@@ -71,7 +71,7 @@
             services.AddTransient<IFormatServices, FormatService>();
             services.AddTransient<ITownService, TownService>();
             services.AddTransient<IMountanService, MountainService>();
-            services.AddTransient<ICreateRaceService, CreateRaceService>();
+            services.AddTransient<IRaceService, RaceService>();
             services.AddTransient<IImageService, ImageService>();
         }
 

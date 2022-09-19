@@ -16,7 +16,7 @@
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
     using static RaceCorp.Web.ViewModels.Constants.StringValues;
 
-    public class AddRaceInputViewModel
+    public class RaceCreateInputViewModel
     {
         [Required]
         [Display(Name = DisplayNameRace)]

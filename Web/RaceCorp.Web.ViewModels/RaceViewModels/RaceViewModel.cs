@@ -14,6 +14,14 @@
 
         public string Description { get; set; }
 
-        public string ImageId { get; set; }
+        public string LogoPath { get; set; }
+
+        public string Town { get; set; }
+
+        public int TownId { get; set; }
+
+        public string Mountain { get; set; }
+
+        public int MountainId { get; set; }
     }
 }

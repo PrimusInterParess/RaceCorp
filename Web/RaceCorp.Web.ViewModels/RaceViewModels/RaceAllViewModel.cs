@@ -2,12 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
+
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
-    public class AllRacesViewModel
+    using RaceCorp.Web.ViewModels.CommonViewModels;
+
+    public class RaceAllViewModel : PagingViewModel
     {
-        ICollection<RaceViewModel> Races { get; set; } = new List<RaceViewModel>();
+        public IEnumerable<RaceViewModel> Races { get; set; } = new List<RaceViewModel>();
     }
 }

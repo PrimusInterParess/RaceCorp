@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -15,20 +16,20 @@
     {
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
-        private readonly ICreateRaceService createRaceService;
+        private readonly IRaceService raceService;
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
 
         public RaceController(
             IFormatServices formatsList,
             IDifficultyService difficultyService,
-            ICreateRaceService createRaceService,
+            IRaceService raceService,
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager)
         {
             this.formatsList = formatsList;
             this.difficultyService = difficultyService;
-            this.createRaceService = createRaceService;
+            this.raceService = raceService;
             this.environment = environment;
             this.userManager = userManager;
         }
@@ -37,7 +38,7 @@
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new AddRaceInputViewModel()
+            var model = new RaceCreateInputViewModel()
             {
                 Formats = this.formatsList.GetFormatKVP(),
                 DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
@@ -48,7 +49,7 @@
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(AddRaceInputViewModel model)
+        public async Task<IActionResult> Create(RaceCreateInputViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -61,7 +62,7 @@
 
             try
             {
-                await this.createRaceService.CreateAsync(model, $"{this.environment.WebRootPath}/images", user.Id);
+                await this.raceService.CreateAsync(model, $"{this.environment.WebRootPath}/images", user.Id);
             }
             catch (Exception e)
             {
@@ -72,18 +73,23 @@
             }
 
             // TODO: Make alert message for successfully added race!
-            // this.TempData["Message"];
+            this.TempData["Message"] = "Your race was successfully created!";
             return this.RedirectToAction(nameof(RaceController.All));
         }
 
-        public IActionResult Profile(int raceId)
+        public IActionResult Profile(int id)
         {
             return this.View();
         }
 
         public IActionResult All()
         {
-            return this.View();
+            var races = new RaceAllViewModel()
+            {
+                Races = this.raceService.All(),
+            };
+
+            return this.View(races);
         }
     }
 }

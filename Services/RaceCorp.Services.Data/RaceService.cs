@@ -1,4 +1,6 @@
-﻿namespace RaceCorp.Services.Data
+﻿using System.Collections.Generic;
+
+namespace RaceCorp.Services.Data
 {
     using System;
     using System.IO;
@@ -13,7 +15,7 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
-    public class CreateRaceService : ICreateRaceService
+    public class RaceService : IRaceService
     {
         private const string LogosFolderName = "logos";
         private readonly IDeletableEntityRepository<Race> raceRepo;
@@ -23,7 +25,7 @@
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IImageService imageService;
 
-        public CreateRaceService(
+        public RaceService(
             IDeletableEntityRepository<Race> raceRepo,
             IDeletableEntityRepository<Mountain> mountainRepo,
             IDeletableEntityRepository<Difficulty> difficultyRepo,
@@ -40,7 +42,7 @@
         }
 
         public async Task CreateAsync(
-            AddRaceInputViewModel model,
+            RaceCreateInputViewModel model,
             string imagePath,
             string userId)
         {
@@ -83,11 +85,11 @@
             {
                 var raceTrace = new RaceDifficulty()
                 {
-                    ControlTime = TimeSpan.FromHours(trace.ControlTime),
+                    ControlTime = TimeSpan.FromHours((double)trace.ControlTime),
                     DifficultyId = int.Parse(trace.DifficultyId),
-                    Length = trace.Length,
+                    Length = (int)trace.Length,
                     Race = race,
-                    StartTime = trace.StartTime,
+                    StartTime = (DateTime)trace.StartTime,
                     TrackUrl = trace.TrackUrl,
                 };
 
@@ -134,6 +136,23 @@
                 throw new Exception(e.Message);
             }
 
+        }
+
+        public List<RaceViewModel> All()
+        {
+            return this.raceRepo.AllAsNoTracking().Select(r => new RaceViewModel()
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Description = r.Description,
+                LogoPath = "/images/logos/" + r.LogoId + "." + r.Logo.Extension,
+                Town = r.Town.Name,
+                TownId = r.TownId,
+                Mountain = r.Mountain.Name,
+                MountainId = r.MountainId,
+            })
+                .OrderByDescending(r => r.Id)
+                .ToList();
         }
     }
 }

@@ -1,11 +1,55 @@
-﻿@{
+﻿@model RaceAllViewModel
+@{
     ViewData["Title"] = "All Races";
 }
-<div class="card" style="width: 18rem;">
-  <img src="..." class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
+
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">@this.TempData["Message"]</div>
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    @foreach (var race in this.Model.Races)
+    {
+
+        <div class="card col-md-4">
+            <img src="@race.LogoPath" class="card-img-top">
+            <div class="card-body text-center">
+                <a asp-action="Profile" asp-route-id="@race.Id"><h5>@race.Name</h5></a>
+                <p class="card-text">
+                   <b> @race.Description</b>
+                </p>
+            </div>
+            <ul class="list-group list-group-flush text-center">
+                <li class="list-group-item">@race.Town</li>
+                <li class="list-group-item">@race.Mountain</li>
+            </ul>
+           </div>
+
+
+       @* <div class="media col-md-4">
+            <img src="@race.LogoPath" width="200" class="mr-3 img-responsive">
+            <div class="media-body">
+                <h5 class="mt-0"><a asp-action="Profile" asp-route-id="@race.Id">@race.Name</a></h5>
+                <p>
+                    @race.Description
+                </p>
+                <div class="form-control">
+                    <ul>
+                        <li>
+                            @race.Town
+                        </li>
+                        <li>
+                            @race.Mountain
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+    }
 </div>
+<hr />
+<partial name="_PagingPartial" model="@Model" />
