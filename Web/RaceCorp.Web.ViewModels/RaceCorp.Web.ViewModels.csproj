@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\RaceCorp.Data.Models\RaceCorp.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\RaceCorp.Services.Mapping\RaceCorp.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\RaceCorp.Services\RaceCorp.Services.csproj" />
   </ItemGroup>
 
 </Project>

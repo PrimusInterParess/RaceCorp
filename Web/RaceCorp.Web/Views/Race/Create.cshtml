@@ -50,8 +50,7 @@
 
             <div>
                 <button class="btn border border-dark" onclick="addAnotherItem(event)">add</button>
-                <button class="btn border border-dark" onclick="removeElement(event)">remove</button>
-            </div>
+           </div>
             <div class="mb-2 mt-2" id="ol">
             </div>
             <div>
@@ -94,30 +93,34 @@
 
 
 
-            var childElement = `<div class="form-control mb-3" id=block${count}><div  class="input-group mb-3">
+            var childElement = `<div class="form-control mb-3" id=block${count}>
+            <div  class="input-group mb-3">
+                                                                  <span class="input-group-text" id="basic-addon1">Trace name</span>
+                                                                  <input type="text" class="form-control" name='Difficulties[${count}].Name' placeholder="Trace Name">
+                                                                  <span asp-validation-for='Difficulties[${count}].Name' class="text-danger"></span>
+                                                                </div><div  class="input-group mb-3">
                                                                   <span class="input-group-text" id="basic-addon1">Length</span>
                                                                   <input type="text" class="form-control" name='Difficulties[${count}].Length' placeholder="Trace Length in kilometers">
-                                                                  <span asp-validation-for="Difficulties[${count}].Length" class="text-danger"></span>
+                                                                  <span asp-validation-for='Difficulties[${count}].Length' class="text-danger"></span>
                                                                 </div>
                                                                 <div id="select${count}" class="input-group mb-3">
                                                                   <span class="input-group-text" id="basic-addon3">Difficulty</span>
-
-                                                                  <span asp-validation-for="Difficulties[${count}].DifficultyId" class="text-danger"></span>
+                                                                  <span asp-validation-for='Difficulties[${count}].DifficultyId' class="text-danger"></span>
                                                                 </div>
                                                                 <div class="input-group mb-3">
                                                                   <span class="input-group-text" id="basic-addon2">Control time</span>
                                                                   <input type="text" class="form-control" name='Difficulties[${count}].ControlTime'  placeholder="Trace Control time in hours">
-                                                                  <span asp-validation-for="Difficulties[${count}].ControlTime" class="text-danger"></span>
+                                                                  <span asp-validation-for='Difficulties[${count}].ControlTime' class="text-danger"></span>
                                                                 </div>
                                                                 <div class="input-group mb-3">
                                                                   <span class="input-group-text" id="basic-addon3">Start Time</span>
-                                                                  <input type="text" class="form-control" name='Difficulties[${count}].StartTime' placeholder="Start time : hh:MM:ss">
-                                                                  <span asp-validation-for="Difficulties[${count}].StartTime" class="text-danger"></span>
+                                                                  <input type="text" class="form-control" name='Difficulties[${count}].StartTime' placeholder="Start time : DD:mm:YYYY:hh:MM:ss">
+                                                                  <span asp-validation-for='Difficulties[${count}].StartTime' class="text-danger"></span>
                                                                 </div>
                                                                 <div class="input-group mb-3">
                                                                   <span class="input-group-text">Trace URL</span>
                                                                   <input type="text" name='Difficulties[${count}].TrackUrl' class="form-control" placeholder="Trace url" >
-                                                                  <span asp-validation-for="Difficulties[${count}].TrackUrl" class="text-danger"></span>
+                                                                  <span asp-validation-for='Difficulties[${count}].TrackUrl' class="text-danger"></span>
                                                                 </div>
                                                                 </div>`;
 
@@ -126,24 +129,29 @@
 
             var divElement = document.getElementById(`select${count}`);
             divElement.appendChild(selectList);
+
+              var createDeleteChild = document.createElement('button');
+                createDeleteChild.setAttribute('href', '#');
+                createDeleteChild.textContent = 'Delete';
+                createDeleteChild.addEventListener('click',deleteItem);
+                createDeleteChild.classList.add('btn');
+                createDeleteChild.classList.add('border');
+                createDeleteChild.classList.add('border-dark');
+                createDeleteChild.classList.add('text-danger');
+           
+              
+
+            var divEl = document.getElementById(`block${count}`);
+           divEl.appendChild(createDeleteChild);
             count += 1;
+
+             function deleteItem(){
+            divEl.remove();
+        }
+            
+
         }
 
-        function removeElement(event) {
-
-            event.preventDefault();
-
-            if (count >= 0) {
-                if (count != 0) {
-                    count -= 1;
-                }
-                var childElement = document.getElementById(`block${count}`);
-                if (childElement != undefined) {
-                    childElement.remove();
-
-                }
-            }
-        }
     </script>
 }
 

@@ -15,9 +15,13 @@
         public const int DefaultDescriptionMaxValue = 300;
 
         // race difficulty
-        public const double DefaultControlTimeMinValue = 1;
-        public const double DefaultControlTimeMaxValue = 24;
+        public const double DefaultControlTimeMinValue = 1.0;
+        public const double DefaultControlTimeMaxValue = 24.0;
 
-        public const int DefaultRaceMinLength = 1;
+        public const double DefaultRaceMinLength = 1.0;
+        public const double DefaultRaceMaxength = 201.0;
+
+        public const int DefControlTimeMinValue = 1;
+        public const int DefControlTimeMaxValue = 36;
     }
 }

@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Models;
+    using RaceCorp.Services.ValidationAttributes;
     using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.FormatViewModels;
 
@@ -30,7 +31,9 @@
         [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Mountain { get; set; }
 
-        public DateTime Date { get; set; } = DateTime.UtcNow;
+        [Required]
+        [ValidateDateAttribute(ErrorMessage = InvalidDateErrorMessage)]
+        public DateTime Date { get; set; } 
 
         [StringLength(DefaultFormatMaxValue, MinimumLength = DefaultFormatMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
 
