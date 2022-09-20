@@ -33,7 +33,7 @@
 
         [Required]
         [ValidateDateAttribute(ErrorMessage = InvalidDateErrorMessage)]
-        public DateTime Date { get; set; } 
+        public DateTime Date { get; set; }
 
         [StringLength(DefaultFormatMaxValue, MinimumLength = DefaultFormatMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
 
@@ -50,6 +50,5 @@
         public IEnumerable<KeyValuePair<string, string>> Formats { get; set; } = new List<KeyValuePair<string, string>>();
 
         public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();
-
     }
 }

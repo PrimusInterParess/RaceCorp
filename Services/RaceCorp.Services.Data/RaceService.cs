@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RaceCorp.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Net.Security;
@@ -13,15 +14,16 @@ namespace RaceCorp.Services.Data
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     public class RaceService : IRaceService
     {
+        private const string LogoRootPath = "/images/logos/";
+
         private const string LogosFolderName = "logos";
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
-        private readonly IDeletableEntityRepository<Difficulty> difficultyRepo;
-        private readonly IRepository<RaceDifficulty> traceRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IImageService imageService;
 
@@ -35,8 +37,6 @@ namespace RaceCorp.Services.Data
         {
             this.raceRepo = raceRepo;
             this.mountainRepo = mountainRepo;
-            this.difficultyRepo = difficultyRepo;
-            this.traceRepo = traceRepo;
             this.townRepo = townRepo;
             this.imageService = imageService;
         }
@@ -46,12 +46,14 @@ namespace RaceCorp.Services.Data
             string imagePath,
             string userId)
         {
-            var race = new Race();
-            race.Name = model.Name;
-            race.Date = model.Date;
-            race.Description = model.Description;
-            race.FormatId = int.Parse(model.FormatId);
-            race.UserId = userId;
+            var race = new Race
+            {
+                Name = model.Name,
+                Date = model.Date,
+                Description = model.Description,
+                FormatId = int.Parse(model.FormatId),
+                UserId = userId,
+            };
 
             var mountainData = this.mountainRepo.All().FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
 
@@ -85,8 +87,9 @@ namespace RaceCorp.Services.Data
             {
                 var raceTrace = new RaceDifficulty()
                 {
+                    Name = trace.Name,
                     ControlTime = TimeSpan.FromHours((double)trace.ControlTime),
-                    DifficultyId = int.Parse(trace.DifficultyId),
+                    DifficultyId = trace.DifficultyId,
                     Length = (int)trace.Length,
                     Race = race,
                     StartTime = (DateTime)trace.StartTime,
@@ -135,17 +138,16 @@ namespace RaceCorp.Services.Data
             {
                 throw new Exception(e.Message);
             }
-
         }
 
-        public List<RaceViewModel> All(int page, int itemsPerPage = 12)
+        public List<RaceViewModel> All(int page, int itemsPerPage = 3)
         {
             return this.raceRepo.AllAsNoTracking().Select(r => new RaceViewModel()
             {
                 Id = r.Id,
                 Name = r.Name,
                 Description = r.Description,
-                LogoPath = "/images/logos/" + r.LogoId + "." + r.Logo.Extension,
+                LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
                 Town = r.Town.Name,
                 TownId = r.TownId,
                 Mountain = r.Mountain.Name,
@@ -158,6 +160,44 @@ namespace RaceCorp.Services.Data
         public int GetCount()
         {
             return this.raceRepo.All().Count();
+        }
+
+        public RaceProfileViewModel GetRaceById(int id)
+        {
+            var race = this.raceRepo
+                .All()
+                .Include(r => r.Logo)
+                .Include(r => r.Mountain)
+                .Include(r => r.Town)
+                .Include(r => r.Traces).ThenInclude(t => t.Difficulty)
+                .FirstOrDefault(r => r.Id == id);
+            if (race != null)
+            {
+                return new RaceProfileViewModel()
+                {
+                    Id = race.Id,
+                    Name = race.Name,
+                    Mountain = race.Mountain.Name,
+                    MountainId = race.MountainId,
+                    Town = race.Town.Name,
+                    TownId = race.TownId,
+                    Description = race.Description,
+                    LogoPath = LogoRootPath + race.LogoId + "." + race.Logo.Extension,
+                    Traces = race.Traces.Select(t => new DifficultyInRaceProfileViewModel()
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        TrackUrl = t.TrackUrl,
+                        ControlTime = t.ControlTime.TotalHours,
+                        DifficultyName = t.Difficulty.Level.ToString(),
+                        DifficultyId = t.DifficultyId,
+                        Length = t.Length,
+                        StartTime = t.StartTime,
+                    }).ToList(),
+                };
+            }
+
+            return null;
         }
     }
 }

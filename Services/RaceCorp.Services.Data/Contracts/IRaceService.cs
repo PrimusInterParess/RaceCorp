@@ -9,8 +9,10 @@
     {
         Task CreateAsync(RaceCreateInputViewModel model, string imagePath, string userId);
 
-        List<RaceViewModel> All(int page, int itemsPerPage = 12);
+        List<RaceViewModel> All(int page, int itemsPerPage = 3);
 
         int GetCount();
+
+        RaceProfileViewModel GetRaceById(int id);
     }
 }

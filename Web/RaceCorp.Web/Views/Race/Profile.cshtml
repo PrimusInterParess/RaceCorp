@@ -1,16 +1,43 @@
-﻿@model RaceCorp.Web.ViewModels.RaceViewModels.RaceCreateInputViewModel
+﻿@model RaceProfileViewModel
+@{
+    this.ViewData["Title"] = "Race Profile";
+    var traces = Model.Traces.Select(t => new KeyValuePair<string, string>(t.Id.ToString(), t.Name)).Select(t => new SelectListItem(t.Value, t.Key));
+}
+<div class="row">
+    <div class="text-center">
+        <h5>@this.ViewData["Title"]</h5>
+    </div>
+    <hr />
 
-<div>
     <div>
-        <h1>Race Profile Page</h1>
+        <h1>@Model.Name</h1>
     </div>
 
-    <div>
-        <p>@Model.Name</p>
+    <select class="form-select" aria-label="Default select example">
+        <option selected>Traces</option>
+        @foreach (var trace in @Model.Traces)
+        {
+            <a asp-action="TraceProfile" asp-route-traceId="@trace.Id">@trace.Name</a>
+        }
+
+    </select>
+    
+    <div class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown link
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+        </div>
     </div>
 
-    <iframe src="" width="500" height="500" frameborder="0" allowfullscreen=""></iframe>
 </div>
+<hr />
+
+
 
 
 

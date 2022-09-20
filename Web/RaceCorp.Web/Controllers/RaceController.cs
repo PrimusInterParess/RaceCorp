@@ -79,7 +79,21 @@
             return this.RedirectToAction(nameof(RaceController.All));
         }
 
+
         public IActionResult Profile(int id)
+        {
+            var model = this.raceService.GetRaceById(id);
+
+            if (model == null)
+            {
+                return this.RedirectToAction(nameof(RaceController.All));
+            }
+
+            return this.View(model);
+        }
+
+
+        public IActionResult TraceProfile(int traceId)
         {
             return this.View();
         }

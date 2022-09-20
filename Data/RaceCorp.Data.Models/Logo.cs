@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace RaceCorp.Data.Models
+﻿namespace RaceCorp.Data.Models
 {
+    using System;
+
     using RaceCorp.Data.Common.Models;
 
     public class Logo : BaseModel<string>

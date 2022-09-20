@@ -23,7 +23,7 @@
         public int? Length { get; set; }
 
         [Required]
-        public string DifficultyId { get; set; }
+        public int DifficultyId { get; set; }
 
         [Required(ErrorMessage = InvalidControlTimeFieldErrorMessage)]
         [Display(Name = "Control time (in hours)")]
