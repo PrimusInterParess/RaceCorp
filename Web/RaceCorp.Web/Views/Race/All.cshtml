@@ -11,6 +11,24 @@
 
 <h1>@this.ViewData["Title"]</h1>
 <hr />
+
+@if(Model.RacesCount==0){
+    <div class="card text-center">
+        <div class="card-header">
+            Opss..
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">There are no races yet!</h5>
+            <p class="card-text">Why don't you add one ?</p>
+            <a asp-action="Create" class="btn btn-secondary">Create race</a>
+        </div>
+        <div class="card-footer text-muted">
+            @DateTime.UtcNow
+        </div>
+    </div>
+}
+else
+{
 <div class="row">
     @foreach (var race in this.Model.Races)
     {
@@ -20,36 +38,39 @@
             <div class="card-body text-center">
                 <a asp-action="Profile" asp-route-id="@race.Id"><h5>@race.Name</h5></a>
                 <p class="card-text">
-                   <b> @race.Description</b>
+                    <b> @race.Description</b>
                 </p>
             </div>
             <ul class="list-group list-group-flush text-center">
                 <li class="list-group-item">@race.Town</li>
                 <li class="list-group-item">@race.Mountain</li>
             </ul>
-           </div>
+        </div>
 
 
-       @* <div class="media col-md-4">
-            <img src="@race.LogoPath" width="200" class="mr-3 img-responsive">
-            <div class="media-body">
-                <h5 class="mt-0"><a asp-action="Profile" asp-route-id="@race.Id">@race.Name</a></h5>
-                <p>
-                    @race.Description
-                </p>
-                <div class="form-control">
-                    <ul>
-                        <li>
-                            @race.Town
-                        </li>
-                        <li>
-                            @race.Mountain
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>*@
+        @* <div class="media col-md-4">
+    <img src="@race.LogoPath" width="200" class="mr-3 img-responsive">
+    <div class="media-body">
+    <h5 class="mt-0"><a asp-action="Profile" asp-route-id="@race.Id">@race.Name</a></h5>
+    <p>
+    @race.Description
+    </p>
+    <div class="form-control">
+    <ul>
+    <li>
+    @race.Town
+    </li>
+    <li>
+    @race.Mountain
+    </li>
+    </ul>
+    </div>
+    </div>
+    </div>*@
     }
 </div>
-<hr />
-<partial name="_PagingPartial" model="@Model" />
+    <hr />
+    <partial name="_PagingPartial" model="@Model" />
+}
+
+

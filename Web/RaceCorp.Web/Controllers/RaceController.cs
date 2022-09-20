@@ -14,6 +14,8 @@
 
     public class RaceController : Controller
     {
+        private const int ItemsPerPage = 12;
+
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
@@ -82,11 +84,19 @@
             return this.View();
         }
 
-        public IActionResult All()
+        public IActionResult All(int id = 1)
         {
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
             var races = new RaceAllViewModel()
             {
-                Races = this.raceService.All(),
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                RacesCount = this.raceService.GetCount(),
+                Races = this.raceService.All(id, ItemsPerPage),
             };
 
             return this.View(races);

@@ -138,7 +138,7 @@ namespace RaceCorp.Services.Data
 
         }
 
-        public List<RaceViewModel> All()
+        public List<RaceViewModel> All(int page, int itemsPerPage = 12)
         {
             return this.raceRepo.AllAsNoTracking().Select(r => new RaceViewModel()
             {
@@ -153,6 +153,11 @@ namespace RaceCorp.Services.Data
             })
                 .OrderByDescending(r => r.Id)
                 .ToList();
+        }
+
+        public int GetCount()
+        {
+            return this.raceRepo.All().Count();
         }
     }
 }

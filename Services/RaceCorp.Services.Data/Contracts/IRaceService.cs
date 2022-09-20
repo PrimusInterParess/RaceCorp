@@ -9,6 +9,8 @@
     {
         Task CreateAsync(RaceCreateInputViewModel model, string imagePath, string userId);
 
-        List<RaceViewModel> All();
+        List<RaceViewModel> All(int page, int itemsPerPage = 12);
+
+        int GetCount();
     }
 }
