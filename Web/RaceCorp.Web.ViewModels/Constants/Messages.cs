@@ -9,6 +9,5 @@
         public const string InvalidStartDateErrorMessage = "Invalid start date";
         public const string InvalidLengthFieldErrorMessage = "Trace length field is required!";
         public const string InvalidControlTimeFieldErrorMessage = "Control time field is required!";
-
     }
 }

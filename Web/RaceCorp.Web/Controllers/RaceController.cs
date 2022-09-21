@@ -79,7 +79,6 @@
             return this.RedirectToAction(nameof(RaceController.All));
         }
 
-
         public IActionResult Profile(int id)
         {
             var model = this.raceService.GetRaceById(id);
@@ -91,7 +90,6 @@
 
             return this.View(model);
         }
-
 
         public IActionResult TraceProfile(int traceId)
         {

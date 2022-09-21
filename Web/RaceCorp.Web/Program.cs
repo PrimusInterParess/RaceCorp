@@ -73,6 +73,7 @@
             services.AddTransient<IMountanService, MountainService>();
             services.AddTransient<IRaceService, RaceService>();
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IRaceDifficultyService, RaceDifficultyService>();
         }
 
         private static void Configure(WebApplication app)
