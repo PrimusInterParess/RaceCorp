@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RaceCorp.Services.Data
+﻿namespace RaceCorp.Services.Data
 {
     using System;
     using System.Collections.Generic;
@@ -11,17 +9,18 @@ namespace RaceCorp.Services.Data
     using System.Web;
 
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
+    using static RaceCorp.Services.Constants.Common;
+    using static RaceCorp.Services.Constants.Messages;
+
     public class RaceService : IRaceService
     {
-        private const string LogoRootPath = "/images/logos/";
-
-        private const string LogosFolderName = "logos";
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
@@ -99,18 +98,27 @@ namespace RaceCorp.Services.Data
                 race.Traces.Add(raceTrace);
             }
 
-            var extension = Path.GetExtension(model.RaceLogo.FileName).TrimStart('.');
+            var extension = string.Empty;
+
+            try
+            {
+                extension = Path.GetExtension(model.RaceLogo.FileName).TrimStart('.');
+            }
+            catch (Exception)
+            {
+                throw new Exception(LogoImageRequired);
+            }
 
             var validateImageExtension = this.imageService.ValidateImageExtension(extension);
 
             if (validateImageExtension == false)
             {
-                throw new Exception($"Invalid image extension {extension}");
+                throw new Exception(InvalidImageExtension + extension);
             }
 
             if (model.RaceLogo.Length > 10 * 1024 * 1024)
             {
-                throw new Exception("invalid file size. It needs to be max 10mb.");
+                throw new Exception(InvalidImageSize);
             }
 
             var logo = new Logo()
@@ -177,6 +185,7 @@ namespace RaceCorp.Services.Data
                 {
                     Id = race.Id,
                     Name = race.Name,
+                    Date = race.Date,
                     Mountain = race.Mountain.Name,
                     MountainId = race.MountainId,
                     Town = race.Town.Name,

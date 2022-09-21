@@ -9,30 +9,72 @@
     </div>
     <hr />
 
-    <div>
+    <div class="col-md-3">
         <h1>@Model.Name</h1>
     </div>
+    <div class="row">
+                <div class="col-md-3 mb-3">
+            <img src=@Model.LogoPath class="card-img-top">
+        </div>
+        <div class="col-md-3 mb-3">
+            <article>Description: @Model.Description</article>
+        </div>
 
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Traces</option>
-        @foreach (var trace in @Model.Traces)
-        {
-            <a asp-action="TraceProfile" asp-route-traceId="@trace.Id">@trace.Name</a>
-        }
-
-    </select>
-    
-    <div class="dropdown show">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown link
-        </a>
-
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+        <div class="col-md-3 mb-3">
+            <article>Where: The race takes place in mount <b>@Model.Mountain</b>, <b>@Model.Town</b></article>
+        </div>
+        <div class="col-md-3 mb-3">
+            <article>When: <b>@Model.Date</b></article>
         </div>
     </div>
+    
+
+    <hr/>
+    <h4>Traces</h4>
+    @for (int i = 0; i < Model.Traces.Count; i++)
+    {
+        var trace = Model.Traces[i];
+
+        <div class=" accordion mb-3" id="departments">
+            <div class="accordion-item">
+                <h2 class=" accordion-header" id="heading-@i">
+                    <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@trace.Name" aria-expanded="false" aria-controls="@trace.Name">
+                        <b class="text-center">@trace.Name</b>
+                    </button>
+                </h2>
+                <div id="@trace.Name" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                    <div class="accordion-body text-center">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a class="btn btn-outline-secondary" asp-area="" asp-controller="RaceDifficulty" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id" asp-action="RaceDifficultyProfile"><b>@trace.Name</b></a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Length: </b>@trace.Length
+                            </li>
+                            <li class="list-group-item">
+                                <b>Difficulty:
+                                    </b>@trace.DifficultyName
+                            </li>
+                            <li class="list-group-item">
+                                <b>Control time:
+                                    </b>@trace.ControlTime h
+                            </li>
+                            <li class="list-group-item">
+                                <b>Starting time: 
+
+                                </b>@trace.StartTime
+                            </li>
+                        </ul>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">  <a class="btn btn-outline-secondary" asp-area="" asp-controller="Town" asp-route-id="@Model.TownId" asp-action="ById"><b>Town:</b> @Model.Town</a></li>
+                            <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Mountain" asp-route-id="@Model.MountainId" asp-action="ById"><b>Mountain:</b> @Model.Mountain</a></li>
+                            <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Difficulty" asp-route-id="@trace.DifficultyId" asp-action="ById"><b>Difficulty:</b> @trace.DifficultyName</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
 </div>
 <hr />

@@ -10,6 +10,8 @@
 
     public class RaceProfileViewModel : RaceViewModel
     {
+        public DateTime Date { get; set; }
+
         public List<DifficultyInRaceProfileViewModel> Traces { get; set; }
     }
 }
