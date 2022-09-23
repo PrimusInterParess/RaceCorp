@@ -1,4 +1,6 @@
-﻿namespace RaceCorp.Services.Data
+﻿using System.Globalization;
+
+namespace RaceCorp.Services.Data
 {
     using System;
     using System.Collections.Generic;
@@ -18,6 +20,7 @@
 
     using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
+
 
     public class RaceService : IRaceService
     {
@@ -84,6 +87,7 @@
 
             foreach (var trace in model.Difficulties)
             {
+
                 var raceTrace = new RaceDifficulty()
                 {
                     Name = trace.Name,

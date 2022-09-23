@@ -1,4 +1,8 @@
-﻿namespace RaceCorp.Services.Data
+﻿using System.Globalization;
+using System.Threading.Tasks;
+using RaceCorp.Services.Mapping;
+
+namespace RaceCorp.Services.Data
 {
     using System;
     using System.Linq;
@@ -48,6 +52,33 @@
                 TrackUrl = trace.TrackUrl,
                 LogoPath = LogoRootPath + trace.Race.LogoId + "." + trace.Race.Logo.Extension,
             };
+        }
+
+        public async Task EditAsync(RaceDifficultyEditViewModel model)
+        {
+            var trace = this.raceDiffRepo
+                .All()
+                .FirstOrDefault(rd => rd.Id == model.Id);
+
+
+
+            trace.Name = model.Name;
+            trace.Length = (int)model.Length;
+            trace.DifficultyId = model.DifficultyId;
+            trace.ControlTime = TimeSpan.FromHours((double)model.ControlTime);
+            trace.TrackUrl = model.TrackUrl;
+            trace.StartTime = (DateTime)model.StartTime;
+
+            await this.raceDiffRepo.SaveChangesAsync();
+        }
+
+        public T GetById<T>(int raceId, int traceId)
+        {
+            return this.raceDiffRepo
+                .AllAsNoTracking()
+                .Where(rd => rd.Id == traceId && rd.RaceId == raceId)
+                .To<T>()
+                .FirstOrDefault();
         }
     }
 }

@@ -6,8 +6,10 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class RaceDifficultyProfileViewModel : RaceDifficultyViewModel
+    public class RaceDifficultyProfileViewModel
     {
+        public string Name { get; set; }
+
         public string RaceName { get; set; }
 
         public int RaceId { get; set; }
@@ -16,5 +18,14 @@
 
         public string LogoPath { get; set; }
 
+        public int? Length { get; set; }
+
+        public int DifficultyId { get; set; }
+
+        public double? ControlTime { get; set; }
+
+        public DateTime? StartTime { get; set; }
+
+        public string TrackUrl { get; set; }
     }
 }

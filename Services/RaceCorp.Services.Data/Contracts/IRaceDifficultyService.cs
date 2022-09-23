@@ -11,5 +11,9 @@
     public interface IRaceDifficultyService
     {
         RaceDifficultyProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId);
+
+        Task EditAsync(RaceDifficultyEditViewModel model);
+
+        T GetById<T>(int raceId, int traceId);
     }
 }

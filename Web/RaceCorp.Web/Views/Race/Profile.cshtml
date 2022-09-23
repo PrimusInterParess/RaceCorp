@@ -13,7 +13,7 @@
         <h1>@Model.Name</h1>
     </div>
     <div class="row">
-                <div class="col-md-3 mb-3">
+        <div class="col-md-3 mb-3">
             <img src=@Model.LogoPath class="card-img-top">
         </div>
         <div class="col-md-3 mb-3">
@@ -27,22 +27,22 @@
             <article>When: <b>@Model.Date</b></article>
         </div>
     </div>
-    
 
-    <hr/>
+
+    <hr />
     <h4>Traces</h4>
     @for (int i = 0; i < Model.Traces.Count; i++)
     {
         var trace = Model.Traces[i];
 
-        <div class=" accordion mb-3" id="departments">
+        <div class="accordion mb-3" id="traces@i">
             <div class="accordion-item">
                 <h2 class=" accordion-header" id="heading-@i">
-                    <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@trace.Name" aria-expanded="false" aria-controls="@trace.Name">
+                    <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#olemale" aria-expanded="false" >
                         <b class="text-center">@trace.Name</b>
                     </button>
                 </h2>
-                <div id="@trace.Name" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                <div id="olemale" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
                     <div class="accordion-body text-center">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -52,15 +52,18 @@
                                 <b>Length: </b>@trace.Length
                             </li>
                             <li class="list-group-item">
-                                <b>Difficulty:
-                                    </b>@trace.DifficultyName
+                                <b>
+                                    Difficulty:
+                                </b>@trace.DifficultyName
                             </li>
                             <li class="list-group-item">
-                                <b>Control time:
-                                    </b>@trace.ControlTime h
+                                <b>
+                                    Control time:
+                                </b>@trace.ControlTime h
                             </li>
                             <li class="list-group-item">
-                                <b>Starting time: 
+                                <b>
+                                    Starting time:
 
                                 </b>@trace.StartTime
                             </li>
@@ -69,6 +72,7 @@
                             <li class="list-group-item">  <a class="btn btn-outline-secondary" asp-area="" asp-controller="Town" asp-route-id="@Model.TownId" asp-action="ById"><b>Town:</b> @Model.Town</a></li>
                             <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Mountain" asp-route-id="@Model.MountainId" asp-action="ById"><b>Mountain:</b> @Model.Mountain</a></li>
                             <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Difficulty" asp-route-id="@trace.DifficultyId" asp-action="ById"><b>Difficulty:</b> @trace.DifficultyName</a></li>
+                            <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="RaceDifficulty" asp-route-raceId="@Model.Id" asp-route-traceId="@trace.Id" asp-action="Edit">Edit</a></li>
                         </ul>
                     </div>
                 </div>

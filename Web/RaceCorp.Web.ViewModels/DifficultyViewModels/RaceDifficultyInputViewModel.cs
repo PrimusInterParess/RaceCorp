@@ -10,7 +10,7 @@
     using static RaceCorp.Web.ViewModels.Constants.Messages;
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
 
-    public class RaceDifficultyViewModel
+    public class RaceDifficultyInputViewModel
     {
         [Display(Name = "Trace name")]
         [Required]
@@ -31,7 +31,6 @@
         public double? ControlTime { get; set; }
 
         [Required(ErrorMessage = InvalidStartDateErrorMessage)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "H")]
         [Display(Name = "Start Date")]
         public DateTime? StartTime { get; set; }
 

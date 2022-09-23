@@ -4,6 +4,6 @@
     {
         public const string LogoRootPath = "/images/logos/";
         public const string LogosFolderName = "logos";
-
+        public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
     }
 }

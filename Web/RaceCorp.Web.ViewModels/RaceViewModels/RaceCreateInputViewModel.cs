@@ -45,7 +45,7 @@
 
         public IFormFile RaceLogo { get; set; }
 
-        public ICollection<RaceDifficultyViewModel> Difficulties { get; set; } = new List<RaceDifficultyViewModel>();
+        public ICollection<RaceDifficultyInputViewModel> Difficulties { get; set; } = new List<RaceDifficultyInputViewModel>();
 
         public IEnumerable<KeyValuePair<string, string>> Formats { get; set; } = new List<KeyValuePair<string, string>>();
 

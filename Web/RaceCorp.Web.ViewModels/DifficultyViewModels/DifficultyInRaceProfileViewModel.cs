@@ -6,10 +6,22 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class DifficultyInRaceProfileViewModel : RaceDifficultyViewModel
+    public class DifficultyInRaceProfileViewModel
     {
         public string DifficultyName { get; set; }
 
         public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int? Length { get; set; }
+
+        public int DifficultyId { get; set; }
+
+        public double? ControlTime { get; set; }
+
+        public DateTime? StartTime { get; set; }
+
+        public string TrackUrl { get; set; }
     }
 }
