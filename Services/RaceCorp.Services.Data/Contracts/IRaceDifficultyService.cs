@@ -12,7 +12,9 @@
     {
         RaceDifficultyProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId);
 
-        Task EditAsync(RaceDifficultyEditViewModel model);
+        Task EditAsync(RaceDifficultyInputViewModel model);
+
+        Task CreateAsync(RaceDifficultyInputViewModel model);
 
         T GetById<T>(int raceId, int traceId);
     }

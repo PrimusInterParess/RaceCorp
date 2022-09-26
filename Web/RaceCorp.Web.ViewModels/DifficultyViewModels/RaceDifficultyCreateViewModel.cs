@@ -17,6 +17,8 @@
         [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Name { get; set; }
 
+        public int RaceId { get; set; }
+
         [Required(ErrorMessage = InvalidLengthFieldErrorMessage)]
         [Display(Name = "Race length")]
         [Range(DefaultRaceMinLength, DefaultRaceMaxength, ErrorMessage = DefaultRaceLengthErrorMessage)]

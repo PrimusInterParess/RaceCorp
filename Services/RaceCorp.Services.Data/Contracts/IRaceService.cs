@@ -9,10 +9,12 @@
     {
         Task CreateAsync(RaceCreateViewModel model, string imagePath, string userId);
 
-        List<RaceViewModel> All(int page, int itemsPerPage = 3);
+        RaceAllViewModel All(int page, int itemsPerPage = 3);
 
         int GetCount();
 
         T GetById<T>(int id);
+
+        bool ValidateId(int id);
     }
 }

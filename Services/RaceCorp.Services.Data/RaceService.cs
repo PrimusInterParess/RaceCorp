@@ -1,10 +1,8 @@
-﻿using System.Globalization;
-using RaceCorp.Services.Mapping;
-
-namespace RaceCorp.Services.Data
+﻿namespace RaceCorp.Services.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net.Security;
@@ -16,12 +14,12 @@ namespace RaceCorp.Services.Data
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
-
 
     public class RaceService : IRaceService
     {
@@ -88,7 +86,6 @@ namespace RaceCorp.Services.Data
 
             foreach (var trace in model.Difficulties)
             {
-
                 var raceTrace = new RaceDifficulty()
                 {
                     Name = trace.Name,
@@ -153,9 +150,10 @@ namespace RaceCorp.Services.Data
             }
         }
 
-        public List<RaceViewModel> All(int page, int itemsPerPage = 3)
+        public RaceAllViewModel All(int page, int itemsPerPage = 3)
         {
-            return this.raceRepo.AllAsNoTracking().Select(r => new RaceViewModel()
+            var count = this.raceRepo.All().Count();
+            var races = this.raceRepo.AllAsNoTracking().Select(r => new RaceViewModel()
             {
                 Id = r.Id,
                 Name = r.Name,
@@ -165,9 +163,15 @@ namespace RaceCorp.Services.Data
                 TownId = r.TownId,
                 Mountain = r.Mountain.Name,
                 MountainId = r.MountainId,
-            })
-                .OrderByDescending(r => r.Id)
-                .ToList();
+            }).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
+
+            return new RaceAllViewModel()
+            {
+                PageNumber = page,
+                ItemsPerPage = itemsPerPage,
+                RacesCount = count,
+                Races = races,
+            };
         }
 
         public int GetCount()
@@ -182,42 +186,11 @@ namespace RaceCorp.Services.Data
                 .Where(r => r.Id == id)
                 .To<T>()
                 .FirstOrDefault();
+        }
 
-            //var race = this.raceRepo
-            //    .All()
-            //    .Include(r => r.Logo)
-            //    .Include(r => r.Mountain)
-            //    .Include(r => r.Town)
-            //    .Include(r => r.Traces).ThenInclude(t => t.Difficulty)
-            //    .FirstOrDefault(r => r.Id == id);
-            //if (race != null)
-            //{
-            //    return new RaceProfileViewModel()
-            //    {
-            //        Id = race.Id,
-            //        Name = race.Name,
-            //        Date = race.Date,
-            //        Mountain = race.Mountain.Name,
-            //        MountainId = race.MountainId,
-            //        Town = race.Town.Name,
-            //        TownId = race.TownId,
-            //        Description = race.Description,
-            //        LogoPath = LogoRootPath + race.LogoId + "." + race.Logo.Extension,
-            //        Traces = race.Traces.Select(t => new DifficultyInRaceProfileViewModel()
-            //        {
-            //            Id = t.Id,
-            //            Name = t.Name,
-            //            TrackUrl = t.TrackUrl,
-            //            ControlTime = t.ControlTime.TotalHours,
-            //            DifficultyName = t.Difficulty.Level.ToString(),
-            //            DifficultyId = t.DifficultyId,
-            //            Length = t.Length,
-            //            StartTime = t.StartTime,
-            //        }).ToList(),
-            //    };
-            //}
-
-            //return null;
+        public bool ValidateId(int id)
+        {
+            return this.raceRepo.AllAsNoTracking().Any(r => r.Id == id);
         }
     }
 }

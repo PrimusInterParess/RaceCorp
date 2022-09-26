@@ -8,6 +8,7 @@
 
     public class RaceDifficultyProfileViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public string RaceName { get; set; }

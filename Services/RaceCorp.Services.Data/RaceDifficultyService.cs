@@ -41,6 +41,7 @@ namespace RaceCorp.Services.Data
             ////LogoRootPath + race.LogoId + "." + race.Logo.Extension
             return new RaceDifficultyProfileViewModel()
             {
+                Id = trace.Id,
                 Name = trace.Name,
                 RaceName = trace.Race.Name,
                 RaceId = trace.RaceId,
@@ -54,13 +55,11 @@ namespace RaceCorp.Services.Data
             };
         }
 
-        public async Task EditAsync(RaceDifficultyEditViewModel model)
+        public async Task EditAsync(RaceDifficultyInputViewModel model)
         {
             var trace = this.raceDiffRepo
                 .All()
                 .FirstOrDefault(rd => rd.Id == model.Id);
-
-
 
             trace.Name = model.Name;
             trace.Length = (int)model.Length;
@@ -79,6 +78,23 @@ namespace RaceCorp.Services.Data
                 .Where(rd => rd.Id == traceId && rd.RaceId == raceId)
                 .To<T>()
                 .FirstOrDefault();
+        }
+
+        public async Task CreateAsync(RaceDifficultyInputViewModel model)
+        {
+            var trace = new RaceDifficulty()
+            {
+                RaceId = model.RaceId,
+                Name = model.Name,
+                Length = (int)model.Length,
+                DifficultyId = model.DifficultyId,
+                StartTime = (DateTime)model.StartTime,
+                TrackUrl = model.TrackUrl,
+                ControlTime = TimeSpan.FromHours((double)model.ControlTime),
+            };
+
+            await this.raceDiffRepo.AddAsync(trace);
+            await this.raceDiffRepo.SaveChangesAsync();
         }
     }
 }

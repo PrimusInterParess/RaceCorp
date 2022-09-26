@@ -11,6 +11,6 @@
 
     public class RaceAllViewModel : PagingViewModel
     {
-        public IEnumerable<RaceViewModel> Races { get; set; } = new List<RaceViewModel>();
+        public ICollection<RaceViewModel> Races { get; set; } = new List<RaceViewModel>();
     }
 }

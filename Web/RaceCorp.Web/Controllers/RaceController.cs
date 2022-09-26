@@ -98,7 +98,7 @@
             model.Formats = this.formatsList.GetFormatKVP();
 
             return this.View(model);
-        }   
+        }
 
         [HttpPost]
         public IActionResult Edit(RaceEditViewModel model)
@@ -114,14 +114,7 @@
                 return this.NotFound();
             }
 
-            var races = new RaceAllViewModel()
-            {
-                ItemsPerPage = ItemsPerPage,
-                PageNumber = id,
-                RacesCount = this.raceService.GetCount(),
-                Races = this.raceService.All(id, ItemsPerPage),
-            };
-
+            var races = this.raceService.All(id);
             return this.View(races);
         }
     }
