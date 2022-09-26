@@ -32,7 +32,7 @@
             IDeletableEntityRepository<Race> raceRepo,
             IDeletableEntityRepository<Mountain> mountainRepo,
             IDeletableEntityRepository<Difficulty> difficultyRepo,
-            IRepository<RaceDifficulty> traceRepo,
+            IRepository<RideDifficulty> traceRepo,
             IDeletableEntityRepository<Town> townRepo,
             IImageService imageService)
         {
@@ -86,7 +86,7 @@
 
             foreach (var trace in model.Difficulties)
             {
-                var raceTrace = new RaceDifficulty()
+                var raceTrace = new RideDifficulty()
                 {
                     Name = trace.Name,
                     ControlTime = TimeSpan.FromHours((double)trace.ControlTime),

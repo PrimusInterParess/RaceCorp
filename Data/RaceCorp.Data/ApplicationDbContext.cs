@@ -23,6 +23,8 @@
         {
         }
 
+        public DbSet<Ride> Rides { get; set; }
+
         public DbSet<Race> Races { get; set; }
 
         public DbSet<Difficulty> Difficulties { get; set; }
@@ -33,7 +35,7 @@
 
         public DbSet<Mountain> Mountains { get; set; }
 
-        public DbSet<RaceDifficulty> RaceDifficulties { get; set; }
+        public DbSet<RideDifficulty> RideDifficulties { get; set; }
 
         public DbSet<Logo> Logos { get; set; }
 

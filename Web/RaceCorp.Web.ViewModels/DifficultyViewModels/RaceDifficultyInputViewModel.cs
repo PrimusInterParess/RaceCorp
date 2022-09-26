@@ -7,7 +7,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
-    public class RaceDifficultyInputViewModel : RaceDifficultyCreateViewModel, IMapFrom<RaceDifficulty>, IHaveCustomMappings
+    public class RaceDifficultyInputViewModel : RaceDifficultyCreateViewModel, IMapFrom<RideDifficulty>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -19,7 +19,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<RaceDifficulty, RaceDifficultyInputViewModel>()
+            configuration.CreateMap<RideDifficulty, RaceDifficultyInputViewModel>()
                 .ForMember(x => x.DifficultyName, opt
                     => opt.MapFrom(x => x.Difficulty.Level.ToString()))
                 .ForMember(x => x.ControlTime, opt

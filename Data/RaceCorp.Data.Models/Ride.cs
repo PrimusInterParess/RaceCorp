@@ -1,21 +1,9 @@
 ﻿namespace RaceCorp.Data.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     using RaceCorp.Data.Common.Models;
 
-    public class Race : BaseRide
+    public class Ride : BaseRide
     {
-        public string LogoId { get; set; }
-
-        public Logo Logo { get; set; }
-
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
@@ -31,7 +19,5 @@
         public int FormatId { get; set; }
 
         public virtual Format Format { get; set; }
-
-        // public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
     }
 }

@@ -12,7 +12,7 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
-    public class RaceController : Controller
+    public class RaceController : BaseController
     {
         private const int ItemsPerPage = 2;
 

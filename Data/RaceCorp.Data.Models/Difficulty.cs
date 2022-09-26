@@ -13,6 +13,6 @@
     {
         public DifficultyLevel Level { get; set; }
 
-        public virtual ICollection<RaceDifficulty> Races { get; set; } = new HashSet<RaceDifficulty>();
+        public virtual ICollection<RideDifficulty> Races { get; set; } = new HashSet<RideDifficulty>();
     }
 }

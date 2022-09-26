@@ -428,7 +428,63 @@ namespace RaceCorp.Data.Migrations
                     b.ToTable("Races");
                 });
 
-            modelBuilder.Entity("RaceCorp.Data.Models.RaceDifficulty", b =>
+            modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FormatId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MountainId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TownId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FormatId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("MountainId");
+
+                    b.HasIndex("TownId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Rides");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.RideDifficulty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -463,7 +519,7 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasIndex("RaceId");
 
-                    b.ToTable("RaceDifficulties");
+                    b.ToTable("RideDifficulties");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Setting", b =>
@@ -628,7 +684,40 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RaceCorp.Data.Models.RaceDifficulty", b =>
+            modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.Format", "Format")
+                        .WithMany()
+                        .HasForeignKey("FormatId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RaceCorp.Data.Models.Mountain", "Mountain")
+                        .WithMany()
+                        .HasForeignKey("MountainId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RaceCorp.Data.Models.Town", "Town")
+                        .WithMany()
+                        .HasForeignKey("TownId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Format");
+
+                    b.Navigation("Mountain");
+
+                    b.Navigation("Town");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.RideDifficulty", b =>
                 {
                     b.HasOne("RaceCorp.Data.Models.Difficulty", "Difficulty")
                         .WithMany("Races")
@@ -637,7 +726,7 @@ namespace RaceCorp.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("RaceCorp.Data.Models.Race", "Race")
-                        .WithMany("Traces")
+                        .WithMany()
                         .HasForeignKey("RaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -674,11 +763,6 @@ namespace RaceCorp.Data.Migrations
             modelBuilder.Entity("RaceCorp.Data.Models.Mountain", b =>
                 {
                     b.Navigation("Races");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
-                {
-                    b.Navigation("Traces");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Town", b =>

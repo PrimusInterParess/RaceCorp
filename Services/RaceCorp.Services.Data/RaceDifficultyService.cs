@@ -1,17 +1,16 @@
-﻿using System.Globalization;
-using System.Threading.Tasks;
-using RaceCorp.Services.Mapping;
-
-namespace RaceCorp.Services.Data
+﻿namespace RaceCorp.Services.Data
 {
     using System;
+    using System.Globalization;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
 
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.DifficultyViewModels;
 
     using static RaceCorp.Services.Constants.Common;
@@ -19,9 +18,9 @@ namespace RaceCorp.Services.Data
 
     public class RaceDifficultyService : IRaceDifficultyService
     {
-        private readonly IRepository<RaceDifficulty> raceDiffRepo;
+        private readonly IRepository<RideDifficulty> raceDiffRepo;
 
-        public RaceDifficultyService(IRepository<RaceDifficulty> raceDiffRepo)
+        public RaceDifficultyService(IRepository<RideDifficulty> raceDiffRepo)
         {
             this.raceDiffRepo = raceDiffRepo;
         }
@@ -82,7 +81,7 @@ namespace RaceCorp.Services.Data
 
         public async Task CreateAsync(RaceDifficultyInputViewModel model)
         {
-            var trace = new RaceDifficulty()
+            var trace = new RideDifficulty()
             {
                 RaceId = model.RaceId,
                 Name = model.Name,
