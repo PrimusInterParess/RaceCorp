@@ -1,5 +1,7 @@
 ﻿namespace RaceCorp.Data.Models
 {
+    using System.Collections.Generic;
+
     using RaceCorp.Data.Common.Models;
 
     public class Ride : BaseRide
@@ -19,5 +21,7 @@
         public int FormatId { get; set; }
 
         public virtual Format Format { get; set; }
+
+        public ICollection<RideDifficulty> Traces { get; set; } = new HashSet<RideDifficulty>();
     }
 }

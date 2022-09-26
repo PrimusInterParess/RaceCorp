@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Data.Common.Models
 {
     using System;
+    using System.Collections.Generic;
 
     using RaceCorp.Data.Common.Models;
 
@@ -11,6 +12,5 @@
         public DateTime Date { get; set; }
 
         public string Description { get; set; }
-
     }
 }

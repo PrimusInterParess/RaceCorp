@@ -6,6 +6,6 @@
 
     public interface IRideService
     {
-        Task CreateAsync(RideCreateViewModel model);
+        Task CreateAsync(RideCreateViewModel model, string userId);
     }
 }

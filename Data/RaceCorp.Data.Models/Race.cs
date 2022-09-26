@@ -32,6 +32,8 @@
 
         public virtual Format Format { get; set; }
 
+        public ICollection<RideDifficulty> Traces { get; set; } = new HashSet<RideDifficulty>();
+
         // public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
     }
 }

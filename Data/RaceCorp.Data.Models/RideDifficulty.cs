@@ -28,6 +28,5 @@
 
         public DateTime StartTime { get; set; }
 
-        // TODO: add race length here
     }
 }
