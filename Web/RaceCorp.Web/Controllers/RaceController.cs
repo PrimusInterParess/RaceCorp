@@ -14,7 +14,7 @@
 
     public class RaceController : Controller
     {
-        private const int ItemsPerPage = 12;
+        private const int ItemsPerPage = 2;
 
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
@@ -40,7 +40,7 @@
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new RaceCreateInputViewModel()
+            var model = new RaceCreateViewModel()
             {
                 Formats = this.formatsList.GetFormatKVP(),
                 DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
@@ -51,7 +51,7 @@
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(RaceCreateInputViewModel model)
+        public async Task<IActionResult> Create(RaceCreateViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -81,7 +81,7 @@
 
         public IActionResult Profile(int id)
         {
-            var model = this.raceService.GetRaceById(id);
+            var model = this.raceService.GetById<RaceProfileViewModel>(id);
 
             if (model == null)
             {
@@ -91,9 +91,20 @@
             return this.View(model);
         }
 
-        public IActionResult TraceProfile(int traceId)
+        [HttpGet]
+        public IActionResult Edit(int id)
         {
-            return this.View();
+            var model = this.raceService.GetById<RaceEditViewModel>(id);
+            model.Formats = this.formatsList.GetFormatKVP();
+
+            return this.View(model);
+        }   
+
+        [HttpPost]
+        public IActionResult Edit(RaceEditViewModel model)
+        {
+            ////TODO: EditAsync(model) * check raceLogo;
+            return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
         }
 
         public IActionResult All(int id = 1)

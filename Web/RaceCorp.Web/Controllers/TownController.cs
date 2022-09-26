@@ -4,7 +4,6 @@
 
     public class TownController : BaseController
     {
-
         ////returns all races related to the town. by townId
         public IActionResult ById(int id)
         {

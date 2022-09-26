@@ -7,7 +7,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
-    public class RaceDifficultyEditViewModel : RaceDifficultyInputViewModel, IMapFrom<RaceDifficulty>, IHaveCustomMappings
+    public class RaceDifficultyEditViewModel : RaceDifficultyCreateViewModel, IMapFrom<RaceDifficulty>, IHaveCustomMappings
     {
         public int Id { get; set; }
 

@@ -1,0 +1,9 @@
+﻿@model RaceEditViewModel
+
+@{
+    this.ViewData["Title"] = "Edit Race";
+    this.ViewData["ButtonName"] = "Edit";
+}
+<partial name="_RaceInputFormPartial" model="@Model" />
+
+<input type="hidden" asp-for="Id" />

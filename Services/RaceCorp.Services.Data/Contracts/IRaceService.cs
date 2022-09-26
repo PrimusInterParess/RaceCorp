@@ -7,12 +7,12 @@
 
     public interface IRaceService
     {
-        Task CreateAsync(RaceCreateInputViewModel model, string imagePath, string userId);
+        Task CreateAsync(RaceCreateViewModel model, string imagePath, string userId);
 
         List<RaceViewModel> All(int page, int itemsPerPage = 3);
 
         int GetCount();
 
-        RaceProfileViewModel GetRaceById(int id);
+        T GetById<T>(int id);
     }
 }

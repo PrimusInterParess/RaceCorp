@@ -1,11 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using RaceCorp.Web.ViewModels.DifficultyViewModels;
-
-namespace RaceCorp.Web.Controllers
+﻿namespace RaceCorp.Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
+
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.DifficultyViewModels;
 
     public class RaceDifficultyController : BaseController
     {
@@ -49,7 +50,7 @@ namespace RaceCorp.Web.Controllers
             {
                 await this.raceDiffService.EditAsync(model);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 this.ModelState.AddModelError(String.Empty, "Invalid operation");
                 model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();

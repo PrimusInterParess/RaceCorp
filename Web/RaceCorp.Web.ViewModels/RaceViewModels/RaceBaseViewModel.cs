@@ -1,22 +1,18 @@
-﻿namespace RaceCorp.Web.ViewModels.RaceViewModels
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using RaceCorp.Services.ValidationAttributes;
+using static RaceCorp.Web.ViewModels.Constants.Messages;
+using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
+using static RaceCorp.Web.ViewModels.Constants.StringValues;
+
+namespace RaceCorp.Web.ViewModels.RaceViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using RaceCorp.Data.Models;
-    using RaceCorp.Services.ValidationAttributes;
-    using RaceCorp.Web.ViewModels.DifficultyViewModels;
-    using RaceCorp.Web.ViewModels.FormatViewModels;
-
-    using static RaceCorp.Web.ViewModels.Constants.Formating;
-    using static RaceCorp.Web.ViewModels.Constants.Messages;
-    using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
-    using static RaceCorp.Web.ViewModels.Constants.StringValues;
-
-    public class RaceCreateInputViewModel
+    public class RaceBaseViewModel
     {
         [Required]
         [Display(Name = DisplayNameRace)]
@@ -32,7 +28,7 @@
         public string Mountain { get; set; }
 
         [Required]
-        [ValidateDateAttribute(ErrorMessage = InvalidDateErrorMessage)]
+        [ValidateDate(ErrorMessage = InvalidDateErrorMessage)]
         public DateTime Date { get; set; }
 
         [StringLength(DefaultFormatMaxValue, MinimumLength = DefaultFormatMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
@@ -45,10 +41,6 @@
 
         public IFormFile RaceLogo { get; set; }
 
-        public ICollection<RaceDifficultyInputViewModel> Difficulties { get; set; } = new List<RaceDifficultyInputViewModel>();
-
         public IEnumerable<KeyValuePair<string, string>> Formats { get; set; } = new List<KeyValuePair<string, string>>();
-
-        public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using RaceCorp.Services.Mapping;
 
 namespace RaceCorp.Services.Data
 {
@@ -44,7 +45,7 @@ namespace RaceCorp.Services.Data
         }
 
         public async Task CreateAsync(
-            RaceCreateInputViewModel model,
+            RaceCreateViewModel model,
             string imagePath,
             string userId)
         {
@@ -174,43 +175,49 @@ namespace RaceCorp.Services.Data
             return this.raceRepo.All().Count();
         }
 
-        public RaceProfileViewModel GetRaceById(int id)
+        public T GetById<T>(int id)
         {
-            var race = this.raceRepo
-                .All()
-                .Include(r => r.Logo)
-                .Include(r => r.Mountain)
-                .Include(r => r.Town)
-                .Include(r => r.Traces).ThenInclude(t => t.Difficulty)
-                .FirstOrDefault(r => r.Id == id);
-            if (race != null)
-            {
-                return new RaceProfileViewModel()
-                {
-                    Id = race.Id,
-                    Name = race.Name,
-                    Date = race.Date,
-                    Mountain = race.Mountain.Name,
-                    MountainId = race.MountainId,
-                    Town = race.Town.Name,
-                    TownId = race.TownId,
-                    Description = race.Description,
-                    LogoPath = LogoRootPath + race.LogoId + "." + race.Logo.Extension,
-                    Traces = race.Traces.Select(t => new DifficultyInRaceProfileViewModel()
-                    {
-                        Id = t.Id,
-                        Name = t.Name,
-                        TrackUrl = t.TrackUrl,
-                        ControlTime = t.ControlTime.TotalHours,
-                        DifficultyName = t.Difficulty.Level.ToString(),
-                        DifficultyId = t.DifficultyId,
-                        Length = t.Length,
-                        StartTime = t.StartTime,
-                    }).ToList(),
-                };
-            }
+            return this.raceRepo
+                .AllAsNoTracking()
+                .Where(r => r.Id == id)
+                .To<T>()
+                .FirstOrDefault();
 
-            return null;
+            //var race = this.raceRepo
+            //    .All()
+            //    .Include(r => r.Logo)
+            //    .Include(r => r.Mountain)
+            //    .Include(r => r.Town)
+            //    .Include(r => r.Traces).ThenInclude(t => t.Difficulty)
+            //    .FirstOrDefault(r => r.Id == id);
+            //if (race != null)
+            //{
+            //    return new RaceProfileViewModel()
+            //    {
+            //        Id = race.Id,
+            //        Name = race.Name,
+            //        Date = race.Date,
+            //        Mountain = race.Mountain.Name,
+            //        MountainId = race.MountainId,
+            //        Town = race.Town.Name,
+            //        TownId = race.TownId,
+            //        Description = race.Description,
+            //        LogoPath = LogoRootPath + race.LogoId + "." + race.Logo.Extension,
+            //        Traces = race.Traces.Select(t => new DifficultyInRaceProfileViewModel()
+            //        {
+            //            Id = t.Id,
+            //            Name = t.Name,
+            //            TrackUrl = t.TrackUrl,
+            //            ControlTime = t.ControlTime.TotalHours,
+            //            DifficultyName = t.Difficulty.Level.ToString(),
+            //            DifficultyId = t.DifficultyId,
+            //            Length = t.Length,
+            //            StartTime = t.StartTime,
+            //        }).ToList(),
+            //    };
+            //}
+
+            //return null;
         }
     }
 }
