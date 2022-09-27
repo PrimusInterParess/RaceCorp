@@ -12,6 +12,8 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
+    using static RaceCorp.Services.Constants.Messages;
+
     public class RaceController : BaseController
     {
         private const int ItemsPerPage = 2;

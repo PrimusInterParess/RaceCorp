@@ -67,7 +67,6 @@
             return this.RedirectToAction(nameof(this.RaceDifficultyProfile), new { raceId = model.RaceId, traceId = model.Id });
         }
 
-
         [HttpGet]
         public IActionResult Create(int raceId)
         {

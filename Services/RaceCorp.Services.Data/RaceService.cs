@@ -31,8 +31,7 @@
         public RaceService(
             IDeletableEntityRepository<Race> raceRepo,
             IDeletableEntityRepository<Mountain> mountainRepo,
-            IDeletableEntityRepository<Difficulty> difficultyRepo,
-            IRepository<RideDifficulty> traceRepo,
+            IDeletableEntityRepository<Trace> difficultyRepo,
             IDeletableEntityRepository<Town> townRepo,
             IImageService imageService)
         {
@@ -86,18 +85,17 @@
 
             foreach (var trace in model.Difficulties)
             {
-                var raceTrace = new RideDifficulty()
+                var traceData = new Trace()
                 {
                     Name = trace.Name,
                     ControlTime = TimeSpan.FromHours((double)trace.ControlTime),
                     DifficultyId = trace.DifficultyId,
                     Length = (int)trace.Length,
-                    Race = race,
                     StartTime = (DateTime)trace.StartTime,
                     TrackUrl = trace.TrackUrl,
                 };
 
-                race.Traces.Add(raceTrace);
+                race.Traces.Add(traceData);
             }
 
             var extension = string.Empty;

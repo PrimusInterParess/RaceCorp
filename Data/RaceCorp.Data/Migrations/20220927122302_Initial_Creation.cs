@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class Initial_Creration : Migration
+    public partial class Initial_Creation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -270,52 +270,6 @@ namespace RaceCorp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rides",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TownId = table.Column<int>(type: "int", nullable: false),
-                    MountainId = table.Column<int>(type: "int", nullable: false),
-                    FormatId = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rides", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rides_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Rides_Formats_FormatId",
-                        column: x => x.FormatId,
-                        principalTable: "Formats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Rides_Mountains_MountainId",
-                        column: x => x.MountainId,
-                        principalTable: "Mountains",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Rides_Towns_TownId",
-                        column: x => x.TownId,
-                        principalTable: "Towns",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Races",
                 columns: table => new
                 {
@@ -368,34 +322,91 @@ namespace RaceCorp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RideDifficulties",
+                name: "Traces",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RaceId = table.Column<int>(type: "int", nullable: false),
-                    DifficultyId = table.Column<int>(type: "int", nullable: false),
                     Length = table.Column<int>(type: "int", nullable: false),
                     ControlTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     TrackUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DifficultyId = table.Column<int>(type: "int", nullable: false),
+                    RideId = table.Column<int>(type: "int", nullable: true),
+                    RaceId = table.Column<int>(type: "int", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RideDifficulties", x => x.Id);
+                    table.PrimaryKey("PK_Traces", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RideDifficulties_Difficulties_DifficultyId",
+                        name: "FK_Traces_Difficulties_DifficultyId",
                         column: x => x.DifficultyId,
                         principalTable: "Difficulties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RideDifficulties_Races_RaceId",
+                        name: "FK_Traces_Races_RaceId",
                         column: x => x.RaceId,
                         principalTable: "Races",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rides",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TownId = table.Column<int>(type: "int", nullable: false),
+                    MountainId = table.Column<int>(type: "int", nullable: false),
+                    FormatId = table.Column<int>(type: "int", nullable: false),
+                    TraceId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rides", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rides_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Rides_Formats_FormatId",
+                        column: x => x.FormatId,
+                        principalTable: "Formats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Rides_Mountains_MountainId",
+                        column: x => x.MountainId,
+                        principalTable: "Mountains",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Rides_Towns_TownId",
+                        column: x => x.TownId,
+                        principalTable: "Towns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Rides_Traces_TraceId",
+                        column: x => x.TraceId,
+                        principalTable: "Traces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -500,16 +511,6 @@ namespace RaceCorp.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RideDifficulties_DifficultyId",
-                table: "RideDifficulties",
-                column: "DifficultyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RideDifficulties_RaceId",
-                table: "RideDifficulties",
-                column: "RaceId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Rides_FormatId",
                 table: "Rides",
                 column: "FormatId");
@@ -530,6 +531,12 @@ namespace RaceCorp.Data.Migrations
                 column: "TownId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Rides_TraceId",
+                table: "Rides",
+                column: "TraceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Rides_UserId",
                 table: "Rides",
                 column: "UserId");
@@ -543,6 +550,21 @@ namespace RaceCorp.Data.Migrations
                 name: "IX_Towns_IsDeleted",
                 table: "Towns",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Traces_DifficultyId",
+                table: "Traces",
+                column: "DifficultyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Traces_IsDeleted",
+                table: "Traces",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Traces_RaceId",
+                table: "Traces",
+                column: "RaceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -563,9 +585,6 @@ namespace RaceCorp.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "RideDifficulties");
-
-            migrationBuilder.DropTable(
                 name: "Rides");
 
             migrationBuilder.DropTable(
@@ -573,6 +592,9 @@ namespace RaceCorp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Traces");
 
             migrationBuilder.DropTable(
                 name: "Difficulties");

@@ -18,16 +18,16 @@
 
     public class RaceDifficultyService : IRaceDifficultyService
     {
-        private readonly IRepository<RideDifficulty> raceDiffRepo;
+        private readonly IRepository<Trace> raceTraceRepo;
 
-        public RaceDifficultyService(IRepository<RideDifficulty> raceDiffRepo)
+        public RaceDifficultyService(IRepository<Trace> raceTraceRepo)
         {
-            this.raceDiffRepo = raceDiffRepo;
+            this.raceTraceRepo = raceTraceRepo;
         }
 
         public RaceDifficultyProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId)
         {
-            var trace = this.raceDiffRepo
+            var trace = this.raceTraceRepo
                 .AllAsNoTracking()
                 .Include(t => t.Race).ThenInclude(r => r.Logo)
                 .Include(t => t.Difficulty)
@@ -43,7 +43,7 @@
                 Id = trace.Id,
                 Name = trace.Name,
                 RaceName = trace.Race.Name,
-                RaceId = trace.RaceId,
+                RaceId = (int)trace.RaceId,
                 Difficulty = trace.Difficulty.Level.ToString(),
                 DifficultyId = trace.DifficultyId,
                 ControlTime = trace.ControlTime.TotalHours,
@@ -56,7 +56,7 @@
 
         public async Task EditAsync(RaceDifficultyInputViewModel model)
         {
-            var trace = this.raceDiffRepo
+            var trace = this.raceTraceRepo
                 .All()
                 .FirstOrDefault(rd => rd.Id == model.Id);
 
@@ -67,33 +67,33 @@
             trace.TrackUrl = model.TrackUrl;
             trace.StartTime = (DateTime)model.StartTime;
 
-            await this.raceDiffRepo.SaveChangesAsync();
+            await this.raceTraceRepo.SaveChangesAsync();
         }
 
         public T GetById<T>(int raceId, int traceId)
         {
-            return this.raceDiffRepo
+            return this.raceTraceRepo
                 .AllAsNoTracking()
-                .Where(rd => rd.Id == traceId && rd.RaceId == raceId)
+                .Where(rt => rt.Id == traceId && rt.RaceId == raceId)
                 .To<T>()
                 .FirstOrDefault();
         }
 
         public async Task CreateAsync(RaceDifficultyInputViewModel model)
         {
-            var trace = new RideDifficulty()
+            var trace = new Trace()
             {
-                RaceId = model.RaceId,
                 Name = model.Name,
                 Length = (int)model.Length,
                 DifficultyId = model.DifficultyId,
                 StartTime = (DateTime)model.StartTime,
                 TrackUrl = model.TrackUrl,
                 ControlTime = TimeSpan.FromHours((double)model.ControlTime),
+                RaceId = model.RaceId,
             };
 
-            await this.raceDiffRepo.AddAsync(trace);
-            await this.raceDiffRepo.SaveChangesAsync();
+            await this.raceTraceRepo.AddAsync(trace);
+            await this.raceTraceRepo.SaveChangesAsync();
         }
     }
 }

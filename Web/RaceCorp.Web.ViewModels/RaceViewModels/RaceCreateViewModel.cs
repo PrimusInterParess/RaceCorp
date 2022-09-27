@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.ValidationAttributes;
+    using RaceCorp.Web.ViewModels.CommonViewModels;
     using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.FormatViewModels;
 
@@ -16,7 +17,7 @@
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
     using static RaceCorp.Web.ViewModels.Constants.StringValues;
 
-    public class RaceCreateViewModel : RaceBaseViewModel
+    public class RaceCreateViewModel : RideBaseCreateViewModel
     {
         public ICollection<RaceDifficultyCreateViewModel> Difficulties { get; set; } = new List<RaceDifficultyCreateViewModel>();
 

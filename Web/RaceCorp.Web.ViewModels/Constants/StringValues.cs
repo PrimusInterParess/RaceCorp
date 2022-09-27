@@ -2,7 +2,7 @@
 {
     public static class StringValues
     {
-        public const string DisplayNameRace = "Race name";
-        public const string DisplayNameFormat = "Race Format";
+        public const string DisplayName = "Name";
+        public const string DisplayNameFormat = "Format";
     }
 }

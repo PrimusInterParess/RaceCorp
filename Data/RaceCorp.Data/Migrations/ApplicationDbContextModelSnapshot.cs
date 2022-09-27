@@ -466,6 +466,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<int>("TownId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TraceId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -479,47 +482,12 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasIndex("TownId");
 
+                    b.HasIndex("TraceId")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Rides");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.RideDifficulty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<TimeSpan>("ControlTime")
-                        .HasColumnType("time");
-
-                    b.Property<int>("DifficultyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Length")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RaceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TrackUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DifficultyId");
-
-                    b.HasIndex("RaceId");
-
-                    b.ToTable("RideDifficulties");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Setting", b =>
@@ -583,6 +551,61 @@ namespace RaceCorp.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Towns");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Trace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<TimeSpan>("ControlTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DifficultyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Length")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RaceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RideId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrackUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DifficultyId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("RaceId");
+
+                    b.ToTable("Traces");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -687,21 +710,27 @@ namespace RaceCorp.Data.Migrations
             modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
                 {
                     b.HasOne("RaceCorp.Data.Models.Format", "Format")
-                        .WithMany()
+                        .WithMany("Rides")
                         .HasForeignKey("FormatId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("RaceCorp.Data.Models.Mountain", "Mountain")
-                        .WithMany()
+                        .WithMany("Rides")
                         .HasForeignKey("MountainId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("RaceCorp.Data.Models.Town", "Town")
-                        .WithMany()
+                        .WithMany("Rides")
                         .HasForeignKey("TownId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RaceCorp.Data.Models.Trace", "Trace")
+                        .WithOne("Ride")
+                        .HasForeignKey("RaceCorp.Data.Models.Ride", "TraceId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "User")
@@ -714,22 +743,22 @@ namespace RaceCorp.Data.Migrations
 
                     b.Navigation("Town");
 
+                    b.Navigation("Trace");
+
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RaceCorp.Data.Models.RideDifficulty", b =>
+            modelBuilder.Entity("RaceCorp.Data.Models.Trace", b =>
                 {
                     b.HasOne("RaceCorp.Data.Models.Difficulty", "Difficulty")
-                        .WithMany("Races")
+                        .WithMany("Traces")
                         .HasForeignKey("DifficultyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("RaceCorp.Data.Models.Race", "Race")
-                        .WithMany()
-                        .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Traces")
+                        .HasForeignKey("RaceId");
 
                     b.Navigation("Difficulty");
 
@@ -747,12 +776,14 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Difficulty", b =>
                 {
-                    b.Navigation("Races");
+                    b.Navigation("Traces");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Format", b =>
                 {
                     b.Navigation("Races");
+
+                    b.Navigation("Rides");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Logo", b =>
@@ -763,11 +794,25 @@ namespace RaceCorp.Data.Migrations
             modelBuilder.Entity("RaceCorp.Data.Models.Mountain", b =>
                 {
                     b.Navigation("Races");
+
+                    b.Navigation("Rides");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
+                {
+                    b.Navigation("Traces");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Town", b =>
                 {
                     b.Navigation("Races");
+
+                    b.Navigation("Rides");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Trace", b =>
+                {
+                    b.Navigation("Ride");
                 });
 #pragma warning restore 612, 618
         }

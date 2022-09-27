@@ -23,19 +23,19 @@
         {
         }
 
+        public DbSet<Difficulty> Difficulties { get; set; }
+
         public DbSet<Ride> Rides { get; set; }
 
         public DbSet<Race> Races { get; set; }
 
-        public DbSet<Difficulty> Difficulties { get; set; }
+        public DbSet<Trace> Traces { get; set; }
 
         public DbSet<Format> Formats { get; set; }
 
         public DbSet<Town> Towns { get; set; }
 
         public DbSet<Mountain> Mountains { get; set; }
-
-        public DbSet<RideDifficulty> RideDifficulties { get; set; }
 
         public DbSet<Logo> Logos { get; set; }
 
@@ -97,6 +97,16 @@
                 .HasOne(l => l.Race)
                 .WithOne(r => r.Logo)
                 .HasForeignKey<Race>(r => r.LogoId);
+
+            builder.Entity<Ride>()
+                            .HasOne(l => l.Trace)
+                            .WithOne(r => r.Ride)
+                            .HasForeignKey<Trace>(r => r.RideId);
+
+            builder.Entity<Trace>()
+                            .HasOne(l => l.Ride)
+                            .WithOne(r => r.Trace)
+                            .HasForeignKey<Ride>(r => r.TraceId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

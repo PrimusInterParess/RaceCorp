@@ -30,7 +30,7 @@ namespace RaceCorp.Web.ViewModels.RaceViewModels
                 .ForMember(x => x.Mountain, opt
                     => opt.MapFrom(x => x.Mountain.Name));
 
-            configuration.CreateMap<RideDifficulty, DifficultyInRaceProfileViewModel>()
+            configuration.CreateMap<Trace, DifficultyInRaceProfileViewModel>()
                 .ForMember(x => x.DifficultyName, opt
                    => opt.MapFrom(x => x.Difficulty.Level.ToString()))
                 .ForMember(x => x.ControlTime, opt

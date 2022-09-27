@@ -1,10 +1,11 @@
 ﻿namespace RaceCorp.Data.Models
 {
+    using System;
     using System.Collections.Generic;
 
     using RaceCorp.Data.Common.Models;
 
-    public class Ride : BaseRide
+    public class Ride : RideBaseModel
     {
         public string UserId { get; set; }
 
@@ -22,6 +23,8 @@
 
         public virtual Format Format { get; set; }
 
-        public ICollection<RideDifficulty> Traces { get; set; } = new HashSet<RideDifficulty>();
+        public int TraceId { get; set; }
+
+        public Trace Trace { get; set; }
     }
 }

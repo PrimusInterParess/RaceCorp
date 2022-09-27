@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.RaceViewModels
+﻿namespace RaceCorp.Web.ViewModels.CommonViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -14,10 +14,10 @@
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
     using static RaceCorp.Web.ViewModels.Constants.StringValues;
 
-    public class RaceBaseViewModel
+    public abstract class RideBaseCreateViewModel
     {
         [Required]
-        [Display(Name = DisplayNameRace)]
+        [Display(Name = DisplayName)]
         [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Name { get; set; }
 

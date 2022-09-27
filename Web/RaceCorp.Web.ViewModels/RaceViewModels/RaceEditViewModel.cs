@@ -4,14 +4,14 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using Microsoft.AspNetCore.Http;
-
     using AutoMapper;
+    using Microsoft.AspNetCore.Http;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Services.ValidationAttributes;
+    using RaceCorp.Web.ViewModels.Ride;
 
-    public class RaceEditViewModel : RaceBaseViewModel, IMapFrom<Race>, IHaveCustomMappings
+    public class RaceEditViewModel : RideCreateViewModel, IMapFrom<Race>, IHaveCustomMappings
     {
         public int Id { get; set; }
 

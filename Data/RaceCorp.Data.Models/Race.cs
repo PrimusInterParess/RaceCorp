@@ -10,7 +10,7 @@
 
     using RaceCorp.Data.Common.Models;
 
-    public class Race : BaseRide
+    public class Race : RideBaseModel
     {
         public string LogoId { get; set; }
 
@@ -32,7 +32,7 @@
 
         public virtual Format Format { get; set; }
 
-        public ICollection<RideDifficulty> Traces { get; set; } = new HashSet<RideDifficulty>();
+        public ICollection<Trace> Traces { get; set; } = new HashSet<Trace>();
 
         // public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
     }

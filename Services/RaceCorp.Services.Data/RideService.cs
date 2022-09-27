@@ -27,8 +27,8 @@
         public async Task CreateAsync(RideCreateViewModel model, string userId)
         {
             // validate entities!!!
-            var town = this.townRepo.AllAsNoTracking().FirstOrDefault(t => t.Name == model.Name);
-            var mountain = this.mountainRepo.AllAsNoTracking().FirstOrDefault(m => m.Name == model.Name);
+            var town = this.townRepo.AllAsNoTracking().FirstOrDefault(t => t.Name == model.Town);
+            var mountain = this.mountainRepo.AllAsNoTracking().FirstOrDefault(m => m.Name == model.Mountain);
 
             // TODO: Validate inputData!
             var ride = new Ride()
@@ -39,12 +39,29 @@
                 Description = model.Description,
                 FormatId = int.Parse(model.FormatId),
                 UserId = userId,
-                Town = town,
-                Mountain = mountain,
+                TownId = town.Id,
+                MountainId = mountain.Id,
+                Trace = new Trace()
+                {
+                    Name = model.Trace.Name,
+                    DifficultyId = model.Trace.DifficultyId,
+                    ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime),
+                    Length = (int)model.Trace.Length,
+                    CreatedOn = DateTime.Now,
+                    StartTime = (DateTime)model.Trace.StartTime,
+                    TrackUrl = model.Trace.TrackUrl,
+                },
             };
 
-            await this.rideRepo.AddAsync(ride);
-            await this.rideRepo.SaveChangesAsync();
+            try
+            {
+                await this.rideRepo.AddAsync(ride);
+                await this.rideRepo.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }
