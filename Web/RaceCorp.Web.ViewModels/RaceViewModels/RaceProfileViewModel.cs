@@ -18,7 +18,7 @@ namespace RaceCorp.Web.ViewModels.RaceViewModels
     {
         public DateTime Date { get; set; }
 
-        public List<DifficultyInRaceProfileViewModel> Traces { get; set; }
+        public List<TraceInRaceProfileViewModel> Traces { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -30,7 +30,7 @@ namespace RaceCorp.Web.ViewModels.RaceViewModels
                 .ForMember(x => x.Mountain, opt
                     => opt.MapFrom(x => x.Mountain.Name));
 
-            configuration.CreateMap<Trace, DifficultyInRaceProfileViewModel>()
+            configuration.CreateMap<Trace, TraceInRaceProfileViewModel>()
                 .ForMember(x => x.DifficultyName, opt
                    => opt.MapFrom(x => x.Difficulty.Level.ToString()))
                 .ForMember(x => x.ControlTime, opt

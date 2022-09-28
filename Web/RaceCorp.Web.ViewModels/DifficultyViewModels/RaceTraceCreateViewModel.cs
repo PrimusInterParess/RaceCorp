@@ -10,7 +10,7 @@
     using static RaceCorp.Web.ViewModels.Constants.Messages;
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
 
-    public class RaceDifficultyCreateViewModel
+    public class RaceTraceCreateViewModel
     {
         [Display(Name = "Trace name")]
         [Required]

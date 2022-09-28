@@ -30,7 +30,10 @@
                               new DifficultySeeder(),
                               new FormatSeeder(),
                               new TownSeeder(),
+                              new LogoSeeder(),
                               new MountainSeeder(),
+                              new RaceSeeder(),
+                              new RideSeeder(),
                           };
 
             foreach (var seeder in seeders)

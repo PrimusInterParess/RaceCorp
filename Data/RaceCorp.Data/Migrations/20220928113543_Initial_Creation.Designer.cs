@@ -12,7 +12,7 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220927122302_Initial_Creation")]
+    [Migration("20220928113543_Initial_Creation")]
     partial class Initial_Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -324,7 +324,7 @@ namespace RaceCorp.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RaceId")
+                    b.Property<int?>("RaceId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")

@@ -19,7 +19,7 @@
 
     public class RaceCreateViewModel : RideBaseCreateViewModel
     {
-        public ICollection<RaceDifficultyCreateViewModel> Difficulties { get; set; } = new List<RaceDifficultyCreateViewModel>();
+        public ICollection<RaceTraceCreateViewModel> Difficulties { get; set; } = new List<RaceTraceCreateViewModel>();
 
         public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();
     }

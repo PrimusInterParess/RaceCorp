@@ -25,7 +25,7 @@
             this.raceTraceRepo = raceTraceRepo;
         }
 
-        public RaceDifficultyProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId)
+        public RaceTraceProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId)
         {
             var trace = this.raceTraceRepo
                 .AllAsNoTracking()
@@ -38,7 +38,7 @@
                 throw new Exception(InvalidTrace);
             }
             ////LogoRootPath + race.LogoId + "." + race.Logo.Extension
-            return new RaceDifficultyProfileViewModel()
+            return new RaceTraceProfileViewModel()
             {
                 Id = trace.Id,
                 Name = trace.Name,
@@ -54,7 +54,7 @@
             };
         }
 
-        public async Task EditAsync(RaceDifficultyInputViewModel model)
+        public async Task EditAsync(RaceTraceInputViewModel model)
         {
             var trace = this.raceTraceRepo
                 .All()
@@ -79,7 +79,7 @@
                 .FirstOrDefault();
         }
 
-        public async Task CreateAsync(RaceDifficultyInputViewModel model)
+        public async Task CreateAsync(RaceTraceInputViewModel model)
         {
             var trace = new Trace()
             {

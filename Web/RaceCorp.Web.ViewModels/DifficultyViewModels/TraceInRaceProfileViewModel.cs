@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class DifficultyInRaceProfileViewModel
+    public class TraceInRaceProfileViewModel
     {
         public string DifficultyName { get; set; }
 

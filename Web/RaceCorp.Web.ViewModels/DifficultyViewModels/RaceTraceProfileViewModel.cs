@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class RaceDifficultyProfileViewModel
+    public class RaceTraceProfileViewModel
     {
         public int Id { get; set; }
 

@@ -10,11 +10,11 @@
 
     public interface IRaceDifficultyService
     {
-        RaceDifficultyProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId);
+        RaceTraceProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId);
 
-        Task EditAsync(RaceDifficultyInputViewModel model);
+        Task EditAsync(RaceTraceInputViewModel model);
 
-        Task CreateAsync(RaceDifficultyInputViewModel model);
+        Task CreateAsync(RaceTraceInputViewModel model);
 
         T GetById<T>(int raceId, int traceId);
     }

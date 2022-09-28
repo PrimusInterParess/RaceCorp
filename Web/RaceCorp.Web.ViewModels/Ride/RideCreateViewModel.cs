@@ -12,7 +12,7 @@
     public class RideCreateViewModel : RideBaseCreateViewModel
     {
 
-        public RaceDifficultyCreateViewModel Trace { get; set; }
+        public RaceTraceCreateViewModel Trace { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();
 

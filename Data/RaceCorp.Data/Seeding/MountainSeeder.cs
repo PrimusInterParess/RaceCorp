@@ -19,17 +19,18 @@
 
             await dbContext.Mountains.AddAsync(new Mountain() { Name = "Pirin" });
 
-            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Rila" });
-
             await dbContext.Mountains.AddAsync(new Mountain() { Name = "Vitosha" });
 
-            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Balkan Mountains" });
+            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Chepan" });
 
-            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Osogovo" });
+            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Rodopi" });
 
-            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Belasitza" });
+            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Balkan" });
 
-            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Lulin Mountain" });
+
+        
+
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model RaceCorp.Web.ViewModels.DifficultyViewModels.RaceDifficultyProfileViewModel
+﻿@model RaceCorp.Web.ViewModels.DifficultyViewModels.RaceTraceProfileViewModel
 
 @{
     this.ViewData["Title"] = "Trace Profile";
@@ -7,7 +7,7 @@
 <article class="form-group text-center">
     <header>
         <h1>@Model.Name</h1>
-        <a class="btn btn-outline-secondary mb-1" asp-controller="RaceDifficulty" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId" asp-action="Edit">Edit</a>
+        <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Edit</a>
 
     </header>
 

@@ -19,17 +19,11 @@
 
             await dbContext.Towns.AddAsync(new Town() { Name = "Sofia" });
 
-            await dbContext.Towns.AddAsync(new Town() { Name = "Plovdiv" });
+            await dbContext.Towns.AddAsync(new Town() { Name = "Dragoman" });
 
-            await dbContext.Towns.AddAsync(new Town() { Name = "Vratsa" });
+            await dbContext.Towns.AddAsync(new Town() { Name = "Buhovo" });
 
-            await dbContext.Towns.AddAsync(new Town() { Name = "Stara Zagora" });
-
-            await dbContext.Towns.AddAsync(new Town() { Name = "Petrich" });
-
-            await dbContext.Towns.AddAsync(new Town() { Name = "Kazanlak" });
-
-            await dbContext.Towns.AddAsync(new Town() { Name = "Belogradchik" });
+            await dbContext.Towns.AddAsync(new Town() { Name = "Kresna" });
 
             await dbContext.Towns.AddAsync(new Town() { Name = "Asenovgrad" });
         }
