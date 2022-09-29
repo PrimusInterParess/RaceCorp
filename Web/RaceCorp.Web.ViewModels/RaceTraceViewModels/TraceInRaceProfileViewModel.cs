@@ -20,7 +20,7 @@
 
         public double? ControlTime { get; set; }
 
-        public DateTime? StartTime { get; set; }
+        public string StartTime { get; set; }
 
         public string TrackUrl { get; set; }
     }

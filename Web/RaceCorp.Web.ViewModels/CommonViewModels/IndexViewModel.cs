@@ -12,8 +12,12 @@
 
         public IEnumerable<KeyValuePair<string, string>> Difficulties { get; set; } = new HashSet<KeyValuePair<string, string>>();
 
-        public string Id { get; set; }
+        public string TownId { get; set; }
 
-        public string Type { get; set; }
+        public string FormatId { get; set; }
+
+        public string DifficultyId { get; set; }
+
+        public string MountainId { get; set; }
     }
 }

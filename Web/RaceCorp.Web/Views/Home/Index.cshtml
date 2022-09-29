@@ -11,67 +11,71 @@
 }
 
 
-<div class="row">
-    <div class="col-sm-6 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Towns</h5>
-                <p class="card-text">You can select races from @Model.Towns.Count() towns around the country !</p>
-                <div class="form-group">
-                    <form id="towns" method="post">
-                        <select class="form-control text-center" asp-items="@towns">
+<form id="towns" method="post">
+    <div class="row">
+
+        <div class="col-sm-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Towns</h5>
+                    <p class="card-text">You can select races from @Model.Towns.Count() towns around the country !</p>
+                    <div class="form-group">
+
+                        <select class="form-control text-center" asp-for="TownId" asp-items="@towns">
                         </select>
-                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select"/>
-                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Mountains</h5>
+                    <p class="card-text">We have races in @Model.Mountains.Count() different mountain ranges! </p>
+                    <div class="form-group">
+
+                        <select class="form-control text-center" asp-for="MountainId" asp-items="@mountains">
+                        </select>
+
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Mountains</h5>
-                <p class="card-text">We have races in @Model.Mountains.Count() different mountain ranges! </p>
-                <div class="form-group">
-                    <form id="towns" method="post">
-                        <select class="form-control text-center" asp-items="@mountains">
+    <div class="row">
+        <div class="col-sm-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Formats</h5>
+                    <p class="card-text">There are @Model.Formats.Count() race formats you can select from! </p>
+                    <div class="form-group">
+
+                        <select class="form-control text-center" asp-for="FormatId" asp-items="@formats">
                         </select>
-                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select" />
-                    </form>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Difficulties</h5>
+                    <p class="card-text">If you want challenges pick race difficulty!</p>
+                    <div class="form-group">
+
+                        <select class="form-control text-center" asp-for="DifficultyId" asp-items="@difficulties">
+                        </select>
+
+                            
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Formats</h5>
-                <p class="card-text">There are @Model.Formats.Count() race formats you can select from! </p>
-                 <div class="form-group">
-                    <form id="towns" method="post">
-                        <select class="form-control text-center" asp-items="@formats">
-                        </select>
-                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select"/>
-                    </form>
-                </div>
-              
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Difficulties</h5>
-                <p class="card-text">If you want challenges pick race difficulty!</p>
-                <div class="form-group">
-                    <form id="towns" method="post">
-                        <select class="form-control text-center" asp-items="@difficulties">
-                        </select>
-                        <input class="form-control mt-2 btn-outline-success" type="submit" value="Select" />
-                    </form>
-                </div>
-              
-            </div>
-        </div>
-    </div>
-</div>
+    <input class="form-control mt-2 btn-outline-success" type="submit" value="Select" />
+</form>

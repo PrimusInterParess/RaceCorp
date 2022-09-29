@@ -48,7 +48,7 @@
                 DifficultyId = trace.DifficultyId,
                 ControlTime = trace.ControlTime.TotalHours,
                 Length = trace.Length,
-                StartTime = trace.StartTime,
+                StartTime = trace.StartTime.ToString("HH:MM"),
                 TrackUrl = trace.TrackUrl,
                 LogoPath = LogoRootPath + trace.Race.LogoId + "." + trace.Race.Logo.Extension,
             };

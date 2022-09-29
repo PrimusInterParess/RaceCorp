@@ -20,7 +20,7 @@
         <div class="card-body">
             <h5 class="card-title">There are no races yet!</h5>
             <p class="card-text">Why don't you add one ?</p>
-            <a asp-action="Create" class="btn btn-secondary">Create race</a>
+            <a asp-action="Create" asp-controller="Race" class="btn btn-secondary">Create race</a>
         </div>
         <div class="card-footer text-muted">
             @DateTime.UtcNow
@@ -41,31 +41,10 @@ else
                 </p>
             </div>
             <ul class="list-group list-group-flush text-center">
-                <li class="list-group-item">@race.Town</li>
-                <li class="list-group-item">@race.Mountain</li>
+                <li class="list-group-item">Town: @race.Town</li>
+                <li class="list-group-item">Mountain: @race.Mountain</li>
             </ul>
         </div>
-
-
-        @* <div class="media col-md-4">
-    <img src="@race.LogoPath" width="200" class="mr-3 img-responsive">
-    <div class="media-body">
-    <h5 class="mt-0"><a asp-action="Profile" asp-route-id="@race.Id">@race.Name</a></h5>
-    <p>
-    @race.Description
-    </p>
-    <div class="form-control">
-    <ul>
-    <li>
-    @race.Town
-    </li>
-    <li>
-    @race.Mountain
-    </li>
-    </ul>
-    </div>
-    </div>
-    </div>*@
     }
 </div>
     <hr />

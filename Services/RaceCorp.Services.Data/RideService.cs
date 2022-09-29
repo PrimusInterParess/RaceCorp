@@ -24,6 +24,11 @@
             this.mountainRepo = mountainRepo;
         }
 
+        public RideAllViewModel All(int page, int itemsPerPage = 3)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task CreateAsync(RideCreateViewModel model, string userId)
         {
             // validate entities!!!

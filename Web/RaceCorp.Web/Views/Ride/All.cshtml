@@ -1,1 +1,60 @@
-﻿<h1>Welcome to all Rides!</h1>
+﻿@model RaceCorp.Web.ViewModels.Ride.RideAllViewModel
+@{
+    ViewData["Title"] = "All Rides";
+}
+
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">@this.TempData["Message"]</div>
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+
+@if (Model.RacesCount == 0)
+{
+    <div class="card text-center">
+        <div class="card-header">
+            Opss..
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">There are no rides yet!</h5>
+            <p class="card-text">Why don't you add one ?</p>
+            <a asp-action="Create" asp-controller="Ride" class="btn btn-secondary">Create ride</a>
+        </div>
+        <div class="card-footer text-muted">
+            @DateTime.UtcNow
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var ride in this.Model.Rides)
+        {
+            <div class="form-group card col-md-4">
+                <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
+                    <iframe src="@ride.TrackUrl" frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0"></iframe>
+                </div>
+                <div class="card-body text-center">
+                    <a class="btn btn-outline-secondary" asp-action="Profile" asp-route-id="@ride.Id"><h5>@ride.Name</h5></a>
+                    <p class="card-text">
+                        <b> @ride.Description</b>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item">Town: @ride.TownName</li>
+                    <li class="list-group-item">Mountain: @ride.MountainName</li>
+                </ul>
+
+                }
+            </div>
+         
+        }
+    </div>
+
+    <hr />
+    <partial name="_PagingPartial" model="@Model" />
+}
+

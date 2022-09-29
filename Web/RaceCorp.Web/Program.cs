@@ -66,7 +66,6 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
-            services.AddTransient<IGetIndexPageCategoriesList, GetIndexPageCategoriesList>();
             services.AddTransient<IDifficultyService, DifficultyService>();
             services.AddTransient<IFormatServices, FormatService>();
             services.AddTransient<ITownService, TownService>();
@@ -75,6 +74,7 @@
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IRaceDifficultyService, RaceDifficultyService>();
             services.AddTransient<IRideService, RideService>();
+            services.AddTransient<IHomeService, HomeService>();
         }
 
         private static void Configure(WebApplication app)

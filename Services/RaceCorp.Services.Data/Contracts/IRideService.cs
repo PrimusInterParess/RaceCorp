@@ -7,5 +7,8 @@
     public interface IRideService
     {
         Task CreateAsync(RideCreateViewModel model, string userId);
+
+        RideAllViewModel All(int page, int itemsPerPage = 3);
+
     }
 }

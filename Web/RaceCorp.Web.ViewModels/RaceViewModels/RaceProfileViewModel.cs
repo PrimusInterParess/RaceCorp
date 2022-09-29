@@ -34,7 +34,9 @@ namespace RaceCorp.Web.ViewModels.RaceViewModels
                 .ForMember(x => x.DifficultyName, opt
                    => opt.MapFrom(x => x.Difficulty.Level.ToString()))
                 .ForMember(x => x.ControlTime, opt
-                   => opt.MapFrom(x => x.ControlTime.TotalHours));
+                   => opt.MapFrom(x => x.ControlTime.TotalHours))
+                .ForMember(x => x.StartTime, opt
+                   => opt.MapFrom(x => x.StartTime.ToString("HH:MM")));
 
             //configuration.CreateMap<RaceDifficulty, RaceDifficultyEditViewModel>()
             //    .ForMember(x => x.DifficultyName, opt

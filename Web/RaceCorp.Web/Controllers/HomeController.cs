@@ -7,30 +7,42 @@
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels;
+    using RaceCorp.Web.ViewModels.CommonViewModels;
 
     public class HomeController : BaseController
     {
-        private readonly IGetIndexPageCategoriesList getCattegoryListService;
+        private readonly IHomeService homeService;
 
-        public HomeController(IGetIndexPageCategoriesList getCattegoryListService)
+        public HomeController(IHomeService homeService)
         {
-            this.getCattegoryListService = getCattegoryListService;
+            this.homeService = homeService;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var indexViewModel = this.getCattegoryListService.GetCategories();
+            var indexViewModel = this.homeService.GetCategories();
 
             return this.View(indexViewModel);
         }
 
         [HttpPost]
-        public IActionResult Index(string inputData)
+        public IActionResult Index(IndexViewModel model)
         {
-            var indexViewModel = this.getCattegoryListService.GetCategories();
+            var homeAllViewModel = this.homeService
+                .GetAll(
+                model.TownId,
+                model.MountainId,
+                model.FormatId,
+                model.DifficultyId);
 
-            return this.View(indexViewModel);
+            return this.RedirectToAction(nameof(HomeController.All), nameof(HomeController), new { model= homeAllViewModel });
+        }
+
+        [HttpGet]
+        public IActionResult All(HomeAllViewModel model)
+        {
+            return this.View(model);
         }
 
         public IActionResult Privacy()

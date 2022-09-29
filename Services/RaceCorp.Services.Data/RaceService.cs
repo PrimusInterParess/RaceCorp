@@ -151,16 +151,14 @@
         public RaceAllViewModel All(int page, int itemsPerPage = 3)
         {
             var count = this.raceRepo.All().Count();
-            var races = this.raceRepo.AllAsNoTracking().Select(r => new RaceViewModel()
+            var races = this.raceRepo.AllAsNoTracking().Select(r => new RaceInAllViewModel()
             {
                 Id = r.Id,
                 Name = r.Name,
                 Description = r.Description,
                 LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
                 Town = r.Town.Name,
-                TownId = r.TownId,
                 Mountain = r.Mountain.Name,
-                MountainId = r.MountainId,
             }).Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList();
 
             return new RaceAllViewModel()

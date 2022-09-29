@@ -68,10 +68,15 @@
             return this.RedirectToAction(nameof(RideController.All));
         }
 
-        [HttpGet]
-        public IActionResult All()
+        public IActionResult All(int id = 1)
         {
-            return this.View();
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
+            var races = this.rideService.All(id);
+            return this.View(races);
         }
     }
 }
