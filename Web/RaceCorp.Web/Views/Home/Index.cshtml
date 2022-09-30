@@ -10,12 +10,11 @@
 
 }
 
-
-<form id="towns" method="post">
+<div class="form-control text-center">
+<form  id="towns" method="post">
     <div class="row">
-
-        <div class="col-sm-6 mb-3">
-            <div class="card">
+        <div class="mb-3">
+                <div class="form-control card col-sm-2">
                 <div class="card-body text-center">
                     <h5 class="card-title">Towns</h5>
                     <p class="card-text">You can select races from @Model.Towns.Count() towns around the country !</p>
@@ -27,8 +26,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 mb-3">
-            <div class="card">
+        <div class="mb-3">
+                <div class="form-control card col-sm-2">
                 <div class="card-body text-center">
                     <h5 class="card-title">Mountains</h5>
                     <p class="card-text">We have races in @Model.Mountains.Count() different mountain ranges! </p>
@@ -42,10 +41,10 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 mb-3">
-            <div class="card">
+
+
+        <div class="mb-3">
+                <div class="form-control card col-sm-2">
                 <div class="card-body text-center">
                     <h5 class="card-title">Formats</h5>
                     <p class="card-text">There are @Model.Formats.Count() race formats you can select from! </p>
@@ -60,8 +59,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 mb-3">
-            <div class="card">
+        <div class="mb-3">
+                <div class="form-control card col-sm-2">
                 <div class="card-body text-center">
                     <h5 class="card-title">Difficulties</h5>
                     <p class="card-text">If you want challenges pick race difficulty!</p>
@@ -70,12 +69,13 @@
                         <select class="form-control text-center" asp-for="DifficultyId" asp-items="@difficulties">
                         </select>
 
-                            
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
-    <input class="form-control mt-2 btn-outline-success" type="submit" value="Select" />
+    <input class="mt-2 form-control btn-outline-success" type="submit" value="Ride" />
 </form>
+</div>

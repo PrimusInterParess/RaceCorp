@@ -72,7 +72,7 @@
             services.AddTransient<IMountanService, MountainService>();
             services.AddTransient<IRaceService, RaceService>();
             services.AddTransient<IImageService, ImageService>();
-            services.AddTransient<IRaceDifficultyService, RaceDifficultyService>();
+            services.AddTransient<IRaceTraceService, RaceTraceService>();
             services.AddTransient<IRideService, RideService>();
             services.AddTransient<IHomeService, HomeService>();
         }

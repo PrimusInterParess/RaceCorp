@@ -1,18 +1,14 @@
-﻿using AutoMapper;
-using RaceCorp.Data.Models;
-using RaceCorp.Services.Mapping;
-
-namespace RaceCorp.Web.ViewModels.RaceViewModels
+﻿namespace RaceCorp.Web.ViewModels.RaceViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
-    using RaceCorp.Web.ViewModels.DifficultyViewModels;
+    using AutoMapper;
+    using RaceCorp.Data.Models;
+    using RaceCorp.Services.Mapping;
+    using RaceCorp.Web.ViewModels.Trace;
+
     using static RaceCorp.Services.Constants.Common;
-
 
     public class RaceProfileViewModel : RaceViewModel, IMapFrom<Race>, IHaveCustomMappings
     {
@@ -37,12 +33,6 @@ namespace RaceCorp.Web.ViewModels.RaceViewModels
                    => opt.MapFrom(x => x.ControlTime.TotalHours))
                 .ForMember(x => x.StartTime, opt
                    => opt.MapFrom(x => x.StartTime.ToString("HH:MM")));
-
-            //configuration.CreateMap<RaceDifficulty, RaceDifficultyEditViewModel>()
-            //    .ForMember(x => x.DifficultyName, opt
-            //        => opt.MapFrom(x => x.Difficulty.Level.ToString()))
-            //    .ForMember(x => x.ControlTime, opt
-            //        => opt.MapFrom(x => x.ControlTime.TotalHours));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.DifficultyViewModels
+﻿namespace RaceCorp.Web.ViewModels.Trace
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,7 @@
     using static RaceCorp.Web.ViewModels.Constants.Messages;
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
 
-    public class RaceTraceCreateViewModel
+    public class TraceInputModel
     {
         [Display(Name = "Trace name")]
         [Required]
@@ -41,5 +41,6 @@
         [Url]
         public string TrackUrl { get; set; }
 
+        public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();
     }
 }

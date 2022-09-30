@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.HomeViewModels;
 
     public interface ITownService

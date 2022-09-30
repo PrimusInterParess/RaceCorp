@@ -42,7 +42,7 @@
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new RaceCreateViewModel()
+            var model = new RaceCreateModel()
             {
                 Formats = this.formatsList.GetFormatKVP(),
                 DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
@@ -53,7 +53,7 @@
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(RaceCreateViewModel model)
+        public async Task<IActionResult> Create(RaceCreateModel model)
         {
             if (!this.ModelState.IsValid)
             {

@@ -33,12 +33,12 @@ else
     <div class="row">
         @foreach (var ride in this.Model.Rides)
         {
-            <div class="form-group card col-md-4">
-                <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
-                    <iframe src="@ride.TrackUrl" frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0"></iframe>
+            <div class="form-group card col-md-4 position-relative">
+                <div class="mb-5 position-relative" style="padding-bottom:76.25%; position:relative; display:block; width: 100%">
+                    <iframe  src="@ride.TrackUrl" frameborder="0" allowfullscreen="" width="424" height="380" style="position:absolute; top:0; left: 0"></iframe>
                 </div>
-                <div class="card-body text-center">
-                    <a class="btn btn-outline-secondary" asp-action="Profile" asp-route-id="@ride.Id"><h5>@ride.Name</h5></a>
+                <div class="mt-1 card-body text-center">
+                    <a class="btn btn-outline-secondary" asp-controller="Ride" asp-action="Profile" asp-route-id="@ride.Id"><h5>@ride.Name</h5></a>
                     <p class="card-text">
                         <b> @ride.Description</b>
                     </p>
@@ -48,7 +48,7 @@ else
                     <li class="list-group-item">Mountain: @ride.MountainName</li>
                 </ul>
 
-                }
+                
             </div>
          
         }

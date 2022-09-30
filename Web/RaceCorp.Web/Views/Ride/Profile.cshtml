@@ -1,26 +1,21 @@
-﻿@model RaceTraceProfileModel;
+﻿@model RaceCorp.Web.ViewModels.Ride.RideProfileVIewModel
 
 @{
-    this.ViewData["Title"] = "Trace Profile";
+    this.ViewData["Title"] = "Ride Profile";
 }
 
 <article class="form-group text-center">
     <header>
         <h1>@Model.Name</h1>
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Edit</a>
-
+        <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Edit" asp-route-traceId="@Model.Id">Edit</a>
     </header>
-
-
     <div class="container">
-
         <div class="ratio ratio-16x9">
             <iframe src="@Model.TrackUrl" frameborder="1"></iframe>
         </div>
         <div class="text-center col-md-6">
 
             <div class="card-header">
-
                 Overview
             </div>
             <ul class="list-group list-group-flush">
@@ -28,13 +23,8 @@
                 <li class="list-group-item">Length: @Model.Length km.</li>
                 <li class="list-group-item">Control time: @Model.ControlTime h</li>
                 <li class="list-group-item">Start time: @Model.StartTime</li>
-                <li class="list-group-item">Race name: @Model.RaceName</li>
+                <li class="list-group-item">Ride name: @Model.TraceName</li>
             </ul>
         </div>
     </div>
-
-
-
-
-
 </article>

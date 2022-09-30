@@ -10,5 +10,6 @@
 
         RideAllViewModel All(int page, int itemsPerPage = 3);
 
+       T GetById<T>(int id);
     }
 }

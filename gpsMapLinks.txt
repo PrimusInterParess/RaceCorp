@@ -9,3 +9,6 @@ https://gpx.studio/?state=%7B%22ids%22:%5B%221Za4X3oxzkgXIqzgvBH3TLxtPQrUOoSC8%2
 https://gpx.studio/?state=%7B%22ids%22:%5B%221hg3hgYLJnIgxLi1vUAUHuMbNRdz030Hw%22%5D%7D - Simeonovo
 https://gpx.studio/?state=%7B%22ids%22:%5B%221nd3WLIpgfDKCEsb7bhnqEZdy1diKSxPJ%22%5D%7D - Kresna 
 https://gpx.studio/?state=%7B%22ids%22:%5B%221DIhM-I_g-4owocu19CrWf9igDd-MzkJ5%22%5D%7D - Zlatnite
+https://gpx.studio/?state=%7B%22ids%22:%5B%221v4Nx9YNGCeD8WySvhvj_ukGVDNUC4lz3%22%5D%7D - TownPortal
+https://gpx.studio/?state=%7B%22ids%22:%5B%221HjOBDl4wtcaMOt6DR9-GfCqCMnclQkHS%22%5D%7D - Simeonvo-Dragalevci
+https://gpx.studio/?state=%7B%22ids%22:%5B%221qaK-FNt5digW_BZfVDhNgdi62WDeZyD2%22%5D%7D- GB-Panch

@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.DifficultyViewModels
+﻿namespace RaceCorp.Web.ViewModels.Trace
 {
     using System.Collections.Generic;
 
@@ -7,7 +7,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
-    public class RaceTraceInputViewModel : RaceTraceCreateViewModel, IMapFrom<Trace>, IHaveCustomMappings
+    public class RaceTraceEditModel : TraceInputModel, IMapFrom<Trace>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -15,11 +15,9 @@
 
         public string DifficultyName { get; set; }
 
-        public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();
-
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Trace, RaceTraceInputViewModel>()
+            configuration.CreateMap<Trace, RaceTraceEditModel>()
                 .ForMember(x => x.DifficultyName, opt
                     => opt.MapFrom(x => x.Difficulty.Level.ToString()))
                 .ForMember(x => x.ControlTime, opt

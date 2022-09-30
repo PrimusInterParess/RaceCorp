@@ -1,21 +1,14 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
-    using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Net.Security;
     using System.Threading.Tasks;
-    using System.Web;
 
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.DifficultyViewModels;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     using static RaceCorp.Services.Constants.Common;
@@ -42,7 +35,7 @@
         }
 
         public async Task CreateAsync(
-            RaceCreateViewModel model,
+            RaceCreateModel model,
             string imagePath,
             string userId)
         {
@@ -55,7 +48,10 @@
                 UserId = userId,
             };
 
-            var mountainData = this.mountainRepo.All().FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
+            var mountainData = this
+                .mountainRepo
+                .All()
+                .FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
 
             if (mountainData == null)
             {
@@ -69,7 +65,9 @@
 
             race.Mountain = mountainData;
 
-            var townData = this.townRepo.All().FirstOrDefault(t => t.Name.ToLower() == model.Town.ToLower());
+            var townData = this
+                .townRepo.All()
+                .FirstOrDefault(t => t.Name.ToLower() == model.Town.ToLower());
 
             if (townData == null)
             {

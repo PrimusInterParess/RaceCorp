@@ -9,6 +9,7 @@
 
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.RaceViewModels;
     using RaceCorp.Web.ViewModels.Ride;
 
     using static RaceCorp.Services.Constants.Messages;
@@ -20,7 +21,11 @@
         private readonly IFormatServices formatServices;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public RideController(IRideService rideService, IDifficultyService difficultyService, IFormatServices formatServices, UserManager<ApplicationUser> userManager)
+        public RideController(
+            IRideService rideService,
+            IDifficultyService difficultyService,
+            IFormatServices formatServices,
+            UserManager<ApplicationUser> userManager)
         {
             this.rideService = rideService;
             this.difficultyService = difficultyService;
@@ -33,7 +38,6 @@
         {
             var model = new RideCreateViewModel()
             {
-                Formats = this.formatServices.GetFormatKVP(),
                 DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
             };
 
@@ -68,6 +72,13 @@
             return this.RedirectToAction(nameof(RideController.All));
         }
 
+        public IActionResult Profile(int id)
+        {
+            var model = this.rideService.GetById<RideProfileVIewModel>(id);
+
+            return this.View(model);
+        }
+
         public IActionResult All(int id = 1)
         {
             if (id <= 0)
@@ -77,6 +88,22 @@
 
             var races = this.rideService.All(id);
             return this.View(races);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = this.rideService.GetById<RideEditVIewModel>(id);
+            model.Formats = this.formatServices.GetFormatKVP();
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(RideEditVIewModel model)
+        {
+            ////TODO: EditAsync(model) * check raceLogo;
+            return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
         }
     }
 }

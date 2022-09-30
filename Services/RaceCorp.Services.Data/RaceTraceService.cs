@@ -6,26 +6,24 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.DifficultyViewModels;
-
+    using RaceCorp.Web.ViewModels.Trace;
     using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
 
-    public class RaceDifficultyService : IRaceDifficultyService
+    public class RaceTraceService : IRaceTraceService
     {
         private readonly IRepository<Trace> raceTraceRepo;
 
-        public RaceDifficultyService(IRepository<Trace> raceTraceRepo)
+        public RaceTraceService(IRepository<Trace> raceTraceRepo)
         {
             this.raceTraceRepo = raceTraceRepo;
         }
 
-        public RaceTraceProfileViewModel GetRaceDifficultyProfileViewModel(int raceId, int traceId)
+        public RaceTraceProfileModel GetRaceDifficultyProfileViewModel(int raceId, int traceId)
         {
             var trace = this.raceTraceRepo
                 .AllAsNoTracking()
@@ -38,7 +36,7 @@
                 throw new Exception(InvalidTrace);
             }
             ////LogoRootPath + race.LogoId + "." + race.Logo.Extension
-            return new RaceTraceProfileViewModel()
+            return new RaceTraceProfileModel()
             {
                 Id = trace.Id,
                 Name = trace.Name,
@@ -54,7 +52,7 @@
             };
         }
 
-        public async Task EditAsync(RaceTraceInputViewModel model)
+        public async Task EditAsync(RaceTraceEditModel model)
         {
             var trace = this.raceTraceRepo
                 .All()
@@ -79,7 +77,7 @@
                 .FirstOrDefault();
         }
 
-        public async Task CreateAsync(RaceTraceInputViewModel model)
+        public async Task CreateAsync(RaceTraceEditModel model)
         {
             var trace = new Trace()
             {

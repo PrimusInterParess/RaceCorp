@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.DifficultyViewModels
+﻿namespace RaceCorp.Web.ViewModels.Trace
 {
     using System;
     using System.Collections.Generic;

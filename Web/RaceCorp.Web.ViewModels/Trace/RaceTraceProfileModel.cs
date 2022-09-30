@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.DifficultyViewModels
+﻿namespace RaceCorp.Web.ViewModels.Trace
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class RaceTraceProfileViewModel
+    public class RaceTraceProfileModel
     {
         public int Id { get; set; }
 

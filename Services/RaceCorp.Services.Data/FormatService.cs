@@ -6,7 +6,7 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.FormatViewModels;
+    using RaceCorp.Web.ViewModels.Common;
 
     public class FormatService : IFormatServices
     {

@@ -7,18 +7,18 @@
     using Microsoft.AspNetCore.Mvc;
 
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.DifficultyViewModels;
+    using RaceCorp.Web.ViewModels.Trace;
 
     using static RaceCorp.Services.Constants.Messages;
 
     public class TraceController : BaseController
     {
-        private readonly IRaceDifficultyService raceDiffService;
+        private readonly IRaceTraceService raceDiffService;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
 
         public TraceController(
-            IRaceDifficultyService raceDiffService,
+            IRaceTraceService raceDiffService,
             IDifficultyService difficultyService,
             IRaceService raceService)
         {
@@ -38,13 +38,13 @@
         [HttpGet]
         public IActionResult EditRaceTrace(int raceId, int traceId)
         {
-            var model = this.raceDiffService.GetById<RaceTraceInputViewModel>(raceId, traceId);
+            var model = this.raceDiffService.GetById<RaceTraceEditModel>(raceId, traceId);
             model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
             return this.View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditRaceTrace(RaceTraceInputViewModel model)
+        public async Task<IActionResult> EditRaceTrace(RaceTraceEditModel model)
         {
             if (this.ModelState.IsValid == false)
             {
@@ -78,7 +78,7 @@
                 return this.RedirectToAction(nameof(RaceController.All), nameof(RaceController));
             }
 
-            var model = new RaceTraceInputViewModel()
+            var model = new RaceTraceEditModel()
             {
                 RaceId = raceId,
             };
@@ -88,7 +88,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RaceTraceInputViewModel model)
+        public async Task<IActionResult> Create(RaceTraceEditModel model)
         {
 
             if (this.ModelState.IsValid == false)

@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.FormatViewModels
+﻿namespace RaceCorp.Web.ViewModels.Common
 {
     public class FormatViewModel
     {

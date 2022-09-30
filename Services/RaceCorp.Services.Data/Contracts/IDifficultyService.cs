@@ -1,8 +1,7 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
     using System.Collections.Generic;
-
-    using RaceCorp.Web.ViewModels.DifficultyViewModels;
+    using RaceCorp.Web.ViewModels.Common;
 
     public interface IDifficultyService
     {

@@ -7,7 +7,7 @@
 
     public interface IRaceService
     {
-        Task CreateAsync(RaceCreateViewModel model, string imagePath, string userId);
+        Task CreateAsync(RaceCreateModel model, string imagePath, string userId);
 
         RaceAllViewModel All(int page, int itemsPerPage = 3);
 

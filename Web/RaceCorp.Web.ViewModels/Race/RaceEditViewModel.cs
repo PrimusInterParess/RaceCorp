@@ -9,9 +9,10 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Services.ValidationAttributes;
+    using RaceCorp.Web.ViewModels.Race;
     using RaceCorp.Web.ViewModels.Ride;
 
-    public class RaceEditViewModel : RideCreateViewModel, IMapFrom<Race>, IHaveCustomMappings
+    public class RaceEditViewModel : RaceBaseInputModel, IMapFrom<Race>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
