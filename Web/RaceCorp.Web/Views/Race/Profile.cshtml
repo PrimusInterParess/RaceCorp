@@ -27,62 +27,83 @@
             <article>Where: The race takes place in mount <b>@Model.Mountain</b>, <b>@Model.Town</b></article>
         </div>
         <div class="col-md-3 mb-3">
-            <article>When: <b>@Model.Date</b></article>
+            <article>When: <b>@Model.Date.ToString("dd/MM/yyyy")</b></article>
         </div>
     </div>
 
 
     <hr />
-    <h4>Traces</h4>
-    @for (int i = 0; i < Model.Traces.Count; i++)
+    @if (Model.Traces.Count != 0)
     {
-        var trace = Model.Traces[i];
-        var idCollapse = "olemale" + i;
-        <div class="accordion mb-3" id="traces@i">
-            <div class="accordion-item">
-                <h2 class=" accordion-header" id="heading-@i">
-                    <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@idCollapse" aria-expanded="false">
-                        <b class="text-center">@trace.Name</b>
-                    </button>
-                </h2>
-                <div id="@idCollapse" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
-                    <div class="accordion-body text-center">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
-                            </li>
-                            <li class="list-group-item">
-                                <b>Length: </b>@trace.Length
-                            </li>
-                            <li class="list-group-item">
-                                <b>
-                                    Difficulty:
-                                </b>@trace.DifficultyName
-                            </li>
-                            <li class="list-group-item">
-                                <b>
-                                    Control time:
-                                </b>@trace.ControlTime h
-                            </li>
-                            <li class="list-group-item">
-                                <b>
-                                    Starting time:
+        <h4>Traces</h4>
+        @for (int i = 0; i < Model.Traces.Count; i++)
+        {
+            var trace = Model.Traces[i];
+            var idCollapse = "olemale" + i;
+            <div class="accordion mb-3" id="traces@i">
+                <div class="accordion-item">
+                    <h2 class=" accordion-header" id="heading-@i">
+                        <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@idCollapse" aria-expanded="false">
+                            <b class="text-center">@trace.Name</b>
+                        </button>
+                    </h2>
+                    <div id="@idCollapse" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                        <div class="accordion-body text-center">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Length: </b>@trace.Length
+                                </li>
+                                <li class="list-group-item">
+                                    <b>
+                                        Difficulty:
+                                    </b>@trace.DifficultyName
+                                </li>
+                                <li class="list-group-item">
+                                    <b>
+                                        Control time:
+                                    </b>@trace.ControlTime h
+                                </li>
+                                <li class="list-group-item">
+                                    <b>
+                                        Starting time:
 
-                                </b>@trace.StartTime
-                            </li>
-                        </ul>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">  <a class="btn btn-outline-secondary" asp-area="" asp-controller="Town" asp-action="ById" asp-route-id="@Model.TownId"><b>Town:</b> @Model.Town</a></li>
-                            <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Mountain" asp-action="ById" asp-route-id="@Model.MountainId"><b>Mountain:</b> @Model.Mountain</a></li>
-                            <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Difficulty" asp-action="ById" asp-route-id="@trace.DifficultyId"><b>Difficulty:</b> @trace.DifficultyName</a></li>
-                            <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-raceId="@Model.Id" asp-route-traceId="@trace.Id">Edit</a></li>
-                        </ul>
+                                    </b>@trace.StartTime
+                                </li>
+                            </ul>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">  <a class="btn btn-outline-secondary" asp-area="" asp-controller="Town" asp-action="ById" asp-route-id="@Model.TownId"><b>Town:</b> @Model.Town</a></li>
+                                <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Mountain" asp-action="ById" asp-route-id="@Model.MountainId"><b>Mountain:</b> @Model.Mountain</a></li>
+                                <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Difficulty" asp-action="ById" asp-route-id="@trace.DifficultyId"><b>Difficulty:</b> @trace.DifficultyName</a></li>
+                                <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-raceId="@Model.Id" asp-route-traceId="@trace.Id">Edit</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+            </div>
+        }
+       
+    }
+    else
+    {
+        <div class="card text-center">
+            <div class="card-header">
+                Opss..
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">There are no traces yet!</h5>
+                <p class="card-text">Why don't you add one ?</p>
+                <a class="btn btn-outline-secondary" asp-controller="Trace" asp-action="Create" asp-route-raceId="@Model.Id">Create trace</a>
+            </div>
+            <div class="card-footer text-muted">
+                @DateTime.UtcNow
             </div>
         </div>
     }
 </div>
+
 <hr />
 
 

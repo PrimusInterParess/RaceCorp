@@ -2,10 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    using RaceCorp.Services.ValidationAttributes;
+    using AutoMapper;
+    using RaceCorp.Data.Models;
+    using RaceCorp.Services.Mapping;
 
     using static RaceCorp.Web.ViewModels.Constants.Messages;
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
@@ -17,10 +18,9 @@
         [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Name { get; set; }
 
-        public int RaceId { get; set; }
-
+        //todo: change race-to trace
         [Required(ErrorMessage = InvalidLengthFieldErrorMessage)]
-        [Display(Name = "Race length")]
+        [Display(Name = "Trace length")]
         [Range(DefaultRaceMinLength, DefaultRaceMaxength, ErrorMessage = DefaultRaceLengthErrorMessage)]
         public int? Length { get; set; }
 

@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-
+    using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Trace;
 
@@ -98,7 +98,7 @@
 
             await this.raceDiffService.CreateAsync(model);
 
-            return this.RedirectToAction(nameof(RaceController.Profile), nameof(RaceController), new { id = model.RaceId });
+            return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.RaceId });
         }
     }
 }

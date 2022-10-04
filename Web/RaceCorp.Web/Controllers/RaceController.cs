@@ -44,6 +44,7 @@
         {
             var model = new RaceCreateModel()
             {
+                Date = DateTime.UtcNow,
                 Formats = this.formatsList.GetFormatKVP(),
                 DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
             };
@@ -57,6 +58,7 @@
         {
             if (!this.ModelState.IsValid)
             {
+                model.Date = DateTime.UtcNow;
                 model.Formats = this.formatsList.GetFormatKVP();
                 model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
                 return this.View(model);
@@ -103,9 +105,26 @@
         }
 
         [HttpPost]
-        public IActionResult Edit(RaceEditViewModel model)
+        public async Task<IActionResult> Edit(RaceEditViewModel model)
         {
-            ////TODO: EditAsync(model) * check raceLogo;
+            if (this.ModelState.IsValid == false)
+            {
+                model.Formats = this.formatsList.GetFormatKVP();
+                return this.View(model);
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            try
+            {
+                await this.raceService.EditAsync(model, $"{this.environment.WebRootPath}/images", user.Id);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
         }
 

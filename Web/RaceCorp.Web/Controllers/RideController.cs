@@ -1,16 +1,17 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
+    using System;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.CodeAnalysis.Operations;
 
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.RaceViewModels;
+
     using RaceCorp.Web.ViewModels.Ride;
+    using RaceCorp.Web.ViewModels.Trace;
 
     using static RaceCorp.Services.Constants.Messages;
 
@@ -38,7 +39,12 @@
         {
             var model = new RideCreateViewModel()
             {
-                DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
+                Date = DateTime.UtcNow,
+                Formats = this.formatServices.GetFormatKVP(),
+                Trace = new TraceInputModel()
+                {
+                    DifficultiesKVP = this.difficultyService.GetDifficultiesKVP(),
+                },
             };
 
             return this.View(model);
@@ -51,8 +57,9 @@
         {
             if (this.ModelState.IsValid == false)
             {
+                model.Date = DateTime.UtcNow;
                 model.Formats = this.formatServices.GetFormatKVP();
-                model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
+                model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
                 return this.View(model);
             }
 
@@ -65,7 +72,7 @@
             {
                 this.ModelState.AddModelError(string.Empty, IvalidOperation);
                 model.Formats = this.formatServices.GetFormatKVP();
-                model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
+                model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
                 return this.View(model);
             }
 
@@ -79,6 +86,7 @@
             return this.View(model);
         }
 
+
         public IActionResult All(int id = 1)
         {
             if (id <= 0)
@@ -86,8 +94,8 @@
                 return this.NotFound();
             }
 
-            var races = this.rideService.All(id);
-            return this.View(races);
+            var rides = this.rideService.All(id);
+            return this.View(rides);
         }
 
         [HttpGet]
@@ -95,7 +103,7 @@
         {
             var model = this.rideService.GetById<RideEditVIewModel>(id);
             model.Formats = this.formatServices.GetFormatKVP();
-
+            model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
             return this.View(model);
         }
 

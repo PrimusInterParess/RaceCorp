@@ -4,7 +4,7 @@
     this.ViewData["Title"] = "Create Ride";
     this.ViewData["ButtonName"] = "Create";
     var formats = Model.Formats.Select(t => new SelectListItem(t.Value, t.Key));
-    var difficulties = Model.DifficultiesKVP.Select(t => new SelectListItem(t.Value, t.Key));
+    var difficulties = Model.Trace.DifficultiesKVP.Select(t => new SelectListItem(t.Value, t.Key));
 }
 
 <div id="formInput" class="text-center" onload="getElements()">

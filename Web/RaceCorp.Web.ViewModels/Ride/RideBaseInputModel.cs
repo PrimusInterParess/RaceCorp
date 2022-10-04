@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Http;
     using RaceCorp.Services.ValidationAttributes;
+    using RaceCorp.Web.ViewModels.Trace;
 
     using static RaceCorp.Web.ViewModels.Constants.Messages;
     using static RaceCorp.Web.ViewModels.Constants.NumbersValues;
@@ -35,10 +36,8 @@
         [Display(Name = DisplayNameFormat)]
         public string FormatId { get; set; }
 
-
         [StringLength(DefaultDescriptionMaxValue, MinimumLength = DefaultDescriptionMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Description { get; set; }
 
-        public IEnumerable<KeyValuePair<string, string>> Formats { get; set; } = new List<KeyValuePair<string, string>>();
     }
 }

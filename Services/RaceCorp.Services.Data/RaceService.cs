@@ -81,19 +81,22 @@
 
             race.Town = townData;
 
-            foreach (var trace in model.Difficulties)
+            if (model.Difficulties.Count != 0)
             {
-                var traceData = new Trace()
+                foreach (var trace in model.Difficulties)
                 {
-                    Name = trace.Name,
-                    ControlTime = TimeSpan.FromHours((double)trace.ControlTime),
-                    DifficultyId = trace.DifficultyId,
-                    Length = (int)trace.Length,
-                    StartTime = (DateTime)trace.StartTime,
-                    TrackUrl = trace.TrackUrl,
-                };
+                    var traceData = new Trace()
+                    {
+                        Name = trace.Name,
+                        ControlTime = TimeSpan.FromHours((double)trace.ControlTime),
+                        DifficultyId = trace.DifficultyId,
+                        Length = (int)trace.Length,
+                        StartTime = (DateTime)trace.StartTime,
+                        TrackUrl = trace.TrackUrl,
+                    };
 
-                race.Traces.Add(traceData);
+                    race.Traces.Add(traceData);
+                }
             }
 
             var extension = string.Empty;
@@ -185,6 +188,94 @@
         public bool ValidateId(int id)
         {
             return this.raceRepo.AllAsNoTracking().Any(r => r.Id == id);
+        }
+
+        public async Task EditAsync(RaceEditViewModel model, string logoPath, string userId)
+        {
+            // TODO: take out the image logic out of Edit/Create methods into private method
+            // TODO: take out common login from Edit/Create methods such as mountain/town ex
+            var race = this.raceRepo.All().FirstOrDefault(r => r.Id == model.Id);
+
+            race.Name = model.Name;
+            race.Description = model.Description;
+            race.FormatId = int.Parse(model.FormatId);
+
+            if (model.RaceLogo != null)
+            {
+                var extension = string.Empty;
+
+                try
+                {
+                    extension = Path.GetExtension(model.RaceLogo.FileName).TrimStart('.');
+                }
+                catch (Exception)
+                {
+                    throw new Exception(LogoImageRequired);
+                }
+
+                var validateImageExtension = this.imageService.ValidateImageExtension(extension);
+
+                if (validateImageExtension == false)
+                {
+                    throw new Exception(InvalidImageExtension + extension);
+                }
+
+                if (model.RaceLogo.Length > 10 * 1024 * 1024)
+                {
+                    throw new Exception(InvalidImageSize);
+                }
+
+                var logo = new Logo()
+                {
+                    Extension = extension,
+                    UserId = userId,
+                };
+
+                await this.imageService
+                     .SaveImageIntoFileSystem(
+                         model.RaceLogo,
+                         logoPath,
+                         LogosFolderName,
+                         logo.Id,
+                         extension);
+
+                race.Logo = logo;
+            }
+
+            var mountainData = this
+                .mountainRepo
+                .All()
+                .FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
+
+            if (mountainData == null)
+            {
+                mountainData = new Mountain()
+                {
+                    Name = model.Mountain,
+                };
+
+                await this.mountainRepo.AddAsync(mountainData);
+            }
+
+            race.Mountain = mountainData;
+
+            var townData = this
+                .townRepo.All()
+                .FirstOrDefault(t => t.Name.ToLower() == model.Town.ToLower());
+
+            if (townData == null)
+            {
+                townData = new Town()
+                {
+                    Name = model.Town,
+                };
+
+                await this.townRepo.AddAsync(townData);
+            }
+
+            race.Town = townData;
+
+            await this.raceRepo.SaveChangesAsync();
         }
     }
 }
