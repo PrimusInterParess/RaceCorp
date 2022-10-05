@@ -19,6 +19,7 @@
         private readonly IFormatServices formatServicesList;
         private readonly ITownService townService;
         private readonly IMountanService mountanService;
+        private readonly IRaceService raceService;
 
         public HomeService(
             IDeletableEntityRepository<Race> raceRepo,
@@ -26,7 +27,8 @@
             IDifficultyService getDifficultiesServiceList,
             IFormatServices formatServicesList,
             ITownService townService,
-            IMountanService mountanService)
+            IMountanService mountanService,
+            IRaceService raceService)
         {
             this.raceRepo = raceRepo;
             this.rideRepo = rideRepo;
@@ -34,6 +36,7 @@
             this.formatServicesList = formatServicesList;
             this.townService = townService;
             this.mountanService = mountanService;
+            this.raceService = raceService;
         }
 
         public HomeAllViewModel GetAll(string townId, string mountainId, string formatId, string difficultyId)

@@ -1,5 +1,7 @@
 ﻿namespace RaceCorp.Web.ViewModels.CommonViewModels
 {
+    using RaceCorp.Web.ViewModels.RaceViewModels;
+    using RaceCorp.Web.ViewModels.Ride;
     using System.Collections.Generic;
 
     public class IndexViewModel
@@ -19,5 +21,8 @@
         public string DifficultyId { get; set; }
 
         public string MountainId { get; set; }
+
+        public ICollection<RaceInAllViewModel> Races { get; set; } = new List<RaceInAllViewModel>();
+
     }
 }

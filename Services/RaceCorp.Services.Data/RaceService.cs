@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -276,6 +277,14 @@
             race.Town = townData;
 
             await this.raceRepo.SaveChangesAsync();
+        }
+
+        public RaceInAllViewModel GetUpcommingEvents()
+        {
+            var raceData = this.raceRepo.All().Where(r => r.Date > DateTime.Now).FirstOrDefault();
+
+            return new RaceInAllViewModel();
+
         }
     }
 }

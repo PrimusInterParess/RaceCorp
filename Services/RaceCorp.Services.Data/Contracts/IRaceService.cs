@@ -18,5 +18,7 @@
         bool ValidateId(int id);
 
         Task EditAsync(RaceEditViewModel model, string logoPath, string userId);
+
+        RaceInAllViewModel GetUpcommingEvents();
     }
 }
