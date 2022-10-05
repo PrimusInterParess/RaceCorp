@@ -10,6 +10,7 @@
 
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     using static RaceCorp.Services.Constants.Messages;
@@ -96,6 +97,8 @@
         }
 
         [HttpGet]
+        [Authorize]
+
         public IActionResult Edit(int id)
         {
             var model = this.raceService.GetById<RaceEditViewModel>(id);
@@ -105,6 +108,8 @@
         }
 
         [HttpPost]
+        [Authorize]
+
         public async Task<IActionResult> Edit(RaceEditViewModel model)
         {
             if (this.ModelState.IsValid == false)
@@ -137,6 +142,46 @@
 
             var races = this.raceService.All(id);
             return this.View(races);
+        }
+
+        [HttpGet]
+        [Authorize]
+
+        public IActionResult UploadPicture()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [Authorize]
+
+        public async Task<IActionResult> UploadPicture(PictureUploadModel model)
+        {
+            if (this.ModelState.IsValid == false)
+            {
+                return this.View(model);
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            try
+            {
+                await this.raceService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images");
+            }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError(string.Empty, e.Message);
+                return this.View(model);
+            }
+
+            this.TempData["Message"] = "Your picture was successfully added!";
+
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult UpcomingRace()
+        {
+            return this.View();
         }
     }
 }

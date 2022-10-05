@@ -35,6 +35,8 @@
         }
 
         [HttpGet]
+        [Authorize]
+
         public IActionResult Create()
         {
             var model = new RideCreateViewModel()
@@ -99,6 +101,8 @@
         }
 
         [HttpGet]
+        [Authorize]
+
         public IActionResult Edit(int id)
         {
             var model = this.rideService.GetById<RideEditVIewModel>(id);
@@ -108,6 +112,8 @@
         }
 
         [HttpPost]
+        [Authorize]
+
         public IActionResult Edit(RideEditVIewModel model)
         {
             ////TODO: EditAsync(model) * check raceLogo;

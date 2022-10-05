@@ -11,6 +11,8 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.CommonViewModels;
 
+    using static RaceCorp.Services.Constants.Common;
+
     public class HomeService : IHomeService
     {
         private readonly IDeletableEntityRepository<Race> raceRepo;
@@ -20,6 +22,7 @@
         private readonly ITownService townService;
         private readonly IMountanService mountanService;
         private readonly IRaceService raceService;
+        private readonly IRepository<Image> imageRepo;
 
         public HomeService(
             IDeletableEntityRepository<Race> raceRepo,
@@ -28,7 +31,8 @@
             IFormatServices formatServicesList,
             ITownService townService,
             IMountanService mountanService,
-            IRaceService raceService)
+            IRaceService raceService,
+            IRepository<Image> imageRepo)
         {
             this.raceRepo = raceRepo;
             this.rideRepo = rideRepo;
@@ -37,6 +41,7 @@
             this.townService = townService;
             this.mountanService = mountanService;
             this.raceService = raceService;
+            this.imageRepo = imageRepo;
         }
 
         public HomeAllViewModel GetAll(string townId, string mountainId, string formatId, string difficultyId)
@@ -46,13 +51,31 @@
 
         public IndexViewModel GetCategories()
         {
-            return new IndexViewModel
+            var townImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == TownImageName);
+
+            var mountainImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == MountainImageName);
+
+            var upcommingRaceImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == UpcommingRaceImageName);
+
+            var model = new IndexViewModel();
+
+            // LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
+            if (townImage != null)
             {
-                Towns = this.townService.GetTownsKVP(),
-                Mountains = this.mountanService.GetMountainsKVP(),
-                Formats = this.formatServicesList.GetFormatKVP(),
-                Difficulties = this.getDifficultiesServiceList.GetDifficultiesKVP(),
-            };
+                model.TownImagePath = TownRootPath + townImage.Id + "." + townImage.Extension;
+            }
+
+            if (mountainImage != null)
+            {
+                model.MountainImagePath = MountainRootPath + mountainImage.Id + "." + mountainImage.Extension;
+            }
+
+            if (upcommingRaceImage != null)
+            {
+                model.UpcomingRaceImagePath = UpcomingRaceRootPath + upcommingRaceImage.Id + "." + upcommingRaceImage.Extension;
+            }
+
+            return model;
         }
     }
 }

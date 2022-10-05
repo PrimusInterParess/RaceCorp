@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     public interface IRaceService
@@ -20,5 +20,7 @@
         Task EditAsync(RaceEditViewModel model, string logoPath, string userId);
 
         RaceInAllViewModel GetUpcommingEvents();
+
+        Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath);
     }
 }

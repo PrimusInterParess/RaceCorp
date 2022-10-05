@@ -1,0 +1,29 @@
+﻿@using RaceCorp.Web.ViewModels.Common;
+
+@{
+    this.ViewData["ButtonName"] = "Upload";
+    this.ViewData["Title"] = "Upload upcomming race picture";
+}
+
+@model PictureUploadModel
+
+
+<div id="formInput" class="text-center">
+    <h1>@ViewData["Title"]</h1>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mt-5 col-md-4 offset-md-4">
+        <form method="post" class="form-group" enctype="multipart/form-data">
+
+            <div class="form-group mb-1">
+                <label asp-for="Picture">Upload Town picture:</label>
+                @using RaceCorp.Web.ViewModels.Race
+                <input asp-for="Picture" name="Picture" class="form-control mb-1" style="width: 100%;" />
+            </div>
+            <div class="form-group mb-1" id="attachHere">
+            </div>
+            <button id="submitBtn" class="btn border border-dark mt-2" type="submit">@ViewData["ButtonName"]</button>
+        </form>
+        <div>
+        </div>
+    </div>
+</div>

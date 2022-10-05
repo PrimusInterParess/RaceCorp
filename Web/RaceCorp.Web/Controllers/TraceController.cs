@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -36,6 +36,8 @@
         }
 
         [HttpGet]
+        [Authorize]
+
         public IActionResult EditRaceTrace(int raceId, int traceId)
         {
             var model = this.raceDiffService.GetById<RaceTraceEditModel>(raceId, traceId);
@@ -44,6 +46,8 @@
         }
 
         [HttpPost]
+        [Authorize]
+
         public async Task<IActionResult> EditRaceTrace(RaceTraceEditModel model)
         {
             if (this.ModelState.IsValid == false)
@@ -68,6 +72,8 @@
         }
 
         [HttpGet]
+        [Authorize]
+
         public IActionResult Create(int raceId)
         {
             var isRaceIdValid = this.raceService.ValidateId(raceId);
@@ -88,9 +94,10 @@
         }
 
         [HttpPost]
+        [Authorize]
+
         public async Task<IActionResult> Create(RaceTraceEditModel model)
         {
-
             if (this.ModelState.IsValid == false)
             {
                 return this.View(model);

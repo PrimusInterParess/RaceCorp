@@ -48,7 +48,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\Images\logos\" />
     <Folder Include="wwwroot\Maps\" />
-    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
   <ItemGroup>

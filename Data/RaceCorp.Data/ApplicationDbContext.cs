@@ -23,6 +23,8 @@
         {
         }
 
+        public DbSet<Image> Images { get; set; }
+
         public DbSet<Difficulty> Difficulties { get; set; }
 
         public DbSet<Ride> Rides { get; set; }

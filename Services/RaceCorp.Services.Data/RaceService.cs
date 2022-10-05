@@ -10,6 +10,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
+    using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     using static RaceCorp.Services.Constants.Common;
@@ -284,7 +285,30 @@
             var raceData = this.raceRepo.All().Where(r => r.Date > DateTime.Now).FirstOrDefault();
 
             return new RaceInAllViewModel();
+        }
 
+        public async Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath)
+        {
+            try
+            {
+                var image = this.imageService.ProccessingImageData(model.Picture, userId);
+
+                image.Name = UpcommingRaceImageName;
+
+                await this.imageService
+                     .SaveImageIntoFileSystem(
+                         model.Picture,
+                         imagePath,
+                         UpcommingRaceFolderName,
+                         image.Id,
+                         image.Extension);
+
+                await this.imageService.SaveAsyncImageIntoDb(image);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }
