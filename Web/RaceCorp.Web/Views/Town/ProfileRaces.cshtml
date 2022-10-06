@@ -1,0 +1,19 @@
+﻿@using RaceCorp.Web.ViewModels.Town
+
+@model TownRacesProfileViewModel
+
+@{
+    this.ViewData["Title"] = "All races in " + this.Model.Name;
+    this.ViewData["action"] = "ProfileRaces";
+    this.ViewData["controller"] = "Town";
+    this.ViewData["townId"] = this.Model.Id;
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<partial name="_RaceAllPartial" model="@Model.Races" />
+
+@if (Model.Races.Races.Count != 0)
+{
+    <partial name="_PagingPartial" model="@Model.Races" />
+}

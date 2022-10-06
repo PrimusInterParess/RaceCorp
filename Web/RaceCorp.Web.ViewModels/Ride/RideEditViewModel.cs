@@ -9,7 +9,6 @@
     {
         public int Id { get; set; }
 
-
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Ride, RideEditVIewModel>()

@@ -10,5 +10,7 @@
 
         public const string IvalidOperation = "Invalid operation";
 
+        public const string TownNameAlreadyExists = "Town with this name already exists";
+
     }
 }

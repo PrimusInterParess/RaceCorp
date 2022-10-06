@@ -1,6 +1,8 @@
 ﻿@model RaceAllViewModel
 @{
     ViewData["Title"] = "All Races";
+    this.ViewData["action"] = "All";
+    this.ViewData["controller"] = "Race";
 }
 
 
@@ -11,43 +13,11 @@
 
 <h1>@this.ViewData["Title"]</h1>
 <hr />
+<partial name="_RaceAllPartial" model="@Model" />
 
-@if(Model.RacesCount==0){
-    <div class="card text-center">
-        <div class="card-header">
-            Opss..
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">There are no races yet!</h5>
-            <p class="card-text">Why don't you add one ?</p>
-            <a asp-action="Create" asp-controller="Race" class="btn btn-secondary">Create race</a>
-        </div>
-        <div class="card-footer text-muted">
-            @DateTime.UtcNow
-        </div>
-    </div>
-}
-else
+
+@if (Model.Races.Count() != 0)
 {
-<div class="row">
-    @foreach (var race in this.Model.Races)
-        {
-            <div class="form-group card col-md-4">
-            <img src="@race.LogoPath" class="card-img-top">
-            <div class="card-body text-center">
-            <a class="btn btn-outline-secondary" asp-action="Profile" asp-route-id="@race.Id"><h5>@race.Name</h5></a> 
-                <p class="card-text">
-                    <b> @race.Description</b>
-                </p>
-            </div>
-            <ul class="list-group list-group-flush text-center">
-                <li class="list-group-item">Town: @race.Town</li>
-                <li class="list-group-item">Mountain: @race.Mountain</li>
-            </ul>
-        </div>
-    }
-</div>
-    <hr />
     <partial name="_PagingPartial" model="@Model" />
 }
 
