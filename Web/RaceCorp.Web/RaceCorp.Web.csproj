@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Ride\All.cshtml" />
+    <Content Remove="Views\Town\All.cshtml" />
   </ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
@@ -52,5 +53,14 @@
 
   <ItemGroup>
     <None Include="Views\Ride\All.cshtml" />
+    <None Include="Views\Town\All.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Town\All.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Town\All.cshtml" />
   </ItemGroup>
 </Project>

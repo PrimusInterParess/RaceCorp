@@ -13,7 +13,5 @@
         public string Town { get; set; }
 
         public string Mountain { get; set; }
-
-        public string TrackUrl { get; set; }
     }
 }

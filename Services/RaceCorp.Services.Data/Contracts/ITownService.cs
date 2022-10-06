@@ -4,14 +4,19 @@
     using System.Threading.Tasks;
 
     using RaceCorp.Web.ViewModels.Common;
-    using RaceCorp.Web.ViewModels.HomeViewModels;
+    using RaceCorp.Web.ViewModels.Ride;
+    using RaceCorp.Web.ViewModels.Town;
 
     public interface ITownService
     {
-        HashSet<TownViewModel> GetTowns();
-
         IEnumerable<KeyValuePair<string, string>> GetTownsKVP();
 
         Task SaveImage(PictureUploadModel model, string userId, string imagePath);
+
+        List<T> GetAll<T>();
+
+        Task Create(TownCreateViewModel model);
+
+        TownRidesProfileViewModel AllRides(int townId, int pageId, int itemsPerPage = 3);
     }
 }
