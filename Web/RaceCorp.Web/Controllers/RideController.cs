@@ -72,7 +72,7 @@
             }
             catch (System.Exception)
             {
-                this.ModelState.AddModelError(string.Empty, IvalidOperation);
+                this.ModelState.AddModelError(string.Empty, IvalidOperationMessage);
                 model.Formats = this.formatServices.GetFormatKVP();
                 model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
                 return this.View(model);
@@ -87,7 +87,6 @@
 
             return this.View(model);
         }
-
 
         public IActionResult All(int id = 1)
         {
@@ -114,10 +113,23 @@
         [HttpPost]
         [Authorize]
 
-        public IActionResult Edit(RideEditVIewModel model)
+        public async Task<IActionResult> Edit(RideEditVIewModel model)
         {
-            ////TODO: EditAsync(model) * check raceLogo;
-            return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
+
+            try
+            {
+                await this.rideService.EditAsync(model);
+            }
+            catch (Exception e)
+            {
+
+                this.ModelState.AddModelError(String.Empty, e.Message);
+                model.Formats = this.formatServices.GetFormatKVP();
+                model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
+                return this.View(model);
+            }
+
+            return this.RedirectToAction(nameof(RideController.Profile), new { id = model.Id });
         }
     }
 }

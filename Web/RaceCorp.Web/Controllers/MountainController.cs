@@ -9,6 +9,8 @@
     using System.Threading.Tasks;
     using System;
     using Microsoft.AspNetCore.Authorization;
+    using RaceCorp.Web.ViewModels.Town;
+    using RaceCorp.Web.ViewModels.Mountain;
 
     public class MountainController : BaseController
     {
@@ -64,7 +66,17 @@
             this.TempData["Message"] = "Your picture was successfully added!";
 
             return this.RedirectToAction("Index", "Home");
+        }
 
+        [HttpGet]
+        public IActionResult All()
+        {
+            var model = new MountainListViewModel()
+            {
+                Mountains = this.mountanService.GetAll<MountainRacesRidesViewModel>(),
+            };
+
+            return this.View(model);
         }
     }
 }

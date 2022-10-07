@@ -1,9 +1,9 @@
-﻿namespace RaceCorp.Web.ViewModels.Race
+﻿namespace RaceCorp.Web.ViewModels.Ride
 {
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
-    public class RaceInTownAllViewModel : IMapFrom<Race>
+    public class RideIdNameViewModel : IMapFrom<Ride>
     {
         public int Id { get; set; }
 

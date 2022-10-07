@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.Town
+﻿namespace RaceCorp.Web.ViewModels.Mountain
 {
     using System.Collections.Generic;
 
@@ -7,7 +7,7 @@
     using RaceCorp.Web.ViewModels.Race;
     using RaceCorp.Web.ViewModels.Ride;
 
-    public class TownRacesRidesViewModel : TownViewModel, IMapFrom<Town>
+    public class MountainRacesRidesViewModel : MountainViewModel, IMapFrom<Mountain>
     {
         public IEnumerable<RaceIdNameViewModel> Races { get; set; }
 

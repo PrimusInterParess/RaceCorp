@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
 
     using RaceCorp.Data.Common.Repositories;
@@ -11,6 +12,7 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.RaceViewModels;
     using RaceCorp.Web.ViewModels.Ride;
     using RaceCorp.Web.ViewModels.Town;
 
@@ -26,6 +28,46 @@
         {
             this.townsRepo = townsRepo;
             this.imageService = imageService;
+        }
+
+        public TownRacesProfileViewModel AllRaces(int townId, int pageId, int itemsPerPage = 3)
+        {
+            var town = this.townsRepo.AllAsNoTracking()
+               .Include(t => t.Races)
+               .ThenInclude(r => r.Mountain)
+               .Include(r => r.Races)
+               .ThenInclude(r => r.Logo)
+               .FirstOrDefault(t => t.Id == townId);
+
+            var count = town.Races.Count();
+
+            var races = town.Races.Select(r => new RaceInAllViewModel()
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Description = r.Description,
+                LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
+                Town = r.Town.Name,
+                Mountain = r.Mountain.Name,
+            })
+           .Skip((pageId - 1) * itemsPerPage)
+           .Take(itemsPerPage)
+           .ToList();
+
+            var raceData = new RaceAllViewModel()
+            {
+                PageNumber = pageId,
+                ItemsPerPage = itemsPerPage,
+                RacesCount = count,
+                Races = races,
+            };
+
+            return new TownRacesProfileViewModel()
+            {
+                Races = raceData,
+                Id = town.Id,
+                Name = town.Name,
+            };
         }
 
         public TownRidesProfileViewModel AllRides(int townId, int pageId, int itemsPerPage = 3)
@@ -88,9 +130,9 @@
                     await this.townsRepo.AddAsync(town);
                     await this.townsRepo.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw new Exception(IvalidOperation);
+                    throw new Exception(IvalidOperationMessage);
                 }
             }
         }
@@ -103,7 +145,6 @@
                 .To<T>()
                 .ToList();
         }
-
 
         public IEnumerable<KeyValuePair<string, string>> GetTownsKVP()
         {

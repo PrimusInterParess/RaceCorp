@@ -24,7 +24,7 @@ else
             <div class="form-group card col-md-4">
                 <img src="@race.LogoPath" class="card-img-top">
                 <div class="card-body text-center">
-                    <a class="btn btn-outline-secondary" asp-action="Profile" asp-route-id="@race.Id"><h5>@race.Name</h5></a>
+                    <a class="btn btn-outline-secondary" asp-controller="Race" asp-action="Profile" asp-route-id="@race.Id"><h5>@race.Name</h5></a>
                     <p class="card-text">
                         <b> @race.Description</b>
                     </p>

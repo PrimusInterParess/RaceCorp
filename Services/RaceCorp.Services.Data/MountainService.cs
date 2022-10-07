@@ -8,9 +8,9 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.Common;
-    using RaceCorp.Web.ViewModels.CommonViewModels;
-
+    using RaceCorp.Web.ViewModels.Mountain;
     using static RaceCorp.Services.Constants.Common;
 
     public class MountainService : IMountanService
@@ -66,6 +66,15 @@
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public List<T> GetAll<T>()
+        {
+            return this
+                 .mountainsRepo
+                 .AllAsNoTracking()
+                 .To<T>()
+                 .ToList();
         }
     }
 }

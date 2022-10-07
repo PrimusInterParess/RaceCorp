@@ -8,9 +8,8 @@
         public const string InvalidTrace = "Invalid trace";
         public const string InvalidStartDateExceptionMessage = $"Invalid date format.Trace date format should as follows- 'Year/Month/Day Hour:Minutes'.";
 
-        public const string IvalidOperation = "Invalid operation";
+        public const string IvalidOperationMessage = "Invalid operation";
 
         public const string TownNameAlreadyExists = "Town with this name already exists";
-
     }
 }

@@ -79,9 +79,8 @@
                 return this.NotFound();
             }
 
-           // races = this.townService.AllRaces(townId, id);
-            // var model = this.townService.GetById(id);
-            return this.View();
+            var races = this.townService.AllRaces(townId, id);
+            return this.View(races);
         }
 
         [HttpGet]

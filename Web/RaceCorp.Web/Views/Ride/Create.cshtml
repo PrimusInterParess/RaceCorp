@@ -11,73 +11,7 @@
     <h1>@ViewData["Title"]</h1>
     <div class="col-md-4 offset-md-4">
         <form method="post" class="form-group" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label class="label" asp-for="Name"></label>
-                <input asp-for="Name" class="form-control  mb-1" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="label" asp-for="Town"></label>
-                <input asp-for="Town" class="form-control  mb-1" />
-                <span asp-validation-for="Town" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="label" asp-for="Mountain"></label>
-                <input asp-for="Mountain" class="form-control mb-1" />
-                <span asp-validation-for="Mountain" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="label" asp-for="Date"></label>
-                <input type="date" asp-for="Date" class="form-control mb-1" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="label" asp-for="FormatId"></label>
-                <select asp-for="FormatId" class="form-control" asp-items="@formats">
-                </select>
-                <span asp-validation-for="FormatId" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label class="label" asp-for="Description"></label>
-                <textarea asp-for="Description" class="form-control row-cols-3"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Trace name</span>
-                <input asp-for="Trace.Name" class="form-control" placeholder="Trace Name">
-                <span asp-validation-for="Trace.Name" class="text-danger"></span>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Length</span>
-                <input asp-for="Trace.Length" class="form-control" placeholder="Trace Length in kilometers">
-                <span asp-validation-for="Trace.Length" class="text-danger"></span>
-            </div>
-
-            <div class="input-group mb-3">
-
-                <span class="input-group-text" id="basic-addon1">Difficulty</span>
-                <select asp-for="Trace.DifficultyId" class="form-control" asp-items="@difficulties">
-                </select>
-                <span asp-validation-for="Trace.DifficultyId" class="text-danger"></span>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon2">Control time</span>
-                <input asp-for="Trace.ControlTime" class="form-control" placeholder="Trace Control time in hours">
-                <span asp-validation-for="Trace.ControlTime" class="text-danger"></span>
-            </div>
-
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon3">Start Time</span>
-                <input asp-for="Trace.StartTime" class="form-control" placeholder="">
-                <span asp-validation-for="Trace.StartTime" class="text-danger"></span>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Trace URL</span>
-                <input asp-for="Trace.TrackUrl" class="form-control" placeholder="Trace url">
-                <span asp-validation-for="Trace.TrackUrl" class="text-danger"></span>
-            </div>
-
+            <partial name="_RideInputFormPartial" model="@Model" />
             <button class="btn btn-outline-secondary" type="submit">@ViewData["ButtonName"]</button>
 
         </form>

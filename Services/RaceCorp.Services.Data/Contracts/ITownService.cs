@@ -18,5 +18,8 @@
         Task Create(TownCreateViewModel model);
 
         TownRidesProfileViewModel AllRides(int townId, int pageId, int itemsPerPage = 3);
+
+        TownRacesProfileViewModel AllRaces(int townId, int pageId, int itemsPerPage = 3);
+
     }
 }

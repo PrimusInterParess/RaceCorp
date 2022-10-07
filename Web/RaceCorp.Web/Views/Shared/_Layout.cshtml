@@ -20,58 +20,62 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <div class="dropdown me-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Races
+                            Create
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li class="nav-item">
                                 <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="Create">Create Race</a>
                             </li>
                             <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="All">All Races</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="dropdown me-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Rides
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li class="nav-item">
                                 <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="Create">Create Ride</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="All">All Rides</a>
-                            </li>
                         </ul>
                     </div>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                All
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="All">Rides</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="All">Races</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Town" asp-action="All">Towns</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Mountain" asp-action="All">Mountain</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <div class="dropdown me-10">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Uploads
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Town" asp-action="UploadPicture">Upload town picture</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Mountain" asp-action="UploadPicture">Upload mountain picture</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="UploadPicture">Upload upcoming race picture</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
-                    <div class="dropdown me-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Uploads
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="Town" asp-action="UploadPicture">Upload town picture</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="Mountain" asp-action="UploadPicture">Upload mountain picture</a>
-                            </li>
-                             <li class="nav-item">
-                               <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="UploadPicture">Upload upcoming race picture</a>
-                            </li>
-                        </ul>
+                        <form class="d-flex">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                        <partial name="_LoginPartial" />
                     </div>
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-success me-2" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>

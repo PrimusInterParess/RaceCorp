@@ -38,6 +38,5 @@
 
         [StringLength(DefaultDescriptionMaxValue, MinimumLength = DefaultDescriptionMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Description { get; set; }
-
     }
 }

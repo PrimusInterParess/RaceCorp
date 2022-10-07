@@ -1,10 +1,20 @@
 ﻿@model RideEditVIewModel
 
 @{
-    this.ViewData["Title"] = "Edit Race";
+    this.ViewData["Title"] = "Edit Ride";
     this.ViewData["ButtonName"] = "Edit";
 }
 
-<partial name="_RideInputFormPartial" model="@Model" />
-
-<input type="hidden" asp-for="Id" />
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+    <div class="col-md-4 offset-md-4">
+        <form method="post" class="form-group" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="TraceId" />
+            <partial name="_RideInputFormPartial" model="@Model" />
+            <button class="btn btn-outline-secondary" type="submit">@ViewData["ButtonName"]</button>
+        </form>
+        <div>
+        </div>
+    </div>
+</div>

@@ -62,7 +62,7 @@
             }
             catch (Exception)
             {
-                this.ModelState.AddModelError(String.Empty, IvalidOperation);
+                this.ModelState.AddModelError(String.Empty, IvalidOperationMessage);
                 model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
 
                 return this.View(model);
@@ -80,7 +80,7 @@
 
             if (isRaceIdValid == false)
             {
-                this.TempData["Message"] = IvalidOperation;
+                this.TempData["Message"] = IvalidOperationMessage;
                 return this.RedirectToAction(nameof(RaceController.All), nameof(RaceController));
             }
 

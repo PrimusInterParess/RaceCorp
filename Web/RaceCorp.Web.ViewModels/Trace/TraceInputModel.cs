@@ -18,7 +18,7 @@
         [StringLength(DefaultStrMaxValue, MinimumLength = DefaultStrMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Name { get; set; }
 
-        //todo: change race-to trace
+        // todo: change race-to trace
         [Required(ErrorMessage = InvalidLengthFieldErrorMessage)]
         [Display(Name = "Trace length")]
         [Range(DefaultRaceMinLength, DefaultRaceMaxength, ErrorMessage = DefaultRaceLengthErrorMessage)]
