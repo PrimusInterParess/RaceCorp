@@ -123,7 +123,7 @@
             catch (Exception e)
             {
 
-                this.ModelState.AddModelError(String.Empty, e.Message);
+                this.ModelState.AddModelError(string.Empty, e.Message);
                 model.Formats = this.formatServices.GetFormatKVP();
                 model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
                 return this.View(model);

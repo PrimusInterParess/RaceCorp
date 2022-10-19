@@ -1,16 +1,17 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Common;
-    using System.Threading.Tasks;
-    using System;
-    using Microsoft.AspNetCore.Authorization;
-    using RaceCorp.Web.ViewModels.Town;
     using RaceCorp.Web.ViewModels.Mountain;
+    using RaceCorp.Web.ViewModels.Town;
 
     public class MountainController : BaseController
     {

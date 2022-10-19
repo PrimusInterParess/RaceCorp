@@ -2,6 +2,10 @@
 {
     using System.Reflection;
 
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.Google;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -41,11 +45,25 @@
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.Configure<CookiePolicyOptions>(
-                options =>
+            //services.Configure<CookiePolicyOptions>(
+            //    options =>
+            //    {
+            //        options.CheckConsentNeeded = context => true;
+            //        options.MinimumSameSitePolicy = SameSiteMode.None;
+            //    });
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opt.DefaultScheme = GoogleDefaults.AuthenticationScheme;
+            })
+                .AddCookie()
+                .AddGoogle(GoogleDefaults.AuthenticationScheme, opt =>
                 {
-                    options.CheckConsentNeeded = context => true;
-                    options.MinimumSameSitePolicy = SameSiteMode.None;
+                    opt.ClientId = configuration["Authentication:Google:ClientId"];
+                    opt.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                    opt.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+
                 });
 
             services.AddControllersWithViews(
@@ -75,6 +93,7 @@
             services.AddTransient<IRaceTraceService, RaceTraceService>();
             services.AddTransient<IRideService, RideService>();
             services.AddTransient<IHomeService, HomeService>();
+            services.AddTransient<IDriveUploadService, DriveUploadService>();
         }
 
         private static void Configure(WebApplication app)
@@ -104,6 +123,8 @@
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthentication();

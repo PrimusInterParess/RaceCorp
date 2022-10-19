@@ -13,12 +13,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.57.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Google.Apis.Drive.v3" Version="1.57.0.2789" />
+		<PackageReference Include="Google.Apis.Oauth2.v2" Version="1.57.0.1869" />
+	</ItemGroup>
 
-  <ItemGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\..\Data\RaceCorp.Data.Common\RaceCorp.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\RaceCorp.Data.Models\RaceCorp.Data.Models.csproj" />
     <ProjectReference Include="..\..\Web\RaceCorp.Web.ViewModels\RaceCorp.Web.ViewModels.csproj" />
