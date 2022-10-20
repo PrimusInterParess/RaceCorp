@@ -45,25 +45,11 @@
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-            //services.Configure<CookiePolicyOptions>(
-            //    options =>
-            //    {
-            //        options.CheckConsentNeeded = context => true;
-            //        options.MinimumSameSitePolicy = SameSiteMode.None;
-            //    });
-
-            services.AddAuthentication(opt =>
-            {
-                opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                opt.DefaultScheme = GoogleDefaults.AuthenticationScheme;
-            })
-                .AddCookie()
-                .AddGoogle(GoogleDefaults.AuthenticationScheme, opt =>
+            services.Configure<CookiePolicyOptions>(
+                options =>
                 {
-                    opt.ClientId = configuration["Authentication:Google:ClientId"];
-                    opt.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-                    opt.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-
+                    options.CheckConsentNeeded = context => true;
+                    options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
             services.AddControllersWithViews(
@@ -93,7 +79,6 @@
             services.AddTransient<IRaceTraceService, RaceTraceService>();
             services.AddTransient<IRideService, RideService>();
             services.AddTransient<IHomeService, HomeService>();
-            services.AddTransient<IDriveUploadService, DriveUploadService>();
         }
 
         private static void Configure(WebApplication app)
@@ -122,7 +107,6 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
 
             app.UseAuthentication();
             app.UseRouting();

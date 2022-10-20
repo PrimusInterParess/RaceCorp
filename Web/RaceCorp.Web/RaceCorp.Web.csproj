@@ -67,4 +67,10 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Town\All.cshtml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="testproject-366105-a9a5c2a64300.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

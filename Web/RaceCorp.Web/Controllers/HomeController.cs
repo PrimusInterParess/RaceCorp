@@ -17,19 +17,15 @@
     public class HomeController : BaseController
     {
         private readonly IHomeService homeService;
-        private readonly IDriveUploadService driveUploadService;
 
-        public HomeController(IHomeService homeService, IDriveUploadService driveUploadService)
+        public HomeController(IHomeService homeService)
         {
             this.homeService = homeService;
-            this.driveUploadService = driveUploadService;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-
-            this.driveUploadService.DriveUploadWithConversion("/");
             var indexViewModel = this.homeService.GetCategories();
 
             return this.View(indexViewModel);
@@ -65,34 +61,5 @@
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
 
-        public async Task Login()
-        {
-            await this.HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
-            {
-                RedirectUri = this.Url.Action("GoogleResponse"),
-            });
-        }
-
-        public async Task<IActionResult> GoogleResonse()
-        {
-            var result = await this.HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(cl => new
-            {
-                cl.Issuer,
-                cl.OriginalIssuer,
-                cl.Type,
-                cl.Value,
-            });
-
-            return this.Json(claims);
-        }
-
-        public async Task<IActionResult> Logout()
-        {
-            await this.HttpContext.SignOutAsync();
-
-            return this.RedirectToAction("Index");
-        }
     }
 }
