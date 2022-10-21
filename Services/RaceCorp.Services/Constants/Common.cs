@@ -5,6 +5,8 @@
         public const string LogoRootPath = "/images/logos/";
         public const string LogosFolderName = "logos";
 
+        
+
         public const string TownFolderName = "towns";
         public const string TownRootPath = "/images/towns/";
         public const string TownImageName = "Town";

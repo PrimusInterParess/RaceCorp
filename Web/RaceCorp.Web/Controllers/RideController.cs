@@ -4,15 +4,15 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-
     using RaceCorp.Web.ViewModels.Ride;
     using RaceCorp.Web.ViewModels.Trace;
 
+    using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Messages;
 
     public class RideController : BaseController
@@ -20,17 +20,20 @@
         private readonly IRideService rideService;
         private readonly IDifficultyService difficultyService;
         private readonly IFormatServices formatServices;
+        private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
 
         public RideController(
             IRideService rideService,
             IDifficultyService difficultyService,
             IFormatServices formatServices,
+            IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager)
         {
             this.rideService = rideService;
             this.difficultyService = difficultyService;
             this.formatServices = formatServices;
+            this.environment = environment;
             this.userManager = userManager;
         }
 
@@ -68,7 +71,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
             try
             {
-                await this.rideService.CreateAsync(model, user.Id);
+                await this.rideService.CreateAsync(model, $"{this.environment.WebRootPath}\\Gpx", user.Id, $"{this.environment.WebRootPath}\\{ServiceAccountKeyFileName}");
             }
             catch (System.Exception)
             {

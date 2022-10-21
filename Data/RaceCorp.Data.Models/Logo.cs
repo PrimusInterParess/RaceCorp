@@ -4,7 +4,7 @@
 
     using RaceCorp.Data.Common.Models;
 
-    public class Logo : ImageBaseModel
+    public class Logo : FileBaseModel
     {
         public int? RaceId { get; set; }
 

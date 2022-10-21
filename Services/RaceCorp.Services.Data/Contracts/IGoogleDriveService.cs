@@ -6,6 +6,6 @@
 
     public interface IGoogleDriveService
     {
-        Task<string> UloadGpxFileToDrive(IFormFile gpxFile, string serviceAccountKeyPath, string uploadFileName);
+        Task<string> UloadGpxFileToDrive(string gpxFilePath, string serviceAccountKeyPath, string uploadFileName, string directoryId);
     }
 }

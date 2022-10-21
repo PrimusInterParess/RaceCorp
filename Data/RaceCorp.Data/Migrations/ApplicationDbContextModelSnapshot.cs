@@ -308,6 +308,39 @@ namespace RaceCorp.Data.Migrations
                     b.ToTable("Formats");
                 });
 
+            modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GoogleDriveDirectoryId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GoogleDriveId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TraceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Gpxs");
+                });
+
             modelBuilder.Entity("RaceCorp.Data.Models.Image", b =>
                 {
                     b.Property<string>("Id")
@@ -600,6 +633,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<int>("DifficultyId")
                         .HasColumnType("int");
 
+                    b.Property<string>("GpxId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -621,12 +657,13 @@ namespace RaceCorp.Data.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TrackUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DifficultyId");
+
+                    b.HasIndex("GpxId")
+                        .IsUnique()
+                        .HasFilter("[GpxId] IS NOT NULL");
 
                     b.HasIndex("IsDeleted");
 
@@ -684,6 +721,15 @@ namespace RaceCorp.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Image", b =>
@@ -792,11 +838,17 @@ namespace RaceCorp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("RaceCorp.Data.Models.Gpx", "Gpx")
+                        .WithOne("Trace")
+                        .HasForeignKey("RaceCorp.Data.Models.Trace", "GpxId");
+
                     b.HasOne("RaceCorp.Data.Models.Race", "Race")
                         .WithMany("Traces")
                         .HasForeignKey("RaceId");
 
                     b.Navigation("Difficulty");
+
+                    b.Navigation("Gpx");
 
                     b.Navigation("Race");
                 });
@@ -820,6 +872,11 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Races");
 
                     b.Navigation("Rides");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>
+                {
+                    b.Navigation("Trace");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Logo", b =>

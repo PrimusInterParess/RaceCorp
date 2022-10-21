@@ -37,36 +37,41 @@
             }
 
             var childElement = `
-                                    <div class="form-control mb-3" id=block${count}>
-                                      <div  class="input-group mb-3">
-                                     <span class="input-group-text" id="basic-addon1">Trace name</span>
-                                      <input type="text" class="form-control" name='Difficulties[${count}].Name' placeholder="Trace Name">
-                                      <span asp-validation-for='Difficulties[${count}].Name' class="text-danger"></span>
-                                    </div><div  class="input-group mb-3">
-                                      <span class="input-group-text" id="basic-addon1">Length</span>
-                                      <input type="text" class="form-control" name='Difficulties[${count}].Length' placeholder="Trace Length in kilometers">
-                                      <span asp-validation-for='Difficulties[${count}].Length' class="text-danger"></span>
-                                    </div>
-                                    <div id="select${count}" class="input-group mb-3">
-                                      <span class="input-group-text" id="basic-addon3">Difficulty</span>
-                                      <span asp-validation-for='Difficulties[${count}].DifficultyId' class="text-danger"></span>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                      <span class="input-group-text" id="basic-addon2">Control time</span>
-                                      <input type="text" class="form-control" name='Difficulties[${count}].ControlTime'  placeholder="Trace Control time in hours">
-                                      <span asp-validation-for='Difficulties[${count}].ControlTime' class="text-danger"></span>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                      <span class="input-group-text" id="basic-addon3">Start Time</span>
-                                      <input type="date" class="form-control" name='Difficulties[${count}].StartTime' placeholder="">
-                                      <span asp-validation-for='Difficulties[${count}].StartTime' class="text-danger"></span>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                      <span class="input-group-text">Trace URL</span>
-                                      <input type="text" name='Difficulties[${count}].TrackUrl' class="form-control" placeholder="Trace url" >
-                                      <span asp-validation-for='Difficulties[${count}].TrackUrl' class="text-danger"></span>
-                                    </div>
-                                    </div>`;
+                                                    <div class="form-control mb-3" id=block${count}>
+                                                      <div  class="input-group mb-3">
+                                                     <span class="input-group-text" id="basic-addon1">Trace name</span>
+                                                      <input type="text" class="form-control" name='Difficulties[${count}].Name' placeholder="Trace Name">
+                                                      <span asp-validation-for='Difficulties[${count}].Name' class="text-danger"></span>
+                                                    </div>
+                                                    <div  class="input-group mb-3">
+                                                      <span class="input-group-text" id="basic-addon1">Length</span>
+                                                      <input type="text" class="form-control" name='Difficulties[${count}].Length' placeholder="Trace Length in kilometers">
+                                                      <span asp-validation-for='Difficulties[${count}].Length' class="text-danger"></span>
+                                                    </div>
+                                                    <div id="select${count}" class="input-group mb-3">
+                                                      <span class="input-group-text" id="basic-addon3">Difficulty</span>
+                                                      <span asp-validation-for='Difficulties[${count}].DifficultyId' class="text-danger"></span>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                      <span class="input-group-text" id="basic-addon2">Control time</span>
+                                                      <input type="text" class="form-control" name='Difficulties[${count}].ControlTime'  placeholder="Trace Control time in hours">
+                                                      <span asp-validation-for='Difficulties[${count}].ControlTime' class="text-danger"></span>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                      <span class="input-group-text" id="basic-addon3">Start Time</span>
+                                                      <input type="date" class="form-control" name='Difficulties[${count}].StartTime' placeholder="">
+                                                      <span asp-validation-for='Difficulties[${count}].StartTime' class="text-danger"></span>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                       <span class="input-group-text">Gpx</span>
+                                                       <input  type="file" name='Difficulties[${count}].GpxFile' class="form-control" id='Difficulties[${count}].GpxFile' >
+                                                    </div>
+                                                    </div>`;
+
+            //      <div class="form-group mb-1" >
+            //       <label asp -for= "RaceLogo" > Upload Race Logo: </label>
+            //        < input asp -for= "RaceLogo" name = "RaceLogo" class= "form-control mb-1" style = "width: 100%;" />
+            //            </div>
 
 
             $("#ol").append(childElement);
@@ -113,12 +118,12 @@
             var divToAttachTo = document.getElementById("attachHere");
 
             var toAttach = `
-                    <label class="mb-2 mt-2"><b>Traces</b></label>
-                      <div id="btns">
-                          <button class="btn border border-dark" onclick="addAnotherItem(event)">add</button>
-                      </div>
-                      <div class="mb-2 mt-2" id="ol">
-                      </div>`;
+                                    <label class="mb-2 mt-2"><b>Traces</b></label>
+                                      <div id="btns">
+                                          <button class="btn border border-dark" onclick="addAnotherItem(event)">add</button>
+                                      </div>
+                                      <div class="mb-2 mt-2" id="ol">
+                                      </div>`;
 
             $("#attachHere").append(toAttach);
         }

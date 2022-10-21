@@ -4,9 +4,9 @@
 
     using RaceCorp.Data.Common.Models;
 
-    public abstract class ImageBaseModel : BaseModel<string>
+    public abstract class FileBaseModel : BaseModel<string>
     {
-        public ImageBaseModel()
+        public FileBaseModel()
         {
             this.Id = Guid.NewGuid().ToString();
         }

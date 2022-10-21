@@ -6,13 +6,12 @@
 
     public interface IRideService
     {
-        Task CreateAsync(RideCreateViewModel model, string userId);
+        Task CreateAsync(RideCreateViewModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile);
 
         Task EditAsync(RideEditVIewModel model);
 
-
         RideAllViewModel All(int page, int itemsPerPage = 3);
 
-       T GetById<T>(int id);
+        T GetById<T>(int id);
     }
 }

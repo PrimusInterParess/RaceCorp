@@ -18,7 +18,7 @@
         private const string ServiceAccountEmail = "testproject@testproject-366105.iam.gserviceaccount.com";
         private const string DirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa";
 
-        public async Task<string> UloadGpxFileToDrive(IFormFile gpxFile, string serviceAccountKeyPath, string uploadFileName)
+        public async Task<string> UloadGpxFileToDrive(string gpxFilePath, string serviceAccountKeyPath, string uploadFileName, string directoryId)
         {
             var credentials = GoogleCredential.FromFile(serviceAccountKeyPath).CreateScoped(DriveService.ScopeConstants.Drive);
 
@@ -30,23 +30,29 @@
             var fileMetadata = new Google.Apis.Drive.v3.Data.File()
             {
                 Name = uploadFileName + ".gpx",
-                Parents = new List<string>() { DirectoryId },
+                Parents = new List<string>() { directoryId },
             };
 
             string uploadFileId;
-
-            await using (var fsSource = new FileStream(uploadFileName, FileMode.Open, FileAccess.Read))
+            try
             {
-                var request = service.Files.Create(fileMetadata, fsSource, "application/gpx+xml");
-                request.Fields = "*";
-                var result = await request.UploadAsync(CancellationToken.None);
-
-                if (result.Status == UploadStatus.Failed)
+                await using (var fsSource = new FileStream(gpxFilePath, FileMode.Open, FileAccess.Read))
                 {
-                    Console.WriteLine($"Error uploading file: {result.Exception.Message}");
-                }
+                    var request = service.Files.Create(fileMetadata, fsSource, "application/gpx+xml");
+                    request.Fields = "*";
+                    var result = await request.UploadAsync(CancellationToken.None);
 
-                uploadFileId = request.ResponseBody?.Id;
+                    if (result.Status == UploadStatus.Failed)
+                    {
+                        Console.WriteLine($"Error uploading file: {result.Exception.Message}");
+                    }
+
+                    uploadFileId = request.ResponseBody?.Id;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
 
             return uploadFileId;

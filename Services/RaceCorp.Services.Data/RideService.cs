@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@
     using RaceCorp.Web.ViewModels.Ride;
 
     using static RaceCorp.Services.Constants.Common;
+    using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Messages;
 
     using Trace = RaceCorp.Data.Models.Trace;
@@ -26,17 +28,26 @@
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
         private readonly IDeletableEntityRepository<Trace> traceRepo;
+        private readonly IRepository<Gpx> gpxRepo;
+        private readonly IGpxService gpxService;
+        private readonly IGoogleDriveService googleDriveService;
 
         public RideService(
             IDeletableEntityRepository<Ride> rideRepo,
             IDeletableEntityRepository<Town> townRepo,
             IDeletableEntityRepository<Mountain> mountainRepo,
-            IDeletableEntityRepository<Trace> traceRepo)
+            IDeletableEntityRepository<Trace> traceRepo,
+            IRepository<Gpx> gpxRepo,
+            IGpxService gpxService,
+            IGoogleDriveService googleDriveService)
         {
             this.rideRepo = rideRepo;
             this.townRepo = townRepo;
             this.mountainRepo = mountainRepo;
             this.traceRepo = traceRepo;
+            this.gpxRepo = gpxRepo;
+            this.gpxService = gpxService;
+            this.googleDriveService = googleDriveService;
         }
 
         public RideAllViewModel All(int page, int itemsPerPage = 3)
@@ -54,7 +65,7 @@
                     Id = r.Id,
                     Name = r.Name,
                     Description = r.Description,
-                    TrackUrl = r.Trace.TrackUrl,
+                    GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
                     TownName = r.Town.Name,
                     MountainName = r.Mountain.Name,
                 })
@@ -71,19 +82,87 @@
             };
         }
 
-        public async Task CreateAsync(RideCreateViewModel model, string userId)
+        public async Task CreateAsync(RideCreateViewModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
         {
-            // validate entities!!!
-            var town = this
+            // validate entries!!!
+            var townData = this
                 .townRepo
                 .AllAsNoTracking()
                 .FirstOrDefault(t => t.Name == model.Town);
-            var mountain = this
+            var mountainData = this
                 .mountainRepo
                 .AllAsNoTracking()
                 .FirstOrDefault(m => m.Name == model.Mountain);
 
-            // TODO: Validate inputData!
+            if (mountainData == null)
+            {
+                mountainData = new Mountain()
+                {
+                    Name = model.Mountain,
+                };
+
+                await this.mountainRepo.AddAsync(mountainData);
+            }
+
+            if (townData == null)
+            {
+                townData = new Town()
+                {
+                    Name = model.Town,
+                };
+
+                await this.townRepo.AddAsync(townData);
+            }
+
+            var extension = string.Empty;
+
+            try
+            {
+                extension = Path.GetExtension(model.Trace.GpxFile.FileName).TrimStart('.');
+            }
+            catch (Exception)
+            {
+                throw new Exception(GpxFileRequired);
+            }
+
+            var validateFileExtention = this.gpxService.ValidateExtension(extension);
+
+            if (validateFileExtention == false)
+            {
+                throw new Exception(InvalidFileExtension + extension);
+            }
+
+            var gpx = new Gpx()
+            {
+                Extension = extension,
+                UserId = userId,
+            };
+
+            try
+            {
+                await this.gpxService.SaveIntoFileSystem(model.Trace.GpxFile, gxpFileRoothPath, model.Name, gpx.Id, extension);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            var gxpFilePath = $"{gxpFileRoothPath}\\{model.Name}\\{gpx.Id}.{extension}";
+            var taskResult = this.googleDriveService.UloadGpxFileToDrive(gxpFilePath, pathToServiceAccountKeyFile, model.Name, DirectoryId);
+            var googleId = taskResult.Result;
+
+            gpx.GoogleDriveId = googleId;
+            gpx.GoogleDriveDirectoryId = DirectoryId;
+
+            try
+            {
+                await this.gpxRepo.AddAsync(gpx);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
             var ride = new Ride()
             {
                 Name = model.Name,
@@ -92,8 +171,8 @@
                 Description = model.Description,
                 FormatId = int.Parse(model.FormatId),
                 UserId = userId,
-                TownId = town.Id,
-                MountainId = mountain.Id,
+                Town = townData,
+                Mountain = mountainData,
                 Trace = new Trace()
                 {
                     Name = model.Trace.Name,
@@ -102,7 +181,7 @@
                     Length = (int)model.Trace.Length,
                     CreatedOn = DateTime.Now,
                     StartTime = (DateTime)model.Trace.StartTime,
-                    TrackUrl = model.Trace.TrackUrl,
+                    Gpx = gpx,
                 },
             };
 
@@ -188,7 +267,8 @@
             traceDb.Length = (int)model.Trace.Length;
             traceDb.DifficultyId = model.Trace.DifficultyId;
             traceDb.ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime);
-            traceDb.TrackUrl = model.Trace.TrackUrl;
+
+            // add gpx file data
             traceDb.StartTime = (DateTime)model.Trace.StartTime;
             try
             {

@@ -9,6 +9,6 @@
     {
         public int TraceId { get; set; }
 
-        public Trace Trace { get; set; }
+        public virtual Trace Trace { get; set; }
     }
 }

@@ -85,6 +85,9 @@
 
             if (model.Difficulties.Count != 0)
             {
+                // TODO:
+                // validate gpx file
+                // Save/Upload gpx file;
                 foreach (var trace in model.Difficulties)
                 {
                     var traceData = new Trace()
@@ -94,7 +97,6 @@
                         DifficultyId = trace.DifficultyId,
                         Length = (int)trace.Length,
                         StartTime = (DateTime)trace.StartTime,
-                        TrackUrl = trace.TrackUrl,
                     };
 
                     race.Traces.Add(traceData);

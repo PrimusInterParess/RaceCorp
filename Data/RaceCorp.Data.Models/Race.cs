@@ -14,7 +14,7 @@
     {
         public string LogoId { get; set; }
 
-        public Logo Logo { get; set; }
+        public virtual Logo Logo { get; set; }
 
         public ICollection<Trace> Traces { get; set; } = new HashSet<Trace>();
 

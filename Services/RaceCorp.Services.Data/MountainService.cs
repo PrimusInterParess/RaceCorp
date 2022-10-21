@@ -11,13 +11,13 @@
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.Mountain;
+
     using static RaceCorp.Services.Constants.Common;
 
     public class MountainService : IMountanService
     {
         private readonly IDeletableEntityRepository<Mountain> mountainsRepo;
         private readonly IImageService imageService;
-
 
         public MountainService(IDeletableEntityRepository<Mountain> mountainsRepo, IImageService imageService)
         {

@@ -48,7 +48,8 @@
                 ControlTime = trace.ControlTime.TotalHours,
                 Length = trace.Length,
                 StartTime = trace.StartTime.ToString("HH:MM"),
-                TrackUrl = trace.TrackUrl,
+
+                // Gpx file path/GoogleId
                 LogoPath = LogoRootPath + trace.Race.LogoId + "." + trace.Race.Logo.Extension,
             };
         }
@@ -63,7 +64,8 @@
             trace.Length = (int)model.Length;
             trace.DifficultyId = model.DifficultyId;
             trace.ControlTime = TimeSpan.FromHours((double)model.ControlTime);
-            trace.TrackUrl = model.TrackUrl;
+
+            // gpx file edit? get file location
             trace.StartTime = (DateTime)model.StartTime;
 
             await this.raceTraceRepo.SaveChangesAsync();
@@ -86,7 +88,8 @@
                 Length = (int)model.Length,
                 DifficultyId = model.DifficultyId,
                 StartTime = (DateTime)model.StartTime,
-                TrackUrl = model.TrackUrl,
+
+                // TODO: add logic for gpx file
                 ControlTime = TimeSpan.FromHours((double)model.ControlTime),
                 RaceId = model.RaceId,
             };

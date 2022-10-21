@@ -17,7 +17,9 @@
 
         public TimeSpan ControlTime { get; set; }
 
-        public string TrackUrl { get; set; }
+        public virtual Gpx Gpx { get; set; }
+
+        public string GpxId { get; set; }
 
         public DateTime StartTime { get; set; }
 
@@ -27,10 +29,10 @@
 
         public int? RideId { get; set; }
 
-        public Ride Ride { get; set; }
+        public virtual Ride Ride { get; set; }
 
         public int? RaceId { get; set; }
 
-        public Race Race { get; set; }
+        public virtual Race Race { get; set; }
     }
 }

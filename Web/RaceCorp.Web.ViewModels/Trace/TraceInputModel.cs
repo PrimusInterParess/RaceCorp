@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using AutoMapper;
+    using Microsoft.AspNetCore.Http;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
@@ -40,6 +41,8 @@
         [Required]
         [Url]
         public string TrackUrl { get; set; }
+
+        public IFormFile GpxFile { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();
     }

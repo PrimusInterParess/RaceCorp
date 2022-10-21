@@ -25,6 +25,8 @@
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<Gpx> Gpxs { get; set; }
+
         public DbSet<Difficulty> Difficulties { get; set; }
 
         public DbSet<Ride> Rides { get; set; }
@@ -109,6 +111,16 @@
                             .HasOne(l => l.Ride)
                             .WithOne(r => r.Trace)
                             .HasForeignKey<Ride>(r => r.TraceId);
+
+            builder.Entity<Trace>()
+                .HasOne(t => t.Gpx)
+                .WithOne(g => g.Trace)
+                .HasForeignKey<Gpx>(g => g.TraceId);
+
+            builder.Entity<Gpx>()
+                .HasOne(g => g.Trace)
+                .WithOne(t => t.Gpx)
+                .HasForeignKey<Trace>(t => t.GpxId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

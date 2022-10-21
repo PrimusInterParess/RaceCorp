@@ -69,7 +69,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="testproject-366105-a9a5c2a64300.json">
+    <Content Update="wwwroot\testproject-366105-a9a5c2a64300.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -79,6 +79,8 @@
             services.AddTransient<IRaceTraceService, RaceTraceService>();
             services.AddTransient<IRideService, RideService>();
             services.AddTransient<IHomeService, HomeService>();
+            services.AddTransient<IGoogleDriveService, GoogleDriveService>();
+            services.AddTransient<IGpxService, GpxService>();
         }
 
         private static void Configure(WebApplication app)

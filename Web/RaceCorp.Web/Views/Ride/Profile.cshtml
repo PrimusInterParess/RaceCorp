@@ -2,6 +2,7 @@
 
 @{
     this.ViewData["Title"] = "Ride Profile";
+    var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + Model.TraceGpxGoogleDriveId + "%22%5D%7D&embed&distance";
 }
 
 <article class="form-group text-center">
@@ -11,7 +12,7 @@
     </header>
     <div class="container">
         <div class="ratio ratio-16x9">
-            <iframe src="@Model.TrackUrl" frameborder="1"></iframe>
+            <iframe src="@url" frameborder="1"></iframe>
         </div>
         <div class="text-center col-md-6">
 

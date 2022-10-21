@@ -86,7 +86,8 @@
                 Id = r.Id,
                 Name = r.Name,
                 Description = r.Description,
-                TrackUrl = r.Trace.TrackUrl,
+
+                // add gxp file data
                 TownName = r.Town.Name,
                 MountainName = r.Mountain.Name,
             })
