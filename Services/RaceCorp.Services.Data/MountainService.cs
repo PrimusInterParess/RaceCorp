@@ -48,7 +48,7 @@
         {
             try
             {
-                var image = this.imageService.ProccessingImageData(model.Picture, userId);
+                var image = this.imageService.ProccessingData(model.Picture, userId);
 
                 image.Name = MountainImageName;
 

@@ -82,15 +82,14 @@
             string userId,
             string pathToServiceAccountKeyFile)
         {
-            // validate entries!!!
             var townDto = this
                 .townRepo
                 .All()
-                .FirstOrDefault(t => t.Name == model.Town);
+                .FirstOrDefault(t => t.Name.ToLower() == model.Town.ToLower());
             var mountainDto = this
                 .mountainRepo
                 .All()
-                .FirstOrDefault(m => m.Name == model.Mountain);
+                .FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
 
             if (mountainDto == null)
             {
@@ -162,28 +161,28 @@
 
         public async Task EditAsync(RideEditVIewModel model)
         {
-            var rideDto = this.rideRepo
+            var rideDb = this.rideRepo
                 .All()
                 .Include(r => r.Mountain)
                 .Include(r => r.Town)
                 .FirstOrDefault(r => r.Id == model.Id);
 
-            if (rideDto == null)
+            if (rideDb == null)
             {
                 throw new Exception(IvalidOperationMessage);
             }
 
-            rideDto.ModifiedOn = DateTime.UtcNow;
+            rideDb.ModifiedOn = DateTime.UtcNow;
 
-            if (rideDto.Mountain.Name != model.Mountain)
+            if (rideDb.Mountain.Name.ToLower() != model.Mountain.ToLower())
             {
-                var mountainDto = this.mountainRepo
+                var mountainDb = this.mountainRepo
                     .All()
-                    .FirstOrDefault(m => m.Name == model.Name);
+                    .FirstOrDefault(m => m.Name.ToLower() == model.Name.ToLower());
 
-                if (mountainDto == null)
+                if (mountainDb == null)
                 {
-                    mountainDto = new Mountain()
+                    mountainDb = new Mountain()
                     {
                         Name = model.Mountain,
                     };
@@ -191,7 +190,7 @@
                     try
                     {
                         await this.mountainRepo
-                            .AddAsync(mountainDto);
+                            .AddAsync(mountainDb);
                     }
                     catch (Exception)
                     {
@@ -199,45 +198,45 @@
                     }
                 }
 
-                rideDto.Mountain = mountainDto;
+                rideDb.Mountain = mountainDb;
             }
 
-            if (rideDto.Town.Name != model.Town)
+            if (rideDb.Town.Name.ToLower() != model.Town.ToLower())
             {
-                var townDto = this.townRepo
+                var townDb = this.townRepo
                     .All()
-                    .FirstOrDefault(m => m.Name == model.Name);
+                    .FirstOrDefault(m => m.Name.ToLower() == model.Name.ToLower());
 
-                if (townDto == null)
+                if (townDb == null)
                 {
-                    townDto = new Town()
+                    townDb = new Town()
                     {
                         Name = model.Town,
                     };
 
                     await this.townRepo
-                        .AddAsync(townDto);
+                        .AddAsync(townDb);
                 }
 
-                rideDto.Town = townDto;
+                rideDb.Town = townDb;
             }
 
-            rideDto.Description = model.Description;
-            rideDto.FormatId = int.Parse(model.FormatId);
-            rideDto.Date = model.Date;
-            rideDto.Name = model.Name;
+            rideDb.Description = model.Description;
+            rideDb.FormatId = int.Parse(model.FormatId);
+            rideDb.Date = model.Date;
+            rideDb.Name = model.Name;
 
-            var traceDto = this.traceRepo
+            var traceDb = this.traceRepo
                 .All()
                 .FirstOrDefault(t => t.Id == model.TraceId);
 
-            traceDto.Name = model.Trace.Name;
-            traceDto.Length = (int)model.Trace.Length;
-            traceDto.DifficultyId = model.Trace.DifficultyId;
-            traceDto.ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime);
+            traceDb.Name = model.Trace.Name;
+            traceDb.Length = (int)model.Trace.Length;
+            traceDb.DifficultyId = model.Trace.DifficultyId;
+            traceDb.ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime);
 
             // add gpx file data
-            traceDto.StartTime = (DateTime)model.Trace.StartTime;
+            traceDb.StartTime = (DateTime)model.Trace.StartTime;
             try
             {
                 await this.rideRepo.SaveChangesAsync();

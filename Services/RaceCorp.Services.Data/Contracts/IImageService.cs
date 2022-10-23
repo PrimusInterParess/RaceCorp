@@ -9,9 +9,9 @@
     {
         bool ValidateImageExtension(string extension);
 
-        Task SaveImageIntoFileSystem(IFormFile image, string imagePath, string folderName, string imageDbId, string extension);
+        Task SaveImageIntoFileSystem(IFormFile imageInputFile, string imagePath, string folderName, string imageDbId, string extension);
 
-        Image ProccessingImageData(IFormFile image, string userId);
+        Image ProccessingData(IFormFile imageInputFile, string userId);
 
         Task SaveAsyncImageIntoDb(Image imageData);
     }

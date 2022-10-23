@@ -42,7 +42,7 @@
             await image.CopyToAsync(fileStream);
         }
 
-        public Image ProccessingImageData(IFormFile image, string userId)
+        public Image ProccessingData(IFormFile image, string userId)
         {
             var extension = string.Empty;
 
