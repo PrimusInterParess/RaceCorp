@@ -55,7 +55,7 @@ dlldata.c
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
-#wwwroot/Credntials/testproject-366105-a9a5c2a64300.json
+
 # .NET Core
 project.lock.json
 project.fragment.lock.json
@@ -145,7 +145,7 @@ _TeamCity*
 _NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*
-
+testproject-366105-a9a5c2a64300.json
 # MightyMoose
 *.mm.*
 AutoTest.Net/
