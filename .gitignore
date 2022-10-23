@@ -55,8 +55,7 @@ dlldata.c
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
-# ignore
-wwwroot/Credntials/testproject-366105-a9a5c2a64300.json
+#wwwroot/Credntials/testproject-366105-a9a5c2a64300.json
 # .NET Core
 project.lock.json
 project.fragment.lock.json
