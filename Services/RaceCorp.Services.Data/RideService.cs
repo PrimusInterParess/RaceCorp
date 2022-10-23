@@ -1,23 +1,16 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
-    using System.Diagnostics;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.VisualBasic;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.RaceViewModels;
     using RaceCorp.Web.ViewModels.Ride;
 
-    using static RaceCorp.Services.Constants.Common;
-    using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Messages;
 
     using Trace = RaceCorp.Data.Models.Trace;
@@ -30,7 +23,7 @@
         private readonly IDeletableEntityRepository<Trace> traceRepo;
         private readonly IRepository<Gpx> gpxRepo;
         private readonly IGpxService gpxService;
-        private readonly IGoogleDriveService googleDriveService;
+        private readonly ITraceService traceService;
 
         public RideService(
             IDeletableEntityRepository<Ride> rideRepo,
@@ -39,7 +32,7 @@
             IDeletableEntityRepository<Trace> traceRepo,
             IRepository<Gpx> gpxRepo,
             IGpxService gpxService,
-            IGoogleDriveService googleDriveService)
+            ITraceService traceService)
         {
             this.rideRepo = rideRepo;
             this.townRepo = townRepo;
@@ -47,17 +40,18 @@
             this.traceRepo = traceRepo;
             this.gpxRepo = gpxRepo;
             this.gpxService = gpxService;
-            this.googleDriveService = googleDriveService;
+            this.traceService = traceService;
         }
 
-        public RideAllViewModel All(int page, int itemsPerPage = 3)
+        public RideAllViewModel All(
+            int page,
+            int itemsPerPage = 3)
         {
-            var count = this
-                .rideRepo
+            var count = this.rideRepo
                 .All()
                 .Count();
-            var rides = this
-                .rideRepo
+
+            var rides = this.rideRepo
                 .AllAsNoTracking()
                 .Include(r => r.Trace)
                 .Select(r => new RideInAllViewModel()
@@ -82,86 +76,62 @@
             };
         }
 
-        public async Task CreateAsync(RideCreateViewModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
+        public async Task CreateAsync(
+            RideCreateViewModel model,
+            string gxpFileRoothPath,
+            string userId,
+            string pathToServiceAccountKeyFile)
         {
             // validate entries!!!
-            var townData = this
+            var townDto = this
                 .townRepo
-                .AllAsNoTracking()
+                .All()
                 .FirstOrDefault(t => t.Name == model.Town);
-            var mountainData = this
+            var mountainDto = this
                 .mountainRepo
-                .AllAsNoTracking()
+                .All()
                 .FirstOrDefault(m => m.Name == model.Mountain);
 
-            if (mountainData == null)
+            if (mountainDto == null)
             {
-                mountainData = new Mountain()
+                mountainDto = new Mountain()
                 {
                     Name = model.Mountain,
                 };
 
-                await this.mountainRepo.AddAsync(mountainData);
+                await this.mountainRepo
+                    .AddAsync(mountainDto);
             }
 
-            if (townData == null)
+            if (townDto == null)
             {
-                townData = new Town()
+                townDto = new Town()
                 {
                     Name = model.Town,
                 };
 
-                await this.townRepo.AddAsync(townData);
+                await this.townRepo
+                    .AddAsync(townDto);
             }
 
-            var extension = string.Empty;
+            var gpx = await this.gpxService
+                .ProccessingData(
+                model.Trace.GpxFile,
+                userId,
+                model.Name,
+                gxpFileRoothPath,
+                pathToServiceAccountKeyFile);
 
-            try
-            {
-                extension = Path.GetExtension(model.Trace.GpxFile.FileName).TrimStart('.');
-            }
-            catch (Exception)
-            {
-                throw new Exception(GpxFileRequired);
-            }
+            await this.gpxRepo
+                .AddAsync(gpx);
 
-            var validateFileExtention = this.gpxService.ValidateExtension(extension);
+            var trace = this.traceService
+                .GetTraceDbModel(
+                model.Trace,
+                gpx);
 
-            if (validateFileExtention == false)
-            {
-                throw new Exception(InvalidFileExtension + extension);
-            }
-
-            var gpx = new Gpx()
-            {
-                Extension = extension,
-                UserId = userId,
-            };
-
-            try
-            {
-                await this.gpxService.SaveIntoFileSystem(model.Trace.GpxFile, gxpFileRoothPath, model.Name, gpx.Id, extension);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-
-            var gxpFilePath = $"{gxpFileRoothPath}\\{model.Name}\\{gpx.Id}.{extension}";
-            var taskResult = this.googleDriveService.UloadGpxFileToDrive(gxpFilePath, pathToServiceAccountKeyFile, model.Name, DirectoryId);
-            var googleId = taskResult.Result;
-
-            gpx.GoogleDriveId = googleId;
-            gpx.GoogleDriveDirectoryId = DirectoryId;
-
-            try
-            {
-                await this.gpxRepo.AddAsync(gpx);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            await this.traceRepo
+                .AddAsync(trace);
 
             var ride = new Ride()
             {
@@ -171,24 +141,18 @@
                 Description = model.Description,
                 FormatId = int.Parse(model.FormatId),
                 UserId = userId,
-                Town = townData,
-                Mountain = mountainData,
-                Trace = new Trace()
-                {
-                    Name = model.Trace.Name,
-                    DifficultyId = model.Trace.DifficultyId,
-                    ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime),
-                    Length = (int)model.Trace.Length,
-                    CreatedOn = DateTime.Now,
-                    StartTime = (DateTime)model.Trace.StartTime,
-                    Gpx = gpx,
-                },
+                Town = townDto,
+                Mountain = mountainDto,
+                Trace = trace,
             };
 
             try
             {
-                await this.rideRepo.AddAsync(ride);
-                await this.rideRepo.SaveChangesAsync();
+                await this.rideRepo
+                    .AddAsync(ride);
+
+                await this.rideRepo
+                    .SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -198,34 +162,36 @@
 
         public async Task EditAsync(RideEditVIewModel model)
         {
-            var rideDb = this
-                .rideRepo
+            var rideDto = this.rideRepo
                 .All()
                 .Include(r => r.Mountain)
                 .Include(r => r.Town)
                 .FirstOrDefault(r => r.Id == model.Id);
 
-            if (rideDb == null)
+            if (rideDto == null)
             {
                 throw new Exception(IvalidOperationMessage);
             }
 
-            rideDb.ModifiedOn = DateTime.UtcNow;
+            rideDto.ModifiedOn = DateTime.UtcNow;
 
-            if (rideDb.Mountain.Name != model.Mountain)
+            if (rideDto.Mountain.Name != model.Mountain)
             {
-                var mountain = this.mountainRepo.All().FirstOrDefault(m => m.Name == model.Name);
+                var mountainDto = this.mountainRepo
+                    .All()
+                    .FirstOrDefault(m => m.Name == model.Name);
 
-                if (mountain == null)
+                if (mountainDto == null)
                 {
-                    mountain = new Mountain()
+                    mountainDto = new Mountain()
                     {
                         Name = model.Mountain,
                     };
 
                     try
                     {
-                        await this.mountainRepo.AddAsync(mountain);
+                        await this.mountainRepo
+                            .AddAsync(mountainDto);
                     }
                     catch (Exception)
                     {
@@ -233,43 +199,45 @@
                     }
                 }
 
-                rideDb.Mountain = mountain;
+                rideDto.Mountain = mountainDto;
             }
 
-            if (rideDb.Town.Name != model.Town)
+            if (rideDto.Town.Name != model.Town)
             {
-                var town = this.townRepo.All().FirstOrDefault(m => m.Name == model.Name);
+                var townDto = this.townRepo
+                    .All()
+                    .FirstOrDefault(m => m.Name == model.Name);
 
-                if (town == null)
+                if (townDto == null)
                 {
-                    town = new Town()
+                    townDto = new Town()
                     {
                         Name = model.Town,
                     };
 
-                    await this.townRepo.AddAsync(town);
+                    await this.townRepo
+                        .AddAsync(townDto);
                 }
 
-                rideDb.Town = town;
+                rideDto.Town = townDto;
             }
 
-            rideDb.Description = model.Description;
-            rideDb.FormatId = int.Parse(model.FormatId);
-            rideDb.Date = model.Date;
-            rideDb.Name = model.Name;
+            rideDto.Description = model.Description;
+            rideDto.FormatId = int.Parse(model.FormatId);
+            rideDto.Date = model.Date;
+            rideDto.Name = model.Name;
 
-            var traceDb = this
-                .traceRepo
+            var traceDto = this.traceRepo
                 .All()
                 .FirstOrDefault(t => t.Id == model.TraceId);
 
-            traceDb.Name = model.Trace.Name;
-            traceDb.Length = (int)model.Trace.Length;
-            traceDb.DifficultyId = model.Trace.DifficultyId;
-            traceDb.ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime);
+            traceDto.Name = model.Trace.Name;
+            traceDto.Length = (int)model.Trace.Length;
+            traceDto.DifficultyId = model.Trace.DifficultyId;
+            traceDto.ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime);
 
             // add gpx file data
-            traceDb.StartTime = (DateTime)model.Trace.StartTime;
+            traceDto.StartTime = (DateTime)model.Trace.StartTime;
             try
             {
                 await this.rideRepo.SaveChangesAsync();

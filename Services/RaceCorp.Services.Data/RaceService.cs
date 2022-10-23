@@ -20,26 +20,42 @@
     {
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
+        private readonly IDeletableEntityRepository<Trace> traceRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
+        private readonly IRepository<Gpx> gpxRepo;
+        private readonly IRepository<Logo> logoRepo;
         private readonly IImageService imageService;
+        private readonly ITraceService traceService;
+        private readonly IGpxService gpxService;
 
         public RaceService(
             IDeletableEntityRepository<Race> raceRepo,
             IDeletableEntityRepository<Mountain> mountainRepo,
-            IDeletableEntityRepository<Trace> difficultyRepo,
+            IDeletableEntityRepository<Trace> traceRepo,
             IDeletableEntityRepository<Town> townRepo,
-            IImageService imageService)
+            IRepository<Gpx> gpxRepo,
+            IRepository<Logo> logoRepo,
+            IImageService imageService,
+            ITraceService traceService,
+            IGpxService gpxService)
         {
             this.raceRepo = raceRepo;
             this.mountainRepo = mountainRepo;
+            this.traceRepo = traceRepo;
             this.townRepo = townRepo;
+            this.gpxRepo = gpxRepo;
+            this.logoRepo = logoRepo;
             this.imageService = imageService;
+            this.traceService = traceService;
+            this.gpxService = gpxService;
         }
 
         public async Task CreateAsync(
             RaceCreateModel model,
             string imagePath,
-            string userId)
+            string userId,
+            string gxpFileRoothPath,
+            string pathToServiceAccountKeyFile)
         {
             var race = new Race
             {
@@ -62,7 +78,8 @@
                     Name = model.Mountain,
                 };
 
-                await this.mountainRepo.AddAsync(mountainData);
+                await this.mountainRepo
+                    .AddAsync(mountainData);
             }
 
             race.Mountain = mountainData;
@@ -78,7 +95,8 @@
                     Name = model.Town,
                 };
 
-                await this.townRepo.AddAsync(townData);
+                await this.townRepo
+                    .AddAsync(townData);
             }
 
             race.Town = townData;
@@ -88,18 +106,23 @@
                 // TODO:
                 // validate gpx file
                 // Save/Upload gpx file;
-                foreach (var trace in model.Difficulties)
+                foreach (var traceInputModel in model.Difficulties)
                 {
-                    var traceData = new Trace()
-                    {
-                        Name = trace.Name,
-                        ControlTime = TimeSpan.FromHours((double)trace.ControlTime),
-                        DifficultyId = trace.DifficultyId,
-                        Length = (int)trace.Length,
-                        StartTime = (DateTime)trace.StartTime,
-                    };
+                    var gpx = await this.gpxService.ProccessingData(
+                        traceInputModel.GpxFile,
+                        userId,
+                        model.Name,
+                        gxpFileRoothPath,
+                        pathToServiceAccountKeyFile);
 
-                    race.Traces.Add(traceData);
+                    await this.gpxRepo.AddAsync(gpx);
+
+                    var trace = this.traceService
+                        .GetTraceDbModel(traceInputModel, gpx);
+
+                    await this.traceRepo.AddAsync(trace);
+
+                    race.Traces.Add(trace);
                 }
             }
 
@@ -131,6 +154,8 @@
                 Extension = extension,
                 UserId = userId,
             };
+
+            await this.logoRepo.AddAsync(logo);
 
             await this.imageService
                  .SaveImageIntoFileSystem(

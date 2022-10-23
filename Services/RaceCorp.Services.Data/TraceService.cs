@@ -15,18 +15,18 @@
     using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
 
-    public class RaceTraceService : IRaceTraceService
+    public class TraceService : ITraceService
     {
-        private readonly IRepository<Trace> raceTraceRepo;
+        private readonly IRepository<Trace> traceRepo;
 
-        public RaceTraceService(IRepository<Trace> raceTraceRepo)
+        public TraceService(IRepository<Trace> raceTraceRepo)
         {
-            this.raceTraceRepo = raceTraceRepo;
+            this.traceRepo = raceTraceRepo;
         }
 
         public RaceTraceProfileModel GetRaceDifficultyProfileViewModel(int raceId, int traceId)
         {
-            var trace = this.raceTraceRepo
+            var trace = this.traceRepo
                 .AllAsNoTracking()
                 .Include(t => t.Race).ThenInclude(r => r.Logo)
                 .Include(t => t.Difficulty)
@@ -56,7 +56,7 @@
 
         public async Task EditAsync(RaceTraceEditModel model)
         {
-            var trace = this.raceTraceRepo
+            var trace = this.traceRepo
                 .All()
                 .FirstOrDefault(rd => rd.Id == model.Id);
 
@@ -68,12 +68,12 @@
             // gpx file edit? get file location
             trace.StartTime = (DateTime)model.StartTime;
 
-            await this.raceTraceRepo.SaveChangesAsync();
+            await this.traceRepo.SaveChangesAsync();
         }
 
         public T GetById<T>(int raceId, int traceId)
         {
-            return this.raceTraceRepo
+            return this.traceRepo
                 .AllAsNoTracking()
                 .Where(rt => rt.Id == traceId && rt.RaceId == raceId)
                 .To<T>()
@@ -94,8 +94,22 @@
                 RaceId = model.RaceId,
             };
 
-            await this.raceTraceRepo.AddAsync(trace);
-            await this.raceTraceRepo.SaveChangesAsync();
+            await this.traceRepo.AddAsync(trace);
+            await this.traceRepo.SaveChangesAsync();
+        }
+
+        public Trace GetTraceDbModel(TraceInputModel traceInputModel, Gpx gpx)
+        {
+            return new Trace()
+            {
+                Name = traceInputModel.Name,
+                DifficultyId = traceInputModel.DifficultyId,
+                ControlTime = TimeSpan.FromHours((double)traceInputModel.ControlTime),
+                Length = (int)traceInputModel.Length,
+                CreatedOn = DateTime.Now,
+                StartTime = (DateTime)traceInputModel.StartTime,
+                Gpx = gpx,
+            };
         }
     }
 }

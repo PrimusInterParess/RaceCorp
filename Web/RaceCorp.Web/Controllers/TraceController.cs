@@ -20,23 +20,23 @@
 
     public class TraceController : BaseController
     {
-        private readonly IRaceTraceService raceDiffService;
+        private readonly ITraceService traceService;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
 
         public TraceController(
-            IRaceTraceService raceDiffService,
+            ITraceService traceService,
             IDifficultyService difficultyService,
             IRaceService raceService)
         {
-            this.raceDiffService = raceDiffService;
+            this.traceService = traceService;
             this.difficultyService = difficultyService;
             this.raceService = raceService;
         }
 
         public IActionResult RaceTraceProfile(int raceId, int traceId)
         {
-            var model = this.raceDiffService.GetRaceDifficultyProfileViewModel(raceId, traceId);
+            var model = this.traceService.GetRaceDifficultyProfileViewModel(raceId, traceId);
 
             this.ViewData["id"] = $"Race id ={raceId}. Trace id = {traceId}";
             return this.View(model);
@@ -47,7 +47,7 @@
 
         public IActionResult EditRaceTrace(int raceId, int traceId)
         {
-            var model = this.raceDiffService.GetById<RaceTraceEditModel>(raceId, traceId);
+            var model = this.traceService.GetById<RaceTraceEditModel>(raceId, traceId);
             model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
             return this.View(model);
         }
@@ -65,7 +65,7 @@
 
             try
             {
-                await this.raceDiffService.EditAsync(model);
+                await this.traceService.EditAsync(model);
             }
             catch (Exception)
             {
@@ -110,7 +110,7 @@
                 return this.View(model);
             }
 
-            await this.raceDiffService.CreateAsync(model);
+            await this.traceService.CreateAsync(model);
 
             return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.RaceId });
         }

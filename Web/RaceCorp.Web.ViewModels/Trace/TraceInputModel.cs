@@ -37,11 +37,6 @@
         [Display(Name = "Start Date")]
         public DateTime? StartTime { get; set; }
 
-        [Display(Name = "Track url")]
-        [Required]
-        [Url]
-        public string TrackUrl { get; set; }
-
         public IFormFile GpxFile { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> DifficultiesKVP { get; set; } = new List<KeyValuePair<string, string>>();

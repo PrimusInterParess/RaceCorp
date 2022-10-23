@@ -68,10 +68,17 @@
                 return this.View(model);
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
+            var user = await this.userManager
+                .GetUserAsync(this.User);
+
             try
             {
-                await this.rideService.CreateAsync(model, $"{this.environment.WebRootPath}\\Gpx", user.Id, $"{this.environment.WebRootPath}\\{ServiceAccountKeyFileName}");
+                await this.rideService
+                    .CreateAsync(
+                    model,
+                    $"{this.environment.WebRootPath}\\Gpx",
+                    user.Id,
+                    $"{this.environment.WebRootPath}\\{ServiceAccountKeyFileName}");
             }
             catch (System.Exception)
             {

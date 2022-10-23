@@ -6,9 +6,10 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    using RaceCorp.Data.Models;
     using RaceCorp.Web.ViewModels.Trace;
 
-    public interface IRaceTraceService
+    public interface ITraceService
     {
         RaceTraceProfileModel GetRaceDifficultyProfileViewModel(int raceId, int traceId);
 
@@ -17,5 +18,7 @@
         Task CreateAsync(RaceTraceEditModel model);
 
         T GetById<T>(int raceId, int traceId);
+
+        Trace GetTraceDbModel(TraceInputModel traceInputModel, Gpx gpx);
     }
 }

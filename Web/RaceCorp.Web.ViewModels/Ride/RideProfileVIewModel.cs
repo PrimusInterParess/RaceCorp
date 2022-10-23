@@ -35,7 +35,8 @@
                    => opt.MapFrom(x => x.Trace.ControlTime.TotalHours))
                 .ForMember(x => x.StartTime, opt
                    => opt.MapFrom(x => x.Trace.StartTime.ToString("HH:MM")))
-                //.ForMember(x => x.TraceGoogleDriveId, opt
+
+                // .ForMember(x => x.TraceGoogleDriveId, opt
                 //   => opt.MapFrom(x => x.Trace.Gpx.GoogleDriveId))
                 // add gxp file data
                 .ForMember(x => x.Length, opt

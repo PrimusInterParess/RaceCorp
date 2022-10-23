@@ -25,7 +25,7 @@
 
             var selectList = document.createElement("select");
             selectList.id = count;
-            selectList.setAttribute('asp-for', `Difficulties[${count}].DifficultyId`);
+            selectList.setAttribute('asp-for',`Difficulties[${count}].DifficultyId`);
             selectList.setAttribute('name', `Difficulties[${count}].DifficultyId`);
             selectList.classList.add('form-control');
 
@@ -37,7 +37,7 @@
             }
 
             var childElement = `
-                                                    <div class="form-control mb-3" id=block${count}>
+            <div class="form-control mb-3" id=block${count}>
                                                       <div  class="input-group mb-3">
                                                      <span class="input-group-text" id="basic-addon1">Trace name</span>
                                                       <input type="text" class="form-control" name='Difficulties[${count}].Name' placeholder="Trace Name">

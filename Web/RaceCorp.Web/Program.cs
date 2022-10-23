@@ -76,7 +76,7 @@
             services.AddTransient<IMountanService, MountainService>();
             services.AddTransient<IRaceService, RaceService>();
             services.AddTransient<IImageService, ImageService>();
-            services.AddTransient<IRaceTraceService, RaceTraceService>();
+            services.AddTransient<ITraceService, TraceService>();
             services.AddTransient<IRideService, RideService>();
             services.AddTransient<IHomeService, HomeService>();
             services.AddTransient<IGoogleDriveService, GoogleDriveService>();

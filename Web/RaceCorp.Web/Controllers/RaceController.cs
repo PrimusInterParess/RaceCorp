@@ -13,6 +13,8 @@
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
+    using static RaceCorp.Services.Constants.Drive;
+
     using static RaceCorp.Services.Constants.Messages;
 
     public class RaceController : BaseController
@@ -69,7 +71,12 @@
 
             try
             {
-                await this.raceService.CreateAsync(model, $"{this.environment.WebRootPath}/images", user.Id);
+                await this.raceService.CreateAsync(
+                    model,
+                    $"{this.environment.WebRootPath}/images",
+                    user.Id,
+                    $"{this.environment.WebRootPath}\\Gpx",
+                    $"{this.environment.WebRootPath}\\{ServiceAccountKeyFileName}");
             }
             catch (Exception e)
             {

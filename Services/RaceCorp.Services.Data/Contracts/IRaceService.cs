@@ -8,7 +8,7 @@
 
     public interface IRaceService
     {
-        Task CreateAsync(RaceCreateModel model, string imagePath, string userId);
+        Task CreateAsync(RaceCreateModel model, string imagePath, string userId, string gxpFileRoothPath, string pathToServiceAccountKeyFile);
 
         RaceAllViewModel All(int page, int itemsPerPage = 3);
 
