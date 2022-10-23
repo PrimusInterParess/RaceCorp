@@ -4,17 +4,18 @@
     this.ViewData["Title"] = "All Towns";
     this.ViewData["imageUrl"] = "/Images/towns/495774d2-26a4-46ba-af89-7b7d3fe95fde.jpg";
 }
-<div class="col-md-12">
+<div class="col-md-12 text-center">
     <div class="text-center">
         <h5>@this.ViewData["Title"]</h5>
     </div>
     <hr />
-    <div>
+    <div >
         <img class="col-md-8" src="@ViewData["imageUrl"]">
     </div>
 
     @if (Model.Towns.Count() != 0)
     {
+        <div class="text-center col-md-12 offset-2">
         <div class="col-md-8">
             <hr />
             <h4>Towns</h4>
@@ -25,7 +26,7 @@
                 var townAcordion = "townAcordion" + i;
                 var raceAcordion = "raceAcordion" + i;
                 var rideAcordion = "rideAcordion" + i;
-                <div class="accordion mb-3" id="town">
+                <div class="accordion mb-3 " id="town">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading-@i">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@townAcordion" aria-expanded="false">
@@ -95,6 +96,7 @@
                     </div>
                 </div>
             }
+        </div>
         </div>
     }
     else

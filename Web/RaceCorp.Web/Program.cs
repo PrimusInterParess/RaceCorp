@@ -81,6 +81,7 @@
             services.AddTransient<IHomeService, HomeService>();
             services.AddTransient<IGoogleDriveService, GoogleDriveService>();
             services.AddTransient<IGpxService, GpxService>();
+            services.AddTransient<ILogoService, LogoService>();
         }
 
         private static void Configure(WebApplication app)
