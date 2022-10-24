@@ -2,12 +2,20 @@
 
 @{
     this.ViewData["Title"] = "Trace Profile";
+
+    var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + Model.GoogleDriveId + "%22%5D%7D&embed&distance";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">@this.TempData["Message"]</div>
 }
 
 <article class="form-group text-center">
     <header>
         <h1>@Model.Name</h1>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Edit</a>
+        <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="DeleteRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Delete</a>
 
     </header>
 
@@ -15,7 +23,7 @@
     <div class="container">
 
         <div class="ratio ratio-16x9">
-            <iframe src="@Model.TrackUrl" frameborder="1"></iframe>
+            <iframe src="@url" frameborder="1"></iframe>
         </div>
         <div class="text-center col-md-6">
 

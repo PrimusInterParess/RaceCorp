@@ -45,7 +45,8 @@
                                             <div class="accordion-body text-center">
                                                 @if (mountain.Races.Count() == 0)
                                                 {
-                                                    <b>No races registered!</b>
+                                                    <b>No races registered!</b> <a class="btn btn-outline-secondary" asp-controller="Race" asp-action="Create">Create one?</a>
+
                                                 }
                                                 else
                                                 {
@@ -73,7 +74,7 @@
                                             <div class="accordion-body text-center">
                                                 @if (mountain.Rides.Count() == 0)
                                                 {
-                                                    <b>No rides registered!</b>
+                                                    <b>No rides registered!</b> <a class="btn btn-outline-secondary" asp-controller="Ride" asp-action="Create">Create one?</a>
                                                 }
                                                 else
                                                 {

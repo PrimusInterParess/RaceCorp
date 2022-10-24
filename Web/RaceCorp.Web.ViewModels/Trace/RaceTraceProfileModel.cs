@@ -28,6 +28,6 @@
 
         public string StartTime { get; set; }
 
-        public string TrackUrl { get; set; }
+        public string GoogleDriveId { get; set; }
     }
 }

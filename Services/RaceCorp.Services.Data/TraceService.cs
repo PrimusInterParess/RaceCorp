@@ -18,25 +18,36 @@
     public class TraceService : ITraceService
     {
         private readonly IRepository<Trace> traceRepo;
+        private readonly IRepository<Gpx> gpxRepo;
+        private readonly IDeletableEntityRepository<Race> raceRepo;
+        private readonly IGpxService gpxService;
 
-        public TraceService(IRepository<Trace> raceTraceRepo)
+        public TraceService(
+            IRepository<Trace> raceTraceRepo,
+            IRepository<Gpx> gpxRepo,
+            IDeletableEntityRepository<Race> raceRepo,
+            IGpxService gpxService)
         {
             this.traceRepo = raceTraceRepo;
+            this.gpxRepo = gpxRepo;
+            this.raceRepo = raceRepo;
+            this.gpxService = gpxService;
         }
 
-        public RaceTraceProfileModel GetRaceDifficultyProfileViewModel(int raceId, int traceId)
+        public RaceTraceProfileModel GetRaceTraceProfileViewModel(int raceId, int traceId)
         {
             var trace = this.traceRepo
                 .AllAsNoTracking()
                 .Include(t => t.Race).ThenInclude(r => r.Logo)
                 .Include(t => t.Difficulty)
+                .Include(t => t.Gpx)
                 .FirstOrDefault(t => t.RaceId == raceId && t.Id == traceId);
 
             if (trace == null)
             {
                 throw new Exception(InvalidTrace);
             }
-            ////LogoRootPath + race.LogoId + "." + race.Logo.Extension
+
             return new RaceTraceProfileModel()
             {
                 Id = trace.Id,
@@ -48,13 +59,12 @@
                 ControlTime = trace.ControlTime.TotalHours,
                 Length = trace.Length,
                 StartTime = trace.StartTime.ToString("HH:MM"),
-
-                // Gpx file path/GoogleId
                 LogoPath = LogoRootPath + trace.Race.LogoId + "." + trace.Race.Logo.Extension,
+                GoogleDriveId = trace.Gpx.GoogleDriveId,
             };
         }
 
-        public async Task EditAsync(RaceTraceEditModel model)
+        public async Task EditAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
         {
             var trace = this.traceRepo
                 .All()
@@ -65,7 +75,23 @@
             trace.DifficultyId = model.DifficultyId;
             trace.ControlTime = TimeSpan.FromHours((double)model.ControlTime);
 
-            // gpx file edit? get file location
+            var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
+
+            if (model.GpxFile != null)
+            {
+                var gpx = await this.gpxService
+                .ProccessingData(
+                model.GpxFile,
+                userId,
+                raceName,
+                gxpFileRoothPath,
+                pathToServiceAccountKeyFile);
+
+                await this.gpxRepo
+                    .AddAsync(gpx);
+                trace.Gpx = gpx;
+            }
+
             trace.StartTime = (DateTime)model.StartTime;
 
             await this.traceRepo.SaveChangesAsync();
@@ -80,18 +106,31 @@
                 .FirstOrDefault();
         }
 
-        public async Task CreateAsync(RaceTraceEditModel model)
+        public async Task CreateRaceTraceAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
         {
+
+            var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
+
+            var gpx = await this.gpxService
+               .ProccessingData(
+               model.GpxFile,
+               userId,
+               raceName,
+               gxpFileRoothPath,
+               pathToServiceAccountKeyFile);
+
+            await this.gpxRepo
+                    .AddAsync(gpx);
+
             var trace = new Trace()
             {
                 Name = model.Name,
                 Length = (int)model.Length,
                 DifficultyId = model.DifficultyId,
                 StartTime = (DateTime)model.StartTime,
-
-                // TODO: add logic for gpx file
                 ControlTime = TimeSpan.FromHours((double)model.ControlTime),
                 RaceId = model.RaceId,
+                Gpx = gpx,
             };
 
             await this.traceRepo.AddAsync(trace);
@@ -110,6 +149,22 @@
                 StartTime = (DateTime)traceInputModel.StartTime,
                 Gpx = gpx,
             };
+        }
+
+        public async Task<bool> DeleteTraceAsync(int id)
+        {
+            var trace = this.traceRepo.All().FirstOrDefault(t => t.Id == id);
+
+            this.traceRepo.Delete(trace);
+
+            var result = await this.traceRepo.SaveChangesAsync();
+
+            if (result == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

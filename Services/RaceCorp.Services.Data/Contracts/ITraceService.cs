@@ -11,14 +11,16 @@
 
     public interface ITraceService
     {
-        RaceTraceProfileModel GetRaceDifficultyProfileViewModel(int raceId, int traceId);
+        RaceTraceProfileModel GetRaceTraceProfileViewModel(int raceId, int traceId);
 
-        Task EditAsync(RaceTraceEditModel model);
+        Task EditAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile);
 
-        Task CreateAsync(RaceTraceEditModel model);
+        Task CreateRaceTraceAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile);
 
         T GetById<T>(int raceId, int traceId);
 
         Trace GetTraceDbModel(TraceInputModel traceInputModel, Gpx gpx);
+
+        Task<bool> DeleteTraceAsync(int id);
     }
 }

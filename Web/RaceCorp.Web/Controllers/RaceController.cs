@@ -76,7 +76,7 @@
                     $"{this.environment.WebRootPath}/images",
                     user.Id,
                     $"{this.environment.WebRootPath}\\Gpx",
-                    $"{this.environment.WebRootPath}\\{ServiceAccountKeyFileName}");
+                    $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
             }
             catch (Exception e)
             {
@@ -86,7 +86,6 @@
                 return this.View(model);
             }
 
-            // TODO: Make alert message for successfully added race!
             this.TempData["Message"] = "Your race was successfully created!";
             return this.RedirectToAction(nameof(RaceController.All));
         }
@@ -136,6 +135,8 @@
 
                 throw;
             }
+
+            this.TempData["Message"] = "Your race was successfully edited!";
 
             return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
         }
@@ -189,6 +190,21 @@
         public IActionResult UpcomingRace()
         {
             return this.View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var isDeleted = await this.raceService.DeleteAsync(id);
+
+            if (isDeleted)
+            {
+                return this.RedirectToAction("All", "Race");
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home");
+
         }
     }
 }

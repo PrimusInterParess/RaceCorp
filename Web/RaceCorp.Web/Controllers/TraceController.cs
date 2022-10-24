@@ -1,21 +1,15 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.IO;
-    using System.Threading.Tasks;
-
-    using Google.Apis.Auth.OAuth2;
-    using Google.Apis.Drive.v3;
-    using Google.Apis.Services;
-
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Models;
-    using RaceCorp.Services.Data;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Trace;
-
+    using System;
+    using System.Threading.Tasks;
+    using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Messages;
 
     public class TraceController : BaseController
@@ -23,23 +17,36 @@
         private readonly ITraceService traceService;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
+        private readonly IWebHostEnvironment environment;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public TraceController(
             ITraceService traceService,
             IDifficultyService difficultyService,
-            IRaceService raceService)
+            IRaceService raceService,
+            IWebHostEnvironment environment,
+            UserManager<ApplicationUser> userManager)
         {
             this.traceService = traceService;
             this.difficultyService = difficultyService;
             this.raceService = raceService;
+            this.environment = environment;
+            this.userManager = userManager;
         }
 
         public IActionResult RaceTraceProfile(int raceId, int traceId)
         {
-            var model = this.traceService.GetRaceDifficultyProfileViewModel(raceId, traceId);
+            try
+            {
+                var model = this.traceService
+                    .GetRaceTraceProfileViewModel(raceId, traceId);
 
-            this.ViewData["id"] = $"Race id ={raceId}. Trace id = {traceId}";
-            return this.View(model);
+                return this.View(model);
+            }
+            catch (Exception)
+            {
+                return this.RedirectToAction("Profile", "Race", new { id = raceId });
+            }
         }
 
         [HttpGet]
@@ -48,7 +55,9 @@
         public IActionResult EditRaceTrace(int raceId, int traceId)
         {
             var model = this.traceService.GetById<RaceTraceEditModel>(raceId, traceId);
+
             model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
+
             return this.View(model);
         }
 
@@ -65,17 +74,28 @@
 
             try
             {
-                await this.traceService.EditAsync(model);
+                var user = await this.userManager
+                .GetUserAsync(this.User);
+
+                await this.traceService
+                    .EditAsync(
+                    model,
+                    $"{this.environment.WebRootPath}\\Gpx",
+                    user.Id,
+                    $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
             }
             catch (Exception)
             {
                 this.ModelState.AddModelError(String.Empty, IvalidOperationMessage);
+
                 model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
 
                 return this.View(model);
             }
 
-            return this.RedirectToAction(nameof(this.RaceTraceProfile), new { raceId = model.RaceId, traceId = model.Id });
+            this.TempData["Message"] = "Your trace was successfully edited!";
+
+            return this.RedirectToAction("RaceTraceProfile", new { raceId = model.RaceId, traceId = model.Id });
         }
 
         [HttpGet]
@@ -88,7 +108,7 @@
             if (isRaceIdValid == false)
             {
                 this.TempData["Message"] = IvalidOperationMessage;
-                return this.RedirectToAction(nameof(RaceController.All), nameof(RaceController));
+                return this.RedirectToAction("All", "Race", nameof(RaceController));
             }
 
             var model = new RaceTraceEditModel()
@@ -110,9 +130,32 @@
                 return this.View(model);
             }
 
-            await this.traceService.CreateAsync(model);
+            var user = await this.userManager
+                .GetUserAsync(this.User);
 
-            return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.RaceId });
+            await this.traceService.CreateRaceTraceAsync(
+                model,
+                $"{this.environment.WebRootPath}\\Gpx",
+                user.Id,
+                $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
+
+            this.TempData["Message"] = "Trace was successfully created!";
+
+            return this.RedirectToAction("Profile", "Race", new { id = model.RaceId });
+        }
+
+        public async Task<IActionResult> DeleteRaceTrace(int traceId, int raceId)
+        {
+            var isDeleted = await this.traceService.DeleteTraceAsync(traceId);
+
+            if (isDeleted)
+            {
+                this.TempData["MessageDeleted"] = "Trace was successfully deleted!";
+
+                return this.RedirectToAction("Race", "Profile", new { id = raceId });
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home");
         }
     }
 }

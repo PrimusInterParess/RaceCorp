@@ -255,5 +255,21 @@
                .To<T>()
                .FirstOrDefault();
         }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var ride = this.rideRepo.All().FirstOrDefault(r => r.Id == id);
+
+            this.rideRepo.Delete(ride);
+
+            var result = await this.rideRepo.SaveChangesAsync();
+
+            if (result == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

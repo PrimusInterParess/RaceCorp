@@ -77,6 +77,7 @@
                 .ThenInclude(r => r.Mountain)
                 .Include(r => r.Rides)
                 .ThenInclude(r => r.Trace)
+                .ThenInclude(t => t.Gpx)
                 .FirstOrDefault(t => t.Id == townId);
 
             var count = town.Rides.Count();
@@ -86,8 +87,7 @@
                 Id = r.Id,
                 Name = r.Name,
                 Description = r.Description,
-
-                // add gxp file data
+                GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
                 TownName = r.Town.Name,
                 MountainName = r.Mountain.Name,
             })

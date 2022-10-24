@@ -24,5 +24,7 @@
         RaceInAllViewModel GetUpcommingEvents();
 
         Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath);
+
+        Task<bool> DeleteAsync(int id);
     }
 }

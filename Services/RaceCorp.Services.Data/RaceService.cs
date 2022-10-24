@@ -288,5 +288,21 @@
                 throw new Exception(e.Message);
             }
         }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var race = this.raceRepo.All().FirstOrDefault(r => r.Id == id);
+
+            this.raceRepo.Delete(race);
+
+            var result = await this.raceRepo.SaveChangesAsync();
+
+            if (result == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

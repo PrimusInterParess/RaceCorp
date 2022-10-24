@@ -78,7 +78,7 @@
                     model,
                     $"{this.environment.WebRootPath}\\Gpx",
                     user.Id,
-                    $"{this.environment.WebRootPath}\\{ServiceAccountKeyFileName}");
+                    $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
             }
             catch (System.Exception)
             {
@@ -87,6 +87,8 @@
                 model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
                 return this.View(model);
             }
+
+            this.TempData["Message"] = "Your ride was successfully created!";
 
             return this.RedirectToAction(nameof(RideController.All));
         }
@@ -139,7 +141,20 @@
                 return this.View(model);
             }
 
+            this.TempData["Message"] = "Your ride was successfully edited!";
+
             return this.RedirectToAction(nameof(RideController.Profile), new { id = model.Id });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var isDeleted = await this.rideService.DeleteAsync(id);
+
+            this.TempData["MessageDeleted"] = "Your ride was successfully deleted!";
+
+            return this.RedirectToAction("All", "Ride");
         }
     }
 }

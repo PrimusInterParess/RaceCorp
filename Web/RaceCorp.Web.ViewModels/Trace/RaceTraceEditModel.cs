@@ -15,6 +15,7 @@
 
         public string DifficultyName { get; set; }
 
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Trace, RaceTraceEditModel>()

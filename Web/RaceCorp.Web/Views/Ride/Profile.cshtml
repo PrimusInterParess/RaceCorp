@@ -5,10 +5,16 @@
     var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + Model.TraceGpxGoogleDriveId + "%22%5D%7D&embed&distance";
 }
 
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">@this.TempData["Message"]</div>
+}
+
 <article class="form-group text-center">
     <header>
         <h1>@Model.Name</h1>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
     </header>
     <div class="container">
         <div class="ratio ratio-16x9">
