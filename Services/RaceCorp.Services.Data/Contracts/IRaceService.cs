@@ -21,7 +21,7 @@
 
         Task EditAsync(RaceEditViewModel model, string logoPath, string userId);
 
-        RaceInAllViewModel GetUpcommingEvents();
+        RaceAllViewModel GetUpcomingRaces(int page, int itemsPerPage = 3);
 
         Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath);
 

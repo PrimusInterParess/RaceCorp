@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -13,21 +14,25 @@
     using RaceCorp.Web.ViewModels.Mountain;
     using RaceCorp.Web.ViewModels.Town;
 
+    using static RaceCorp.Services.Constants.Common;
+
     public class MountainController : BaseController
     {
-
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMountanService mountanService;
+        private readonly IImageService imageService;
 
         public MountainController(
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager,
-            IMountanService mountanService)
+            IMountanService mountanService,
+            IImageService imageService)
         {
             this.environment = environment;
             this.userManager = userManager;
             this.mountanService = mountanService;
+            this.imageService = imageService;
         }
 
         public IActionResult ById(int id)
@@ -56,7 +61,7 @@
 
             try
             {
-                await this.mountanService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images");
+                await this.imageService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images", MountainFolderName, MountainImageName);
             }
             catch (Exception e)
             {
@@ -78,6 +83,28 @@
             };
 
             return this.View(model);
+        }
+
+        public IActionResult ProfileRides(int mountainId, int id = 1)
+        {
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
+            var rides = this.mountanService.AllRides(mountainId, id);
+            return this.View(rides);
+        }
+
+        public IActionResult ProfileRaces(int mountainId, int id = 1)
+        {
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
+            var races = this.mountanService.AllRaces(mountainId, id);
+            return this.View(races);
         }
     }
 }

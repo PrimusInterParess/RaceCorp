@@ -8,6 +8,8 @@
     {
         public string UpcomingRaceImagePath { get; set; }
 
+        public string UpcomingRidesImagePath { get; set; }
+
         public string TownImagePath { get; set; }
 
         public string MountainImagePath { get; set; }

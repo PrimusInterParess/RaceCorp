@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
         private readonly IDeletableEntityRepository<Trace> traceRepo;
+        private readonly IRepository<ApplicationUserRide> userRideRepo;
         private readonly IRepository<Gpx> gpxRepo;
         private readonly IGpxService gpxService;
         private readonly ITraceService traceService;
@@ -30,6 +32,7 @@
             IDeletableEntityRepository<Town> townRepo,
             IDeletableEntityRepository<Mountain> mountainRepo,
             IDeletableEntityRepository<Trace> traceRepo,
+            IRepository<ApplicationUserRide> userRideRepo,
             IRepository<Gpx> gpxRepo,
             IGpxService gpxService,
             ITraceService traceService)
@@ -38,6 +41,7 @@
             this.townRepo = townRepo;
             this.mountainRepo = mountainRepo;
             this.traceRepo = traceRepo;
+            this.userRideRepo = userRideRepo;
             this.gpxRepo = gpxRepo;
             this.gpxService = gpxService;
             this.traceService = traceService;
@@ -159,7 +163,7 @@
             }
         }
 
-        public async Task EditAsync(RideEditVIewModel model)
+        public async Task EditAsync(RideEditVIewModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
         {
             var rideDb = this.rideRepo
                 .All()
@@ -234,9 +238,24 @@
             traceDb.Length = (int)model.Trace.Length;
             traceDb.DifficultyId = model.Trace.DifficultyId;
             traceDb.ControlTime = TimeSpan.FromHours((double)model.Trace.ControlTime);
-
-            // add gpx file data
             traceDb.StartTime = (DateTime)model.Trace.StartTime;
+
+            if (model.Trace.GpxFile != null)
+            {
+                var gpx = await this.gpxService
+                .ProccessingData(
+                model.Trace.GpxFile,
+                userId,
+                model.Name,
+                gxpFileRoothPath,
+                pathToServiceAccountKeyFile);
+
+                await this.gpxRepo
+                    .AddAsync(gpx);
+
+                traceDb.Gpx = gpx;
+            }
+
             try
             {
                 await this.rideRepo.SaveChangesAsync();
@@ -268,6 +287,63 @@
             {
                 return false;
             }
+
+            return true;
+        }
+
+        public RideAllViewModel GetUpcomingRides(int page, int itemsPerPage = 3)
+        {
+            var count = this.rideRepo
+                 .All()
+                 .Count();
+
+            var rides = this.rideRepo
+                .AllAsNoTracking()
+                .Include(r => r.Trace)
+                .Where(r => r.Date > DateTime.Now)
+                .Select(r => new RideInAllViewModel()
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
+                    TownName = r.Town.Name,
+                    MountainName = r.Mountain.Name,
+                })
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToList();
+
+            return new RideAllViewModel()
+            {
+                PageNumber = page,
+                ItemsPerPage = itemsPerPage,
+                RacesCount = count,
+                Rides = rides,
+            };
+        }
+
+        public async Task<bool> RegisterUserToRide(int id, string userId)
+        {
+            var ride = this.rideRepo.All().Include(r=>r.RegisteredUsers).FirstOrDefault(r => r.Id == id);
+
+            if (ride.RegisteredUsers.Any(u => u.ApplicationUserId == userId))
+            {
+                return false;
+            }
+
+            var userRide = new ApplicationUserRide
+            {
+                ApplicationUserId = userId,
+                RideId = id,
+            };
+
+            await this.userRideRepo.AddAsync(userRide);
+
+            ride.RegisteredUsers.Add(userRide);
+
+            
+            await this.rideRepo.SaveChangesAsync();
 
             return true;
         }

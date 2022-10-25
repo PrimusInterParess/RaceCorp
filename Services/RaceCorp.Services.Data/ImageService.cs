@@ -9,6 +9,7 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.Common;
 
     using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
@@ -81,6 +82,29 @@
             {
                 await this.imageRepo.AddAsync(imageData);
                 await this.imageRepo.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public async Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath, string folderName, string imageName)
+        {
+            try
+            {
+                var image = this.ProccessingData(model.Picture, userId);
+
+                image.Name = imageName;
+
+                await this.SaveImageIntoFileSystem(
+                         model.Picture,
+                         imagePath,
+                         folderName,
+                         image.Id,
+                         image.Extension);
+
+                await this.SaveAsyncImageIntoDb(image);
             }
             catch (Exception e)
             {

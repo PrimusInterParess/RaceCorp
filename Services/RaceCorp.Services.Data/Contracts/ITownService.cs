@@ -11,8 +11,6 @@
     {
         IEnumerable<KeyValuePair<string, string>> GetTownsKVP();
 
-        Task SaveImage(PictureUploadModel model, string userId, string imagePath);
-
         List<T> GetAll<T>();
 
         Task Create(TownCreateViewModel model);

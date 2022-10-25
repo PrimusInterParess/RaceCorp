@@ -61,6 +61,7 @@
                 StartTime = trace.StartTime.ToString("HH:MM"),
                 LogoPath = LogoRootPath + trace.Race.LogoId + "." + trace.Race.Logo.Extension,
                 GoogleDriveId = trace.Gpx.GoogleDriveId,
+                GpxId = trace.GpxId,
             };
         }
 
@@ -79,17 +80,26 @@
 
             if (model.GpxFile != null)
             {
-                var gpx = await this.gpxService
-                .ProccessingData(
-                model.GpxFile,
-                userId,
-                raceName,
-                gxpFileRoothPath,
-                pathToServiceAccountKeyFile);
+               
+                try
+                {
+                    var gpx = await this.gpxService
+                     .ProccessingData(
+                     model.GpxFile,
+                     userId,
+                     raceName,
+                     gxpFileRoothPath,
+                     pathToServiceAccountKeyFile);
 
-                await this.gpxRepo
+                    await this.gpxRepo
                     .AddAsync(gpx);
-                trace.Gpx = gpx;
+                    trace.Gpx = gpx;
+                }
+                catch (Exception e)
+                {
+
+                    throw new Exception(e.Message);
+                }
             }
 
             trace.StartTime = (DateTime)model.StartTime;

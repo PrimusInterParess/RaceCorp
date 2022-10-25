@@ -156,6 +156,7 @@
 
             var races = this.raceRepo
                 .AllAsNoTracking()
+                .OrderByDescending(r => r.CreatedOn)
                 .Select(r => new RaceInAllViewModel()
                 {
                     Id = r.Id,
@@ -258,11 +259,36 @@
             await this.raceRepo.SaveChangesAsync();
         }
 
-        public RaceInAllViewModel GetUpcommingEvents()
+        public RaceAllViewModel GetUpcomingRaces(int page, int itemsPerPage = 3)
         {
-            var raceData = this.raceRepo.All().Where(r => r.Date > DateTime.Now).FirstOrDefault();
+            var count = this.raceRepo
+                 .All()
+                 .Count();
 
-            return new RaceInAllViewModel();
+            var races = this.raceRepo
+                .AllAsNoTracking()
+                .Where(r => r.Date > DateTime.Now)
+                .OrderBy(r => r.CreatedOn)
+                .Select(r => new RaceInAllViewModel()
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
+                    Town = r.Town.Name,
+                    Mountain = r.Mountain.Name,
+                })
+            .Skip((page - 1) * itemsPerPage)
+            .Take(itemsPerPage)
+            .ToList();
+
+            return new RaceAllViewModel()
+            {
+                PageNumber = page,
+                ItemsPerPage = itemsPerPage,
+                RacesCount = count,
+                Races = races,
+            };
         }
 
         public async Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath)

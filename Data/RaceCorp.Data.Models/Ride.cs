@@ -10,5 +10,7 @@
         public int TraceId { get; set; }
 
         public virtual Trace Trace { get; set; }
+
+        public virtual ICollection<ApplicationUserRide> RegisteredUsers { get; set; } = new HashSet<ApplicationUserRide>();
     }
 }

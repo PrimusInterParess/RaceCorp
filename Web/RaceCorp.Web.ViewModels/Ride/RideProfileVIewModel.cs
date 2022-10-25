@@ -24,6 +24,8 @@
 
         public string TraceGpxGoogleDriveId { get; set; }
 
+        public string TraceGpxId { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Ride, RideProfileVIewModel>()
@@ -35,10 +37,6 @@
                    => opt.MapFrom(x => x.Trace.ControlTime.TotalHours))
                 .ForMember(x => x.StartTime, opt
                    => opt.MapFrom(x => x.Trace.StartTime.ToString("HH:MM")))
-
-                // .ForMember(x => x.TraceGoogleDriveId, opt
-                //   => opt.MapFrom(x => x.Trace.Gpx.GoogleDriveId))
-                // add gxp file data
                 .ForMember(x => x.Length, opt
                    => opt.MapFrom(x => x.Trace.Length));
         }

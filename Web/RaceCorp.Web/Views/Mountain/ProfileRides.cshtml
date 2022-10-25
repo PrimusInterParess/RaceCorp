@@ -1,0 +1,20 @@
+﻿@using RaceCorp.Web.ViewModels.Mountain
+
+@model MountainRidesProfileViewModel
+
+@{
+    this.ViewData["Title"] = "All rides in " + this.Model.Name;
+    this.ViewData["action"] = "ProfileRides";
+    this.ViewData["controller"] = "Mountain";
+    this.ViewData["townId"] = this.Model.Id;
+
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<partial name="_RideAllPartial" model="@Model.Rides" />
+
+@if (Model.Rides.Rides.Count != 0)
+{
+    <partial name="_PagingPartial" model="@Model.Rides" />
+}

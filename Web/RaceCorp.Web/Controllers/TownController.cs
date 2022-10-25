@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -13,18 +14,24 @@
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.Town;
 
+    using static RaceCorp.Services.Constants.Common;
+
+
     public class TownController : BaseController
     {
         private readonly ITownService townService;
+        private readonly IImageService imageService;
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
 
         public TownController(
             ITownService townService,
+            IImageService imageService,
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager)
         {
             this.townService = townService;
+            this.imageService = imageService;
             this.environment = environment;
             this.userManager = userManager;
         }
@@ -114,7 +121,7 @@
 
             try
             {
-                await this.townService.SaveImage(model, user.Id, $"{this.environment.WebRootPath}/images");
+                await this.imageService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images", TownFolderName, TownImageName);
             }
             catch (Exception e)
             {

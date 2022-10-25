@@ -24,13 +24,18 @@
         private readonly IDeletableEntityRepository<Town> townsRepo;
         private readonly IImageService imageService;
 
-        public TownService(IDeletableEntityRepository<Town> townsRepo, IImageService imageService)
+        public TownService(
+            IDeletableEntityRepository<Town> townsRepo,
+            IImageService imageService)
         {
             this.townsRepo = townsRepo;
             this.imageService = imageService;
         }
 
-        public TownRacesProfileViewModel AllRaces(int townId, int pageId, int itemsPerPage = 3)
+        public TownRacesProfileViewModel AllRaces(
+            int townId,
+            int pageId,
+            int itemsPerPage = 3)
         {
             var town = this.townsRepo.AllAsNoTracking()
                .Include(t => t.Races)
@@ -70,7 +75,10 @@
             };
         }
 
-        public TownRidesProfileViewModel AllRides(int townId, int pageId, int itemsPerPage = 3)
+        public TownRidesProfileViewModel AllRides(
+            int townId,
+            int pageId,
+            int itemsPerPage = 3)
         {
             var town = this.townsRepo.AllAsNoTracking()
                 .Include(t => t.Rides)
@@ -111,7 +119,8 @@
             };
         }
 
-        public async Task Create(TownCreateViewModel model)
+        public async Task Create(
+            TownCreateViewModel model)
         {
             var alreadyExists = this.townsRepo.All().Any(t => t.Name == model.Name);
 
@@ -143,6 +152,7 @@
             return this
                 .townsRepo
                 .AllAsNoTracking()
+                .Where(t => t.Rides.Count() != 0 || t.Races.Count() != 0)
                 .To<T>()
                 .ToList();
         }
@@ -155,30 +165,6 @@
                    Id = f.Id,
                    Name = f.Name,
                }).Select(f => new KeyValuePair<string, string>(f.Id.ToString(), f.Name));
-        }
-
-        public async Task SaveImage(PictureUploadModel model, string userId, string imagePath)
-        {
-            try
-            {
-                var image = this.imageService.ProccessingData(model.Picture, userId);
-
-                image.Name = TownImageName;
-
-                await this.imageService
-                     .SaveImageIntoFileSystem(
-                         model.Picture,
-                         imagePath,
-                         TownFolderName,
-                         image.Id,
-                         image.Extension);
-
-                await this.imageService.SaveAsyncImageIntoDb(image);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
         }
     }
 }

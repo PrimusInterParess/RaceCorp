@@ -29,10 +29,15 @@
             this.googleDriveService = googleDriveService;
         }
 
+        public Gpx GetGpxById(string id)
+        {
+            return this.gpxRepo.AllAsNoTracking().FirstOrDefault(f => f.Id == id);
+        }
+
         public async Task<Gpx> ProccessingData(
             IFormFile file,
             string userId,
-            string inputModelname,
+            string folderName,
             string gxpFileRoothPath,
             string pathToServiceAccountKeyFile)
         {
@@ -58,6 +63,7 @@
             {
                 Extension = extention,
                 UserId = userId,
+                FolderName = folderName,
             };
 
             try
@@ -65,7 +71,7 @@
                 await this.SaveIntoFileSystem(
                     file,
                     gxpFileRoothPath,
-                    inputModelname,
+                    folderName,
                     gpxDto.Id,
                     extention);
             }
@@ -74,13 +80,13 @@
                 throw new Exception(e.Message);
             }
 
-            var gxpFilePath = $"{gxpFileRoothPath}\\{inputModelname}\\{gpxDto.Id}.{extention}";
+            var gxpFilePath = $"{gxpFileRoothPath}\\{folderName}\\{gpxDto.Id}.{extention}";
 
             var googleId = await this.googleDriveService
                 .UloadGpxFileToDrive(
                 gxpFilePath,
                 pathToServiceAccountKeyFile,
-                inputModelname,
+                folderName,
                 DirectoryId);
 
             gpxDto.GoogleDriveId = googleId;

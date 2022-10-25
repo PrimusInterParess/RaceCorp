@@ -18,6 +18,8 @@
 
         public ICollection<Trace> Traces { get; set; } = new HashSet<Trace>();
 
+        public virtual ICollection<ApplicationUserRace> RegisteredUsers { get; set; } = new HashSet<ApplicationUserRace>();
+
         // public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
     }
 }

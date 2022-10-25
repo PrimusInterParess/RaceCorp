@@ -1,0 +1,23 @@
+﻿@model RaceAllViewModel
+@{
+    ViewData["Title"] = "Upcoming Races";
+    this.ViewData["action"] = "UpcomingRaces";
+    this.ViewData["controller"] = "Race";
+}
+
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">@this.TempData["Message"]</div>
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<partial name="_RaceAllPartial" model="@Model" />
+
+
+@if (Model.Races.Count() != 0)
+{
+    <partial name="_PagingPartial" model="@Model" />
+}
+

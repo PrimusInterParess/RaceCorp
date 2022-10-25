@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
+    using System.ComponentModel;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,7 @@
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
+        private readonly IGpxService gpxService;
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -31,12 +33,14 @@
             IFormatServices formatsList,
             IDifficultyService difficultyService,
             IRaceService raceService,
+            IGpxService gpxService,
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager)
         {
             this.formatsList = formatsList;
             this.difficultyService = difficultyService;
             this.raceService = raceService;
+            this.gpxService = gpxService;
             this.environment = environment;
             this.userManager = userManager;
         }
@@ -130,10 +134,11 @@
             {
                 await this.raceService.EditAsync(model, $"{this.environment.WebRootPath}/images", user.Id);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                this.ModelState.AddModelError("", e.Message);
+                model.Formats = this.formatsList.GetFormatKVP();
+                return this.View(model);
             }
 
             this.TempData["Message"] = "Your race was successfully edited!";
@@ -187,9 +192,15 @@
             return this.RedirectToAction("Index", "Home");
         }
 
-        public IActionResult UpcomingRace()
+        public IActionResult UpcomingRaces(int id = 1)
         {
-            return this.View();
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
+            var races = this.raceService.GetUpcomingRaces(id);
+            return this.View(races);
         }
 
         [HttpGet]
@@ -204,6 +215,25 @@
             }
 
             return this.RedirectToAction("ErrorPage", "Home");
+        }
+
+        [DisplayName("Download Gpx")]
+        public IActionResult DownloadGpx(string id)
+        {
+
+            try
+            {
+                var gpxFile = this.gpxService.GetGpxById(id);
+                var gpxFilePath = $"{this.environment.WebRootPath}/Gpx/{gpxFile.FolderName}/{gpxFile.Id}.{gpxFile.Extension}";
+                byte[] fileBytes = System.IO.File.ReadAllBytes(gpxFilePath);
+                string fileName = $"{gpxFile.FolderName}.{gpxFile.Extension}";
+                return this.File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception)
+            {
+
+                return this.RedirectToAction("ErrorPage", "Home");
+            }
 
         }
     }

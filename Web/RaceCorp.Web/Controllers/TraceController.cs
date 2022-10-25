@@ -84,9 +84,9 @@
                     user.Id,
                     $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                this.ModelState.AddModelError(String.Empty, IvalidOperationMessage);
+                this.ModelState.AddModelError(String.Empty, e.Message);
 
                 model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
 

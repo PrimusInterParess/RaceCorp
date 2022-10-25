@@ -6,6 +6,7 @@
 
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.Mountain;
+    using RaceCorp.Web.ViewModels.Town;
 
     public interface IMountanService
     {
@@ -15,6 +16,8 @@
 
         IEnumerable<KeyValuePair<string, string>> GetMountainsKVP();
 
-        Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath);
+        MountainRidesProfileViewModel AllRides(int mountainId, int pageId, int itemsPerPage = 3);
+
+        MountainRacesProfileViewModel AllRaces(int mountainId, int pageId, int itemsPerPage = 3);
     }
 }

@@ -11,8 +11,10 @@
 
         Task SaveIntoFileSystem(IFormFile file, string filePath, string folderName, string fileDbId, string extension);
 
-        Task<Gpx> ProccessingData(IFormFile file, string userId, string raceRideName, string gxpFileRoothPath, string pathToServiceAccountKeyFile);
+        Task<Gpx> ProccessingData(IFormFile file, string userId, string folderName, string gxpFileRoothPath, string pathToServiceAccountKeyFile);
 
         Task SaveAsyncIntoDb(Gpx fileData);
+
+        Gpx GetGpxById(string id);
     }
 }

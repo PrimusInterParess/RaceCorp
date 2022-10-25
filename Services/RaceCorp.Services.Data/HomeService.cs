@@ -57,6 +57,9 @@
 
             var upcommingRaceImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == UpcommingRaceImageName);
 
+            var upcommingRidesImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == UpcommingRidesImageName);
+
+
             var model = new IndexViewModel();
 
             // LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
@@ -73,6 +76,12 @@
             if (upcommingRaceImage != null)
             {
                 model.UpcomingRaceImagePath = UpcomingRaceRootPath + upcommingRaceImage.Id + "." + upcommingRaceImage.Extension;
+            }
+
+
+            if (upcommingRidesImage != null)
+            {
+                model.UpcomingRidesImagePath = UpcomingRidesRootPath + upcommingRidesImage.Id + "." + upcommingRidesImage.Extension;
             }
 
             return model;

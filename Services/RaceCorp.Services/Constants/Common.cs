@@ -17,6 +17,10 @@
         public const string UpcomingRaceRootPath = "/images/upcomingRaces/";
         public const string UpcommingRaceImageName = "UpcomingRace";
 
+        public const string UpcommingRidesFolderName = "upcomingRices";
+        public const string UpcomingRidesRootPath = "/images/upcomingRides/";
+        public const string UpcommingRidesImageName = "UpcomingRides";
+
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
     }
 }

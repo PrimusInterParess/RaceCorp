@@ -1,0 +1,26 @@
+﻿@model RaceCorp.Web.ViewModels.Ride.RideAllViewModel
+@{
+    this.ViewData["Title"] = "Upcoming Rides";
+    this.ViewData["action"] = "UpcomingRides";
+    this.ViewData["controller"] = "Ride";
+}
+
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success">@this.TempData["Message"]</div>
+}
+
+@if (this.TempData.ContainsKey("MessageDeleted"))
+{
+    <div class="alert alert-success">@this.TempData["MessageDeleted"]</div>
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+
+<partial name="_RideAllPartial" model="@Model" />
+@if (Model.Rides.Count != 0)
+{
+    <partial name="_PagingPartial" model="@Model" />
+}

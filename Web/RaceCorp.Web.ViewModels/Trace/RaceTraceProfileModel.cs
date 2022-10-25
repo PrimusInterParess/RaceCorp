@@ -1,5 +1,6 @@
 ﻿namespace RaceCorp.Web.ViewModels.Trace
 {
+    using RaceCorp.Services.Mapping;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -29,5 +30,7 @@
         public string StartTime { get; set; }
 
         public string GoogleDriveId { get; set; }
+
+        public string GpxId { get; set; }
     }
 }

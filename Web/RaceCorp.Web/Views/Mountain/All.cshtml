@@ -4,7 +4,7 @@
     this.ViewData["Title"] = "All Mountains";
     this.ViewData["imageUrl"] = "/Images/mountains/090f915b-bfd2-4f39-8fec-e4366b75db11.jpg";
 }
-<div class="col-md-12">
+<div class="col-md-12 text-center">
     <div class="text-center">
         <h5>@this.ViewData["Title"]</h5>
     </div>
@@ -15,6 +15,7 @@
 
     @if (Model.Mountains.Count() != 0)
     {
+        <div class="text-center col-md-12 offset-2">
         <div class="col-md-8">
             <hr />
             <h4>Mountains</h4>
@@ -45,7 +46,7 @@
                                             <div class="accordion-body text-center">
                                                 @if (mountain.Races.Count() == 0)
                                                 {
-                                                    <b>No races registered!</b> <a class="btn btn-outline-secondary" asp-controller="Race" asp-action="Create">Create one?</a>
+                                                    <b>No races registered!</b> 
 
                                                 }
                                                 else
@@ -56,7 +57,7 @@
                                                             <a class="btn btn-outline-primary" asp-controller="Race" asp-action="Profile" asp-route-id="@race.Id"><b>@race.Name</b></a>
                                                         </div>
                                                     }
-                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Mountain" asp-action="ProfileRaces" asp-route-id=@mountain.Id>All races from @mountain.Name</a>
+                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Mountain" asp-action="ProfileRaces" asp-route-mountainId=@mountain.Id>All races from @mountain.Name</a>
 
                                                 }
                                             </div>
@@ -74,7 +75,7 @@
                                             <div class="accordion-body text-center">
                                                 @if (mountain.Rides.Count() == 0)
                                                 {
-                                                    <b>No rides registered!</b> <a class="btn btn-outline-secondary" asp-controller="Ride" asp-action="Create">Create one?</a>
+                                                    <b>No rides registered!</b> 
                                                 }
                                                 else
                                                 {
@@ -84,7 +85,7 @@
                                                             <a class="btn btn-outline-primary" asp-controller="Ride" asp-action="Profile" asp-route-id="@ride.Id"><b>@ride.Name</b></a>
                                                         </div>
                                                     }
-                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Mountain" asp-action="ProfileRides" asp-route-id=@mountain.Id>All rides from @mountain.Name</a>
+                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Mountain" asp-action="ProfileRides" asp-route-mountainId=@mountain.Id>All rides from @mountain.Name</a>
 
                                                 }
                                             </div>
@@ -96,6 +97,7 @@
                     </div>
                 </div>
             }
+            </div>
         </div>
     }
     else

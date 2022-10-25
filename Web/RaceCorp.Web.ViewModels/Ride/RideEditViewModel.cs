@@ -11,7 +11,7 @@
 
         public int TraceId { get; set; }
 
-        public void CreateMappings(IProfileExpression configuration)
+        public new void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Ride, RideEditVIewModel>()
             .ForMember(x => x.Mountain, opt
