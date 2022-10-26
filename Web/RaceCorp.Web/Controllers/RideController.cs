@@ -153,7 +153,6 @@
             }
             catch (Exception e)
             {
-
                 this.ModelState.AddModelError(string.Empty, e.Message);
                 model.Formats = this.formatServices.GetFormatKVP();
                 model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
@@ -244,13 +243,11 @@
                 }
 
                 return this.RedirectToAction("ErrorPage", "Home");
-
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return this.RedirectToAction("ErrorPage", "Home");
             }
-
         }
     }
 }

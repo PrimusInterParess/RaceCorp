@@ -1,13 +1,13 @@
-﻿namespace RaceCorp.Web
+namespace RaceCorp.Web
 {
     using System.Reflection;
 
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authentication.Google;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -31,9 +31,12 @@
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+
             ConfigureServices(builder.Services, builder.Configuration);
             var app = builder.Build();
             Configure(app);
+            app.UseAuthentication();
             app.Run();
         }
 

@@ -59,7 +59,6 @@
 
             var upcommingRidesImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == UpcommingRidesImageName);
 
-
             var model = new IndexViewModel();
 
             // LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
@@ -77,7 +76,6 @@
             {
                 model.UpcomingRaceImagePath = UpcomingRaceRootPath + upcommingRaceImage.Id + "." + upcommingRaceImage.Extension;
             }
-
 
             if (upcommingRidesImage != null)
             {

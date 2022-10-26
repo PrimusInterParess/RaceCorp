@@ -5,5 +5,9 @@
         public const string SystemName = "RaceCorp";
 
         public const string AdministratorRoleName = "Administrator";
+
+        public const string RaceOwnerRoleName = "Race owner";
+
+        public const string RacerRoleName = "Racer";
     }
 }

@@ -16,7 +16,6 @@
 
     using static RaceCorp.Services.Constants.Common;
 
-
     public class TownController : BaseController
     {
         private readonly ITownService townService;
@@ -56,20 +55,17 @@
             }
             catch (Exception e)
             {
-                this.ModelState.AddModelError(String.Empty, e.Message);
+                this.ModelState.AddModelError(string.Empty, e.Message);
 
                 return this.View(model);
             }
 
-
             return this.RedirectToAction("Town", "All");
         }
-
 
         ////returns all races related to the town. by townId
         public IActionResult ProfileRides(int townId, int id = 1)
         {
-
             if (id <= 0)
             {
                 return this.NotFound();
@@ -132,7 +128,6 @@
             this.TempData["Message"] = "Your picture was successfully added!";
 
             return this.RedirectToAction("Index", "Home");
-
         }
     }
 }

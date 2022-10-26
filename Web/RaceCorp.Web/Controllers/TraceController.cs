@@ -1,5 +1,8 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -7,8 +10,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Trace;
-    using System;
-    using System.Threading.Tasks;
+
     using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Messages;
 
@@ -86,7 +88,7 @@
             }
             catch (Exception e)
             {
-                this.ModelState.AddModelError(String.Empty, e.Message);
+                this.ModelState.AddModelError(string.Empty, e.Message);
 
                 model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
 

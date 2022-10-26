@@ -20,10 +20,30 @@
 
         private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
         {
-            var role = await roleManager.FindByNameAsync(roleName);
-            if (role == null)
+            var adminRole = await roleManager.FindByNameAsync(roleName);
+            if (adminRole == null)
             {
                 var result = await roleManager.CreateAsync(new ApplicationRole(roleName));
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                }
+            }
+
+            var racerRole = await roleManager.FindByNameAsync(GlobalConstants.RacerRoleName);
+            if (racerRole == null)
+            {
+                var result = await roleManager.CreateAsync(new ApplicationRole(GlobalConstants.RacerRoleName));
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                }
+            }
+
+            var raceOwnerRole = await roleManager.FindByNameAsync(GlobalConstants.RaceOwnerRoleName);
+            if (raceOwnerRole == null)
+            {
+                var result = await roleManager.CreateAsync(new ApplicationRole(GlobalConstants.RaceOwnerRoleName));
                 if (!result.Succeeded)
                 {
                     throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));

@@ -61,7 +61,6 @@
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
 
-
         public IActionResult ErrorPage()
         {
             return this.View(

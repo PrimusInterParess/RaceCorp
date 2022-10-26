@@ -136,7 +136,7 @@
             }
             catch (Exception e)
             {
-                this.ModelState.AddModelError("", e.Message);
+                this.ModelState.AddModelError(" ", e.Message);
                 model.Formats = this.formatsList.GetFormatKVP();
                 return this.View(model);
             }
