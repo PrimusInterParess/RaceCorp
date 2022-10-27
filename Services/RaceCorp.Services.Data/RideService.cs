@@ -325,7 +325,7 @@
 
         public async Task<bool> RegisterUserToRide(int id, string userId)
         {
-            var ride = this.rideRepo.All().Include(r=>r.RegisteredUsers).FirstOrDefault(r => r.Id == id);
+            var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == id);
 
             if (ride.RegisteredUsers.Any(u => u.ApplicationUserId == userId))
             {
@@ -342,7 +342,6 @@
 
             ride.RegisteredUsers.Add(userRide);
 
-            
             await this.rideRepo.SaveChangesAsync();
 
             return true;

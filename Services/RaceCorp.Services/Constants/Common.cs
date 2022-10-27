@@ -21,6 +21,12 @@
         public const string UpcomingRidesRootPath = "/Images/upcomingRides/";
         public const string UpcommingRidesImageName = "UpcomingRides";
 
+        public const string ImageParentFolderName = "Images";
+        public const string GpxFolderName = "Gpxs";
+        public const string ServiceAccountFolderName = "Credentials";
+
+
+
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
     }
 }

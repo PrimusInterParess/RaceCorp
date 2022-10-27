@@ -24,6 +24,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using Microsoft.Extensions.Logging;
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure.Contracts;
 
     public class RegisterModel : PageModel
     {
@@ -34,6 +35,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> emailStore;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IRegisterService registerService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +43,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IRegisterService registerService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -50,64 +53,58 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.registerService = registerService;
             this.Input = new InputModel();
-            this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Name)).ToList();
+            this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
         }
 
-        /// <summary>
-        ///     Gets or sets this API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     Gets or sets this API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string ReturnUrl { get; set; }
 
-        /// <summary>
-        ///     Gets or sets this API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     Gets or sets this API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     Gets or sets this API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            [Required]
+            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            public string LastName { get; set; }
+
+            [Required]
+            public int Gender { get; set; }
+
+            [Required]
+            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            public string Town { get; set; }
+
+            [Required]
+            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            public string Country { get; set; }
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     Gets or sets this API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            public string Role { get; set; }
+            public string RoleId { get; set; }
 
             public IEnumerable<SelectListItem> Roles { get; set; } = new List<SelectListItem>();
         }
@@ -126,49 +123,53 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             {
                 var user = this.CreateUser();
 
-                var role = this.roleManager.Roles
-                    .FirstOrDefault(
-                    r=>r.Name.ToLower()==this.Input.Role.ToLower()&&
-                    r.Name.ToLower()!= GlobalConstants.AdministratorRoleName.ToLower());
-
-                if (role!=null)
-                {
-                    user.Roles.Add();
-                }
-
                 await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
 
+                await this.registerService.ProccesingData(this.Input, user);
 
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
 
                 if (result.Succeeded)
                 {
-                    this.logger.LogInformation("User created a new account with password.");
+                    var identityResult = await this.registerService.AssignUserToRole(this.Input.RoleId, user);
 
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = this.Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: this.Request.Scheme);
-
-                    await this.emailSender.SendEmailAsync(
-                        this.Input.Email,
-                        "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (this.userManager.Options.SignIn.RequireConfirmedAccount)
+                    if (identityResult.Succeeded)
                     {
-                        return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
+                            this.logger.LogInformation("User created a new account with password.");
+
+                            var userId = await this.userManager.GetUserIdAsync(user);
+                            var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+                            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                            var callbackUrl = this.Url.Page(
+                                "/Account/ConfirmEmail",
+                                pageHandler: null,
+                                values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                                protocol: this.Request.Scheme);
+
+                            await this.emailSender.SendEmailAsync(
+                                this.Input.Email,
+                                "Confirm your email",
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                            if (this.userManager.Options.SignIn.RequireConfirmedAccount)
+                            {
+                                return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
+                            }
+                            else
+                            {
+                                await this.signInManager.SignInAsync(user, isPersistent: false);
+                                return this.LocalRedirect(returnUrl);
+                            }
+                        
                     }
-                    else
+
+                    foreach (var error in identityResult.Errors)
                     {
-                        await this.signInManager.SignInAsync(user, isPersistent: false);
-                        return this.LocalRedirect(returnUrl);
+                        this.ModelState.AddModelError(string.Empty, error.Description);
                     }
+
+                    return this.Page();
                 }
 
                 foreach (var error in result.Errors)

@@ -184,7 +184,6 @@
 
         [HttpPost]
         [Authorize]
-
         public async Task<IActionResult> UploadPicture(PictureUploadModel model)
         {
             if (this.ModelState.IsValid == false)
@@ -196,7 +195,7 @@
 
             try
             {
-                await this.imageService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images", UpcommingRidesFolderName, UpcommingRidesImageName);
+                await this.imageService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/Images", UpcommingRidesFolderName, UpcommingRidesImageName);
             }
             catch (Exception e)
             {

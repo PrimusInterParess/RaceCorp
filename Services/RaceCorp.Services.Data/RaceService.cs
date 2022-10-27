@@ -55,10 +55,12 @@
 
         public async Task CreateAsync(
             RaceCreateModel model,
-            string imagePath,
+            string roothPath,
+            string imageParentFolderName,
             string userId,
-            string gxpFileRoothPath,
-            string pathToServiceAccountKeyFile)
+            string gpxFolderName,
+            string serviceAccountFolderName,
+            string sereviceAccountKeyFileName)
         {
             var race = new Race
             {
@@ -106,6 +108,9 @@
 
             if (model.Difficulties.Count != 0)
             {
+                var gpxRoothPath = $"{roothPath}\\{gpxFolderName}";
+                var serviceAccountPath = $"{roothPath}\\{serviceAccountFolderName}\\{sereviceAccountKeyFileName}";
+
                 foreach (var traceInputModel in model.Difficulties)
                 {
                     var gpx = await this.gpxService
@@ -113,8 +118,8 @@
                         traceInputModel.GpxFile,
                         userId,
                         model.Name,
-                        gxpFileRoothPath,
-                        pathToServiceAccountKeyFile);
+                        gpxRoothPath,
+                        serviceAccountPath);
 
                     await this.gpxRepo.AddAsync(gpx);
 
@@ -126,7 +131,7 @@
                     race.Traces.Add(trace);
                 }
             }
-
+            //TODO: FINISH HIM!
             var logo = await this.logoService
                 .ProccessingData(
                 model.RaceLogo,

@@ -166,5 +166,24 @@
                    Name = f.Name,
                }).Select(f => new KeyValuePair<string, string>(f.Id.ToString(), f.Name));
         }
+
+        public async Task<Town> ReturnTown(string townName)
+        {
+            var townDb = this.townsRepo.All().FirstOrDefault(t => t.Name == townName);
+
+            if (townDb == null)
+            {
+                townDb = new Town
+                {
+                    Name = townName,
+                    CreatedOn = DateTime.Now,
+                };
+
+                await this.townsRepo.AddAsync(townDb);
+                await this.townsRepo.SaveChangesAsync();
+            }
+
+            return townDb;
+        }
     }
 }

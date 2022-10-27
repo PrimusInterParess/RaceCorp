@@ -3,7 +3,6 @@ namespace RaceCorp.Data.Models
 {
     using System;
     using System.Collections.Generic;
-
     using Microsoft.AspNetCore.Identity;
 
     using RaceCorp.Data.Common.Models;
@@ -17,6 +16,18 @@ namespace RaceCorp.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Gender { get; set; }
+
+        public int TownId { get; set; }
+
+        public virtual Town Town { get; set; }
+
+        public string Country { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }

@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221025094928_gpx-addProperty-folderName")]
-    partial class gpxaddPropertyfolderName
+    [Migration("20221027104053_Initial_Creation")]
+    partial class Initial_Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,6 +183,9 @@ namespace RaceCorp.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -196,8 +199,17 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -228,6 +240,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TownId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -247,7 +262,49 @@ namespace RaceCorp.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("TownId");
+
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUserRace", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RaceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("RaceId");
+
+                    b.ToTable("ApplicationUserRace");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUserRide", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RideId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("RideId");
+
+                    b.ToTable("ApplicationUserRide");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Difficulty", b =>
@@ -728,6 +785,51 @@ namespace RaceCorp.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.Town", "Town")
+                        .WithMany("Users")
+                        .HasForeignKey("TownId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Town");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUserRace", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Races")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("RaceCorp.Data.Models.Race", "Race")
+                        .WithMany("RegisteredUsers")
+                        .HasForeignKey("RaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Race");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUserRide", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Rides")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("RaceCorp.Data.Models.Ride", "Ride")
+                        .WithMany("RegisteredUsers")
+                        .HasForeignKey("RideId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Ride");
+                });
+
             modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>
                 {
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "User")
@@ -864,6 +966,10 @@ namespace RaceCorp.Data.Migrations
 
                     b.Navigation("Logins");
 
+                    b.Navigation("Races");
+
+                    b.Navigation("Rides");
+
                     b.Navigation("Roles");
                 });
 
@@ -898,7 +1004,14 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
                 {
+                    b.Navigation("RegisteredUsers");
+
                     b.Navigation("Traces");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
+                {
+                    b.Navigation("RegisteredUsers");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Town", b =>
@@ -906,6 +1019,8 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Races");
 
                     b.Navigation("Rides");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Trace", b =>

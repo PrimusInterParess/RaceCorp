@@ -80,7 +80,6 @@
 
             if (model.GpxFile != null)
             {
-               
                 try
                 {
                     var gpx = await this.gpxService
@@ -97,7 +96,6 @@
                 }
                 catch (Exception e)
                 {
-
                     throw new Exception(e.Message);
                 }
             }
@@ -118,7 +116,6 @@
 
         public async Task CreateRaceTraceAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
         {
-
             var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
 
             var gpx = await this.gpxService

@@ -24,6 +24,8 @@ namespace RaceCorp.Web
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Services.Messaging;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure.Contracts;
     using RaceCorp.Web.ViewModels;
 
     public class Program
@@ -85,6 +87,7 @@ namespace RaceCorp.Web
             services.AddTransient<IGoogleDriveService, GoogleDriveService>();
             services.AddTransient<IGpxService, GpxService>();
             services.AddTransient<ILogoService, LogoService>();
+            services.AddTransient<IRegisterService, RegisterService>();
         }
 
         private static void Configure(WebApplication app)

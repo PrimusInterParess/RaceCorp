@@ -15,5 +15,7 @@
         public virtual ICollection<Race> Races { get; set; } = new HashSet<Race>();
 
         public virtual ICollection<Ride> Rides { get; set; } = new HashSet<Ride>();
+
+        public virtual ICollection<ApplicationUser> Users { get; set; } = new HashSet<ApplicationUser>();
     }
 }

@@ -8,6 +8,8 @@
 
     public interface IImageService
     {
+        void Process(IFormFile inputImage, string roothPath, string imageParentFolderName, string folderName, string userId);
+
         bool ValidateImageExtension(string extension);
 
         Task SaveImageIntoFileSystem(IFormFile imageInputFile, string imagePath, string folderName, string imageDbId, string extension);

@@ -111,5 +111,10 @@
                 throw new Exception(e.Message);
             }
         }
+
+        public void Process(IFormFile inputImage, string roothPath, string parentFolderName, string folderName, string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

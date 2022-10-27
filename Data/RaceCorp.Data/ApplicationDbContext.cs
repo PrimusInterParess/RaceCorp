@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -121,6 +122,11 @@
                 .HasOne(g => g.Trace)
                 .WithOne(t => t.Gpx)
                 .HasForeignKey<Trace>(t => t.GpxId);
+
+            builder.Entity<Town>()
+                .HasMany(t => t.Users)
+                .WithOne(u => u.Town)
+                .HasForeignKey(u => u.TownId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
