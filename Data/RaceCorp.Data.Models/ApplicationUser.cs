@@ -29,6 +29,10 @@ namespace RaceCorp.Data.Models
 
         public string Country { get; set; }
 
+        public string TeamId { get; set; }
+
+        public virtual Team Team { get; set; }
+
         // Audit info
         public DateTime CreatedOn { get; set; }
 

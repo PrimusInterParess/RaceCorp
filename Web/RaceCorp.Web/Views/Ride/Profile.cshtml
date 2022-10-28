@@ -9,32 +9,61 @@
 {
     <div class="alert alert-success">@this.TempData["Message"]</div>
 }
+<h1>@Model.Name</h1>
 
-<article class="form-group text-center">
-    <header>
-        <h1>@Model.Name</h1>
+<div class="row">
+
+    <div class="btn-group-vertical col-md-2">
+        <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Register" asp-route-id="@Model.Id">Register for the ride</a>
+        <a class="btn btn-outline-info mb-1" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</a>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</a>
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Register" asp-route-id="@Model.Id">Register for the ride</a>
+        <a class="btn btn-outline-danger mb-1" asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 
-    </header>
-    <div class="container">
-        <div class="ratio ratio-16x9">
-            <iframe src="@url" frameborder="1"></iframe>
-        </div>
-        <div class="text-center col-md-6">
-
-            <div class="card-header">
-                Overview
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Difficulty: @Model.Difficulty</li>
-                <li class="list-group-item">Length: @Model.Length km.</li>
-                <li class="list-group-item">Control time: @Model.ControlTime h</li>
-                <li class="list-group-item">Start time: @Model.StartTime</li>
-                <li class="list-group-item">Ride name: @Model.TraceName</li>
-            </ul>
-        </div>
     </div>
-</article>
+
+    <div class="col-md-6 col-sm-12">
+        <iframe width="650" height="300" src="@url" frameborder="1"></iframe>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card-header">
+            Overview
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Difficulty: @Model.Difficulty</li>
+            <li class="list-group-item">Length: @Model.Length km.</li>
+            <li class="list-group-item">Control time: @Model.ControlTime h</li>
+            <li class="list-group-item">Start time: @Model.StartTime</li>
+            <li class="list-group-item">Ride name: @Model.TraceName</li>
+            <li class="list-group-item">Apply description here</li>
+        </ul>
+    </div>
+
+</div>
+<div class="row">
+    <div class="scrollable mt-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Racer</th>
+                    <th scope="col">Team</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for (int i = 0; i < 10; i++)
+                {
+                    var user = Model.RegisteredUsers.FirstOrDefault();
+                    
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
+                        <td class="text-center">BTRevolution</td>
+                    </tr>
+
+                   
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

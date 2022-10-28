@@ -51,7 +51,7 @@
 
             try
             {
-                await this.adminService.UploadingPicture(inputModel, environment.WebRootPath, user.Id);
+                await this.adminService.UploadingPicture(inputModel, this.environment.WebRootPath, user.Id);
             }
             catch (Exception e)
             {

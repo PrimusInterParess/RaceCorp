@@ -11,8 +11,11 @@ a.navbar-brand {
 a {
     color: #0366d6;
 }
-
-
+.scrollable {
+    height: 170px;
+    width: 350px; /* or any value */
+    overflow-y: auto;
+}
 
 
 .race-image {

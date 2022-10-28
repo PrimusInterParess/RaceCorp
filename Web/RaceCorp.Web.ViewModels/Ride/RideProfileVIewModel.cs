@@ -3,6 +3,8 @@
     using AutoMapper;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
+    using RaceCorp.Web.ViewModels.ApplicationUsers;
+    using System.Collections.Generic;
 
     public class RideProfileVIewModel : IMapFrom<Ride>, IHaveCustomMappings
     {
@@ -25,6 +27,8 @@
         public string TraceGpxGoogleDriveId { get; set; }
 
         public string TraceGpxId { get; set; }
+
+        public ICollection<UserRideRegisteredModel> RegisteredUsers { get; set; } = new List<UserRideRegisteredModel>();
 
         public void CreateMappings(IProfileExpression configuration)
         {

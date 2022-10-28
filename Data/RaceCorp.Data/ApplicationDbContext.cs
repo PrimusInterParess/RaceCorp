@@ -26,6 +26,8 @@
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<Team> Teams { get; set; }
+
         public DbSet<Gpx> Gpxs { get; set; }
 
         public DbSet<Difficulty> Difficulties { get; set; }

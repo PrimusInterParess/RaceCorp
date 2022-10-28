@@ -170,13 +170,6 @@
             return this.RedirectToAction("All", "Ride");
         }
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult UploadPicture()
-        {
-            return this.View();
-        }
-
         public IActionResult UpcomingRides(int id = 1)
         {
             if (id <= 0)
