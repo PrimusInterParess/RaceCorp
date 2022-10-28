@@ -8,7 +8,7 @@
         public const string SystemImageFolderName = "System";
 
         public const string TownFolderName = "towns";
-        public const string TownRootPath = "/Images/towns/";
+        public const string SystemRoothPath = "\\Images\\System\\";
         public const string TownImageName = "Town";
 
         public const string MountainFolderName = "mountains";

@@ -64,22 +64,22 @@
             // LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
             if (townImage != null)
             {
-                model.TownImagePath = TownRootPath + townImage.Id + "." + townImage.Extension;
+                model.TownImagePath = SystemRoothPath + townImage.Id + "." + townImage.Extension;
             }
 
             if (mountainImage != null)
             {
-                model.MountainImagePath = MountainRootPath + mountainImage.Id + "." + mountainImage.Extension;
+                model.MountainImagePath = SystemRoothPath + mountainImage.Id + "." + mountainImage.Extension;
             }
 
             if (upcommingRaceImage != null)
             {
-                model.UpcomingRaceImagePath = UpcomingRaceRootPath + upcommingRaceImage.Id + "." + upcommingRaceImage.Extension;
+                model.UpcomingRaceImagePath = SystemRoothPath + upcommingRaceImage.Id + "." + upcommingRaceImage.Extension;
             }
 
             if (upcommingRidesImage != null)
             {
-                model.UpcomingRidesImagePath = UpcomingRidesRootPath + upcommingRidesImage.Id + "." + upcommingRidesImage.Extension;
+                model.UpcomingRidesImagePath = SystemRoothPath + upcommingRidesImage.Id + "." + upcommingRidesImage.Extension;
             }
 
             return model;

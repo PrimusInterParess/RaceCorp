@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.Areas.Administration.Infrastructure.Contracts;
     using RaceCorp.Web.Areas.Administration.Models;
     using RaceCorp.Web.Controllers;
 
@@ -20,15 +21,17 @@
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IFileService fileService;
+        private readonly IAdminService adminService;
 
         public AdministrationController(
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager,
-            IFileService fileService)
+            IFileService fileService, IAdminService adminService)
         {
             this.environment = environment;
             this.userManager = userManager;
             this.fileService = fileService;
+            this.adminService = adminService;
         }
 
         [HttpGet]
@@ -48,7 +51,7 @@
 
             try
             {
-                
+                await this.adminService.UploadingPicture(inputModel, environment.WebRootPath, user.Id);
             }
             catch (Exception e)
             {
@@ -59,7 +62,7 @@
 
             this.TempData["Message"] = "Your picture was successfully added!";
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Index", "Home", new { area = "" });
 
             // return this.View();
         }
