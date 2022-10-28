@@ -2,6 +2,7 @@
 {
     using System;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -114,39 +115,31 @@
                 .FirstOrDefault();
         }
 
-        public async Task CreateRaceTraceAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
+        public async Task CreateRaceTraceAsync(RaceTraceEditModel model, string roothPath, string userId)
         {
             var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
+
+            var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
+            var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
             var gpx = await this.gpxService
                .ProccessingData(
                model.GpxFile,
                userId,
                raceName,
-               gxpFileRoothPath,
-               pathToServiceAccountKeyFile);
+               gpxRoothPath,
+               serviceAccountPath);
 
-            await this.gpxRepo
-                    .AddAsync(gpx);
+            var trace = await this.ProccedingData(model);
+            trace.Gpx = gpx;
+            trace.RaceId = model.RaceId;
 
-            var trace = new Trace()
-            {
-                Name = model.Name,
-                Length = (int)model.Length,
-                DifficultyId = model.DifficultyId,
-                StartTime = (DateTime)model.StartTime,
-                ControlTime = TimeSpan.FromHours((double)model.ControlTime),
-                RaceId = model.RaceId,
-                Gpx = gpx,
-            };
-
-            await this.traceRepo.AddAsync(trace);
             await this.traceRepo.SaveChangesAsync();
         }
 
-        public Trace GetTraceDbModel(TraceInputModel traceInputModel, Gpx gpx)
+        public async Task<Trace> ProccedingData(TraceInputModel traceInputModel)
         {
-            return new Trace()
+            var traceDto = new Trace()
             {
                 Name = traceInputModel.Name,
                 DifficultyId = traceInputModel.DifficultyId,
@@ -154,8 +147,11 @@
                 Length = (int)traceInputModel.Length,
                 CreatedOn = DateTime.Now,
                 StartTime = (DateTime)traceInputModel.StartTime,
-                Gpx = gpx,
             };
+
+            await this.traceRepo.AddAsync(traceDto);
+
+            return traceDto;
         }
 
         public async Task<bool> DeleteTraceAsync(int id)

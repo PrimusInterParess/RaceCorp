@@ -5,6 +5,8 @@
         public const string LogoRootPath = "/Images/logos/";
         public const string LogosFolderName = "logos";
 
+        public const string SystemImageFolderName = "System";
+
         public const string TownFolderName = "towns";
         public const string TownRootPath = "/Images/towns/";
         public const string TownImageName = "Town";
@@ -15,11 +17,11 @@
 
         public const string UpcommingRaceFolderName = "upcomingRaces";
         public const string UpcomingRaceRootPath = "/Images/upcomingRaces/";
-        public const string UpcommingRaceImageName = "UpcomingRace";
+        public const string UpcommingRaceImageName = "Upcoming Races";
 
         public const string UpcommingRidesFolderName = "upcomingRices";
         public const string UpcomingRidesRootPath = "/Images/upcomingRides/";
-        public const string UpcommingRidesImageName = "UpcomingRides";
+        public const string UpcommingRidesImageName = "Upcoming Rides";
 
         public const string ImageParentFolderName = "Images";
         public const string GpxFolderName = "Gpxs";

@@ -21,18 +21,15 @@
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMountanService mountanService;
-        private readonly IImageService imageService;
 
         public MountainController(
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager,
-            IMountanService mountanService,
-            IImageService imageService)
+            IMountanService mountanService)
         {
             this.environment = environment;
             this.userManager = userManager;
             this.mountanService = mountanService;
-            this.imageService = imageService;
         }
 
         public IActionResult ById(int id)
@@ -46,32 +43,6 @@
         public IActionResult UploadPicture()
         {
             return this.View();
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UploadPicture(PictureUploadModel model)
-        {
-            if (this.ModelState.IsValid == false)
-            {
-                return this.View(model);
-            }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            try
-            {
-                await this.imageService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images", MountainFolderName, MountainImageName);
-            }
-            catch (Exception e)
-            {
-                this.ModelState.AddModelError(string.Empty, e.Message);
-                return this.View(model);
-            }
-
-            this.TempData["Message"] = "Your picture was successfully added!";
-
-            return this.RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

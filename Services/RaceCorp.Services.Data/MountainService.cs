@@ -21,12 +21,10 @@
     public class MountainService : IMountanService
     {
         private readonly IDeletableEntityRepository<Mountain> mountainsRepo;
-        private readonly IImageService imageService;
 
-        public MountainService(IDeletableEntityRepository<Mountain> mountainsRepo, IImageService imageService)
+        public MountainService(IDeletableEntityRepository<Mountain> mountainsRepo)
         {
             this.mountainsRepo = mountainsRepo;
-            this.imageService = imageService;
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetMountainsKVP()
@@ -137,6 +135,24 @@
                 Id = mountain.Id,
                 Name = mountain.Name,
             };
+        }
+
+        public async Task<Mountain> ProccesingData(string name)
+        {
+            var mountainDb = this.mountainsRepo.All().FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+
+            if (mountainDb == null)
+            {
+                mountainDb = new Mountain
+                {
+                    Name = name,
+                    CreatedOn = DateTime.Now,
+                };
+
+                await this.mountainsRepo.AddAsync(mountainDb);
+            }
+
+            return mountainDb;
         }
     }
 }

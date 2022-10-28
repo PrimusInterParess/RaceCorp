@@ -2,12 +2,8 @@ namespace RaceCorp.Web
 {
     using System.Reflection;
 
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.AspNetCore.Authentication.Google;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -24,6 +20,8 @@ namespace RaceCorp.Web
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Services.Messaging;
+    using RaceCorp.Web.Areas.Administration.Infrastructure;
+    using RaceCorp.Web.Areas.Administration.Infrastructure.Contracts;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure.Contracts;
     using RaceCorp.Web.ViewModels;
@@ -33,7 +31,6 @@ namespace RaceCorp.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
 
             ConfigureServices(builder.Services, builder.Configuration);
             var app = builder.Build();
@@ -80,7 +77,6 @@ namespace RaceCorp.Web
             services.AddTransient<ITownService, TownService>();
             services.AddTransient<IMountanService, MountainService>();
             services.AddTransient<IRaceService, RaceService>();
-            services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ITraceService, TraceService>();
             services.AddTransient<IRideService, RideService>();
             services.AddTransient<IHomeService, HomeService>();
@@ -88,6 +84,8 @@ namespace RaceCorp.Web
             services.AddTransient<IGpxService, GpxService>();
             services.AddTransient<ILogoService, LogoService>();
             services.AddTransient<IRegisterService, RegisterService>();
+            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IAdminService, AdminService>();
         }
 
         private static void Configure(WebApplication app)

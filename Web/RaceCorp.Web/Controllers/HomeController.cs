@@ -31,18 +31,6 @@
             return this.View(indexViewModel);
         }
 
-        // [HttpPost]
-        //  public IActionResult Index(IndexViewModel model)
-        //  {
-        //    var homeAllViewModel = this.homeService
-        //        .GetAll(
-        //        model.TownId,
-        //        model.MountainId,
-        //        model.FormatId,
-        //        model.DifficultyId);
-
-        // return this.RedirectToAction(nameof(HomeController.All), nameof(HomeController), new { model= homeAllViewModel });
-        //  }
         [HttpGet]
         public IActionResult All(HomeAllViewModel model)
         {

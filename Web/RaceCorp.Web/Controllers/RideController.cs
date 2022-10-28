@@ -26,7 +26,6 @@
     {
         private readonly IRideService rideService;
         private readonly IDifficultyService difficultyService;
-        private readonly IImageService imageService;
         private readonly IFormatServices formatServices;
         private readonly IGpxService gpxService;
         private readonly IWebHostEnvironment environment;
@@ -35,7 +34,6 @@
         public RideController(
             IRideService rideService,
             IDifficultyService difficultyService,
-            IImageService imageService,
             IFormatServices formatServices,
             IGpxService gpxService,
             IWebHostEnvironment environment,
@@ -43,7 +41,6 @@
         {
             this.rideService = rideService;
             this.difficultyService = difficultyService;
-            this.imageService = imageService;
             this.formatServices = formatServices;
             this.gpxService = gpxService;
             this.environment = environment;
@@ -89,9 +86,8 @@
                 await this.rideService
                     .CreateAsync(
                     model,
-                    $"{this.environment.WebRootPath}\\Gpx",
-                    user.Id,
-                    $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
+                    $"{this.environment.WebRootPath}",
+                    user.Id);
             }
             catch (System.Exception)
             {
@@ -147,9 +143,8 @@
             {
                 await this.rideService.EditAsync(
                     model,
-                    $"{this.environment.WebRootPath}\\Gpx",
-                    user.Id,
-                    $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
+                    $"{this.environment.WebRootPath}",
+                    user.Id);
             }
             catch (Exception e)
             {
@@ -180,42 +175,6 @@
         public IActionResult UploadPicture()
         {
             return this.View();
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UploadPicture(PictureUploadModel model)
-        {
-            if (this.ModelState.IsValid == false)
-            {
-                return this.View(model);
-            }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            try
-            {
-                await this.imageService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/Images", UpcommingRidesFolderName, UpcommingRidesImageName);
-            }
-            catch (Exception e)
-            {
-                this.ModelState.AddModelError(string.Empty, e.Message);
-                return this.View(model);
-            }
-
-            this.TempData["Message"] = "Your picture was successfully added!";
-
-            return this.RedirectToAction("Index", "Home");
-        }
-
-        [DisplayName("Download Gpx")]
-        public IActionResult DownloadGpx(string id)
-        {
-            var gpxFile = this.gpxService.GetGpxById(id);
-            var gpxFilePath = $"{this.environment.WebRootPath}/Gpx/{gpxFile.FolderName}/{gpxFile.Id}.{gpxFile.Extension}";
-            byte[] fileBytes = System.IO.File.ReadAllBytes(gpxFilePath);
-            string fileName = $"{gpxFile.FolderName}.{gpxFile.Extension}";
-            return this.File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
 
         public IActionResult UpcomingRides(int id = 1)

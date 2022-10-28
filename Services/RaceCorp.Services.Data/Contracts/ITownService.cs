@@ -2,9 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using RaceCorp.Data.Models;
-    using RaceCorp.Web.ViewModels.Common;
-    using RaceCorp.Web.ViewModels.Ride;
     using RaceCorp.Web.ViewModels.Town;
 
     public interface ITownService
@@ -13,12 +12,10 @@
 
         List<T> GetAll<T>();
 
-        Task Create(TownCreateViewModel model);
-
         TownRidesProfileViewModel AllRides(int townId, int pageId, int itemsPerPage = 3);
 
         TownRacesProfileViewModel AllRaces(int townId, int pageId, int itemsPerPage = 3);
 
-        Task<Town> ReturnTown(string townName);
+        Task<Town> ProccesingData(string name);
     }
 }

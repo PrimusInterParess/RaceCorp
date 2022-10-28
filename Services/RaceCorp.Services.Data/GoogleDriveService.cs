@@ -24,6 +24,8 @@
             string uploadFileName,
             string directoryId)
         {
+
+
             var credentials = GoogleCredential.FromFile(serviceAccountKeyPath).CreateScoped(DriveService.ScopeConstants.Drive);
 
             var service = new DriveService(new BaseClientService.Initializer()

@@ -6,9 +6,9 @@
 
     public interface IRideService
     {
-        Task CreateAsync(RideCreateViewModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile);
+        Task CreateAsync(RideCreateViewModel model, string roothPath, string userId);
 
-        Task EditAsync(RideEditVIewModel model, string userId, string gxpFileRoothPath, string pathToServiceAccountKeyFile);
+        Task EditAsync(RideEditVIewModel model, string roothPath, string userId);
 
         RideAllViewModel All(int page, int itemsPerPage = 3);
 

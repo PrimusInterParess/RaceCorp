@@ -28,6 +28,7 @@
 	<ItemGroup>
     <ProjectReference Include="..\..\Data\RaceCorp.Data.Common\RaceCorp.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\RaceCorp.Data.Models\RaceCorp.Data.Models.csproj" />
+    <ProjectReference Include="..\..\RaceCorp.Common\RaceCorp.Common.csproj" />
     <ProjectReference Include="..\..\Web\RaceCorp.Web.ViewModels\RaceCorp.Web.ViewModels.csproj" />
     <ProjectReference Include="..\RaceCorp.Services.Mapping\RaceCorp.Services.Mapping.csproj" />
   </ItemGroup>

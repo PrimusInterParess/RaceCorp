@@ -14,10 +14,7 @@
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
-    using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Common;
-
-    using static RaceCorp.Services.Constants.Messages;
 
     public class RaceController : BaseController
     {
@@ -76,14 +73,10 @@
 
             try
             {
-
-                //model,
-                //    $"{this.environment.WebRootPath}/images",
-                //    user.Id,
-                //    $"{this.environment.WebRootPath}\\Gpx",
-                //    $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}"
-
-                await this.raceService.CreateAsync(model, this.environment.WebRootPath, ImageParentFolderName, user.Id, GpxFolderName, ServiceAccountFolderName, ServiceAccountKeyFileName);
+                await this.raceService.CreateAsync(
+                    model,
+                    this.environment.WebRootPath,
+                    user.Id);
             }
             catch (Exception e)
             {
@@ -135,7 +128,12 @@
 
             try
             {
-                await this.raceService.EditAsync(model, $"{this.environment.WebRootPath}/images", user.Id);
+                var imageRoothPath = $"{this.environment.WebRootPath}\\{ImageParentFolderName}";
+
+                await this.raceService.EditAsync(
+                    model,
+                    imageRoothPath,
+                    user.Id);
             }
             catch (Exception e)
             {
@@ -182,7 +180,7 @@
 
             try
             {
-                await this.raceService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images");
+                // await this.raceService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images");
             }
             catch (Exception e)
             {
@@ -218,26 +216,6 @@
             }
 
             return this.RedirectToAction("ErrorPage", "Home");
-        }
-
-        [DisplayName("Download Gpx")]
-        public IActionResult DownloadGpx(string id)
-        {
-
-            try
-            {
-                var gpxFile = this.gpxService.GetGpxById(id);
-                var gpxFilePath = $"{this.environment.WebRootPath}/Gpx/{gpxFile.FolderName}/{gpxFile.Id}.{gpxFile.Extension}";
-                byte[] fileBytes = System.IO.File.ReadAllBytes(gpxFilePath);
-                string fileName = $"{gpxFile.FolderName}.{gpxFile.Extension}";
-                return this.File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
-            }
-            catch (Exception)
-            {
-
-                return this.RedirectToAction("ErrorPage", "Home");
-            }
-
         }
     }
 }

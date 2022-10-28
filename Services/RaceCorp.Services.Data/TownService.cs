@@ -22,14 +22,11 @@
     public class TownService : ITownService
     {
         private readonly IDeletableEntityRepository<Town> townsRepo;
-        private readonly IImageService imageService;
 
         public TownService(
-            IDeletableEntityRepository<Town> townsRepo,
-            IImageService imageService)
+            IDeletableEntityRepository<Town> townsRepo)
         {
             this.townsRepo = townsRepo;
-            this.imageService = imageService;
         }
 
         public TownRacesProfileViewModel AllRaces(
@@ -119,34 +116,6 @@
             };
         }
 
-        public async Task Create(
-            TownCreateViewModel model)
-        {
-            var alreadyExists = this.townsRepo.All().Any(t => t.Name == model.Name);
-
-            if (alreadyExists)
-            {
-                throw new Exception(TownNameAlreadyExists);
-            }
-            else
-            {
-                var town = new Town()
-                {
-                    Name = model.Name,
-                };
-
-                try
-                {
-                    await this.townsRepo.AddAsync(town);
-                    await this.townsRepo.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    throw new Exception(IvalidOperationMessage);
-                }
-            }
-        }
-
         public List<T> GetAll<T>()
         {
             return this
@@ -167,20 +136,19 @@
                }).Select(f => new KeyValuePair<string, string>(f.Id.ToString(), f.Name));
         }
 
-        public async Task<Town> ReturnTown(string townName)
+        public async Task<Town> ProccesingData(string name)
         {
-            var townDb = this.townsRepo.All().FirstOrDefault(t => t.Name == townName);
+            var townDb = this.townsRepo.All().FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
 
             if (townDb == null)
             {
                 townDb = new Town
                 {
-                    Name = townName,
+                    Name = name,
                     CreatedOn = DateTime.Now,
                 };
 
                 await this.townsRepo.AddAsync(townDb);
-                await this.townsRepo.SaveChangesAsync();
             }
 
             return townDb;

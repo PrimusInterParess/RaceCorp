@@ -1,7 +1,6 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -10,57 +9,42 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     using static RaceCorp.Services.Constants.Common;
-    using static RaceCorp.Services.Constants.Messages;
 
     public class RaceService : IRaceService
     {
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Mountain> mountainRepo;
-        private readonly IDeletableEntityRepository<Trace> traceRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
-        private readonly IRepository<Gpx> gpxRepo;
-        private readonly IRepository<Logo> logoRepo;
-        private readonly IImageService imageService;
         private readonly ITraceService traceService;
         private readonly IGpxService gpxService;
         private readonly ILogoService logoService;
+        private readonly IMountanService mountanService;
+        private readonly ITownService townService;
 
         public RaceService(
             IDeletableEntityRepository<Race> raceRepo,
             IDeletableEntityRepository<Mountain> mountainRepo,
-            IDeletableEntityRepository<Trace> traceRepo,
             IDeletableEntityRepository<Town> townRepo,
-            IRepository<Gpx> gpxRepo,
-            IRepository<Logo> logoRepo,
-            IImageService imageService,
             ITraceService traceService,
             IGpxService gpxService,
-            ILogoService logoService)
+            ILogoService logoService,
+            IMountanService mountanService,
+            ITownService townService)
         {
             this.raceRepo = raceRepo;
             this.mountainRepo = mountainRepo;
-            this.traceRepo = traceRepo;
             this.townRepo = townRepo;
-            this.gpxRepo = gpxRepo;
-            this.logoRepo = logoRepo;
-            this.imageService = imageService;
             this.traceService = traceService;
             this.gpxService = gpxService;
             this.logoService = logoService;
+            this.mountanService = mountanService;
+            this.townService = townService;
         }
 
-        public async Task CreateAsync(
-            RaceCreateModel model,
-            string roothPath,
-            string imageParentFolderName,
-            string userId,
-            string gpxFolderName,
-            string serviceAccountFolderName,
-            string sereviceAccountKeyFileName)
+        public async Task CreateAsync(RaceCreateModel model, string roothPath, string userId)
         {
             var race = new Race
             {
@@ -106,10 +90,18 @@
 
             race.Town = townData;
 
+            var logoRoothPath = $"{roothPath}\\{ImageParentFolderName}";
+
+            var logo = await this.logoService
+                .ProccessingData(
+                model.RaceLogo,
+                userId,
+                logoRoothPath);
+
             if (model.Difficulties.Count != 0)
             {
-                var gpxRoothPath = $"{roothPath}\\{gpxFolderName}";
-                var serviceAccountPath = $"{roothPath}\\{serviceAccountFolderName}\\{sereviceAccountKeyFileName}";
+                var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
+                var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
                 foreach (var traceInputModel in model.Difficulties)
                 {
@@ -121,24 +113,14 @@
                         gpxRoothPath,
                         serviceAccountPath);
 
-                    await this.gpxRepo.AddAsync(gpx);
+                    var trace = await this.traceService
+                        .ProccedingData(traceInputModel);
 
-                    var trace = this.traceService
-                        .GetTraceDbModel(traceInputModel, gpx);
-
-                    await this.traceRepo.AddAsync(trace);
+                    trace.Gpx = gpx;
 
                     race.Traces.Add(trace);
                 }
             }
-            //TODO: FINISH HIM!
-            var logo = await this.logoService
-                .ProccessingData(
-                model.RaceLogo,
-                userId,
-                imagePath);
-
-            await this.logoRepo.AddAsync(logo);
 
             race.Logo = logo;
 
@@ -223,43 +205,14 @@
                  userId,
                  logoPath);
 
-                await this.logoRepo.AddAsync(logo);
-
                 raceDb.Logo = logo;
             }
 
-            var mountainData = this
-                .mountainRepo
-                .All()
-                .FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
+            var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
+            var townDb = await this.townService.ProccesingData(model.Town);
 
-            if (mountainData == null)
-            {
-                mountainData = new Mountain()
-                {
-                    Name = model.Mountain,
-                };
-
-                await this.mountainRepo.AddAsync(mountainData);
-            }
-
-            raceDb.Mountain = mountainData;
-
-            var townData = this
-                .townRepo.All()
-                .FirstOrDefault(t => t.Name.ToLower() == model.Town.ToLower());
-
-            if (townData == null)
-            {
-                townData = new Town()
-                {
-                    Name = model.Town,
-                };
-
-                await this.townRepo.AddAsync(townData);
-            }
-
-            raceDb.Town = townData;
+            raceDb.Mountain = mountainDb;
+            raceDb.Town = townDb;
 
             await this.raceRepo.SaveChangesAsync();
         }
@@ -294,30 +247,6 @@
                 RacesCount = count,
                 Races = races,
             };
-        }
-
-        public async Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath)
-        {
-            try
-            {
-                var image = this.imageService.ProccessingData(model.Picture, userId);
-
-                image.Name = UpcommingRaceImageName;
-
-                await this.imageService
-                     .SaveImageIntoFileSystem(
-                         model.Picture,
-                         imagePath,
-                         UpcommingRaceFolderName,
-                         image.Id,
-                         image.Extension);
-
-                await this.imageService.SaveAsyncImageIntoDb(image);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
         }
 
         public async Task<bool> DeleteAsync(int id)

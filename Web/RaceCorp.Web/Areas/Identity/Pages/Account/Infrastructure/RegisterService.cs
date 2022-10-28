@@ -47,7 +47,7 @@
 
         public async Task ProccesingData(RegisterModel.InputModel inputModel, ApplicationUser user)
         {
-            var townDb = await this.townService.ReturnTown(inputModel.Town);
+            var townDb = await this.townService.ProccesingData(inputModel.Town);
 
             try
             {

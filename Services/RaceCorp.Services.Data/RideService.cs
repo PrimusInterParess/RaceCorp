@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.Ride;
 
+    using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
 
     using Trace = RaceCorp.Data.Models.Trace;
@@ -19,32 +21,32 @@
     public class RideService : IRideService
     {
         private readonly IDeletableEntityRepository<Ride> rideRepo;
-        private readonly IDeletableEntityRepository<Town> townRepo;
-        private readonly IDeletableEntityRepository<Mountain> mountainRepo;
         private readonly IDeletableEntityRepository<Trace> traceRepo;
         private readonly IRepository<ApplicationUserRide> userRideRepo;
         private readonly IRepository<Gpx> gpxRepo;
         private readonly IGpxService gpxService;
         private readonly ITraceService traceService;
+        private readonly ITownService townService;
+        private readonly IMountanService mountanService;
 
         public RideService(
             IDeletableEntityRepository<Ride> rideRepo,
-            IDeletableEntityRepository<Town> townRepo,
-            IDeletableEntityRepository<Mountain> mountainRepo,
             IDeletableEntityRepository<Trace> traceRepo,
             IRepository<ApplicationUserRide> userRideRepo,
             IRepository<Gpx> gpxRepo,
             IGpxService gpxService,
-            ITraceService traceService)
+            ITraceService traceService,
+            ITownService townService,
+            IMountanService mountanService)
         {
             this.rideRepo = rideRepo;
-            this.townRepo = townRepo;
-            this.mountainRepo = mountainRepo;
             this.traceRepo = traceRepo;
             this.userRideRepo = userRideRepo;
             this.gpxRepo = gpxRepo;
             this.gpxService = gpxService;
             this.traceService = traceService;
+            this.townService = townService;
+            this.mountanService = mountanService;
         }
 
         public RideAllViewModel All(
@@ -80,61 +82,25 @@
             };
         }
 
-        public async Task CreateAsync(
-            RideCreateViewModel model,
-            string gxpFileRoothPath,
-            string userId,
-            string pathToServiceAccountKeyFile)
+        public async Task CreateAsync(RideCreateViewModel model, string roothPath, string userId)
         {
-            var townDto = this
-                .townRepo
-                .All()
-                .FirstOrDefault(t => t.Name.ToLower() == model.Town.ToLower());
-            var mountainDto = this
-                .mountainRepo
-                .All()
-                .FirstOrDefault(m => m.Name.ToLower() == model.Mountain.ToLower());
+            var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
+            var townDb = await this.townService.ProccesingData(model.Town);
 
-            if (mountainDto == null)
-            {
-                mountainDto = new Mountain()
-                {
-                    Name = model.Mountain,
-                };
-
-                await this.mountainRepo
-                    .AddAsync(mountainDto);
-            }
-
-            if (townDto == null)
-            {
-                townDto = new Town()
-                {
-                    Name = model.Town,
-                };
-
-                await this.townRepo
-                    .AddAsync(townDto);
-            }
+            var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
+            var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
             var gpx = await this.gpxService
                 .ProccessingData(
                 model.Trace.GpxFile,
                 userId,
                 model.Name,
-                gxpFileRoothPath,
-                pathToServiceAccountKeyFile);
+                gpxRoothPath,
+                serviceAccountPath);
 
-            await this.gpxRepo
-                .AddAsync(gpx);
+            var trace = await this.traceService.ProccedingData(model.Trace);
 
-            var trace = this.traceService
-                .GetTraceDbModel(
-                model.Trace,
-                gpx);
-
-            await this.traceRepo
-                .AddAsync(trace);
+            trace.Gpx = gpx;
 
             var ride = new Ride()
             {
@@ -144,18 +110,15 @@
                 Description = model.Description,
                 FormatId = int.Parse(model.FormatId),
                 UserId = userId,
-                Town = townDto,
-                Mountain = mountainDto,
+                Town = townDb,
+                Mountain = mountainDb,
                 Trace = trace,
             };
 
             try
             {
-                await this.rideRepo
-                    .AddAsync(ride);
-
-                await this.rideRepo
-                    .SaveChangesAsync();
+                await this.rideRepo.AddAsync(ride);
+                await this.rideRepo.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -163,7 +126,7 @@
             }
         }
 
-        public async Task EditAsync(RideEditVIewModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
+        public async Task EditAsync(RideEditVIewModel model, string roothPath, string userId)
         {
             var rideDb = this.rideRepo
                 .All()
@@ -176,55 +139,12 @@
                 throw new Exception(IvalidOperationMessage);
             }
 
+            var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
+            var townDb = await this.townService.ProccesingData(model.Town);
+
+            rideDb.Mountain = mountainDb;
+            rideDb.Town = townDb;
             rideDb.ModifiedOn = DateTime.UtcNow;
-
-            if (rideDb.Mountain.Name.ToLower() != model.Mountain.ToLower())
-            {
-                var mountainDb = this.mountainRepo
-                    .All()
-                    .FirstOrDefault(m => m.Name.ToLower() == model.Name.ToLower());
-
-                if (mountainDb == null)
-                {
-                    mountainDb = new Mountain()
-                    {
-                        Name = model.Mountain,
-                    };
-
-                    try
-                    {
-                        await this.mountainRepo
-                            .AddAsync(mountainDb);
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception(IvalidOperationMessage);
-                    }
-                }
-
-                rideDb.Mountain = mountainDb;
-            }
-
-            if (rideDb.Town.Name.ToLower() != model.Town.ToLower())
-            {
-                var townDb = this.townRepo
-                    .All()
-                    .FirstOrDefault(m => m.Name.ToLower() == model.Name.ToLower());
-
-                if (townDb == null)
-                {
-                    townDb = new Town()
-                    {
-                        Name = model.Town,
-                    };
-
-                    await this.townRepo
-                        .AddAsync(townDb);
-                }
-
-                rideDb.Town = townDb;
-            }
-
             rideDb.Description = model.Description;
             rideDb.FormatId = int.Parse(model.FormatId);
             rideDb.Date = model.Date;
@@ -242,13 +162,16 @@
 
             if (model.Trace.GpxFile != null)
             {
+                var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
+                var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
+
                 var gpx = await this.gpxService
                 .ProccessingData(
                 model.Trace.GpxFile,
                 userId,
                 model.Name,
-                gxpFileRoothPath,
-                pathToServiceAccountKeyFile);
+                gpxRoothPath,
+                serviceAccountPath);
 
                 await this.gpxRepo
                     .AddAsync(gpx);

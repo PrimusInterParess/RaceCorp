@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -20,13 +21,16 @@
         private readonly string[] allowedExtensions = new[] { "gpx" };
         private readonly IRepository<Gpx> gpxRepo;
         private readonly IGoogleDriveService googleDriveService;
+        private readonly IFileService fileService;
 
         public GpxService(
             IRepository<Gpx> gpxRepo,
-            IGoogleDriveService googleDriveService)
+            IGoogleDriveService googleDriveService,
+            IFileService fileService)
         {
             this.gpxRepo = gpxRepo;
             this.googleDriveService = googleDriveService;
+            this.fileService = fileService;
         }
 
         public Gpx GetGpxById(string id)
@@ -41,22 +45,16 @@
             string gxpFileRoothPath,
             string pathToServiceAccountKeyFile)
         {
-            string extention;
-
-            try
+            if (file == null)
             {
-                extention = Path.GetExtension(file.FileName).TrimStart('.');
-            }
-            catch (Exception)
-            {
-                throw new Exception(GpxFileRequired);
+                throw new ArgumentNullException(GpxFileRequired);
             }
 
-            var validateFileExtention = this.ValidateExtension(extention);
+            var extention = this.fileService.ValidateFile(file, GlobalConstants.Gpx);
 
-            if (validateFileExtention == false)
+            if (extention == null)
             {
-                throw new Exception(InvalidFileExtension + extention);
+                throw new ArgumentNullException(InvalidFileExtension + GpxFileRequired);
             }
 
             var gpxDto = new Gpx()
@@ -68,7 +66,7 @@
 
             try
             {
-                await this.SaveIntoFileSystem(
+                await this.fileService.SaveFileIntoFileSystem(
                     file,
                     gxpFileRoothPath,
                     folderName,
@@ -92,33 +90,9 @@
             gpxDto.GoogleDriveId = googleId;
             gpxDto.GoogleDriveDirectoryId = DirectoryId;
 
+            await this.gpxRepo.AddAsync(gpxDto);
+
             return gpxDto;
-        }
-
-        public Task SaveAsyncIntoDb(Gpx fileData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task SaveIntoFileSystem(
-            IFormFile file,
-            string filePath,
-            string folderName,
-            string fileDbId,
-            string extension)
-        {
-            Directory.CreateDirectory($"{filePath}/{folderName}/");
-
-            var physicalPath = $"{filePath}/{folderName}/{fileDbId}.{extension}";
-
-            await using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
-
-            await file.CopyToAsync(fileStream);
-        }
-
-        public bool ValidateExtension(string extension)
-        {
-            return this.allowedExtensions.Any(x => extension.EndsWith(x));
         }
     }
 }

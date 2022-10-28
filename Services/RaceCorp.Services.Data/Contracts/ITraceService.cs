@@ -15,11 +15,11 @@
 
         Task EditAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile);
 
-        Task CreateRaceTraceAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile);
+        Task CreateRaceTraceAsync(RaceTraceEditModel model, string roothPath, string userId);
 
         T GetById<T>(int raceId, int traceId);
 
-        Trace GetTraceDbModel(TraceInputModel traceInputModel, Gpx gpx);
+        Task<Trace> ProccedingData(TraceInputModel traceInputModel);
 
         Task<bool> DeleteTraceAsync(int id);
     }

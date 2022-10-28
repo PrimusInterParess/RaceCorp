@@ -1,10 +1,12 @@
 ﻿namespace RaceCorp.Services.Data
 {
-    using System.IO;
     using System;
+    using System.IO;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using RaceCorp.Common;
+    using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
 
@@ -13,36 +15,23 @@
 
     public class LogoService : ILogoService
     {
-        private readonly IImageService imageService;
+        private readonly IFileService fileService;
+        private readonly IRepository<Logo> logoRepo;
 
-        public LogoService(IImageService imageService)
+        public LogoService(
+            IFileService fileService,IRepository<Logo> logoRepo)
         {
-            this.imageService = imageService;
+            this.fileService = fileService;
+            this.logoRepo = logoRepo;
         }
 
         public async Task<Logo> ProccessingData(IFormFile logoInputFile, string userId, string imagePath)
         {
-            var extension = string.Empty;
+            var extension = this.fileService.ValidateFile(logoInputFile, GlobalConstants.Image);
 
-            try
+            if (extension == null)
             {
-                extension = Path.GetExtension(logoInputFile.FileName).TrimStart('.');
-            }
-            catch (Exception)
-            {
-                throw new Exception(LogoImageRequired);
-            }
-
-            var validateImageExtension = this.imageService.ValidateImageExtension(extension);
-
-            if (validateImageExtension == false)
-            {
-                throw new Exception(InvalidImageExtension + extension);
-            }
-
-            if (logoInputFile.Length > 10 * 1024 * 1024)
-            {
-                throw new Exception(InvalidImageSize);
+                throw new ArgumentNullException(InvalidImageMessage);
             }
 
             var logoDto = new Logo()
@@ -51,13 +40,15 @@
                 UserId = userId,
             };
 
-            await this.imageService
-                .SaveImageIntoFileSystem(
+            await this.fileService
+                .SaveFileIntoFileSystem(
                    logoInputFile,
                    imagePath,
                    LogosFolderName,
                    logoDto.Id,
                    extension);
+
+            await this.logoRepo.AddAsync(logoDto);
 
             return logoDto;
         }

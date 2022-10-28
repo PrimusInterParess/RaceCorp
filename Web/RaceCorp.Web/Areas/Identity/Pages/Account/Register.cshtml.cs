@@ -161,7 +161,6 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                                 await this.signInManager.SignInAsync(user, isPersistent: false);
                                 return this.LocalRedirect(returnUrl);
                             }
-                        
                     }
 
                     foreach (var error in identityResult.Errors)
@@ -169,6 +168,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                         this.ModelState.AddModelError(string.Empty, error.Description);
                     }
 
+                    this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
                     return this.Page();
                 }
 
@@ -177,6 +177,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                     this.ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
+            this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
 
             // If we got this far, something failed, redisplay form
             return this.Page();

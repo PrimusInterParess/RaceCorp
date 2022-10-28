@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
+    using System.ComponentModel;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -13,12 +14,14 @@
 
     using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Messages;
+    using static RaceCorp.Services.Constants.Common;
 
     public class TraceController : BaseController
     {
         private readonly ITraceService traceService;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
+        private readonly IGpxService gpxService;
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -26,12 +29,14 @@
             ITraceService traceService,
             IDifficultyService difficultyService,
             IRaceService raceService,
+            IGpxService gpxService,
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager)
         {
             this.traceService = traceService;
             this.difficultyService = difficultyService;
             this.raceService = raceService;
+            this.gpxService = gpxService;
             this.environment = environment;
             this.userManager = userManager;
         }
@@ -102,8 +107,9 @@
 
         [HttpGet]
         [Authorize]
+        [DisplayName("Create Trace")]
 
-        public IActionResult Create(int raceId)
+        public IActionResult CreateRaceTrace(int raceId)
         {
             var isRaceIdValid = this.raceService.ValidateId(raceId);
 
@@ -125,7 +131,7 @@
         [HttpPost]
         [Authorize]
 
-        public async Task<IActionResult> Create(RaceTraceEditModel model)
+        public async Task<IActionResult> CreateRaceTrace(RaceTraceEditModel model)
         {
             if (this.ModelState.IsValid == false)
             {
@@ -137,14 +143,15 @@
 
             await this.traceService.CreateRaceTraceAsync(
                 model,
-                $"{this.environment.WebRootPath}\\Gpx",
-                user.Id,
-                $"{this.environment.WebRootPath}\\Credentials\\{ServiceAccountKeyFileName}");
+                $"{this.environment.WebRootPath}",
+                user.Id);
 
             this.TempData["Message"] = "Trace was successfully created!";
 
             return this.RedirectToAction("Profile", "Race", new { id = model.RaceId });
         }
+
+        [DisplayName("Delete Trace")]
 
         public async Task<IActionResult> DeleteRaceTrace(int traceId, int raceId)
         {
@@ -154,10 +161,28 @@
             {
                 this.TempData["MessageDeleted"] = "Trace was successfully deleted!";
 
-                return this.RedirectToAction("Race", "Profile", new { id = raceId });
+                return this.RedirectToAction("Profile", "Race", new { id = raceId });
             }
 
             return this.RedirectToAction("ErrorPage", "Home");
+        }
+
+        [DisplayName("Download Gpx")]
+        public IActionResult DownloadGpx(string id)
+        {
+            try
+            {
+                var gpxFile = this.gpxService.GetGpxById(id);
+                var gpxFilePath = $"{this.environment.WebRootPath}\\{GpxFolderName}\\{gpxFile.FolderName}\\{gpxFile.Id}.{gpxFile.Extension}";
+                byte[] fileBytes = System.IO.File.ReadAllBytes(gpxFilePath);
+                string fileName = $"{gpxFile.FolderName}.{gpxFile.Extension}";
+                return this.File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception)
+            {
+                return this.RedirectToAction("ErrorPage", "Home");
+            }
+
         }
     }
 }

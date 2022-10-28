@@ -15,7 +15,7 @@
         <h1>@Model.Name</h1>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</a>
+        <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</a>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Register" asp-route-id="@Model.Id">Register for the ride</a>
 
     </header>

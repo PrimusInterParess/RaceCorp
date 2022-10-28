@@ -9,7 +9,7 @@
 
     public interface IRaceService
     {
-        Task CreateAsync(RaceCreateModel model, string roothPath, string imageParentFolderName, string userId, string gpxFolderName, string serviceAccountFolderName, string sereviceAccountKeyFileName);
+        Task CreateAsync(RaceCreateModel model, string roothPath, string userId);
 
         RaceAllViewModel All(int page, int itemsPerPage = 3);
 
@@ -22,8 +22,6 @@
         Task EditAsync(RaceEditViewModel model, string logoPath, string userId);
 
         RaceAllViewModel GetUpcomingRaces(int page, int itemsPerPage = 3);
-
-        Task SaveImageAsync(PictureUploadModel model, string userId, string imagePath);
 
         Task<bool> DeleteAsync(int id);
     }
