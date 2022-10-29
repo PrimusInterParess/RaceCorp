@@ -12,6 +12,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.EventRegister;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     using static RaceCorp.Services.Constants.Common;
@@ -23,6 +24,7 @@
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
+        private readonly IEventService eventService;
         private readonly IGpxService gpxService;
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
@@ -31,6 +33,7 @@
             IFormatServices formatsList,
             IDifficultyService difficultyService,
             IRaceService raceService,
+            IEventService eventService,
             IGpxService gpxService,
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager)
@@ -38,6 +41,7 @@
             this.formatsList = formatsList;
             this.difficultyService = difficultyService;
             this.raceService = raceService;
+            this.eventService = eventService;
             this.gpxService = gpxService;
             this.environment = environment;
             this.userManager = userManager;
@@ -213,6 +217,40 @@
             if (isDeleted)
             {
                 return this.RedirectToAction("All", "Race");
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home");
+        }
+
+        public async Task<IActionResult> Register(EventRegisterModel eventModel)
+        {
+            try
+            {
+                var registering = await this.eventService.RegisterUserEvent(eventModel);
+                if (registering)
+                {
+                    this.TempData["Registered"] = "Your are now registered!";
+
+                    return this.RedirectToAction("Profile", new { id = eventModel.Id });
+                }
+
+                return this.RedirectToAction("ErrorPage", "Home");
+            }
+            catch (Exception)
+            {
+                return this.RedirectToAction("ErrorPage", "Home");
+            }
+        }
+
+        public async Task<IActionResult> Unregister(EventRegisterModel eventModel)
+        {
+            var isRemoved = await this.eventService.Unregister(eventModel);
+
+            if (isRemoved)
+            {
+                this.TempData["Unregistered"] = "Your are unregistered!!";
+
+                return this.RedirectToAction("Profile", new { id = eventModel.Id });
             }
 
             return this.RedirectToAction("ErrorPage", "Home");

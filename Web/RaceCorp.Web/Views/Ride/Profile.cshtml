@@ -1,20 +1,51 @@
-﻿@model RaceCorp.Web.ViewModels.Ride.RideProfileVIewModel
+﻿@using System.Security.Claims
+@model RaceCorp.Web.ViewModels.Ride.RideProfileVIewModel
 
 @{
     this.ViewData["Title"] = "Ride Profile";
     var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + Model.TraceGpxGoogleDriveId + "%22%5D%7D&embed&distance";
+
+    var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    var isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
+
+    var hasPassed = DateTime.Parse(Model.StartTime) < DateTime.Now;
 }
 
 @if (this.TempData.ContainsKey("Message"))
 {
     <div class="alert alert-success">@this.TempData["Message"]</div>
 }
+
+@if (this.TempData.ContainsKey("Unregistered"))
+{
+    <div class="alert alert-success">@this.TempData["Unregistered"]</div>
+}
+
+@if (this.TempData.ContainsKey("Registered"))
+{
+    <div class="alert alert-success">@this.TempData["Registered"]</div>
+}
 <h1>@Model.Name</h1>
 
 <div class="row">
 
     <div class="btn-group-vertical col-md-2">
-        <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Register" asp-route-id="@Model.Id">Register for the ride</a>
+
+        @if (hasPassed)
+        {
+            <a class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
+
+        }
+        else if (isRegistered)
+        {
+            <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Unregister</a>
+
+        }
+        else
+        {
+            <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride" >Register for the ride</a>
+
+        }
         <a class="btn btn-outline-info mb-1" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</a>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
         <a class="btn btn-outline-danger mb-1" asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
@@ -40,30 +71,34 @@
 
 </div>
 <div class="row">
-    <div class="scrollable mt-2">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Racer</th>
-                    <th scope="col">Team</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @for (int i = 0; i < 10; i++)
-                {
-                    var user = Model.RegisteredUsers.FirstOrDefault();
-                    
+    @if (Model.RegisteredUsers.Count() != 0)
+    {
+        <div class="scrollable mt-2">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">@(i+1)</th>
-                        <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
-                        <td class="text-center">BTRevolution</td>
+                        <th scope="col">#</th>
+                        <th scope="col">Racer</th>
+                        <th scope="col">Team</th>
                     </tr>
+                </thead>
+                <tbody>
 
-                   
-                }
-            </tbody>
-        </table>
-    </div>
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        var user = Model.RegisteredUsers.FirstOrDefault();
+
+                        <tr>
+                            <th scope="row">@(i + 1)</th>
+                            <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
+                            <td class="text-center">BTRevolution</td>
+                        </tr>
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
+

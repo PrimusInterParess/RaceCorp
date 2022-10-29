@@ -1,7 +1,12 @@
-﻿@model RaceProfileViewModel
+﻿@using System.Security.Claims
+@model RaceProfileViewModel
 @{
     this.ViewData["Title"] = "Race Profile";
-    var traces = Model.Traces.Select(t => new KeyValuePair<string, string>(t.Id.ToString(), t.Name)).Select(t => new SelectListItem(t.Value, t.Key));
+
+    var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    var isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
+
+    var hasPassed = DateTime.Parse(Model.Date) < DateTime.Now;
 }
 
 @if (this.TempData.ContainsKey("Message"))
@@ -13,10 +18,35 @@
 {
     <div class="alert alert-success">@this.TempData["MessageDeleted"]</div>
 }
+@if (this.TempData.ContainsKey("Unregistered"))
+{
+    <div class="alert alert-success">@this.TempData["Unregistered"]</div>
+}
 
+@if (this.TempData.ContainsKey("Registered"))
+{
+    <div class="alert alert-success">@this.TempData["Registered"]</div>
+}
 <div class="row">
     <div class="text-center">
         <h5>@this.ViewData["Title"]</h5>
+
+        @if (hasPassed)
+        {
+            <a class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
+
+        }
+        else if (isRegistered)
+        {
+            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">Unregister</a>
+
+        }
+        else
+        {
+            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">Register for the race</a>
+
+        }
+
         <a class="btn btn-outline-secondary mb-1 " asp-route-id="@Model.Id" asp-action="Edit">Edit</a>
         <a class="btn btn-outline-secondary mb-1 " asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
         <a class="btn btn-outline-secondary mb-1 " asp-controller="Trace" asp-action="CreateRaceTrace" asp-route-raceId="@Model.Id">Create trace</a>
@@ -39,7 +69,7 @@
             <article>Where: The race takes place in mount <b>@Model.Mountain</b>, <b>@Model.Town</b></article>
         </div>
         <div class="col-md-3 mb-3">
-            <article>When: <b>@Model.Date.ToString("dd/MM/yyyy")</b></article>
+            <article>When: <b>@Model.Date</b></article>
         </div>
     </div>
 
@@ -96,7 +126,35 @@
                 </div>
             </div>
         }
-       
+        @if (Model.RegisteredUsers.Count() != 0)
+        {
+            <div class="scrollable mt-2">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Racer</th>
+                            <th scope="col">Team</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @for (int i = 0; i < 10; i++)
+                        {
+                            var user = Model.RegisteredUsers.FirstOrDefault();
+
+                            <tr>
+                                <th scope="row">@(i + 1)</th>
+                                <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
+                                <td class="text-center">BTRevolution</td>
+                            </tr>
+
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     }
     else
     {

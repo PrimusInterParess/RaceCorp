@@ -14,6 +14,8 @@
 
         RideAllViewModel GetUpcomingRides(int page, int itemsPerPage = 3);
 
+        Task<bool> Unregister(int id, string userId);
+
 
         T GetById<T>(int id);
 

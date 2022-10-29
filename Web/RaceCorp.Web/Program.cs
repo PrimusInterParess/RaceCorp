@@ -86,6 +86,7 @@ namespace RaceCorp.Web
             services.AddTransient<IRegisterService, RegisterService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<IEventService, EventService>();
         }
 
         private static void Configure(WebApplication app)
