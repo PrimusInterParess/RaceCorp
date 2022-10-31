@@ -4,9 +4,16 @@
 @{
     this.ViewData["Title"] = "Ride Profile";
     var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + Model.TraceGpxGoogleDriveId + "%22%5D%7D&embed&distance";
+    var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
+    var isRegistered = false;
+    string currentUserId = null;
+    if (currentUserIdClaim != null)
+    {
+        currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
+    }
 
-    var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-    var isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
+
 
     var hasPassed = DateTime.Parse(Model.StartTime) < DateTime.Now;
 }
@@ -41,11 +48,12 @@
             <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Unregister</a>
 
         }
-        else
+        else if (currentUserIdClaim != null)
         {
-            <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride" >Register for the ride</a>
+            <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Register for the ride</a>
 
         }
+
         <a class="btn btn-outline-info mb-1" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</a>
         <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
         <a class="btn btn-outline-danger mb-1" asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>

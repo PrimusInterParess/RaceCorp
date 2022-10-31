@@ -3,8 +3,15 @@
 @{
     this.ViewData["Title"] = "Race Profile";
 
-    var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-    var isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
+    var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
+    var isRegistered = false;
+    string currentUserId=null;
+
+    if (currentUserIdClaim != null)
+    {
+        currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
+    }
 
     var hasPassed = DateTime.Parse(Model.Date) < DateTime.Now;
 }
@@ -38,12 +45,12 @@
         }
         else if (isRegistered)
         {
-            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">Unregister</a>
+            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Unregister</a>
 
         }
-        else
+        else if (currentUserIdClaim != null)
         {
-            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">Register for the race</a>
+            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Register for the ride</a>
 
         }
 
