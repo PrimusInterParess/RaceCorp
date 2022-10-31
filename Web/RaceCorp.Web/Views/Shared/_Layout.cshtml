@@ -1,4 +1,13 @@
-﻿@using RaceCorp.Common
+﻿@using RaceCorp.Common;
+@{
+    string currentUserId = null;
+    var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
+
+    if (currentUserIdClaim != null)
+    {
+        currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;       
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +83,9 @@
                                     </li>
                                 </ul>
                             </div>
+                        </div>
+                        <div>
+                            <a class="btn btn-outline-secondary" asp-action="Profile" asp-controller="User" asp-route-id="@currentUserId">View profile</a>
                         </div>
 
                         <form class="d-flex">

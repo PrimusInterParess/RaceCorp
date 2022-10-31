@@ -5,7 +5,7 @@
 
     var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
     var isRegistered = false;
-    string currentUserId=null;
+    string currentUserId = null;
 
     if (currentUserIdClaim != null)
     {
@@ -38,24 +38,10 @@
     <div class="text-center">
         <h5>@this.ViewData["Title"]</h5>
 
-        @if (hasPassed)
-        {
-            <a class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
-
-        }
-        else if (isRegistered)
-        {
-            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Unregister</a>
-
-        }
-        else if (currentUserIdClaim != null)
-        {
-            <a class="btn btn-outline-success mb-1" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Register for the ride</a>
-
-        }
-
         <a class="btn btn-outline-secondary mb-1 " asp-route-id="@Model.Id" asp-action="Edit">Edit</a>
-        <a class="btn btn-outline-secondary mb-1 " asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+        <form method="post" asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">
+            <button class="btn btn-outline-success mb-1 btn-block" type="submit">Delete</button>
+        </form>
         <a class="btn btn-outline-secondary mb-1 " asp-controller="Trace" asp-action="CreateRaceTrace" asp-route-raceId="@Model.Id">Create trace</a>
     </div>
     <hr />
@@ -101,6 +87,26 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                     <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
+                                </li>
+                                <li>
+                                    @if (hasPassed)
+                                    {
+                                        <a class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
+
+                                    }
+                                    else if (isRegistered)
+                                    {
+                                        <form method="post" asp-controller="Race" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">
+                                            <button class="btn btn-outline-success mb-1 btn-block" type="submit">Unregister</button>
+                                        </form>
+
+                                    }
+                                    else if (currentUserIdClaim != null)
+                                    {
+                                        <form method="post" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="Race">
+                                            <button class="btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
+                                        </form>
+                                    }
                                 </li>
                                 <li class="list-group-item">
                                     <b>Length: </b>@trace.Length

@@ -106,6 +106,7 @@
             return this.RedirectToAction(nameof(RideController.All));
         }
 
+        [HttpGet]
         public IActionResult Profile(int id)
         {
             var model = this.rideService.GetById<RideProfileVIewModel>(id);
@@ -163,7 +164,7 @@
             return this.RedirectToAction(nameof(RideController.Profile), new { id = model.Id });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -185,6 +186,8 @@
             return this.View(rides);
         }
 
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Register(EventRegisterModel eventModel)
         {
             try
@@ -205,6 +208,8 @@
             }
         }
 
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Unregister(EventRegisterModel eventModel)
         {
             var isRemoved = await this.eventService.Unregister(eventModel);

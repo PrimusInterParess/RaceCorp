@@ -25,24 +25,9 @@
             this.townService = townService;
         }
 
-        public async Task<IdentityResult> AssignUserToRole(string roleId, ApplicationUser user)
+        public async Task AssignUserToRole(string roleName, ApplicationUser user)
         {
-            var applicationRole = await this.roleManager.FindByIdAsync(roleId);
-
-            if (applicationRole != null)
-            {
-                try
-                {
-                    var result = await this.userManager.AddToRoleAsync(user, applicationRole.Name);
-
-                    return result;
-                }
-                catch (System.Exception)
-                {
-                }
-            }
-
-            return IdentityResult.Failed(new IdentityError() { Description = "Failed to register user to role" });
+            await this.userManager.AddToRoleAsync(user, roleName);
         }
 
         public async Task ProccesingData(RegisterModel.InputModel inputModel, ApplicationUser user)
@@ -62,6 +47,11 @@
                 throw new InvalidOperationException("Invalid input data!");
             }
 
+        }
+
+        public async Task<ApplicationRole> ValidateRole(string roleId)
+        {
+            return await this.roleManager.FindByIdAsync(roleId);
         }
     }
 }

@@ -7,5 +7,7 @@
         public string UserId { get; set; }
 
         public string EventType { get; set; }
+
+        public string TraceId { get; set; }
     }
 }

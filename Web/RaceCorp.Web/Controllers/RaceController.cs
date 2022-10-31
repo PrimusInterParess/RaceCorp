@@ -162,41 +162,6 @@
             return this.View(races);
         }
 
-        [HttpGet]
-        [Authorize]
-
-        public IActionResult UploadPicture()
-        {
-            return this.View();
-        }
-
-        [HttpPost]
-        [Authorize]
-
-        public async Task<IActionResult> UploadPicture(PictureUploadModel model)
-        {
-            if (this.ModelState.IsValid == false)
-            {
-                return this.View(model);
-            }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            try
-            {
-                // await this.raceService.SaveImageAsync(model, user.Id, $"{this.environment.WebRootPath}/images");
-            }
-            catch (Exception e)
-            {
-                this.ModelState.AddModelError(string.Empty, e.Message);
-                return this.View(model);
-            }
-
-            this.TempData["Message"] = "Your picture was successfully added!";
-
-            return this.RedirectToAction("Index", "Home");
-        }
-
         public IActionResult UpcomingRaces(int id = 1)
         {
             if (id <= 0)
@@ -208,7 +173,7 @@
             return this.View(races);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -221,6 +186,9 @@
 
             return this.RedirectToAction("ErrorPage", "Home");
         }
+
+        [HttpPost]
+        [Authorize]
 
         public async Task<IActionResult> Register(EventRegisterModel eventModel)
         {
@@ -242,6 +210,8 @@
             }
         }
 
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Unregister(EventRegisterModel eventModel)
         {
             var isRemoved = await this.eventService.Unregister(eventModel);

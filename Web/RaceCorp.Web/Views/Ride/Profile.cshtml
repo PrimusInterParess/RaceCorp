@@ -1,5 +1,4 @@
-﻿@using System.Security.Claims
-@model RaceCorp.Web.ViewModels.Ride.RideProfileVIewModel
+﻿@model RaceCorp.Web.ViewModels.Ride.RideProfileVIewModel
 
 @{
     this.ViewData["Title"] = "Ride Profile";
@@ -34,79 +33,99 @@
 }
 <h1>@Model.Name</h1>
 
+
 <div class="row">
-
-    <div class="btn-group-vertical col-md-2">
-
-        @if (hasPassed)
-        {
-            <a class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
-
-        }
-        else if (isRegistered)
-        {
-            <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Unregister</a>
-
-        }
-        else if (currentUserIdClaim != null)
-        {
-            <a class="btn btn-outline-success mb-1" asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">Register for the ride</a>
-
-        }
-
-        <a class="btn btn-outline-info mb-1" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</a>
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        <a class="btn btn-outline-danger mb-1" asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-
-    </div>
-
-    <div class="col-md-6 col-sm-12">
-        <iframe width="650" height="300" src="@url" frameborder="1"></iframe>
+    <div class="offset-0 col-md-6 col-xl-5 col-sm-12">
+        <iframe width="550" height="700" src="@url" frameborder="1"></iframe>
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="card-header">
             Overview
         </div>
         <ul class="list-group list-group-flush">
+            <li class="list-group-item">Start time: @Model.StartTime</li>
+
             <li class="list-group-item">Difficulty: @Model.Difficulty</li>
             <li class="list-group-item">Length: @Model.Length km.</li>
             <li class="list-group-item">Control time: @Model.ControlTime h</li>
-            <li class="list-group-item">Start time: @Model.StartTime</li>
             <li class="list-group-item">Ride name: @Model.TraceName</li>
-            <li class="list-group-item">Apply description here</li>
+            <li class="list-group-item">Description: @Model.Description</li>
         </ul>
     </div>
+    <div class="col-md-2">
+        @if (hasPassed)
+        {
+            <button class="btn btn-outline-success btn-block disabled mb-1">Event has passed! Try it next time!</button>
 
-</div>
-<div class="row">
-    @if (Model.RegisteredUsers.Count() != 0)
+        }
+        else if (isRegistered)
+        {
+
+
+            <form method="post"
+              asp-controller="Ride" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
+                <button class="btn btn-outline-success mb-1 btn-block" type="submit">Unregister</button>
+            </form>
+
+
+
+        }
+        else if (currentUserIdClaim != null)
+        {
+
+            <form method="post"
+              asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
+                <button class="btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
+            </form>
+
+
+        }
+        <form method="get">
+            <button class="btn btn-outline-info mb-1 btn-block" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</button>
+        </form>
+        <form method="get">
+            <button class="btn btn-outline-secondary mb-1 btn-block" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
+        </form>
+        <form method="post"
+              asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">
+            <button class="btn btn-outline-success mb-1" type="submit">Delete</button>
+        </form>
+    </div>
+     @if (Model.RegisteredUsers.Count() != 0)
     {
-        <div class="scrollable mt-2">
+        <div class="scrollable col-md-8 mt-2">
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Racer</th>
                         <th scope="col">Team</th>
+                        <th scope="col">Town</th>
+                        <th scope="col">Trace name</th>
                     </tr>
                 </thead>
                 <tbody>
-
-                    @for (int i = 0; i < 10; i++)
-                    {
-                        var user = Model.RegisteredUsers.FirstOrDefault();
-
-                        <tr>
-                            <th scope="row">@(i + 1)</th>
-                            <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
-                            <td class="text-center">BTRevolution</td>
-                        </tr>
-
-
+                    @{
+                        int count = 0;
+                        @foreach (var user in Model.RegisteredUsers)
+                        {
+                            <tr>
+                                <th scope="row">@(count += 1)</th>
+                                <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
+                                <td class="text-center">BTRevolution</td>
+                                <td class="text-center">Town name here</td>
+                                <td class="text-center">@Model.TraceName</td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
         </div>
     }
+</div>
+
+
+<div class="row">
+   
 </div>
 

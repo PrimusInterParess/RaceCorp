@@ -9,7 +9,9 @@
 
     public interface IRegisterService
     {
-        Task<IdentityResult> AssignUserToRole(string roleId, ApplicationUser user);
+        Task AssignUserToRole(string roleName, ApplicationUser user);
+
+        Task<ApplicationRole> ValidateRole(string roleId);
 
         Task ProccesingData(RegisterModel.InputModel inputModel, ApplicationUser user);
     }

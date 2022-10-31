@@ -1,0 +1,30 @@
+﻿@model RaceCorp.Web.ViewModels.ApplicationUsers.UserProfileViewModel;
+
+<div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
+        <p class="card-text">Email: @Model.UserName</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Town name: @Model.TownName</li>
+        <li class="list-group-item">Country: @Model.ContryName</li>
+    </ul>
+    <div class="card-body">
+        <b>Rides</b>
+        <ol>
+            @foreach (var ride in Model.Rides)
+            {
+                <li>@ride.RideName ,@ride.RideTraceStartTime</li>
+            }
+        </ol>
+        <b>Race</b>
+        <ol>
+            @foreach (var race in Model.Races)
+            {
+                <li>@race.RaceName, @race.TraceName, @race.RaceTraceStartTime</li>
+            }
+        </ol>
+      
+    </div>
+</div>

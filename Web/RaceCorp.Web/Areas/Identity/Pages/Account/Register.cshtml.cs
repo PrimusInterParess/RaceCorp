@@ -126,50 +126,60 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
 
-                await this.registerService.ProccesingData(this.Input, user);
+                try
+                {
+                    await this.registerService.ProccesingData(this.Input, user);
+                }
+                catch (Exception e)
+                {
+                    this.ModelState.AddModelError(string.Empty, e.Message);
+                    this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
+
+                    return this.Page();
+                }
+
+                var applicationRole = await this.registerService.ValidateRole(this.Input.RoleId);
+
+                if (applicationRole == null)
+                {
+                    this.ModelState.AddModelError(" ", "Invalid Role. Please choose role!");
+                    this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
+
+                    // If we got this far, something failed, redisplay form
+                    return this.Page();
+                }
 
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
 
                 if (result.Succeeded)
                 {
-                    var identityResult = await this.registerService.AssignUserToRole(this.Input.RoleId, user);
+                    await this.registerService.AssignUserToRole(applicationRole.Name, user);
 
-                    if (identityResult.Succeeded)
+                    this.logger.LogInformation("User created a new account with password.");
+
+                    var userId = await this.userManager.GetUserIdAsync(user);
+                    var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = this.Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        protocol: this.Request.Scheme);
+
+                    await this.emailSender.SendEmailAsync(
+                        this.Input.Email,
+                        "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    if (this.userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                            this.logger.LogInformation("User created a new account with password.");
-
-                            var userId = await this.userManager.GetUserIdAsync(user);
-                            var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-                            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                            var callbackUrl = this.Url.Page(
-                                "/Account/ConfirmEmail",
-                                pageHandler: null,
-                                values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                                protocol: this.Request.Scheme);
-
-                            await this.emailSender.SendEmailAsync(
-                                this.Input.Email,
-                                "Confirm your email",
-                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                            if (this.userManager.Options.SignIn.RequireConfirmedAccount)
-                            {
-                                return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
-                            }
-                            else
-                            {
-                                await this.signInManager.SignInAsync(user, isPersistent: false);
-                                return this.LocalRedirect(returnUrl);
-                            }
+                        return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
                     }
-
-                    foreach (var error in identityResult.Errors)
+                    else
                     {
-                        this.ModelState.AddModelError(string.Empty, error.Description);
+                        await this.signInManager.SignInAsync(user, isPersistent: false);
+                        return this.LocalRedirect(returnUrl);
                     }
-
-                    this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
-                    return this.Page();
                 }
 
                 foreach (var error in result.Errors)

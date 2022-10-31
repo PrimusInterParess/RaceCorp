@@ -13,7 +13,7 @@ a {
 }
 .scrollable {
     height: 170px;
-    width: 350px; /* or any value */
+    width: 650px; /* or any value */
     overflow-y: auto;
 }
 

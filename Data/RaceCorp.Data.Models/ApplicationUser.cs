@@ -29,6 +29,10 @@ namespace RaceCorp.Data.Models
 
         public string Country { get; set; }
 
+        public string PictureId { get; set; }
+
+        public virtual Image ProfilePicture { get; set; }
+
         public string TeamId { get; set; }
 
         public virtual Team Team { get; set; }
@@ -52,5 +56,7 @@ namespace RaceCorp.Data.Models
         public virtual ICollection<ApplicationUserRace> Races { get; set; } = new HashSet<ApplicationUserRace>();
 
         public virtual ICollection<ApplicationUserRide> Rides { get; set; } = new HashSet<ApplicationUserRide>();
+
+        public virtual ICollection<ApplicationUserTrace> Traces { get; set; } = new HashSet<ApplicationUserTrace>();
     }
 }
