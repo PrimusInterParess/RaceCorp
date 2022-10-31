@@ -1,12 +1,12 @@
 ﻿namespace RaceCorp.Web.ViewModels.Trace
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
-    public class TraceInRaceProfileViewModel
+    using RaceCorp.Data.Models;
+    using RaceCorp.Services.Mapping;
+    using RaceCorp.Web.ViewModels.ApplicationUsers;
+
+    public class TraceInRaceProfileViewModel : IMapTo<Trace>
     {
         public string DifficultyName { get; set; }
 
@@ -22,5 +22,6 @@
 
         public string StartTime { get; set; }
 
+        public ICollection<UserTraceBaseModel> RegisteredUsers { get; set; } = new HashSet<UserTraceBaseModel>();
     }
 }

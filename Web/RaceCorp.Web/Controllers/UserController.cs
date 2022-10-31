@@ -19,7 +19,6 @@
         public IActionResult Profile(string id)
         {
             var userDto = this.userService.GetById<UserProfileViewModel>(id);
-
             return this.View(userDto);
         }
     }

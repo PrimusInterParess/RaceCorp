@@ -204,9 +204,11 @@
 
                 return this.RedirectToAction("ErrorPage", "Home");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return this.RedirectToAction("ErrorPage", "Home");
+                this.TempData["CannotParticipate"] = e.Message;
+
+                return this.RedirectToAction("Profile", new { id = eventModel.Id });
             }
         }
 

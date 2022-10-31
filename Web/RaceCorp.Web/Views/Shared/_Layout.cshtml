@@ -1,13 +1,5 @@
 ﻿@using RaceCorp.Common;
-@{
-    string currentUserId = null;
-    var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
 
-    if (currentUserIdClaim != null)
-    {
-        currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;       
-    }
-}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,6 +58,15 @@
                                 </li>
                             </ul>
                         </div>
+                        @if (
+                        this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+                        this.User.IsInRole(GlobalConstants.RacerRoleName) ||
+                        this.User.IsInRole(GlobalConstants.RaceOwnerRoleName))
+                        {
+                            <div>
+                                <a class="btn btn-outline-secondary" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">View profile</a>
+                            </div>
+                        }
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                             <div class="dropdown me-10">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -84,10 +85,6 @@
                                 </ul>
                             </div>
                         </div>
-                        <div>
-                            <a class="btn btn-outline-secondary" asp-action="Profile" asp-controller="User" asp-route-id="@currentUserId">View profile</a>
-                        </div>
-
                         <form class="d-flex">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>

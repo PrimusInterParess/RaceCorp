@@ -16,6 +16,10 @@
 
         public int TraceId { get; set; }
 
-        public Trace Trace { get; set; }
+        public virtual Trace Trace { get; set; }
+
+        public virtual Race Race { get; set; }
+
+        public int RaceId { get; set; }
     }
 }

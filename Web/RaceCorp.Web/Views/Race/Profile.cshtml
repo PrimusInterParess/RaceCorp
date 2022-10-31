@@ -34,6 +34,11 @@
 {
     <div class="alert alert-success">@this.TempData["Registered"]</div>
 }
+
+@if (this.TempData.ContainsKey("CannotParticipate"))
+{
+    <div class="alert alert-success">@this.TempData["CannotParticipate"]</div>
+}
 <div class="row">
     <div class="text-center">
         <h5>@this.ViewData["Title"]</h5>
@@ -94,14 +99,14 @@
                                         <a class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
 
                                     }
-                                    else if (isRegistered)
+                                    else if (currentUserId != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId))
                                     {
                                         <form method="post" asp-controller="Race" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">
                                             <button class="btn btn-outline-success mb-1 btn-block" type="submit">Unregister</button>
                                         </form>
 
                                     }
-                                    else if (currentUserIdClaim != null)
+                                    else if (currentUserIdClaim != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId) == false)
                                     {
                                         <form method="post" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="Race">
                                             <button class="btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
@@ -152,17 +157,17 @@
                     </thead>
                     <tbody>
 
-                        @for (int i = 0; i < 10; i++)
-                        {
-                            var user = Model.RegisteredUsers.FirstOrDefault();
 
-                            <tr>
-                                <th scope="row">@(i + 1)</th>
-                                <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
-                                <td class="text-center">BTRevolution</td>
-                            </tr>
-
-
+                        @{
+                            var count = 0;
+                            @foreach (var user in Model.RegisteredUsers)
+                            {
+                                <tr>
+                                    <th scope="row">@(count += 1)</th>
+                                    <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
+                                    <td class="text-center">BTRevolution</td>
+                                </tr>
+                            }                        
                         }
                     </tbody>
                 </table>

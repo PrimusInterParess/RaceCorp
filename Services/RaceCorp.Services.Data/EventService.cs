@@ -90,30 +90,55 @@
 
         private async Task<bool> RegisterUserRace(EventRegisterModel eventModel)
         {
-            var race = this.raceRepo.All().Include(r => r.Traces).Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == eventModel.Id);
-
-            if (race.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId))
-            {
-                return false;
-            }
+            var race = this.raceRepo
+                .All()
+                .Include(r => r.Traces)
+                .ThenInclude(t => t.RegisteredUsers)
+                .Include(r => r.RegisteredUsers)
+                .FirstOrDefault(r => r.Id == eventModel.Id);
 
             var trace = race.Traces.FirstOrDefault(t => t.Id == int.Parse(eventModel.TraceId));
+            Trace traceUserRegisterIn = null;
+
+            var isAlredyRegistered = race.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId);
+
+            if (isAlredyRegistered)
+            {
+                traceUserRegisterIn = race.Traces
+                 .FirstOrDefault(t => t.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId));
+
+                var currdentTraceSpan = trace.StartTime;
+
+                var traceAlreadyRegesteredInSpan = traceUserRegisterIn.StartTime + traceUserRegisterIn.ControlTime;
+
+                if (currdentTraceSpan < traceAlreadyRegesteredInSpan)
+                {
+                    throw new InvalidOperationException($"Cannot Register for this trace.You are alredy registered for {traceUserRegisterIn.Name} and IT starts {traceUserRegisterIn.StartTime}");
+                }
+            }
 
             var userTrace = new ApplicationUserTrace
             {
                 ApplicationUserId = eventModel.UserId,
                 TraceId = trace.Id,
+                RaceId = race.Id,
             };
-            var userRace = new ApplicationUserRace
+
+            if (isAlredyRegistered == false)
             {
-                ApplicationUserId = eventModel.UserId,
-                RaceId = eventModel.Id,
-            };
+                var userRace = new ApplicationUserRace
+                {
+                    ApplicationUserId = eventModel.UserId,
+                    RaceId = eventModel.Id,
+                    TraceId = trace.Id,
+                };
+
+                await this.userRaceRepo.AddAsync(userRace);
+            }
 
             try
             {
                 await this.userTraceRepo.AddAsync(userTrace);
-                await this.userRaceRepo.AddAsync(userRace);
                 await this.raceRepo.SaveChangesAsync();
             }
             catch (Exception e)
@@ -154,14 +179,21 @@
             var trace = race.Traces
                 .FirstOrDefault(t => t.Id == int.Parse(eventModel.TraceId));
 
-            var registeredUserRace = race.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
+            var participatesInAnotherTrace = race.Traces
+                .FirstOrDefault(t => t.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId && u.TraceId != trace.Id));
+
+            if (participatesInAnotherTrace == null)
+            {
+                var registeredUserRace = race.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
+                this.userRaceRepo.Delete(registeredUserRace);
+            }
+
             var registeredUserTrace = trace.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
 
             try
             {
                 this.userTraceRepo.Delete(registeredUserTrace);
-                this.userRaceRepo.Delete(registeredUserRace);
-                await this.userRaceRepo.SaveChangesAsync();
+                await this.userTraceRepo.SaveChangesAsync();
             }
             catch (Exception e)
             {

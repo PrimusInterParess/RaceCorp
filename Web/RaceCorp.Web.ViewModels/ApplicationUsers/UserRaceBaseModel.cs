@@ -1,16 +1,26 @@
 ﻿namespace RaceCorp.Web.ViewModels.ApplicationUsers
 {
+    using System.Collections.Generic;
+
+    using AutoMapper;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
+    using RaceCorp.Web.ViewModels.Trace;
 
-    public class UserRaceBaseModel : IMapFrom<ApplicationUserRace>
+    public class UserRaceBaseModel : IMapTo<ApplicationUserRace>, IHaveCustomMappings
     {
         public int RaceId { get; set; }
 
         public string RaceName { get; set; }
 
-        public string TraceName { get; set; }
+        public List<UserTraceBaseModel> Traces { get; set; } = new List<UserTraceBaseModel>();
+    
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<ApplicationUserRace, UserRaceBaseModel>();
 
-        public string RaceTraceStartTime { get; set; }
+            configuration.CreateMap<Race, UserRaceBaseModel>();
+
+        }
     }
 }
