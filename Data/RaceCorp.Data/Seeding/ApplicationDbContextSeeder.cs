@@ -29,11 +29,7 @@
                               new SettingsSeeder(),
                               new DifficultySeeder(),
                               new FormatSeeder(),
-                              //new TownSeeder(),
-                              //new LogoSeeder(),
-                              //new MountainSeeder(),
-                              //new RaceSeeder(),
-                              //new RideSeeder(),
+                              new UserSeeder(),
                           };
 
             foreach (var seeder in seeders)
