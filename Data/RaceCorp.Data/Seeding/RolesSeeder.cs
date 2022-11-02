@@ -33,7 +33,11 @@
             var racerRole = await roleManager.FindByNameAsync(GlobalConstants.RacerRoleName);
             if (racerRole == null)
             {
-                var result = await roleManager.CreateAsync(new ApplicationRole(GlobalConstants.RacerRoleName));
+                var result = await roleManager.CreateAsync(new ApplicationRole()
+                {
+                    Id = GlobalConstants.RacerRoleName,
+                    Name = GlobalConstants.RacerRoleName,
+                });
                 if (!result.Succeeded)
                 {
                     throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
@@ -43,7 +47,11 @@
             var raceOwnerRole = await roleManager.FindByNameAsync(GlobalConstants.RaceOwnerRoleName);
             if (raceOwnerRole == null)
             {
-                var result = await roleManager.CreateAsync(new ApplicationRole(GlobalConstants.RaceOwnerRoleName));
+                var result = await roleManager.CreateAsync(new ApplicationRole()
+                {
+                    Id = GlobalConstants.RaceOwnerRoleName,
+                    Name = GlobalConstants.RaceOwnerRoleName,
+                });
                 if (!result.Succeeded)
                 {
                     throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));

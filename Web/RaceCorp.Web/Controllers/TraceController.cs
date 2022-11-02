@@ -175,14 +175,13 @@
                 var gpxFile = this.gpxService.GetGpxById(id);
                 var gpxFilePath = $"{this.environment.WebRootPath}\\{GpxFolderName}\\{gpxFile.FolderName}\\{gpxFile.Id}.{gpxFile.Extension}";
                 byte[] fileBytes = System.IO.File.ReadAllBytes(gpxFilePath);
-                string fileName = $"{gpxFile.FolderName}.{gpxFile.Extension}";
+                string fileName = $"{id}.{gpxFile.Extension}";
                 return this.File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
             }
             catch (Exception)
             {
                 return this.RedirectToAction("ErrorPage", "Home");
             }
-
         }
     }
 }

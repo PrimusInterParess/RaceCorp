@@ -18,6 +18,6 @@
 
         Task<Logo> ProccessingLogoData(IFormFile file, string userId, string imagePath);
 
-        Task<Image> ProccessingImageData(IFormFile file, string userId, string imagePath);
+        Task<Image> ProccessingImageData(IFormFile file, string userId, string imagePath, string imageFolderName);
     }
 }

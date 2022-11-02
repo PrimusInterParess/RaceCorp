@@ -21,17 +21,16 @@
 
         public string Country { get; set; }
 
-        public string PictureId { get; set; }
+        public string ProfilePicturePath { get; set; }
 
-       
         public List<UserRideBaseModel> Rides { get; set; } = new List<UserRideBaseModel>();
 
         public List<UserTraceBaseModel> Traces { get; set; } = new List<UserTraceBaseModel>();
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<ApplicationUser, UserProfileViewModel>();
-
+            configuration.CreateMap<ApplicationUser, UserProfileViewModel>().ForMember(x => x.ProfilePicturePath, opt
+                       => opt.MapFrom(x => $"\\Images\\{x.Email}\\{x.ProfilePicture.Id}.{x.ProfilePicture.Extension}"));
         }
     }
 }

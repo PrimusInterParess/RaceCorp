@@ -43,7 +43,7 @@
                 .ForMember(x => x.ControlTime, opt
                    => opt.MapFrom(x => x.Trace.ControlTime.TotalHours))
                 .ForMember(x => x.StartTime, opt
-                   => opt.MapFrom(x => x.Trace.StartTime.ToString("D")))
+                   => opt.MapFrom(x => x.Trace.StartTime.ToString("f")))
                 .ForMember(x => x.Length, opt
                    => opt.MapFrom(x => x.Trace.Length));
         }

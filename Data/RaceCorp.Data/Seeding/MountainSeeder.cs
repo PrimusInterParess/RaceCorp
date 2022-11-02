@@ -25,12 +25,7 @@
 
             await dbContext.Mountains.AddAsync(new Mountain() { Name = "Rodopi" });
 
-            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Balkan" });
-
-
-        
-
-
+            await dbContext.Mountains.AddAsync(new Mountain() { Name = "Stara Planina" });
         }
     }
 }

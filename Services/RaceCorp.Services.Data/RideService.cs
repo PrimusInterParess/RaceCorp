@@ -68,6 +68,7 @@
                     GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
                     TownName = r.Town.Name,
                     MountainName = r.Mountain.Name,
+                    TraceStartTime = r.Trace.StartTime.ToString("f"),
                 })
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)
@@ -232,6 +233,7 @@
                     GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
                     TownName = r.Town.Name,
                     MountainName = r.Mountain.Name,
+                    TraceStartTime = r.Trace.StartTime.ToString("f"),
                 })
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)

@@ -1,40 +1,68 @@
 ﻿@model RaceCorp.Web.ViewModels.ApplicationUsers.UserProfileViewModel;
 
-<div class="card" style="width: 18rem;">
-    <img src="" class="card-img-top" alt="">
-    <div class="card-body">
-        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
-        <p class="card-text">Email: @Model.UserName</p>
+@{
+    var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
+    string currentUserId = null;
+    if (currentUserIdClaim != null)
+    {
+        currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+    }
+}
+
+<form method="post" enctype="multipart/form-data" asp-controller="User" asp-area="" asp-action="UploadProfilePicture" asp-route-userId="@currentUserId">
+    <input class="form-control" type="file" name="ProfilePicture" />
+    <button class="btn btn-outline-success mb-1 btn-block" type="submit">Upload picture</button>
+</form>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+            <img src="@Model.ProfilePicturePath" class="card-img-top" alt="">
+            <div class="card-body">
+                <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
+                <p class="card-text">Email: @Model.UserName</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Town name: @Model.TownName</li>
+                <li class="list-group-item">Country: @Model.Country</li>
+            </ul>
+            <div class="card-body">
+                Add Description here...
+            </div>
+        </div>
     </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Town name: @Model.TownName</li>
-        <li class="list-group-item">Country: @Model.Country</li>
-    </ul>
-    <div class="card-body">
-        @if (Model.Rides.Count() != 0)
-        {
-            <b>Rides</b>
-            <ol>
-                @foreach (var ride in Model.Rides)
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-6">
+                @if (Model.Rides.Count() != 0)
                 {
-                    <li>@ride.RideName ,@ride.RideTraceStartTime</li>
+                    <b>Rides</b>
+                    <ol>
+                        @foreach (var ride in Model.Rides)
+                        {
+                            <li>@ride.RideName ,@ride.RideTraceStartTime</li>
+                        }
+                    </ol>
                 }
-            </ol>
-        }
-        @if (Model.Traces.Count != 0)
-        {
-            <b>Race</b>
-            <ol>
-                @foreach (var trace in Model.Traces)
+            </div>
+            <div class="col-md-6">
+                @if (Model.Traces.Count != 0)
                 {
-                    <li>@trace.RaceName - @trace.TraceName - @trace.TraceStartTime</li>
+                    <b>Race</b>
+                    <ol>
+                        @foreach (var trace in Model.Traces)
+                        {
+                            <li>@trace.RaceName - @trace.TraceName - @trace.TraceStartTime</li>
 
 
 
+                        }
+                    </ol>
                 }
-            </ol>
-        }
-
-
+            </div>
+        </div>
     </div>
 </div>
+
+

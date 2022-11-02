@@ -29,6 +29,62 @@
             this.imageRepo = imageRepo;
         }
 
+        public async Task<Logo> ProccessingLogoData(IFormFile file, string userId, string imagePath)
+        {
+            var extension = this.ValidateFile(file, GlobalConstants.Image);
+
+            if (extension == null)
+            {
+                throw new ArgumentNullException(InvalidImageMessage);
+            }
+
+            var logoDto = new Logo()
+            {
+                Extension = extension,
+                UserId = userId,
+            };
+
+            await this.SaveFileIntoFileSystem(
+                   file,
+                   imagePath,
+                   LogosFolderName,
+                   logoDto.Id,
+                   extension);
+
+            await this.logoRepo.AddAsync(logoDto);
+
+            return logoDto;
+        }
+
+        public async Task<Image> ProccessingImageData(IFormFile file, string userId, string roothPath, string imageFolderName)
+        {
+            var extension = this.ValidateFile(file, GlobalConstants.Image);
+
+            if (extension == null)
+            {
+                throw new ArgumentNullException(InvalidImageMessage);
+            }
+
+            var imageDto = new Image()
+            {
+                Extension = extension,
+                UserId = userId,
+            };
+
+            var imageRoothPath = $"{roothPath}\\{ImageParentFolderName}";
+
+            await this.SaveFileIntoFileSystem(
+                   file,
+                   imageRoothPath,
+                   imageFolderName,
+                   imageDto.Id,
+                   extension);
+
+            await this.imageRepo.AddAsync(imageDto);
+
+            return imageDto;
+        }
+
         public async Task SaveFileIntoFileSystem(IFormFile file, string roothPath, string folderName, string dbId, string extension)
         {
             Directory.CreateDirectory($"{roothPath}\\{folderName}\\");
@@ -59,63 +115,6 @@
             }
 
             return null;
-        }
-
-        public async Task<Logo> ProccessingLogoData(IFormFile file, string userId, string imagePath)
-        {
-            var extension = this.ValidateFile(file, GlobalConstants.Image);
-
-            if (extension == null)
-            {
-                throw new ArgumentNullException(InvalidImageMessage);
-            }
-
-            var logoDto = new Logo()
-            {
-                Extension = extension,
-                UserId = userId,
-            };
-
-            await this.SaveFileIntoFileSystem(
-                   file,
-                   imagePath,
-                   LogosFolderName,
-                   logoDto.Id,
-                   extension);
-
-            await this.logoRepo.AddAsync(logoDto);
-
-            return logoDto;
-        }
-
-        public async Task<Image> ProccessingImageData(IFormFile file, string userId, string roothPath)
-        {
-            var extension = this.ValidateFile(file, GlobalConstants.Image);
-
-            if (extension == null)
-            {
-                throw new ArgumentNullException(InvalidImageMessage);
-            }
-
-            var imageDto = new Image()
-            {
-                Extension = extension,
-                UserId = userId,
-            };
-
-            var imageRoothPath = $"{roothPath}\\{ImageParentFolderName}";
-
-
-            await this.SaveFileIntoFileSystem(
-                   file,
-                   imageRoothPath,
-                   SystemImageFolderName,
-                   imageDto.Id,
-                   extension);
-
-            await this.imageRepo.AddAsync(imageDto);
-
-            return imageDto;
         }
     }
 }

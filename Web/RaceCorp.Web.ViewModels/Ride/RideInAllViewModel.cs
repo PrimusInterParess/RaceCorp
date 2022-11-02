@@ -19,5 +19,7 @@
         public string TownName { get; set; }
 
         public string MountainName { get; set; }
+
+        public string TraceStartTime { get; set; }
     }
 }
