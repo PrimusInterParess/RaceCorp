@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221031210746_user-race-traceId-property")]
-    partial class userracetraceIdproperty
+    [Migration("20221102195820_init-creation")]
+    partial class initcreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -328,12 +328,17 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("RaceId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TraceId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("RaceId");
 
                     b.HasIndex("TraceId");
 
@@ -405,13 +410,13 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChildFolderName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FolderName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GoogleDriveDirectoryId")
@@ -422,6 +427,9 @@ namespace RaceCorp.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ParentFolderName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TraceId")
                         .HasColumnType("int");
@@ -441,6 +449,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChildFolderName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -451,6 +462,9 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentFolderName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -470,6 +484,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChildFolderName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -478,6 +495,9 @@ namespace RaceCorp.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ParentFolderName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RaceId")
                         .HasColumnType("int");
@@ -920,6 +940,12 @@ namespace RaceCorp.Data.Migrations
                         .WithMany("Traces")
                         .HasForeignKey("ApplicationUserId");
 
+                    b.HasOne("RaceCorp.Data.Models.Race", "Race")
+                        .WithMany()
+                        .HasForeignKey("RaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("RaceCorp.Data.Models.Trace", "Trace")
                         .WithMany("RegisteredUsers")
                         .HasForeignKey("TraceId")
@@ -927,6 +953,8 @@ namespace RaceCorp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Race");
 
                     b.Navigation("Trace");
                 });

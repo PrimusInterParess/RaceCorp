@@ -408,13 +408,13 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChildFolderName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FolderName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GoogleDriveDirectoryId")
@@ -425,6 +425,9 @@ namespace RaceCorp.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ParentFolderName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TraceId")
                         .HasColumnType("int");
@@ -444,6 +447,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChildFolderName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -454,6 +460,9 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentFolderName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -473,6 +482,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChildFolderName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -481,6 +493,9 @@ namespace RaceCorp.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ParentFolderName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RaceId")
                         .HasColumnType("int");

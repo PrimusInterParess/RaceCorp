@@ -9,7 +9,5 @@
         public virtual Trace Trace { get; set; }
 
         public int TraceId { get; set; }
-
-        public string FolderName { get; set; }
     }
 }

@@ -7,7 +7,7 @@
 
     public interface IGpxService
     {
-        Task<Gpx> ProccessingData(IFormFile file, string userId, string folderName, string gxpFileRoothPath, string pathToServiceAccountKeyFile);
+        Task<Gpx> ProccessingData(IFormFile file, string userId, string childrenFolderName, string rootPath, string pathToServiceAccountKeyFile);
 
         Gpx GetGpxById(string id);
     }

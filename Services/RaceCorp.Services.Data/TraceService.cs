@@ -66,7 +66,7 @@
             };
         }
 
-        public async Task EditAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId, string pathToServiceAccountKeyFile)
+        public async Task EditAsync(RaceTraceEditModel model, string roothPath, string userId)
         {
             var trace = this.traceRepo
                 .All()
@@ -76,6 +76,8 @@
             trace.Length = (int)model.Length;
             trace.DifficultyId = model.DifficultyId;
             trace.ControlTime = TimeSpan.FromHours((double)model.ControlTime);
+
+            var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
             var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
 
@@ -88,8 +90,8 @@
                      model.GpxFile,
                      userId,
                      raceName,
-                     gxpFileRoothPath,
-                     pathToServiceAccountKeyFile);
+                     roothPath,
+                     serviceAccountPath);
 
                     await this.gpxRepo
                     .AddAsync(gpx);
@@ -119,7 +121,6 @@
         {
             var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
 
-            var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
             var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
             var gpx = await this.gpxService
@@ -127,7 +128,7 @@
                model.GpxFile,
                userId,
                raceName,
-               gpxRoothPath,
+               roothPath,
                serviceAccountPath);
 
             var trace = await this.ProccedingData(model);

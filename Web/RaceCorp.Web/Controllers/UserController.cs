@@ -1,5 +1,7 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,6 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.ApplicationUsers;
-    using System.Threading.Tasks;
 
     public class UserController : BaseController
     {

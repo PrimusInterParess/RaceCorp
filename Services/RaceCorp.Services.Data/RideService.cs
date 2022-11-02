@@ -88,7 +88,6 @@
             var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
             var townDb = await this.townService.ProccesingData(model.Town);
 
-            var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
             var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
             var gpx = await this.gpxService
@@ -96,7 +95,7 @@
                 model.Trace.GpxFile,
                 userId,
                 model.Name,
-                gpxRoothPath,
+                roothPath,
                 serviceAccountPath);
 
             var trace = await this.traceService.ProccedingData(model.Trace);

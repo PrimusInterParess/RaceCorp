@@ -132,11 +132,10 @@
 
             try
             {
-                var imageRoothPath = $"{this.environment.WebRootPath}\\{ImageParentFolderName}";
 
                 await this.raceService.EditAsync(
                     model,
-                    imageRoothPath,
+                    this.environment.WebRootPath,
                     user.Id);
             }
             catch (Exception e)

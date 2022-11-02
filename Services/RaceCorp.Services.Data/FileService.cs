@@ -56,7 +56,7 @@
             return logoDto;
         }
 
-        public async Task<Image> ProccessingImageData(IFormFile file, string userId, string roothPath, string imageFolderName)
+        public async Task<Image> ProccessingImageData(IFormFile file, string userId, string roothPath, string childrenFolderName)
         {
             var extension = this.ValidateFile(file, GlobalConstants.Image);
 
@@ -67,6 +67,8 @@
 
             var imageDto = new Image()
             {
+                ParentFolderName = ImageParentFolderName,
+                ChildFolderName = childrenFolderName,
                 Extension = extension,
                 UserId = userId,
             };
@@ -76,7 +78,7 @@
             await this.SaveFileIntoFileSystem(
                    file,
                    imageRoothPath,
-                   imageFolderName,
+                   childrenFolderName,
                    imageDto.Id,
                    extension);
 
@@ -89,7 +91,7 @@
         {
             Directory.CreateDirectory($"{roothPath}\\{folderName}\\");
 
-            var physicalPath = $"{roothPath}/{folderName}/{dbId}.{extension}";
+            var physicalPath = $"{roothPath}\\{folderName}\\{dbId}.{extension}";
             await using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
             await file.CopyToAsync(fileStream);
         }

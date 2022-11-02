@@ -19,13 +19,13 @@
         private readonly IRepository<Logo> logoRepo;
 
         public LogoService(
-            IFileService fileService,IRepository<Logo> logoRepo)
+            IFileService fileService, IRepository<Logo> logoRepo)
         {
             this.fileService = fileService;
             this.logoRepo = logoRepo;
         }
 
-        public async Task<Logo> ProccessingData(IFormFile logoInputFile, string userId, string imagePath)
+        public async Task<Logo> ProccessingData(IFormFile logoInputFile, string userId, string roothPath)
         {
             var extension = this.fileService.ValidateFile(logoInputFile, GlobalConstants.Image);
 
@@ -34,16 +34,20 @@
                 throw new ArgumentNullException(InvalidImageMessage);
             }
 
+            var logoRoothPath = $"{roothPath}\\{ImageParentFolderName}";
+
             var logoDto = new Logo()
             {
                 Extension = extension,
                 UserId = userId,
+                ParentFolderName = ImageParentFolderName,
+                ChildFolderName = LogosFolderName,
             };
 
             await this.fileService
                 .SaveFileIntoFileSystem(
                    logoInputFile,
-                   imagePath,
+                   logoRoothPath,
                    LogosFolderName,
                    logoDto.Id,
                    extension);

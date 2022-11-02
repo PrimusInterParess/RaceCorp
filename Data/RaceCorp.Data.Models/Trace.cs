@@ -36,6 +36,5 @@
         public virtual Race Race { get; set; }
 
         public virtual ICollection<ApplicationUserTrace> RegisteredUsers { get; set; } = new HashSet<ApplicationUserTrace>();
-
     }
 }

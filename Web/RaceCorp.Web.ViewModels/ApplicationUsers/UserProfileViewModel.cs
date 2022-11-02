@@ -30,7 +30,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationUser, UserProfileViewModel>().ForMember(x => x.ProfilePicturePath, opt
-                       => opt.MapFrom(x => $"\\Images\\{x.Email}\\{x.ProfilePicture.Id}.{x.ProfilePicture.Extension}"));
+                       => opt.MapFrom(x => x.ProfilePicture == null ? "\\Images\\default\\Murgash.jpg" : $"\\{x.ProfilePicture.ParentFolderName}\\{x.ProfilePicture.ChildFolderName}\\{x.ProfilePicture.Id}.{x.ProfilePicture.Extension}"));
         }
     }
 }

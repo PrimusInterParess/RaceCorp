@@ -41,8 +41,8 @@
         public async Task<Gpx> ProccessingData(
             IFormFile file,
             string userId,
-            string folderName,
-            string gxpFileRoothPath,
+            string childrenFolderName,
+            string roothPath,
             string pathToServiceAccountKeyFile)
         {
             if (file == null)
@@ -61,15 +61,18 @@
             {
                 Extension = extention,
                 UserId = userId,
-                FolderName = folderName,
+                ParentFolderName = GpxFolderName,
+                ChildFolderName = childrenFolderName,
             };
+
+            var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
 
             try
             {
                 await this.fileService.SaveFileIntoFileSystem(
                     file,
-                    gxpFileRoothPath,
-                    folderName,
+                    gpxRoothPath,
+                    childrenFolderName,
                     gpxDto.Id,
                     extention);
             }
@@ -78,13 +81,13 @@
                 throw new Exception(e.Message);
             }
 
-            var gxpFilePath = $"{gxpFileRoothPath}\\{folderName}\\{gpxDto.Id}.{extention}";
+            var gpxFilePath = $"{gpxRoothPath}\\{childrenFolderName}\\{gpxDto.Id}.{extention}";
 
             var googleId = await this.googleDriveService
                 .UloadGpxFileToDrive(
-                gxpFilePath,
+                gpxFilePath,
                 pathToServiceAccountKeyFile,
-                folderName,
+                childrenFolderName,
                 DirectoryId);
 
             gpxDto.GoogleDriveId = googleId;

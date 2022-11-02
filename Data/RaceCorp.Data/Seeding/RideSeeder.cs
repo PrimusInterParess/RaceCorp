@@ -1,10 +1,11 @@
-﻿using RaceCorp.Data.Models;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace RaceCorp.Data.Seeding
+﻿namespace RaceCorp.Data.Seeding
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using RaceCorp.Data.Models;
+
     public class RideSeeder : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
@@ -33,9 +34,10 @@ namespace RaceCorp.Data.Seeding
                     StartTime = DateTime.Now.AddDays(5),
                     Gpx = new Gpx
                     {
+                        ParentFolderName = "Gpxs",
                         CreatedOn = DateTime.Now,
                         Extension = "gpx",
-                        FolderName = "Golden Bridges",
+                        ChildFolderName = "Golden Bridges",
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1X-l7S5MX4rw9JrSrakVp-AAgVVXmHTQf",
                         Id = "goldenBridges",
@@ -63,9 +65,10 @@ namespace RaceCorp.Data.Seeding
                     StartTime = DateTime.Now.AddDays(10),
                     Gpx = new Gpx
                     {
+                        ParentFolderName = "Gpxs",
                         CreatedOn = DateTime.Now,
                         Extension = "gpx",
-                        FolderName = "Town Portal",
+                        ChildFolderName = "Town Portal",
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1Jl4CvWN_nh6m14RO_-ugYSmpNa4R4uKa",
                         Id = "townPortalSimeonovo-Dragaletsi",
@@ -93,9 +96,10 @@ namespace RaceCorp.Data.Seeding
                     StartTime = DateTime.Now.AddDays(30),
                     Gpx = new Gpx
                     {
+                        ParentFolderName = "Gpxs",
                         CreatedOn = DateTime.Now,
                         Extension = "gpx",
-                        FolderName = "Town Portal",
+                        ChildFolderName = "Town Portal",
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1v4Nx9YNGCeD8WySvhvj_ukGVDNUC4lz3",
                         Id = "townPortal",
@@ -123,9 +127,10 @@ namespace RaceCorp.Data.Seeding
                     StartTime = DateTime.Now.AddDays(60),
                     Gpx = new Gpx
                     {
+                        ParentFolderName = "Gpxs",
                         CreatedOn = DateTime.Now,
                         Extension = "gpx",
-                        FolderName = "Town Portal",
+                        ChildFolderName = "Town Portal",
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1De6IwgWzfPTbPdY0cO-Eh1v9wQOfhwVw",
                         Id = "townPortalGornaBaniaPancharevo",
@@ -154,9 +159,10 @@ namespace RaceCorp.Data.Seeding
                     StartTime = DateTime.Now.AddDays(120),
                     Gpx = new Gpx
                     {
+                        ParentFolderName = "Gpxs",
                         CreatedOn = DateTime.Now,
                         Extension = "gpx",
-                        FolderName = "Kresna",
+                        ChildFolderName = "Kresna",
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1EKOlp-9gBYmpY8hzx8jxlMbCdVdYS-gH",
                         Id = "kresnaEpic",

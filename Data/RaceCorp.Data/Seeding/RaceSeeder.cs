@@ -25,6 +25,8 @@
                 FormatId = 2,
                 Logo = new Logo
                 {
+                    ParentFolderName = "Images",
+                    ChildFolderName = "logos",
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "vitosha100",
@@ -44,9 +46,10 @@
                         Length = 100,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "Vitosha100km",
+                            ChildFolderName = "Vitosha100km",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1arDdkmCrnPrYfZPKq6NlISKOOKq2BXFY",
                             Id = "vitosha100km",
@@ -65,6 +68,8 @@
                 FormatId = 2,
                 Logo = new Logo
                 {
+                    ParentFolderName = "Images",
+                    ChildFolderName = "logos",
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "murgash",
@@ -84,9 +89,10 @@
                         Length = 19,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "Murgash",
+                            ChildFolderName = "Murgash",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1DQqa_i8S-FSfJNi9WEJLWWQl0bVM4LrV",
                             Id = "murgashPicnic",
@@ -103,9 +109,10 @@
                         Length = 44,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "Murgash",
+                            ChildFolderName = "Murgash",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1JodQPhuPOmba9KuyU8U-ZI2DFvlsUnkL",
                             Id = "murgashClassic",
@@ -122,9 +129,11 @@
                         Length = 75,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
+
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "Murgash",
+                            ChildFolderName = "Murgash",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "12X2AxNk2nMYBiYHYrg1OmTpjoB82rTI6",
                             Id = "murgashEpic",
@@ -143,6 +152,8 @@
                 FormatId = 2,
                 Logo = new Logo
                 {
+                    ParentFolderName = "Images",
+                    ChildFolderName = "logos",
                     CreatedOn = DateTime.Now,
                     Extension = "png",
                     Id = "bike4chepan",
@@ -162,9 +173,10 @@
                         Length = 42,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "Bike4Chepan",
+                            ChildFolderName = "Bike4Chepan",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1JIhx8oyweUJmytzwbsPp5QBAbe0KuJVD",
                             Id = "bike4ChepanLong",
@@ -181,9 +193,11 @@
                         Length = 42,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
+
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "Bike4Chepan",
+                            ChildFolderName = "Bike4Chepan",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1Za4X3oxzkgXIqzgvBH3TLxtPQrUOoSC8",
                             Id = "bike4ChepanShort",
@@ -202,6 +216,8 @@
                 FormatId = 1,
                 Logo = new Logo
                 {
+                    ParentFolderName = "Images",
+                    ChildFolderName = "logos",
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "xcoDragalevci",
@@ -221,9 +237,10 @@
                         Length = 18,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "XCODragalevo",
+                            ChildFolderName = "XCODragalevo",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1BXdW6q-1985PtsdGsf2vfU2CT7hP7equ",
                             Id = "xcoDragalevo",
@@ -242,6 +259,8 @@
                 FormatId = 1,
                 Logo = new Logo
                 {
+                    ParentFolderName = "Images",
+                    ChildFolderName = "logos",
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "xcoSimeonovo",
@@ -261,9 +280,11 @@
                         Length = 16,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
+
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "XCOSimeonovo",
+                            ChildFolderName = "XCOSimeonovo",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1hg3hgYLJnIgxLi1vUAUHuMbNRdz030Hw",
                             Id = "xcoSimeonovo",
@@ -282,6 +303,8 @@
                 FormatId = 2,
                 Logo = new Logo
                 {
+                    ParentFolderName = "Images",
+                    ChildFolderName = "logos",
                     CreatedOn = DateTime.Now,
                     Extension = "png",
                     Id = "asenovgradskiBairi",
@@ -301,9 +324,10 @@
                         Length = 42,
                         Gpx = new Gpx
                         {
+                            ParentFolderName = "Gpxs",
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
-                            FolderName = "AsenovgradskiBairi",
+                            ChildFolderName = "AsenovgradskiBairi",
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1qc1_wE28CCfAzvpRQsmyzatBYYIS62Sr",
                             Id = "asenovgradskiBairiLong",

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class Initial_Creation : Migration
+    public partial class initcreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -135,6 +135,30 @@ namespace RaceCorp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Teams",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TownId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Teams_Towns_TownId",
+                        column: x => x.TownId,
+                        principalTable: "Towns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -144,6 +168,8 @@ namespace RaceCorp.Data.Migrations
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TownId = table.Column<int>(type: "int", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PictureId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -161,11 +187,16 @@ namespace RaceCorp.Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Towns_TownId",
                         column: x => x.TownId,
@@ -267,11 +298,12 @@ namespace RaceCorp.Data.Migrations
                     GoogleDriveId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GoogleDriveDirectoryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TraceId = table.Column<int>(type: "int", nullable: false),
-                    FolderName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ParentFolderName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChildFolderName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,7 +324,9 @@ namespace RaceCorp.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ParentFolderName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChildFolderName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -313,7 +347,9 @@ namespace RaceCorp.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ParentFolderName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChildFolderName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -378,30 +414,6 @@ namespace RaceCorp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApplicationUserRace",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    RaceId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUserRace", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserRace_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserRace_Races_RaceId",
-                        column: x => x.RaceId,
-                        principalTable: "Races",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Traces",
                 columns: table => new
                 {
@@ -439,6 +451,68 @@ namespace RaceCorp.Data.Migrations
                         column: x => x.RaceId,
                         principalTable: "Races",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserRace",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RaceId = table.Column<int>(type: "int", nullable: false),
+                    TraceId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserRace", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRace_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRace_Races_RaceId",
+                        column: x => x.RaceId,
+                        principalTable: "Races",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRace_Traces_TraceId",
+                        column: x => x.TraceId,
+                        principalTable: "Traces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserTrace",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TraceId = table.Column<int>(type: "int", nullable: false),
+                    RaceId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserTrace", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserTrace_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserTrace_Races_RaceId",
+                        column: x => x.RaceId,
+                        principalTable: "Races",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserTrace_Traces_TraceId",
+                        column: x => x.TraceId,
+                        principalTable: "Traces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -529,6 +603,11 @@ namespace RaceCorp.Data.Migrations
                 column: "RaceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserRace_TraceId",
+                table: "ApplicationUserRace",
+                column: "TraceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ApplicationUserRide_ApplicationUserId",
                 table: "ApplicationUserRide",
                 column: "ApplicationUserId");
@@ -537,6 +616,21 @@ namespace RaceCorp.Data.Migrations
                 name: "IX_ApplicationUserRide_RideId",
                 table: "ApplicationUserRide",
                 column: "RideId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserTrace_ApplicationUserId",
+                table: "ApplicationUserTrace",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserTrace_RaceId",
+                table: "ApplicationUserTrace",
+                column: "RaceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserTrace_TraceId",
+                table: "ApplicationUserTrace",
+                column: "TraceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -581,6 +675,11 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_TeamId",
+                table: "AspNetUsers",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_TownId",
                 table: "AspNetUsers",
                 column: "TownId");
@@ -610,7 +709,9 @@ namespace RaceCorp.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Images_UserId",
                 table: "Images",
-                column: "UserId");
+                column: "UserId",
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Logos_UserId",
@@ -691,6 +792,16 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Teams_IsDeleted",
+                table: "Teams",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teams_TownId",
+                table: "Teams",
+                column: "TownId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Towns_IsDeleted",
                 table: "Towns",
                 column: "IsDeleted");
@@ -725,6 +836,9 @@ namespace RaceCorp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ApplicationUserRide");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUserTrace");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -776,6 +890,9 @@ namespace RaceCorp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Towns");

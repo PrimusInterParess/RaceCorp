@@ -90,17 +90,15 @@
 
             race.Town = townData;
 
-            var logoRoothPath = $"{roothPath}\\{ImageParentFolderName}";
 
             var logo = await this.logoService
                 .ProccessingData(
                 model.RaceLogo,
                 userId,
-                logoRoothPath);
+                roothPath);
 
             if (model.Difficulties.Count != 0)
             {
-                var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
                 var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
                 foreach (var traceInputModel in model.Difficulties)
@@ -110,7 +108,7 @@
                         traceInputModel.GpxFile,
                         userId,
                         model.Name,
-                        gpxRoothPath,
+                        roothPath,
                         serviceAccountPath);
 
                     var trace = await this.traceService
@@ -189,7 +187,7 @@
                 .Any(r => r.Id == id);
         }
 
-        public async Task EditAsync(RaceEditViewModel model, string logoPath, string userId)
+        public async Task EditAsync(RaceEditViewModel model, string roothPath, string userId)
         {
             var raceDb = this.raceRepo.All().FirstOrDefault(r => r.Id == model.Id);
 
@@ -203,7 +201,7 @@
                  .ProccessingData(
                  model.RaceLogo,
                  userId,
-                 logoPath);
+                 roothPath);
 
                 raceDb.Logo = logo;
             }
