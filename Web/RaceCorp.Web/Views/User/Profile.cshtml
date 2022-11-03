@@ -10,10 +10,10 @@
     }
 }
 
-<form method="post" enctype="multipart/form-data" asp-controller="User" asp-area="" asp-action="UploadProfilePicture" asp-route-userId="@currentUserId">
+@*<form method="post" enctype="multipart/form-data" asp-controller="User" asp-area="" asp-action="UploadProfilePicture" asp-route-userId="@currentUserId">
     <input class="form-control" type="file" name="ProfilePicture" />
     <button class="btn btn-outline-success mb-1 btn-block" type="submit">Upload picture</button>
-</form>
+</form>*@
 
 <div class="row">
     <div class="col-md-4">
@@ -24,7 +24,7 @@
                 <p class="card-text">Email: @Model.UserName</p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Town name: @Model.TownName</li>
+                <li class="list-group-item">Town: @Model.TownName</li>
                 <li class="list-group-item">Country: @Model.Country</li>
             </ul>
             <div class="card-body">

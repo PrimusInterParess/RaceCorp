@@ -12,7 +12,7 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221102195820_init-creation")]
+    [Migration("20221103212835_init-creation")]
     partial class initcreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -217,6 +217,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("MemberInTeamId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -244,7 +247,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TeamId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TownId")
                         .HasColumnType("int");
@@ -260,6 +263,8 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
+                    b.HasIndex("MemberInTeamId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -267,8 +272,6 @@ namespace RaceCorp.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("TeamId");
 
                     b.HasIndex("TownId");
 
@@ -708,6 +711,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
@@ -727,6 +733,10 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId")
+                        .IsUnique()
+                        .HasFilter("[CreatorId] IS NOT NULL");
 
                     b.HasIndex("IsDeleted");
 
@@ -877,9 +887,9 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.Team", "Team")
+                    b.HasOne("RaceCorp.Data.Models.Team", "MemberInTeam")
                         .WithMany("TeamMembers")
-                        .HasForeignKey("TeamId");
+                        .HasForeignKey("MemberInTeamId");
 
                     b.HasOne("RaceCorp.Data.Models.Town", "Town")
                         .WithMany("Users")
@@ -887,7 +897,7 @@ namespace RaceCorp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Team");
+                    b.Navigation("MemberInTeam");
 
                     b.Navigation("Town");
                 });
@@ -1068,11 +1078,17 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Team", b =>
                 {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Creator")
+                        .WithOne("Team")
+                        .HasForeignKey("RaceCorp.Data.Models.Team", "CreatorId");
+
                     b.HasOne("RaceCorp.Data.Models.Town", "Town")
                         .WithMany()
                         .HasForeignKey("TownId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Creator");
 
                     b.Navigation("Town");
                 });
@@ -1113,6 +1129,8 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Rides");
 
                     b.Navigation("Roles");
+
+                    b.Navigation("Team");
 
                     b.Navigation("Traces");
                 });

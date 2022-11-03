@@ -95,9 +95,9 @@
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            builder.Entity<Team>()
-                .HasMany(t => t.TeamMembers)
-                .WithOne(u => u.MemberInTeam)
+            builder.Entity<ApplicationUser>()
+                .HasOne(u => u.MemberInTeam)
+                .WithMany(t => t.TeamMembers)
                 .HasForeignKey(u => u.MemberInTeamId);
 
             builder.Entity<Team>()

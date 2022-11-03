@@ -24,6 +24,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using Microsoft.Extensions.Logging;
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure.Contracts;
 
     public class RegisterModel : PageModel
@@ -36,6 +37,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
         private readonly IRegisterService registerService;
+        private readonly IUserClaimsPrincipalFactory<ApplicationUser> claimsPrincipalFactory;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -44,7 +46,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IRegisterService registerService)
+            IRegisterService registerService,
+            IUserClaimsPrincipalFactory<ApplicationUser> claimsPrincipalFactory)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -54,6 +57,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             this.logger = logger;
             this.emailSender = emailSender;
             this.registerService = registerService;
+            this.claimsPrincipalFactory = claimsPrincipalFactory;
             this.Input = new InputModel();
             this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
         }
@@ -154,6 +158,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     await this.registerService.AssignUserToRole(applicationRole.Name, user);
+
+                    await this.claimsPrincipalFactory.CreateAsync(user);
 
                     this.logger.LogInformation("User created a new account with password.");
 

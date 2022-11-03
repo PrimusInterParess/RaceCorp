@@ -4,6 +4,7 @@ namespace RaceCorp.Web
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -46,6 +47,9 @@ namespace RaceCorp.Web
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>,
+         AdditionalUserClaimsPrincipalFactory>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>

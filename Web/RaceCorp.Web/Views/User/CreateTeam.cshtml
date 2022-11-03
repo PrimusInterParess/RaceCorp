@@ -7,19 +7,19 @@
 <form method="post" class="form-group" enctype="multipart/form-data">
     <div class="form-control mb-3">
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">Trace name</span>
-            <input asp-for="Name" class="form-control" placeholder="Trace Name">
+            <span class="input-group-text" id="basic-addon1">Name</span>
+            <input asp-for="Name" class="form-control" placeholder="Name">
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">Description</span>
-            <textarea asp-for="Description"></textarea>
+            <textarea class="form-control" asp-for="Description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
 
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon2">Control time</span>
+            <span class="input-group-text" id="basic-addon2">Town</span>
             <input asp-for="TownName" class="form-control" placeholder="Town name here">
             <span asp-validation-for="TownName" class="text-danger"></span>
         </div>

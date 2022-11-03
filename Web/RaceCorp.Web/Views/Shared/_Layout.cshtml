@@ -66,8 +66,15 @@
                         this.User.IsInRole(GlobalConstants.RacerRoleName) ||
                         this.User.IsInRole(GlobalConstants.RaceOwnerRoleName))
                         {
-                            <div>
-                                <a class="btn btn-outline-secondary" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">View profile</a>
+                            <div class="dropdown me-2">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    All
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li>
+                                        <a class="btn btn btn-secondary me-2" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">View</a>
+                                    </li>
+                                </ul>
                             </div>
                         }
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">

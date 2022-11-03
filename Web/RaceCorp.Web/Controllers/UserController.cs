@@ -55,6 +55,7 @@
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> CreateTeam()
         {
             var user = await this.userManager
@@ -69,6 +70,8 @@
         }
 
         [HttpPost]
+        [Authorize]
+
         public IActionResult CreateTeam(TeamCreateBaseModel inputModel)
         {
 
