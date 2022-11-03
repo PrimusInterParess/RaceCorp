@@ -3,6 +3,7 @@ namespace RaceCorp.Data.Models
 {
     using System;
     using System.Collections.Generic;
+
     using Microsoft.AspNetCore.Identity;
 
     using RaceCorp.Data.Common.Models;
@@ -36,6 +37,10 @@ namespace RaceCorp.Data.Models
         public string TeamId { get; set; }
 
         public virtual Team Team { get; set; }
+
+        public string MemberInTeamId { get; set; }
+
+        public virtual Team MemberInTeam { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }

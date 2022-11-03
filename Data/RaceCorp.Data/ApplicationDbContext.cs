@@ -95,6 +95,16 @@
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            builder.Entity<Team>()
+                .HasMany(t => t.TeamMembers)
+                .WithOne(u => u.MemberInTeam)
+                .HasForeignKey(u => u.MemberInTeamId);
+
+            builder.Entity<Team>()
+                .HasOne(t => t.Creator)
+                .WithOne(u => u.Team)
+                .HasForeignKey<Team>(t => t.CreatorId);
+
             builder.Entity<Race>()
                 .HasOne(r => r.Logo)
                 .WithOne(l => l.Race)

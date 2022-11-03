@@ -39,7 +39,7 @@
                 .ForMember(x => x.ControlTime, opt
                    => opt.MapFrom(x => x.ControlTime.TotalHours))
                 .ForMember(x => x.StartTime, opt
-                   => opt.MapFrom(x => x.StartTime.ToString("HH:MM")));
+                   => opt.MapFrom(x => x.StartTime.ToString("f")));
         }
     }
 }

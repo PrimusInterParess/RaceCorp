@@ -35,10 +35,10 @@
 
 
 <div class="row">
-    <div class="offset-0 col-md-6 col-xl-5 col-sm-12">
-        <iframe width="550" height="700" src="@url" frameborder="1"></iframe>
+    <div class="offset-0 col-md-5 col-xl-5 col-sm-12">
+        <iframe width="550" height="400" src="@url" frameborder="1"></iframe>
     </div>
-    <div class="col-md-3 col-sm-12">
+    <div class="col-md-3">
         <div class="card-header">
             Overview
         </div>
@@ -86,40 +86,46 @@
             <button class="btn btn-outline-success mb-1" type="submit">Delete</button>
         </form>
     </div>
-    @if (Model.RegisteredUsers.Count() != 0)
-    {
-        <div class="scrollable col-md-8 mt-2">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Racer</th>
-                        <th scope="col">Team</th>
-                        <th scope="col">Town</th>
-                        <th scope="col">Trace name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        int count = 0;
-                        @foreach (var user in Model.RegisteredUsers)
-                        {
-                            <tr>
-                                <th scope="row">@(count += 1)</th>
-                                <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
-                                <td class="text-center">BTRevolution</td>
-                                <td class="text-center">Town name here</td>
-                                <td class="text-center">@Model.TraceName</td>
-                            </tr>
+    <div class="col-md-4">
+        @if (Model.RegisteredUsers.Count() != 0)
+        {
+            <h3 class="mb-2 mt-2">Registered riders</h3>
+
+            <div class="scrollable  mt-2">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Racer</th>
+                            <th scope="col">Team</th>
+                            <th scope="col">Town</th>
+                            <th scope="col">Trace name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int count = 0;
+                            @foreach (var user in Model.RegisteredUsers)
+                            {
+                                <tr>
+                                    <th scope="row">@(count += 1)</th>
+                                    <td><a class="btn btn-outline-secondary text-center" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.FullName</a></td>
+                                    <td class="text-center">BTRevolution</td>
+                                    <td class="text-center">Town name here</td>
+                                    <td class="text-center">@Model.TraceName</td>
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
 </div>
 
 
-<div class="row">
-</div>
+
+
+
+
 

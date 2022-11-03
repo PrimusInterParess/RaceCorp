@@ -15,6 +15,10 @@
 
         public virtual Town Town { get; set; }
 
+        public string CreatorId { get; set; }
+
+        public virtual ApplicationUser Creator { get; set; }
+
         public virtual ICollection<ApplicationUser> TeamMembers { get; set; } = new HashSet<ApplicationUser>();
     }
 }

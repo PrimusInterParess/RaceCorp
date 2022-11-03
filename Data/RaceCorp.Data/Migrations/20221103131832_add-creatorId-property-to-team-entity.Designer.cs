@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaceCorp.Data;
 
@@ -11,9 +12,10 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221103131832_add-creatorId-property-to-team-entity")]
+    partial class addcreatorIdpropertytoteamentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,9 +217,6 @@ namespace RaceCorp.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("MemberInTeamId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -245,7 +244,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TeamId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TownId")
                         .HasColumnType("int");
@@ -261,8 +260,6 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("MemberInTeamId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -270,6 +267,8 @@ namespace RaceCorp.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("TeamId");
 
                     b.HasIndex("TownId");
 
@@ -885,17 +884,15 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.Team", "MemberInTeam")
+                    b.HasOne("RaceCorp.Data.Models.Team", null)
                         .WithMany("TeamMembers")
-                        .HasForeignKey("MemberInTeamId");
+                        .HasForeignKey("TeamId");
 
                     b.HasOne("RaceCorp.Data.Models.Town", "Town")
                         .WithMany("Users")
                         .HasForeignKey("TownId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("MemberInTeam");
 
                     b.Navigation("Town");
                 });

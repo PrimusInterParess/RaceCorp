@@ -40,15 +40,28 @@
     <div class="alert alert-success">@this.TempData["CannotParticipate"]</div>
 }
 <div class="row">
-    <div class="text-center">
-        <h5>@this.ViewData["Title"]</h5>
+    <div class="col-md-4 mb-3">
+        <a class="form-control btn btn-outline-success mb-1 " asp-controller="Trace" asp-action="CreateRaceTrace" asp-route-raceId="@Model.Id">Create trace</a>
 
-        <a class="btn btn-outline-secondary mb-1 " asp-route-id="@Model.Id" asp-action="Edit">Edit</a>
-        <form method="post" asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">
-            <button class="btn btn-outline-success mb-1 btn-block" type="submit">Delete</button>
-        </form>
-        <a class="btn btn-outline-secondary mb-1 " asp-controller="Trace" asp-action="CreateRaceTrace" asp-route-raceId="@Model.Id">Create trace</a>
     </div>
+    <div class="col-md-4 mb-3">
+        <a class="form-control btn btn-outline-secondary mb-1 " asp-route-id="@Model.Id" asp-action="Edit">Edit</a>
+
+    </div>
+   
+    <div class="col-md-4 mb-3">
+        <form method="post" asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">
+            <button class="form-control btn btn-outline-danger mb-1 btn-block" type="submit">Delete</button>
+        </form>
+    </div>
+</div>
+
+<div class="text-center">
+    <h5>@this.ViewData["Title"]</h5>
+
+</div>
+<div class="row">
+
     <hr />
     <div class="row">
         <div class="col-md-3">
@@ -56,19 +69,25 @@
         </div>
     </div>
     <div class="row">
+
+
         <div class="col-md-3 mb-3">
             <img src=@Model.LogoPath class="card-img-top">
         </div>
         <div class="col-md-3 mb-3">
+
             <article>Description: @Model.Description</article>
         </div>
 
         <div class="col-md-3 mb-3">
+
             <article>Where: The race takes place in mount <b>@Model.Mountain</b>, <b>@Model.Town</b></article>
         </div>
         <div class="col-md-3 mb-3">
+
             <article>When: <b>@Model.Date</b></article>
         </div>
+
     </div>
 
 
@@ -91,54 +110,47 @@
                         <div class="accordion-body text-center">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
-                                </li>
-                                <li>
-                                    @if (hasPassed)
-                                    {
-                                        <a class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
+                                    <div class="row form-group">
+                                        <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
 
-                                    }
-                                    else if (currentUserId != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId))
-                                    {
-                                        <form method="post" asp-controller="Race" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">
-                                            <button class="btn btn-outline-success mb-1 btn-block" type="submit">Unregister</button>
-                                        </form>
 
-                                    }
-                                    else if (currentUserIdClaim != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId) == false)
-                                    {
-                                        <form method="post" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="Race">
-                                            <button class="btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
-                                        </form>
-                                    }
+                                        @if (hasPassed)
+                                        {
+                                            <a class="form-control btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
+
+                                        }
+                                        else if (currentUserId != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId))
+                                        {
+                                            <form method="post" asp-controller="Race" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">
+                                                <button class="form-control btn btn-outline-danger mb-1" type="submit">Unregister</button>
+                                            </form>
+
+                                        }
+                                        else if (currentUserIdClaim != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId) == false)
+                                        {
+                                            <form method="post" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="Race">
+                                                <button class="form-control btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
+                                            </form>
+                                        }
+                                    </div>
                                 </li>
-                                <li class="list-group-item">
-                                    <b>Length: </b>@trace.Length
-                                </li>
+
                                 <li class="list-group-item">
                                     <b>
                                         Difficulty:
                                     </b>@trace.DifficultyName
-                                </li>
-                                <li class="list-group-item">
+                                    <b>Length: </b>@trace.Length km
                                     <b>
                                         Control time:
                                     </b>@trace.ControlTime h
-                                </li>
-                                <li class="list-group-item">
                                     <b>
                                         Starting time:
 
                                     </b>@trace.StartTime
                                 </li>
+
                             </ul>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">  <a class="btn btn-outline-secondary" asp-area="" asp-controller="Town" asp-action="ById" asp-route-id="@Model.TownId"><b>Town:</b> @Model.Town</a></li>
-                                <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Mountain" asp-action="ById" asp-route-id="@Model.MountainId"><b>Mountain:</b> @Model.Mountain</a></li>
-                                <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Difficulty" asp-action="ById" asp-route-id="@trace.DifficultyId"><b>Difficulty:</b> @trace.DifficultyName</a></li>
-                                <li class="list-group-item"> <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-raceId="@Model.Id" asp-route-traceId="@trace.Id">Edit</a></li>
-                            </ul>
+
                         </div>
                     </div>
                 </div>
@@ -164,10 +176,10 @@
                             {
                                 <tr>
                                     <th scope="row">@(count += 1)</th>
-                                    <td><a class="btn btn-outline-secondary text-center" asp-action="Index" asp-controller="Home">@user.FullName</a></td>
+                                    <td><a class="btn btn-outline-secondary text-center" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.FullName</a></td>
                                     <td class="text-center">BTRevolution</td>
                                 </tr>
-                            }                        
+                            }
                         }
                     </tbody>
                 </table>

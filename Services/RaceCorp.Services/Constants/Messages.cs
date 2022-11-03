@@ -15,5 +15,10 @@
         public const string IvalidOperationMessage = "Invalid operation";
 
         public const string TownNameAlreadyExists = "Town with this name already exists";
+        public const string TownNameLenghtError = "{0} should be between {2} and {1} characters long";
+
+        public const string InvalidTeamNameLenghMessage = "{0} should be between{2} and {1}";
+
+        public const string DescriptionLenghtErrorMessage = "Description must be between {0} and {1} characteres long";
     }
 }
