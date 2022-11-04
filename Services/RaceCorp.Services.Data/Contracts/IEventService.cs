@@ -10,4 +10,5 @@
 
         Task<bool> Unregister(EventRegisterModel eventModel);
     }
-}   
+}
+

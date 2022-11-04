@@ -26,7 +26,8 @@
         public AdministrationController(
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager,
-            IFileService fileService, IAdminService adminService)
+            IFileService fileService,
+            IAdminService adminService)
         {
             this.environment = environment;
             this.userManager = userManager;
@@ -62,7 +63,7 @@
 
             this.TempData["Message"] = "Your picture was successfully added!";
 
-            return this.RedirectToAction("Index", "Home", new { area = "" });
+            return this.RedirectToAction("Index", "Home", new { area = " " });
 
             // return this.View();
         }

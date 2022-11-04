@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221103212835_init-creation")]
-    partial class initcreation
+    [Migration("20221104132245_Initial_Creation")]
+    partial class Initial_Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

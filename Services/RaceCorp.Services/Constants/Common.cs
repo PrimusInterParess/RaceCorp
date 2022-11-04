@@ -27,8 +27,6 @@
         public const string GpxFolderName = "Gpxs";
         public const string ServiceAccountFolderName = "Credentials";
 
-
-
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
     }
 }

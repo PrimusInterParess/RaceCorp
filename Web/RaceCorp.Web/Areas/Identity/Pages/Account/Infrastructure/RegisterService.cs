@@ -46,7 +46,6 @@
             {
                 throw new InvalidOperationException("Invalid input data!");
             }
-
         }
 
         public async Task<ApplicationRole> ValidateRole(string roleId)

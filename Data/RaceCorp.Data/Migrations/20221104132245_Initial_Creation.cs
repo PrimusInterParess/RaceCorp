@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class initcreation : Migration
+    public partial class Initial_Creation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

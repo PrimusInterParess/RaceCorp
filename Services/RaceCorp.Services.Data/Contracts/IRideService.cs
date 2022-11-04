@@ -16,7 +16,6 @@
 
         Task<bool> Unregister(int id, string userId);
 
-
         T GetById<T>(int id);
 
         Task<bool> DeleteAsync(int id);

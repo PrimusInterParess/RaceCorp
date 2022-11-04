@@ -4,7 +4,6 @@ namespace RaceCorp.Web
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -17,6 +16,7 @@ namespace RaceCorp.Web
     using RaceCorp.Data.Repositories;
     using RaceCorp.Data.Seeding;
     using RaceCorp.Services;
+    using RaceCorp.Services.Contracts;
     using RaceCorp.Services.Data;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
@@ -48,15 +48,12 @@ namespace RaceCorp.Web
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>,
-         AdditionalUserClaimsPrincipalFactory>();
-
             services.Configure<CookiePolicyOptions>(
-                options =>
-                {
-                    options.CheckConsentNeeded = context => true;
-                    options.MinimumSameSitePolicy = SameSiteMode.None;
-                });
+         options =>
+         {
+             options.CheckConsentNeeded = context => true;
+             options.MinimumSameSitePolicy = SameSiteMode.None;
+         });
 
             services.AddControllersWithViews(
                 options =>
@@ -92,6 +89,7 @@ namespace RaceCorp.Web
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IClaimTransformationService, ClaimTransformationService>();
         }
 
         private static void Configure(WebApplication app)

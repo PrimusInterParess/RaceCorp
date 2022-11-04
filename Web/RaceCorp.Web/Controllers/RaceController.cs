@@ -132,7 +132,6 @@
 
             try
             {
-
                 await this.raceService.EditAsync(
                     model,
                     this.environment.WebRootPath,

@@ -5,6 +5,5 @@
     public class MountainRidesProfileViewModel : MountainViewModel
     {
         public RideAllViewModel Rides { get; set; }
-
     }
 }

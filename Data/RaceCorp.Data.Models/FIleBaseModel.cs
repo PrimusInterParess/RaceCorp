@@ -1,7 +1,7 @@
 ﻿namespace RaceCorp.Data.Models
 {
     using System;
-
+    using System.Diagnostics.CodeAnalysis;
     using RaceCorp.Data.Common.Models;
 
     public abstract class FileBaseModel : BaseModel<string>
@@ -13,6 +13,7 @@
 
         public string Extension { get; set; }
 
+        [AllowNull]
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }

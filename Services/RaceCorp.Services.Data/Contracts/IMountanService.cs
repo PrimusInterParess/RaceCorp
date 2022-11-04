@@ -1,8 +1,8 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
     using System.Collections.Generic;
-
     using System.Threading.Tasks;
+
     using RaceCorp.Data.Models;
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.Mountain;

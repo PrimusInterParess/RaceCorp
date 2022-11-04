@@ -43,12 +43,11 @@
         [Authorize]
         public async Task<IActionResult> UploadProfilePicture(ApplicationUserProfilePictureUploadModel model)
         {
-
             if (model.ProfilePicture != null)
             {
                 await this.userService.SaveProfileImage(model.ProfilePicture, model.UserId, this.environment.WebRootPath);
 
-                return this.RedirectToAction("Profile", "User", new { id = model.UserId, area = "" });
+                return this.RedirectToAction("Profile", "User", new { id = model.UserId, area = string.Empty });
             }
 
             return this.RedirectToAction("/");
@@ -74,9 +73,35 @@
 
         public IActionResult CreateTeam(TeamCreateBaseModel inputModel)
         {
-
-
             return this.View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await this.userManager
+               .GetUserAsync(this.User);
+
+            if (user.Id != id)
+            {
+                this.RedirectToAction("ErrorPage", "Home", new { area = " " });
+            }
+
+            var userEditModel = this.userService.GetById<UserEditViewModel>(id);
+
+            return this.View(userEditModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Edit(UserEditViewModel inputModel)
+        {
+            var user = await this.userManager
+               .GetUserAsync(this.User);
+
+            await this.userService.EditAsync(inputModel, this.environment.WebRootPath, this.User);
+            return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = inputModel.Id });
         }
     }
 }

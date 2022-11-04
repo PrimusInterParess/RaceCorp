@@ -14,13 +14,12 @@
         public string RaceName { get; set; }
 
         public List<UserTraceBaseModel> Traces { get; set; } = new List<UserTraceBaseModel>();
-    
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationUserRace, UserRaceBaseModel>();
 
             configuration.CreateMap<Race, UserRaceBaseModel>();
-
         }
     }
 }

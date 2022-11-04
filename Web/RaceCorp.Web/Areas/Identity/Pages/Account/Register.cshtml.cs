@@ -24,6 +24,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using Microsoft.Extensions.Logging;
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
+    using RaceCorp.Services.Contracts;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure.Contracts;
 
@@ -37,6 +38,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
         private readonly IRegisterService registerService;
+        private readonly IClaimTransformationService transformationService;
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> claimsPrincipalFactory;
 
         public RegisterModel(
@@ -47,6 +49,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IRegisterService registerService,
+            IClaimTransformationService transformationService,
             IUserClaimsPrincipalFactory<ApplicationUser> claimsPrincipalFactory)
         {
             this.userManager = userManager;
@@ -57,6 +60,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             this.logger = logger;
             this.emailSender = emailSender;
             this.registerService = registerService;
+            this.transformationService = transformationService;
             this.claimsPrincipalFactory = claimsPrincipalFactory;
             this.Input = new InputModel();
             this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
@@ -159,7 +163,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 {
                     await this.registerService.AssignUserToRole(applicationRole.Name, user);
 
-                    await this.claimsPrincipalFactory.CreateAsync(user);
+                    await this.transformationService.AddRegistrationClaims(user, this.User);
 
                     this.logger.LogInformation("User created a new account with password.");
 

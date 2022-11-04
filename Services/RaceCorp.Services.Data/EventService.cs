@@ -141,7 +141,7 @@
                 await this.userTraceRepo.AddAsync(userTrace);
                 await this.raceRepo.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Error registering User for race");
             }
