@@ -16,6 +16,8 @@
                 return;
             }
 
+            var userId = dbContext.Users.FirstOrDefault(u => u.Email == "yborisov@gmail.com")?.Id;
+
             await dbContext.Races.AddAsync(new Race
             {
                 Name = "Vitosha100km",
@@ -23,6 +25,7 @@
                 Date = DateTime.Now.AddMonths(7),
                 Description = "Most popular race in Bulgaria!",
                 FormatId = 2,
+                ApplicationUserId = userId,
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -30,7 +33,7 @@
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "vitosha100",
-                    UserId = "DaniBorisov",
+                    ApplicationUserId = userId,
                 },
                 MountainId = 2,
                 TownId = 1,
@@ -53,11 +56,11 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1arDdkmCrnPrYfZPKq6NlISKOOKq2BXFY",
                             Id = "vitosha100km",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                 },
-            });
+            }); ;
 
             await dbContext.Races.AddAsync(new Race
             {
@@ -66,6 +69,7 @@
                 Date = DateTime.Now.AddMonths(7),
                 Description = "Test yourself! We have tree different traces you can pick from! From beginers to pros!",
                 FormatId = 2,
+                ApplicationUserId = userId,
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -73,7 +77,7 @@
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "murgash",
-                    UserId = "DaniBorisov",
+                    ApplicationUserId = userId,
                 },
                 MountainId = 5,
                 TownId = 3,
@@ -96,7 +100,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1DQqa_i8S-FSfJNi9WEJLWWQl0bVM4LrV",
                             Id = "murgashPicnic",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                     new Trace
@@ -116,7 +120,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1JodQPhuPOmba9KuyU8U-ZI2DFvlsUnkL",
                             Id = "murgashClassic",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                     new Trace
@@ -137,7 +141,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "12X2AxNk2nMYBiYHYrg1OmTpjoB82rTI6",
                             Id = "murgashEpic",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                 },
@@ -150,6 +154,7 @@
                 Date = DateTime.Now.AddMonths(7),
                 Description = "Speed,skills,concentration,endurance - all needed for the race!Test yourself!",
                 FormatId = 2,
+                ApplicationUserId = userId,
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -157,7 +162,7 @@
                     CreatedOn = DateTime.Now,
                     Extension = "png",
                     Id = "bike4chepan",
-                    UserId = "DaniBorisov",
+                    ApplicationUserId = userId,
                 },
                 MountainId = 3,
                 TownId = 2,
@@ -180,7 +185,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1JIhx8oyweUJmytzwbsPp5QBAbe0KuJVD",
                             Id = "bike4ChepanLong",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                     new Trace
@@ -201,7 +206,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1Za4X3oxzkgXIqzgvBH3TLxtPQrUOoSC8",
                             Id = "bike4ChepanShort",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                 },
@@ -214,6 +219,7 @@
                 Date = DateTime.Now.AddMonths(5),
                 Description = "One of the best's XCO's you can race! Come and dig deep!",
                 FormatId = 1,
+                ApplicationUserId = userId,
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -221,7 +227,7 @@
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "xcoDragalevci",
-                    UserId = "DaniBorisov",
+                    ApplicationUserId = userId,
                 },
                 MountainId = 2,
                 TownId = 1,
@@ -244,7 +250,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1BXdW6q-1985PtsdGsf2vfU2CT7hP7equ",
                             Id = "xcoDragalevo",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                 },
@@ -257,6 +263,7 @@
                 Date = DateTime.Now.AddMonths(4),
                 Description = "Roller Coaster. Come and have fun with one of the best racers in Sofia!",
                 FormatId = 1,
+                ApplicationUserId = userId,
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -264,7 +271,7 @@
                     CreatedOn = DateTime.Now,
                     Extension = "jpg",
                     Id = "xcoSimeonovo",
-                    UserId = "DaniBorisov",
+                    ApplicationUserId = userId,
                 },
                 MountainId = 2,
                 TownId = 1,
@@ -288,7 +295,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1hg3hgYLJnIgxLi1vUAUHuMbNRdz030Hw",
                             Id = "xcoSimeonovo",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId =userId,
                         },
                     },
                 },
@@ -301,6 +308,7 @@
                 Date = DateTime.Now.AddMonths(10),
                 Description = "In the heart of Rodopi Mountain,race that can challenge your skills,endurance,will!",
                 FormatId = 2,
+                ApplicationUserId = userId,
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -308,7 +316,7 @@
                     CreatedOn = DateTime.Now,
                     Extension = "png",
                     Id = "asenovgradskiBairi",
-                    UserId = "DaniBorisov",
+                    ApplicationUserId = userId,
                 },
                 MountainId = 4,
                 TownId = 5,
@@ -331,7 +339,7 @@
                             GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                             GoogleDriveId = "1qc1_wE28CCfAzvpRQsmyzatBYYIS62Sr",
                             Id = "asenovgradskiBairiLong",
-                            UserId = "DaniBorisov",
+                            ApplicationUserId = userId,
                         },
                     },
                 },

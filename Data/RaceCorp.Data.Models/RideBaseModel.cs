@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Data.Common.Models
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     using RaceCorp.Data.Models;
 
@@ -12,9 +13,9 @@
 
         public string Description { get; set; }
 
-        public string UserId { get; set; }
+        public string? ApplicationUserId { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
         public int TownId { get; set; }
 

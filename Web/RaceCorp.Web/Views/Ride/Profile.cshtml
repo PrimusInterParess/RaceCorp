@@ -109,7 +109,7 @@
                             {
                                 <tr>
                                     <th scope="row">@(count += 1)</th>
-                                    <td><a class="btn btn-outline-secondary text-center" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.FullName</a></td>
+                                    <td><a class="btn btn-outline-secondary text-center" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
                                     <td class="text-center">BTRevolution</td>
                                     <td class="text-center">Town name here</td>
                                     <td class="text-center">@Model.TraceName</td>

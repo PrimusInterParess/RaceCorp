@@ -1,0 +1,122 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+#nullable disable
+
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
+using RaceCorp.Common;
+using RaceCorp.Data.Common.Repositories;
+using RaceCorp.Data.Models;
+
+namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
+{
+    public class DeletePersonalDataModel : PageModel
+    {
+        private readonly IDeletableEntityRepository<ApplicationRole> roleRepo;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<DeletePersonalDataModel> logger;
+
+        public DeletePersonalDataModel(IDeletableEntityRepository<ApplicationRole> roleRepo,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<DeletePersonalDataModel> logger)
+        {
+            this.roleRepo = roleRepo;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.logger = logger;
+        }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public class InputModel
+        {
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [Required]
+            [DataType(DataType.Password)]
+            public string Password { get; set; }
+        }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public bool RequirePassword { get; set; }
+
+        public async Task<IActionResult> OnGet()
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            if (user == null)
+            {
+                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+            }
+
+            this.RequirePassword = await this.userManager.HasPasswordAsync(user);
+            return this.Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            if (user == null)
+            {
+                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+            }
+
+            this.RequirePassword = await this.userManager.HasPasswordAsync(user);
+            if (this.RequirePassword)
+            {
+                if (!await this.userManager.CheckPasswordAsync(user, this.Input.Password))
+                {
+                    this.ModelState.AddModelError(string.Empty, "Incorrect password.");
+                    return this.Page();
+                }
+            }
+
+            await this.ReasignUserFromRoles(user);
+
+            var userId = await this.userManager.GetUserIdAsync(user);
+            var result = await this.userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+            }
+
+            await this.signInManager.SignOutAsync();
+
+            this.logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+
+            return this.Redirect("~/");
+        }
+
+        private async Task ReasignUserFromRoles(ApplicationUser user)
+        {
+            var userRoles = await this.userManager.GetRolesAsync(user);
+
+            foreach (var role in userRoles)
+            {
+                await this.userManager.RemoveFromRoleAsync(user, role);
+            }
+        }
+    }
+}

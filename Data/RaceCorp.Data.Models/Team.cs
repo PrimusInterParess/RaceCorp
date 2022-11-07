@@ -1,12 +1,15 @@
 ﻿namespace RaceCorp.Data.Models
 {
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     using RaceCorp.Data.Common.Models;
 
     public class Team : BaseDeletableModel<string>
     {
+        public Team() => this.Id = Guid.NewGuid().ToString();
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -15,9 +18,10 @@
 
         public virtual Town Town { get; set; }
 
-        public string CreatorId { get; set; }
+        [AllowNull]
+        public string ApplicationUserId { get; set; }
 
-        public virtual ApplicationUser Creator { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
         public virtual ICollection<ApplicationUser> TeamMembers { get; set; } = new HashSet<ApplicationUser>();
     }

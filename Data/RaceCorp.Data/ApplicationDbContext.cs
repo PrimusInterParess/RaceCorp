@@ -26,6 +26,8 @@
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<ProfilePicture> ProfilePictures { get; set; }
+
         public DbSet<Team> Teams { get; set; }
 
         public DbSet<Gpx> Gpxs { get; set; }
@@ -95,50 +97,43 @@
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            builder.Entity<Gpx>().HasOne(g => g.ApplicationUser).WithMany().HasForeignKey(g => g.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Logo>().HasOne(l => l.ApplicationUser).WithMany(u => u.Logos).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Image>().HasOne(l => l.ApplicationUser).WithMany(u => u.Images).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Ride>().HasOne(l => l.ApplicationUser).WithMany(u => u.CreatedRides).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Race>().HasOne(l => l.ApplicationUser).WithMany(u => u.CreatedRaces).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<ApplicationUserRace>().HasOne(l => l.ApplicationUser).WithMany(u => u.Races).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ApplicationUserRide>().HasOne(l => l.ApplicationUser).WithMany(u => u.Rides).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ApplicationUserTrace>().HasOne(l => l.ApplicationUser).WithMany(u => u.Traces).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<ApplicationUser>()
-                .HasOne(u => u.MemberInTeam)
-                .WithMany(t => t.TeamMembers)
-                .HasForeignKey(u => u.MemberInTeamId);
+               .HasOne(u => u.MemberInTeam)
+              .WithMany(t => t.TeamMembers)
+              .HasForeignKey(u => u.MemberInTeamId);
+
+            builder.Entity<ApplicationUser>()
+            .HasOne(u => u.ProfilePicture)
+            .WithOne(t => t.ApplicationUser)
+            .HasForeignKey<ApplicationUser>(u => u.ProfilePictureId);
 
             builder.Entity<Team>()
-                .HasOne(t => t.Creator)
+                .HasOne(t => t.ApplicationUser)
                 .WithOne(u => u.Team)
-                .HasForeignKey<Team>(t => t.CreatorId);
-
-            builder.Entity<Race>()
-                .HasOne(r => r.Logo)
-                .WithOne(l => l.Race)
-                .HasForeignKey<Logo>(l => l.RaceId);
+                .HasForeignKey<Team>(t => t.ApplicationUserId);
 
             builder.Entity<Logo>()
                 .HasOne(l => l.Race)
                 .WithOne(r => r.Logo)
                 .HasForeignKey<Race>(r => r.LogoId);
 
-            builder.Entity<Ride>()
-                            .HasOne(l => l.Trace)
-                            .WithOne(r => r.Ride)
-                            .HasForeignKey<Trace>(r => r.RideId);
-
             builder.Entity<Trace>()
                             .HasOne(l => l.Ride)
                             .WithOne(r => r.Trace)
                             .HasForeignKey<Ride>(r => r.TraceId);
 
-            builder.Entity<Trace>()
-                .HasOne(t => t.Gpx)
-                .WithOne(g => g.Trace)
-                .HasForeignKey<Gpx>(g => g.TraceId);
+            builder.Entity<Trace>().HasOne(t => t.Gpx).WithOne(g => g.Trace).HasForeignKey<Trace>(t => t.GpxId);
 
-            builder.Entity<Gpx>()
-                .HasOne(g => g.Trace)
-                .WithOne(t => t.Gpx)
-                .HasForeignKey<Trace>(t => t.GpxId);
-
-            builder.Entity<Town>()
-                .HasMany(t => t.Users)
-                .WithOne(u => u.Town)
-                .HasForeignKey(u => u.TownId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

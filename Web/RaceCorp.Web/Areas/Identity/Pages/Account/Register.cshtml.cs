@@ -1,121 +1,115 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-namespace RaceCorp.Web.Areas.Identity.Pages.Account
-{
 #nullable disable
 
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Text;
-    using System.Text.Encodings.Web;
-    using System.Threading;
-    using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
+using RaceCorp.Common;
+using RaceCorp.Data.Common.Repositories;
+using RaceCorp.Data.Models;
 
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.WebUtilities;
-    using Microsoft.Extensions.Logging;
-    using RaceCorp.Common;
-    using RaceCorp.Data.Models;
-    using RaceCorp.Services.Contracts;
-    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure;
-    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure.Contracts;
-
+namespace RaceCorp.Web.Areas.Identity.Pages.Account
+{
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserStore<ApplicationUser> userStore;
         private readonly IUserEmailStore<ApplicationUser> emailStore;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
-        private readonly IRegisterService registerService;
-        private readonly IClaimTransformationService transformationService;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> claimsPrincipalFactory;
 
         public RegisterModel(
-            UserManager<ApplicationUser> userManager,
+            IRepository<ApplicationRole> roleRepo,
             RoleManager<ApplicationRole> roleManager,
+            UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            IRegisterService registerService,
-            IClaimTransformationService transformationService,
-            IUserClaimsPrincipalFactory<ApplicationUser> claimsPrincipalFactory)
+            IEmailSender emailSender)
         {
-            this.userManager = userManager;
             this.roleManager = roleManager;
+            this.userManager = userManager;
             this.userStore = userStore;
             this.emailStore = this.GetEmailStore();
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
-            this.registerService = registerService;
-            this.transformationService = transformationService;
-            this.claimsPrincipalFactory = claimsPrincipalFactory;
-            this.Input = new InputModel();
-            this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
         }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public string ReturnUrl { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public class InputModel
         {
 
+            [Required]
+            [StringLength(20, MinimumLength = 2, ErrorMessage = "Enter error message")]
+            public string Username { get; set; }
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
-
-            public string FirstName { get; set; }
-
-            [Required]
-            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
-            public string LastName { get; set; }
-
-            [Required]
-            public int Gender { get; set; }
-
-            [Required]
-            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
-            public string Town { get; set; }
-
-            [Required]
-            [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
-            public string Country { get; set; }
-
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-
-            public string RoleId { get; set; }
-
-            public IEnumerable<SelectListItem> Roles { get; set; } = new List<SelectListItem>();
         }
+
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -125,60 +119,32 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= this.Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
                 var user = this.CreateUser();
 
-                await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
+                await this.userStore.SetUserNameAsync(user, this.Input.Username, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
-
-                try
-                {
-                    await this.registerService.ProccesingData(this.Input, user);
-                }
-                catch (Exception e)
-                {
-                    this.ModelState.AddModelError(string.Empty, e.Message);
-                    this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
-
-                    return this.Page();
-                }
-
-                var applicationRole = await this.registerService.ValidateRole(this.Input.RoleId);
-
-                if (applicationRole == null)
-                {
-                    this.ModelState.AddModelError(" ", "Invalid Role. Please choose role!");
-                    this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
-
-                    // If we got this far, something failed, redisplay form
-                    return this.Page();
-                }
-
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
 
                 if (result.Succeeded)
                 {
-                    await this.registerService.AssignUserToRole(applicationRole.Name, user);
-
-                    await this.transformationService.AddRegistrationClaims(user, this.User);
-
                     this.logger.LogInformation("User created a new account with password.");
+
+                    await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
 
                     var userId = await this.userManager.GetUserIdAsync(user);
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = this.Url.Page(
+                    var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: this.Request.Scheme);
 
-                    await this.emailSender.SendEmailAsync(
-                        this.Input.Email,
-                        "Confirm your email",
+                    await this.emailSender.SendEmailAsync(this.Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (this.userManager.Options.SignIn.RequireConfirmedAccount)
@@ -191,29 +157,14 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                         return this.LocalRedirect(returnUrl);
                     }
                 }
-
                 foreach (var error in result.Errors)
                 {
                     this.ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            this.Input.Roles = this.roleManager.Roles.Where(r => r.Name != GlobalConstants.AdministratorRoleName).Select(r => new SelectListItem(r.Name, r.Id)).ToList();
-
             // If we got this far, something failed, redisplay form
-            return this.Page();
-        }
-
-        private ApplicationRole GetApplicationRole(ApplicationUser user, string roleName)
-        {
-            var role = this.roleManager.Roles.FirstOrDefault(x => x.Name == roleName);
-
-            if (role == null)
-            {
-                throw new InvalidOperationException("Invalid role");
-            }
-
-            return role;
+            return Page();
         }
 
         private ApplicationUser CreateUser()
@@ -224,7 +175,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
                     $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }

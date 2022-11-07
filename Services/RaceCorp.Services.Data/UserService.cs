@@ -4,14 +4,12 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authentication;
+
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Newtonsoft.Json.Linq;
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
-    using RaceCorp.Services.Contracts;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.ApplicationUsers;
@@ -21,18 +19,16 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IFileService fileService;
-        private readonly IClaimTransformationService claimsTransformationService;
+
 
         public UserService(
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Town> townRepo,
-            IFileService fileService,
-            IClaimTransformationService claimsTransformationService)
+            IFileService fileService)
         {
             this.userRepo = userRepo;
             this.townRepo = townRepo;
             this.fileService = fileService;
-            this.claimsTransformationService = claimsTransformationService;
         }
 
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath, ClaimsPrincipal claimPrincipal)
@@ -41,22 +37,18 @@
 
             if (user.FirstName != inputModel.FirstName || user.LastName != inputModel.LastName)
             {
-                var value = $"{inputModel.FirstName} {inputModel.LastName}";
-
-                var result = await this.claimsTransformationService.UpdateClaim(user, claimPrincipal, ClaimTypes.GivenName, value);
                 user.FirstName = inputModel.FirstName;
                 user.LastName = inputModel.LastName;
             }
 
             if (user.Gender != inputModel.Gender)
             {
-                var result = await this.claimsTransformationService.UpdateClaim(user, claimPrincipal, ClaimTypes.Gender, inputModel.Gender);
                 user.Gender = inputModel.Gender;
             }
 
             if (inputModel.UserProfilePicture != null)
             {
-                var image = await this.fileService.ProccessingImageData(inputModel.UserProfilePicture, inputModel.Id, roothPath, inputModel.FirstName + inputModel.LastName);
+                var image = await this.fileService.ProccessingProfilePictureData(inputModel.UserProfilePicture, inputModel.Id, roothPath, inputModel.FirstName + inputModel.LastName + GlobalConstants.ProfilePicterPostFix);
                 user.ProfilePicture = image;
             }
 
@@ -83,30 +75,6 @@
         public T GetById<T>(string id)
         {
             return this.userRepo.All().Where(u => u.Id == id).To<T>().FirstOrDefault();
-        }
-
-        public async Task<bool> SaveProfileImage(IFormFile inputFile, string userId, string roothPath)
-        {
-            var user = this.userRepo.All().FirstOrDefault(u => u.Id == userId);
-
-            if (user == null)
-            {
-                throw new ArgumentNullException("Invalid operation");
-            }
-
-            try
-            {
-                var image = await this.fileService.ProccessingImageData(inputFile, userId, roothPath, user.Email);
-                user.ProfilePicture = image;
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Cannot upload profile picture");
-            }
-
-            await this.userRepo.SaveChangesAsync();
-
-            return true;
         }
     }
 }

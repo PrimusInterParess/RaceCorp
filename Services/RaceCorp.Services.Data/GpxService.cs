@@ -60,7 +60,7 @@
             var gpxDto = new Gpx()
             {
                 Extension = extention,
-                UserId = userId,
+                ApplicationUserId = userId,
                 ParentFolderName = GpxFolderName,
                 ChildFolderName = childrenFolderName,
             };

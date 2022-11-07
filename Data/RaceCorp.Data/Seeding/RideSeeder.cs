@@ -15,6 +15,8 @@
                 return;
             }
 
+            var userId = dbContext.Users.FirstOrDefault(u => u.Email == "yborisov@gmail.com")?.Id;
+
             await dbContext.Rides.AddAsync(new Ride()
             {
                 CreatedOn = DateTime.Now,
@@ -24,6 +26,7 @@
                 MountainId = 2,
                 TownId = 1,
                 Name = "Golden Bridges",
+                ApplicationUserId = userId,
                 Trace = new Trace
                 {
                     Name = "Boyana-Golden Bridges",
@@ -41,7 +44,7 @@
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1X-l7S5MX4rw9JrSrakVp-AAgVVXmHTQf",
                         Id = "goldenBridges",
-                        UserId = "DaniBorisov",
+                        ApplicationUserId = userId,
                     },
                 },
             });
@@ -55,6 +58,7 @@
                 MountainId = 2,
                 TownId = 1,
                 Name = "Town Portal",
+                ApplicationUserId = userId,
                 Trace = new Trace
                 {
                     Name = "Simeonovo-Dragaletsi",
@@ -72,7 +76,7 @@
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1Jl4CvWN_nh6m14RO_-ugYSmpNa4R4uKa",
                         Id = "townPortalSimeonovo-Dragaletsi",
-                        UserId = "DaniBorisov",
+                        ApplicationUserId = userId,
                     },
                 },
             });
@@ -86,6 +90,7 @@
                 MountainId = 2,
                 TownId = 1,
                 Name = "Town Portal",
+                ApplicationUserId = userId,
                 Trace = new Trace
                 {
                     Name = "Simeonovo-Pancharevo",
@@ -103,7 +108,7 @@
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1v4Nx9YNGCeD8WySvhvj_ukGVDNUC4lz3",
                         Id = "townPortal",
-                        UserId = "DaniBorisov",
+                        ApplicationUserId = userId,
                     },
                 },
             });
@@ -117,6 +122,7 @@
                 MountainId = 2,
                 TownId = 1,
                 Name = "Town Portal",
+                ApplicationUserId = userId,
                 Trace = new Trace
                 {
                     Name = "Gorna Bania-Pancharevo",
@@ -134,7 +140,7 @@
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1De6IwgWzfPTbPdY0cO-Eh1v9wQOfhwVw",
                         Id = "townPortalGornaBaniaPancharevo",
-                        UserId = "DaniBorisov",
+                        ApplicationUserId = userId,
                     },
                 },
             });
@@ -149,6 +155,7 @@
 
                 TownId = 4,
                 Name = "Kresna",
+                ApplicationUserId = userId,
                 Trace = new Trace
                 {
                     Name = "Kresna-Vlahi-Sinanitsa",
@@ -166,7 +173,7 @@
                         GoogleDriveDirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa",
                         GoogleDriveId = "1EKOlp-9gBYmpY8hzx8jxlMbCdVdYS-gH",
                         Id = "kresnaEpic",
-                        UserId = "DaniBorisov",
+                        ApplicationUserId = userId,
                     },
                 },
             });

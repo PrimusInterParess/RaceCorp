@@ -1,11 +1,11 @@
-﻿using System;
-
-namespace RaceCorp.Data.Models
+﻿namespace RaceCorp.Data.Models
 {
-    public class ApplicationUserRide
-    {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+    using System;
 
+    using RaceCorp.Data.Common.Models;
+
+    public class ApplicationUserRide : BaseDeletableModel<int>
+    {
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }

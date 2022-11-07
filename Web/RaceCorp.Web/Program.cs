@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using RaceCorp.Data;
 namespace RaceCorp.Web
 {
     using System.Reflection;
@@ -16,15 +19,12 @@ namespace RaceCorp.Web
     using RaceCorp.Data.Repositories;
     using RaceCorp.Data.Seeding;
     using RaceCorp.Services;
-    using RaceCorp.Services.Contracts;
     using RaceCorp.Services.Data;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Services.Messaging;
     using RaceCorp.Web.Areas.Administration.Infrastructure;
     using RaceCorp.Web.Areas.Administration.Infrastructure.Contracts;
-    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure;
-    using RaceCorp.Web.Areas.Identity.Pages.Account.Infrastructure.Contracts;
     using RaceCorp.Web.ViewModels;
 
     public class Program
@@ -84,12 +84,10 @@ namespace RaceCorp.Web
             services.AddTransient<IGoogleDriveService, GoogleDriveService>();
             services.AddTransient<IGpxService, GpxService>();
             services.AddTransient<ILogoService, LogoService>();
-            services.AddTransient<IRegisterService, RegisterService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IClaimTransformationService, ClaimTransformationService>();
         }
 
         private static void Configure(WebApplication app)

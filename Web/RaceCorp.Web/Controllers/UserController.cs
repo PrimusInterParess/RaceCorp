@@ -39,20 +39,6 @@
             return this.View(userDto);
         }
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UploadProfilePicture(ApplicationUserProfilePictureUploadModel model)
-        {
-            if (model.ProfilePicture != null)
-            {
-                await this.userService.SaveProfileImage(model.ProfilePicture, model.UserId, this.environment.WebRootPath);
-
-                return this.RedirectToAction("Profile", "User", new { id = model.UserId, area = string.Empty });
-            }
-
-            return this.RedirectToAction("/");
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> CreateTeam()

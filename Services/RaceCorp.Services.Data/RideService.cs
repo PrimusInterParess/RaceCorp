@@ -109,7 +109,7 @@
                 CreatedOn = DateTime.Now,
                 Description = model.Description,
                 FormatId = int.Parse(model.FormatId),
-                UserId = userId,
+                ApplicationUserId = userId,
                 Town = townDb,
                 Mountain = mountainDb,
                 Trace = trace,

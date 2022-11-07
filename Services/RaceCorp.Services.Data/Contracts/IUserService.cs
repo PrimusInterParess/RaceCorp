@@ -10,8 +10,6 @@
     {
         public T GetById<T>(string id);
 
-        Task<bool> SaveProfileImage(IFormFile inputFile, string userId, string roothPath);
-
         Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath, ClaimsPrincipal claimPrincipal);
     }
 }

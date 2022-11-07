@@ -2,21 +2,18 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+
     using RaceCorp.Data.Common.Models;
 
-    public abstract class FileBaseModel : BaseModel<string>
+    public abstract class FileBaseModel : BaseDeletableModel<string>
     {
-        public FileBaseModel()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
+        public FileBaseModel() => this.Id = Guid.NewGuid().ToString();
 
         public string Extension { get; set; }
 
-        [AllowNull]
-        public string UserId { get; set; }
+        public string? ApplicationUserId { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
         public string ParentFolderName { get; set; }
 

@@ -52,7 +52,7 @@
                 Date = model.Date,
                 Description = model.Description,
                 FormatId = int.Parse(model.FormatId),
-                UserId = userId,
+                ApplicationUserId = userId,
             };
 
             var mountainData = this

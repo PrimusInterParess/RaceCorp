@@ -10,13 +10,8 @@ namespace RaceCorp.Data.Models
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
-        public ApplicationUser()
-        {
+        public ApplicationUser() =>
             this.Id = Guid.NewGuid().ToString();
-            this.Roles = new HashSet<IdentityUserRole<string>>();
-            this.Claims = new HashSet<IdentityUserClaim<string>>();
-            this.Logins = new HashSet<IdentityUserLogin<string>>();
-        }
 
         public string FirstName { get; set; }
 
@@ -24,21 +19,21 @@ namespace RaceCorp.Data.Models
 
         public string Gender { get; set; }
 
-        public int TownId { get; set; }
+        public int? TownId { get; set; }
 
         public virtual Town Town { get; set; }
 
         public string Country { get; set; }
 
-        public string PictureId { get; set; }
+        public string ProfilePictureId { get; set; }
 
-        public virtual Image ProfilePicture { get; set; }
+        public virtual ProfilePicture ProfilePicture { get; set; }
 
-        public string TeamId { get; set; }
+        public string? TeamId { get; set; }
 
         public virtual Team Team { get; set; }
 
-        public string MemberInTeamId { get; set; }
+        public string? MemberInTeamId { get; set; }
 
         public virtual Team MemberInTeam { get; set; }
 
@@ -52,16 +47,26 @@ namespace RaceCorp.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
+        public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
 
-        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
+        public virtual ICollection<Logo> Logos { get; set; } = new HashSet<Logo>();
 
-        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+        public virtual ICollection<Gpx> Gpxs { get; set; } = new HashSet<Gpx>();
+
+        public virtual ICollection<Ride> CreatedRides { get; set; } = new HashSet<Ride>();
+
+        public virtual ICollection<Race> CreatedRaces { get; set; } = new HashSet<Race>();
 
         public virtual ICollection<ApplicationUserRace> Races { get; set; } = new HashSet<ApplicationUserRace>();
 
         public virtual ICollection<ApplicationUserRide> Rides { get; set; } = new HashSet<ApplicationUserRide>();
 
         public virtual ICollection<ApplicationUserTrace> Traces { get; set; } = new HashSet<ApplicationUserTrace>();
+
+        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserRole<string>>();
+
+        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; } = new HashSet<IdentityUserClaim<string>>();
+
+        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; } = new HashSet<IdentityUserLogin<string>>();
     }
 }

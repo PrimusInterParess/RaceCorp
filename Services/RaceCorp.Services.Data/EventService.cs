@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
@@ -12,6 +12,7 @@
 
     public class EventService : IEventService
     {
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IDeletableEntityRepository<Ride> rideRepo;
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Trace> traceRepo;
@@ -20,6 +21,7 @@
         private readonly IRepository<ApplicationUserTrace> userTraceRepo;
 
         public EventService(
+            UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<Ride> rideRepo,
             IDeletableEntityRepository<Race> raceRepo,
             IDeletableEntityRepository<Trace> traceRepo,
@@ -27,6 +29,7 @@
             IRepository<ApplicationUserRace> userRaceRepo,
             IRepository<ApplicationUserTrace> userTraceRepo)
         {
+            this.userManager = userManager;
             this.rideRepo = rideRepo;
             this.raceRepo = raceRepo;
             this.traceRepo = traceRepo;
@@ -70,6 +73,7 @@
         private async Task<bool> RegisterUserRide(EventRegisterModel eventModel)
         {
             var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == eventModel.Id);
+            var user = await this.userManager.FindByIdAsync(eventModel.UserId);
 
             if (ride.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId))
             {
@@ -78,8 +82,8 @@
 
             var userRide = new ApplicationUserRide
             {
-                ApplicationUserId = eventModel.UserId,
-                RideId = eventModel.Id,
+                Ride = ride,
+                ApplicationUser = user,
             };
 
             await this.userRideRepo.AddAsync(userRide);
@@ -96,6 +100,8 @@
                 .ThenInclude(t => t.RegisteredUsers)
                 .Include(r => r.RegisteredUsers)
                 .FirstOrDefault(r => r.Id == eventModel.Id);
+
+            var user = await this.userManager.FindByIdAsync(eventModel.UserId);
 
             var trace = race.Traces.FirstOrDefault(t => t.Id == int.Parse(eventModel.TraceId));
             Trace traceUserRegisterIn = null;
@@ -119,18 +125,18 @@
 
             var userTrace = new ApplicationUserTrace
             {
-                ApplicationUserId = eventModel.UserId,
-                TraceId = trace.Id,
-                RaceId = race.Id,
+                Race = race,
+                Trace = trace,
+                ApplicationUser = user,
             };
 
             if (isAlredyRegistered == false)
             {
                 var userRace = new ApplicationUserRace
                 {
-                    ApplicationUserId = eventModel.UserId,
-                    RaceId = eventModel.Id,
-                    TraceId = trace.Id,
+                    Race = race,
+                    Trace = trace,
+                    ApplicationUser = user,
                 };
 
                 await this.userRaceRepo.AddAsync(userRace);

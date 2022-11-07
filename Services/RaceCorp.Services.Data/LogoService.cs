@@ -39,7 +39,7 @@
             var logoDto = new Logo()
             {
                 Extension = extension,
-                UserId = userId,
+                ApplicationUserId = userId,
                 ParentFolderName = ImageParentFolderName,
                 ChildFolderName = LogosFolderName,
             };
