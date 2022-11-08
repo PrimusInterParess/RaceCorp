@@ -3,13 +3,15 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@{
+    var displayName = this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value == null ? this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value : this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+}
 
 <ul class="navbar-nav">
     @if (this.SignInManager.IsSignedIn(this.User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @this.User.Claims?.FirstOrDefault(c=>c.Type ==ClaimTypes.Email)?.Value!</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @displayName!</a>
         </li>
         if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
         {

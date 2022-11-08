@@ -67,15 +67,13 @@
                         {
                             <div class="dropdown me-2">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                   User Profile
+                                  Profile
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li>
                                         <a class="dropdown-item" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">View</a>
                                     </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-action="Edit" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Edit</a>
-                                    </li>
+                                   
                                 </ul>
                             </div>
                         }

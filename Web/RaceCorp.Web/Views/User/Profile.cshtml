@@ -21,22 +21,23 @@
             <img src="@Model.ProfilePicturePath" class="card-img-top" alt="">
             <div class="card-body">
                 <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
-                <p class="card-text">Email: @Model.UserName</p>
+                <p class="card-text">Email: @Model.Email</p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Town: @Model.TownName</li>
                 <li class="list-group-item">Country: @Model.Country</li>
             </ul>
             <div class="card-body">
-                Add Description here...
+                @Model.About
             </div>
         </div>
     </div>
     <div class="col-md-8">
-        <div class="row mb-5">
+        <div class="row mb-2">
             <div class="col-md-6">
                 @if (Model.Rides.Count() != 0)
                 {
+                    <h2>Rides registred to</h2>
                     <div class="scrollable mt-2 col-md-3">
                         <table class="table">
                             <thead class="thead-dark">
@@ -68,6 +69,8 @@
             <div class="col-md-6">
                 @if (Model.Traces.Count != 0)
                 {
+                    <h2>Races registred to</h2>
+
                     <div class="scrollable mt-2 col-md-3">
                         <table class="table">
                             <thead class="thead-dark">
@@ -98,6 +101,71 @@
             </div>
         </div>
     </div>
+</div>
+<div class="row mt-1">
+    <div class="col-md-6">
+        @if (Model.CreatedRides.Count() != 0)
+        {
+            <h3>Created rides</h3>
+
+            <div class="scrollableMyEvents mt-2">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ride</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var count = 0;
+                            @foreach (var ride in Model.CreatedRides)
+                            {
+                                <tr>
+                                    <th scope="row">@(count += 1)</th>
+                                    <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.Id">@ride.Name</a></td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+
+    <div class="col-md-6">
+        @if (Model.CreatedRaces.Count() != 0)
+        {
+            <h3>Created races</h3>
+
+            <div class="scrollableMyEvents mt-2">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Race</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var count = 0;
+                            @foreach (var race in Model.CreatedRaces)
+                            {
+                                <tr>
+                                    <th scope="row">@(count += 1)</th>
+                                    <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Race" asp-route-id="@race.Id">@race.Name</a></td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
 </div>
 
 

@@ -4,7 +4,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -150,6 +150,7 @@
                     LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
                     Town = r.Town.Name,
                     Mountain = r.Mountain.Name,
+                    Date = r.Date.ToString(GlobalConstants.DateStringFormat),
                 })
             .Skip((page - 1) * itemsPerPage)
             .Take(itemsPerPage)
@@ -233,6 +234,7 @@
                     LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
                     Town = r.Town.Name,
                     Mountain = r.Mountain.Name,
+                    Date = r.Date.ToString(GlobalConstants.DateStringFormat),
                 })
             .Skip((page - 1) * itemsPerPage)
             .Take(itemsPerPage)

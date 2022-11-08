@@ -17,6 +17,12 @@ a {
     overflow-y: auto;
 }
 
+.scrollableMyEvents {
+    height: 200px;
+    width: 300px; /* or any value */
+    overflow-y: auto;
+}
+
 
 .race-image {
     transition: transform .3s;

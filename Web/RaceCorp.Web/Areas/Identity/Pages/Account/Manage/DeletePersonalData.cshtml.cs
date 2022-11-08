@@ -1,21 +1,20 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using RaceCorp.Common;
-using RaceCorp.Data.Common.Repositories;
-using RaceCorp.Data.Models;
-
 namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
 {
+#nullable disable
+
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+    using RaceCorp.Data.Common.Repositories;
+    using RaceCorp.Data.Models;
+
     public class DeletePersonalDataModel : PageModel
     {
         private readonly IDeletableEntityRepository<ApplicationRole> roleRepo;
@@ -23,7 +22,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<DeletePersonalDataModel> logger;
 
-        public DeletePersonalDataModel(IDeletableEntityRepository<ApplicationRole> roleRepo,
+        public DeletePersonalDataModel(
+            IDeletableEntityRepository<ApplicationRole> roleRepo,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<DeletePersonalDataModel> logger)
@@ -93,6 +93,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
             }
 
             await this.ReasignUserFromRoles(user);
+            await this.DeleteClaimsFromUser(user);
 
             var userId = await this.userManager.GetUserIdAsync(user);
             var result = await this.userManager.DeleteAsync(user);
@@ -116,6 +117,17 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
             foreach (var role in userRoles)
             {
                 await this.userManager.RemoveFromRoleAsync(user, role);
+            }
+        }
+
+        private async Task DeleteClaimsFromUser(ApplicationUser user)
+        {
+            var userClaims = await this.userManager.GetClaimsAsync(user);
+
+            foreach (var claim in userClaims)
+            {
+
+                await this.userManager.RemoveClaimAsync(user, claim);
             }
         }
     }

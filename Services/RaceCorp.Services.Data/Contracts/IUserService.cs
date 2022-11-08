@@ -10,6 +10,6 @@
     {
         public T GetById<T>(string id);
 
-        Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath, ClaimsPrincipal claimPrincipal);
+        Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath);
     }
 }

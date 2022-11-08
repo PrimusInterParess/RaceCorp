@@ -13,6 +13,8 @@
 
         public string UserName { get; set; }
 
+        public string Email { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -21,7 +23,13 @@
 
         public string Country { get; set; }
 
+        public string About { get; set; }
+
         public string ProfilePicturePath { get; set; }
+
+        public virtual ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
+
+        public virtual ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();
 
         public List<UserRideBaseModel> Rides { get; set; } = new List<UserRideBaseModel>();
 

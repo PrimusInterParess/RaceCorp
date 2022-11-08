@@ -86,7 +86,12 @@
             var user = await this.userManager
                .GetUserAsync(this.User);
 
-            await this.userService.EditAsync(inputModel, this.environment.WebRootPath, this.User);
+            if (this.ModelState.IsValid == false)
+            {
+                return this.View(inputModel);
+            }
+
+            await this.userService.EditAsync(inputModel, this.environment.WebRootPath);
             return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = inputModel.Id });
         }
     }

@@ -3,10 +3,12 @@ namespace RaceCorp.Data.Models
 {
     using System;
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using Microsoft.AspNetCore.Identity;
 
     using RaceCorp.Data.Common.Models;
+    using RaceCorp.Data.Models.Enums;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -17,7 +19,10 @@ namespace RaceCorp.Data.Models
 
         public string LastName { get; set; }
 
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
+
+        [Required]
+        public DateTime DateOfBirth { get; set; }
 
         public int? TownId { get; set; }
 
@@ -34,6 +39,8 @@ namespace RaceCorp.Data.Models
         public virtual Team Team { get; set; }
 
         public string? MemberInTeamId { get; set; }
+
+        public string About { get; set; }
 
         public virtual Team MemberInTeam { get; set; }
 
