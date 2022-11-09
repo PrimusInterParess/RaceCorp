@@ -1,6 +1,55 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+
+/*inline buttons*/
+.nav-buttons {
+    list-style-type: none;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+    .nav-buttons li {
+        display: inline-block;
+        font-size: 10px;
+        padding: 5px;
+    }
+/*inline buttons*/
+
+
+/*map*/
+
+.map-responsive-Card {
+    overflow: hidden;
+    padding-bottom: 77%;
+    position: relative;
+    height: 0;
+}
+
+    .map-responsive-Card iframe {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+
+.map-responsive {
+    overflow: hidden;
+    padding-bottom: 31.4%;
+    position: relative;
+    height: 0;
+}
+
+    .map-responsive iframe {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+/*map*/
 /*ERROR*/
 .cls-1 {
     fill: #ffc541;
@@ -1010,9 +1059,16 @@ a.navbar-brand {
 a {
     color: #0366d6;
 }
+
+.scrollable-ride {
+    height: 350px;
+    width: 360px;
+    overflow-y: auto;
+}
+
 .scrollable {
     height: 170px;
-    width: 650px; /* or any value */
+    width: 200px; /* or any value */
     overflow-y: auto;
 }
 
@@ -1027,10 +1083,10 @@ a {
     transition: transform .3s;
 }
 
-.race-image:hover {
-    z-index: 1;
-    transform: scale(2);
-}
+    .race-image:hover {
+        z-index: 1;
+        transform: scale(2);
+    }
 
 .race:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -1102,4 +1158,3 @@ body {
     display: inline-block;
     width: 100px;
 }
-

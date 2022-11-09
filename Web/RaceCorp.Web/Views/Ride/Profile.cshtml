@@ -31,12 +31,57 @@
 {
     <div class="alert alert-success">@this.TempData["Registered"]</div>
 }
-<h1>@Model.Name</h1>
 
 
+<ul class="nav">
+    <li class="me-5">
+        <h1>@Model.Name</h1>
+    </li>
+    @if (hasPassed)
+    {
+        <li>
+            <button class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</button>
+        </li>
+    }
+    else if (isRegistered)
+    {
+        <li class="me-2">
+            <form method="post"
+              asp-controller="Ride" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
+                <button class="btn btn-outline-success mb-1 " type="submit">Unregister</button>
+            </form>
+        </li>
+    }
+    else if (currentUserIdClaim != null)
+    {
+        <li class="me-2">
+            <form method="post"
+              asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
+                <button class="btn btn-outline-success mb-1" type="submit">Register</button>
+            </form>
+        </li>
+
+    }
+    <li class="me-2">
+        <form method="get">
+            <button class="btn btn-outline-info mb-1 btn-block" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</button>
+        </form>
+    </li>
+    <li class="me-2">
+        <form method="get">
+            <button class="btn btn-outline-secondary mb-1 btn-block" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
+        </form>
+    </li>
+    <li class="me-2">
+        <form method="post"
+              asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">
+            <button class="btn btn-outline-success mb-1" type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
 <div class="row">
-    <div class="offset-0 col-md-5 col-xl-5 col-sm-12">
-        <iframe width="550" height="400" src="@url" frameborder="1"></iframe>
+    <div class="map-responsive col-md-5">
+        <iframe src="@url"></iframe>
     </div>
     <div class="col-md-3">
         <div class="card-header">
@@ -52,46 +97,13 @@
             <li class="list-group-item">Description: @Model.Description</li>
         </ul>
     </div>
+
     <div class="col-md-2">
-        @if (hasPassed)
-        {
-            <button class="btn btn-outline-success btn-block disabled mb-1">Event has passed! Try it next time!</button>
-
-        }
-        else if (isRegistered)
-        {
-            <form method="post"
-              asp-controller="Ride" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
-                <button class="btn btn-outline-success mb-1 btn-block" type="submit">Unregister</button>
-            </form>
-        }
-        else if (currentUserIdClaim != null)
-        {
-
-            <form method="post"
-              asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
-                <button class="btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
-            </form>
-
-
-        }
-        <form method="get">
-            <button class="btn btn-outline-info mb-1 btn-block" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</button>
-        </form>
-        <form method="get">
-            <button class="btn btn-outline-secondary mb-1 btn-block" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
-        </form>
-        <form method="post"
-              asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">
-            <button class="btn btn-outline-success mb-1" type="submit">Delete</button>
-        </form>
-    </div>
-    <div class="col-md-4">
         @if (Model.RegisteredUsers.Count() != 0)
         {
-            <h3 class="mb-2 mt-2">Registered riders</h3>
+            <h6>Registered riders</h6>
 
-            <div class="scrollable  mt-2">
+            <div class="scrollable-ride">
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
@@ -99,7 +111,6 @@
                             <th scope="col">Racer</th>
                             <th scope="col">Team</th>
                             <th scope="col">Town</th>
-                            <th scope="col">Trace name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,10 +120,9 @@
                             {
                                 <tr>
                                     <th scope="row">@(count += 1)</th>
-                                    <td><a class="btn btn-outline-secondary text-center" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
+                                    <td><a type="button" style="outline" class="btn btn-lg btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
                                     <td class="text-center">BTRevolution</td>
                                     <td class="text-center">Town name here</td>
-                                    <td class="text-center">@Model.TraceName</td>
                                 </tr>
                             }
                         }

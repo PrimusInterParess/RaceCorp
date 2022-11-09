@@ -25,7 +25,7 @@
             {
                 CreatedOn = DateTime.Now,
                 Email = "yborisov@gmail.com",
-                UserName = "DaniBorisov",
+                UserName = "yborisov@gmail.com",
                 NormalizedEmail = "yborisov@gmail.com".ToUpper(),
                 NormalizedUserName = "yborisov@gmail.com".ToUpper(),
                 FirstName = "Yordan",
@@ -41,7 +41,7 @@
             {
                 CreatedOn = DateTime.Now,
                 Email = "kborisova@gmail.com",
-                UserName = "KarolinaBorisova",
+                UserName = "kborisova@gmail.com",
                 NormalizedEmail = "=kborisova@gmail.com".ToUpper(),
                 NormalizedUserName = "kborisova@gmail.com".ToUpper(),
                 FirstName = "Karolina",
@@ -56,7 +56,7 @@
             {
                 CreatedOn = DateTime.Now,
                 Email = "kborisov@gmail.com",
-                UserName = "KrumBorisov",
+                UserName = "kborisov@gmail.com",
                 NormalizedEmail = "kborisov@gmail.com".ToUpper(),
                 NormalizedUserName = "kborisov@gmail.com".ToUpper(),
                 FirstName = "Krum",
@@ -71,7 +71,7 @@
             {
                 CreatedOn = DateTime.Now,
                 Email = "eborisova@gmail.com",
-                UserName = "EstelleBorisova",
+                UserName = "eborisova@gmail.com",
                 NormalizedEmail = "=eborisova@gmail.com".ToUpper(),
                 NormalizedUserName = "eborisova@gmail.com".ToUpper(),
                 FirstName = "Estelle",
@@ -87,7 +87,7 @@
                 CreatedOn = DateTime.Now,
                 Email = "nborisova@gmail.com",
                 UserName = "nborisova@gmail.com",
-                NormalizedEmail = "=nborisova@gmail.com".ToUpper(),
+                NormalizedEmail = "nborisova@gmail.com".ToUpper(),
                 NormalizedUserName = "nborisova@gmail.com".ToUpper(),
                 FirstName = "Nebesna",
                 LastName = "Borisova",

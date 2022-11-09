@@ -106,6 +106,8 @@
                 await this.UpdateClaim(ClaimTypes.DateOfBirth, inputModel.Gender.ToString(), user);
             }
 
+            await this.userManager.UpdateAsync(user);
+            await this.signInManager.RefreshSignInAsync(user);
             await this.userRepo.SaveChangesAsync();
 
             return true;
@@ -128,9 +130,6 @@
             {
                 user.Claims.Where(c => c.ClaimType == claimType).FirstOrDefault().ClaimValue = value;
             }
-
-            await this.userManager.UpdateAsync(user);
-            await this.signInManager.SignInAsync(user, isPersistent: false);
         }
     }
 }
