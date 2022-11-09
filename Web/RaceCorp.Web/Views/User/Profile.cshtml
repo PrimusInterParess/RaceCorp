@@ -1,171 +1,193 @@
-﻿@model RaceCorp.Web.ViewModels.ApplicationUsers.UserProfileViewModel;
+﻿@using RaceCorp.Common
+@model RaceCorp.Web.ViewModels.ApplicationUsers.UserProfileViewModel;
 
-@{
-    var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
-    string currentUserId = null;
-    if (currentUserIdClaim != null)
-    {
-        currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-    }
-}
-
-@*<form method="post" enctype="multipart/form-data" asp-controller="User" asp-area="" asp-action="UploadProfilePicture" asp-route-userId="@currentUserId">
-    <input class="form-control" type="file" name="ProfilePicture" />
-    <button class="btn btn-outline-success mb-1 btn-block" type="submit">Upload picture</button>
-</form>*@
-
-<div class="row">
-    <div class="col-md-4">
-        <div class="card" style="width: 18rem;">
-            <img src="@Model.ProfilePicturePath" class="card-img-top" alt="">
-            <div class="card-body">
-                <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
-                <p class="card-text">Email: @Model.Email</p>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<section id="content" class="container ">
+    <!-- Begin .page-heading -->
+    <div class="page-heading mt-3">
+        <div class="media clearfix">
+            <div class="media-left pr30">
+                <a asp-action="Edit" asp-controller="User" asp-area="" asp-route-id="@Model.Id">
+                    <img style="width:30rem"; class="media-object mw150" src="@Model.ProfilePicturePath">
+                </a>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Town: @Model.TownName</li>
-                <li class="list-group-item">Country: @Model.Country</li>
-            </ul>
-            <div class="card-body">
-                @Model.About
+            <div class="media-body va-m">
+                <h2 class="media-heading">
+                    @Model.FirstName @Model.LastName
+                    <small> - Profile</small>
+                </h2>
+                <p class="lead">@Model.About</p>
+                <div class="media-links">
+                    <ul class="list-inline list-unstyled">
+                        <li>
+                            <a href="@Model.FacoBookLink" title="facebook link">
+                                <span class="fa fa-facebook-square fs35 text-primary"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Model.TwitterLink" title="twitter link">
+                                <span class="fa fa-twitter-square fs35 text-info"></span>
+                            </a>
+                        </li>
+
+                        <li class="hidden">
+                            <a href="@Model.LinkedInLink" title="linkedin link">
+                                <span class="fa fa-linkedin-square fs35 text-info"></span>
+                            </a>
+                        </li>
+                        <li class="hidden">
+                            <a href="@Model.GitHubLink" title="github link">
+                                <span class="fa fa-github-square fs35 text-dark"></span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-8">
-        <div class="row mb-2">
-            <div class="col-md-6">
-                @if (Model.Rides.Count() != 0)
-                {
-                    <h2>Rides registred to</h2>
-                    <div class="scrollable mt-2 col-md-3">
-                        <table class="table">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Rides</th>
-                                    <th scope="col">Start</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    var count = 0;
-                                    @foreach (var ride in Model.Rides)
-                                    {
-                                        <tr>
-                                            <th scope="row">@(count += 1)</th>
-                                            <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.RideId">@ride.RideName</a></td>
-                                            <td class="text-center">@ride.RideTraceStartTime</td>
-                                        </tr>
-                                    }
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-heading">
+                    <span class="panel-icon">
+                        <i class="fa fa-trophy"></i>
+                    </span>
+                    <span class="panel-title">Races I add</span>
+                </div>
+                <div class="panel-body pn">
+                    <table class="table mbn tc-icon-1 tc-med-2 tc-bold-last">
+                        <thead>
+                            <tr class="hidden">
+                                <th class="mw30">#</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var count = 0;
+                                @foreach (var race in Model.CreatedRaces)
+                                {
+                                    <tr>
+                                        <th scope="row">@(count += 1)</th>
+                                        <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Race" asp-route-id="@race.Id">@race.Name</a></td>
+                                        <td>@race.Date</td>
+                                    </tr>
                                 }
-                            </tbody>
-                        </table>
-                    </div>
-                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                @if (Model.Traces.Count != 0)
-                {
-                    <h2>Races registred to</h2>
+            <div class="panel">
+                <div class="panel-heading">
+                    <span class="panel-icon">
+                        <i class="fa fa-star"></i>
+                    </span>
+                    <span class="panel-title">Rides I add</span>
+                </div>
+                <div class="panel-body pn">
+                    <table class="table mbn tc-icon-1 tc-med-2 tc-bold-last">
+                        <thead>
+                            <tr class="hidden">
+                                <th class="mw30">#</th>
+                                <th>Name</th>
 
-                    <div class="scrollable mt-2 col-md-3">
-                        <table class="table">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Races</th>
-                                    <th scope="col">Trace</th>
-                                    <th scope="col">Start</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    var count = 0;
-                                    @foreach (var trace in Model.Traces)
-                                    {
-                                        <tr>
-                                            <th scope="row">@(count += 1)</th>
-                                            <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Race" asp-route-id="@trace.RaceId">@trace.RaceName</a></td>
-                                            <td><a class="btn btn-outline-secondary text-center" asp-action="RaceTraceProfile" asp-controller="Trace" asp-route-traceId="@trace.TraceId" asp-route-raceId="@trace.RaceId">@trace.TraceName</a></td>
-                                            <td class="text-center">@trace.TraceStartTime</td>
-                                        </tr>
-                                    }
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var count1 = 0;
+                                @foreach (var ride in Model.CreatedRides)
+                                {
+                                    <tr>
+                                        <th scope="row">@(count1 += 1)</th>
+                                        <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.Id">@ride.Name</a></td>
+
+                                        <td>@ride.Date</td>
+                                    </tr>
                                 }
-                            </tbody>
-                        </table>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+
+            <div class="tab-block">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab1" data-toggle="tab">My races</a>
+                    </li>
+                    <li>
+                        <a href="#tab2" data-toggle="tab">My rides</a>
+                    </li>
+                </ul>
+                <div class="tab-content p30" style="height: 730px;">
+                    <div id="tab1" class="tab-pane active">
+                        <div class="media">
+                            @if (Model.Traces.Count != 0)
+                            {
+                                <h3>Races I'm Registered in</h3>
+
+                                @foreach (var raceTrace in Model.Traces)
+                                {
+                                    <a class="pull-left" href="#"> <img class="media-object mn thumbnail mw50" src="@raceTrace.LogoPaht" alt="..."> </a>
+                                    <div class="media-body">
+                                        <h5 class="media-heading mb20">
+                                            <a asp-action="Profile" asp-controller="Race" asp-route-id="@raceTrace.RaceId" type="button" style="outline" class="btn btn-lg btn-block">@raceTrace.RaceName  , @raceTrace.TraceName</a>
+
+                                            <small> - @raceTrace.TraceStartTime</small>
+                                        </h5>
+
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <h3>You are not yet registered for any race!</h3>
+                                <a asp-action="All" asp-controller="Race">Why don't you register for a race ?</a>
+                            }
+                        </div>
+
+
+
+
                     </div>
-                }
+                    <div id="tab2" class="tab-pane active mt-5">
+                        <div class="media">
+                            @if (Model.Rides.Count != 0)
+                            {
+                                <h3>Rides I'm Registered in</h3>
+
+                                @foreach (var ride in Model.Rides)
+                                {
+                                    <a class="pull-left" href="#"> <img class="media-object mn thumbnail mw50" src="@GlobalConstants.RideDefaultImage" alt="..."> </a>
+                                    <div class="media-body">
+                                        <h5 class="media-heading mb20">
+                                            <a asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.RideId" type="button" style="outline" class="btn btn-lg btn-block">@ride.RideName</a>
+
+                                            <small> - @ride.RideTraceStartTime</small>
+                                        </h5>
+
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <h3>You are not yet registered for any ride!</h3>
+                                <a asp-action="All" asp-controller="Ride">Why don't you register for a ride ?</a>
+                            }
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="row mt-1">
-    <div class="col-md-6">
-        @if (Model.CreatedRides.Count() != 0)
-        {
-            <h3>Created rides</h3>
-
-            <div class="scrollableMyEvents mt-2">
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Ride</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            var count = 0;
-                            @foreach (var ride in Model.CreatedRides)
-                            {
-                                <tr>
-                                    <th scope="row">@(count += 1)</th>
-                                    <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.Id">@ride.Name</a></td>
-
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-
-    </div>
-
-    <div class="col-md-6">
-        @if (Model.CreatedRaces.Count() != 0)
-        {
-            <h3>Created races</h3>
-
-            <div class="scrollableMyEvents mt-2">
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Race</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            var count = 0;
-                            @foreach (var race in Model.CreatedRaces)
-                            {
-                                <tr>
-                                    <th scope="row">@(count += 1)</th>
-                                    <td><a class="btn btn-outline-secondary text-center" asp-action="Profile" asp-controller="Race" asp-route-id="@race.Id">@race.Name</a></td>
-
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-    </div>
-
-</div>
-
-
+</section>

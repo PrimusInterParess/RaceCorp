@@ -2,8 +2,9 @@
 {
     using System.Collections;
     using System.Collections.Generic;
-
+    using System.Linq;
     using AutoMapper;
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
@@ -27,6 +28,14 @@
 
         public string ProfilePicturePath { get; set; }
 
+        public string LinkedInLink { get; set; }
+
+        public string FacoBookLink { get; set; }
+
+        public string GitHubLink { get; set; }
+
+        public string TwitterLink { get; set; }
+
         public virtual ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
 
         public virtual ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();
@@ -37,8 +46,10 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
+            // the last one to close the door!
             configuration.CreateMap<ApplicationUser, UserProfileViewModel>().ForMember(x => x.ProfilePicturePath, opt
-                       => opt.MapFrom(x => x.ProfilePicture == null ? "\\Images\\default\\Murgash.jpg" : $"\\{x.ProfilePicture.ParentFolderName}\\{x.ProfilePicture.ChildFolderName}\\{x.ProfilePicture.Id}.{x.ProfilePicture.Extension}"));
+                       => opt.MapFrom(x => x.ProfilePicturePath == null ?
+                       "\\Images\\default\\Murgash.jpg" : x.ProfilePicturePath));
         }
     }
 }

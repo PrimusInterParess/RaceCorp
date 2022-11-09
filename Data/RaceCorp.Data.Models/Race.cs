@@ -12,6 +12,8 @@
 
     public class Race : RideBaseModel
     {
+        public string LogoPath { get; set; }
+
         public string LogoId { get; set; }
 
         public virtual Logo Logo { get; set; }

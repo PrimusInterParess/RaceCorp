@@ -17,6 +17,8 @@
 
         public TimeSpan ControlTime { get; set; }
 
+        public string GpxPath { get; set; }
+
         public virtual Gpx Gpx { get; set; }
 
         public string GpxId { get; set; }

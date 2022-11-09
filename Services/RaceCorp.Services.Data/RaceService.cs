@@ -1,10 +1,12 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using RaceCorp.Common;
+
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -114,12 +116,14 @@
                     var trace = await this.traceService
                         .ProccedingData(traceInputModel);
 
+                    trace.GpxPath = $"\\{gpx.ParentFolderName}\\{gpx.ChildFolderName}\\{gpx.Id}.{gpx.Extension}";
                     trace.Gpx = gpx;
 
                     race.Traces.Add(trace);
                 }
             }
 
+            race.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
             race.Logo = logo;
 
             try
@@ -147,7 +151,7 @@
                     Id = r.Id,
                     Name = r.Name,
                     Description = r.Description,
-                    LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
+                    LogoPath = r.LogoPath,
                     Town = r.Town.Name,
                     Mountain = r.Mountain.Name,
                     Date = r.Date.ToString(GlobalConstants.DateStringFormat),
@@ -204,6 +208,7 @@
                  userId,
                  roothPath);
 
+                raceDb.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
                 raceDb.Logo = logo;
             }
 
@@ -231,7 +236,7 @@
                     Id = r.Id,
                     Name = r.Name,
                     Description = r.Description,
-                    LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
+                    LogoPath = r.LogoPath,
                     Town = r.Town.Name,
                     Mountain = r.Mountain.Name,
                     Date = r.Date.ToString(GlobalConstants.DateStringFormat),

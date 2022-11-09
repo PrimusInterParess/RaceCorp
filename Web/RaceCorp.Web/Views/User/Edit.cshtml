@@ -1,53 +1,75 @@
 ﻿@using RaceCorp.Data.Models.Enums;
 @model RaceCorp.Web.ViewModels.ApplicationUsers.UserEditViewModel;
 
-<div class="col-md-6">
-    <form id="editForm" method="post" enctype="multipart/form-data">
-        <h2>Edit</h2>
-        <hr />
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="form-floating mb-2">
-            <input asp-for="FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
-            <label asp-for="FirstName">First name</label>
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="form-floating mb-2">
-            <input asp-for="LastName" class="form-control" autocomplete="lastname" aria-required="true" />
-            <label asp-for="LastName">Last name</label>
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-        <div class="form-floating mb-2">
-            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-select">
-                <option selected>Gender</option>
-            </select>
-            <span asp-validation-for="Gender" class="text-danger"></span>
-        </div>
-        <div class="form-floating mb-2">
-            <input asp-for="Town" class="form-control" autocomplete="townname" aria-required="true" />
-            <label asp-for="Town">Town name</label>
-            <span asp-validation-for="Town" class="text-danger"></span>
-        </div>
-        <div class="form-floating mb-2">
-            <input asp-for="Country" class="form-control" autocomplete="countryname" aria-required="true" />
-            <label asp-for="Country">Country name</label>
-            <span asp-validation-for="Country" class="text-danger"></span>
-        </div>
+<div class="text-center">
+    <div class="col-md-6 text-center">
+        <form id="editForm" method="post" enctype="multipart/form-data">
+            <h2>Edit</h2>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-floating mb-2">
+                <input asp-for="FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
+                <label asp-for="FirstName">First name</label>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <input asp-for="LastName" class="form-control" autocomplete="lastname" aria-required="true" />
+                <label asp-for="LastName">Last name</label>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-select">
+                    <option selected>Gender</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <input asp-for="Town" class="form-control" autocomplete="townname" aria-required="true" />
+                <label asp-for="Town">Town name</label>
+                <span asp-validation-for="Town" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <input asp-for="FacoBookLink" class="form-control" autocomplete="townname" aria-required="true" />
+                <label asp-for="FacoBookLink">FacoBook Url</label>
+                <span asp-validation-for="FacoBookLink" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <input asp-for="LinkedInLink" class="form-control" autocomplete="townname" aria-required="true" />
+                <label asp-for="LinkedInLink">LinkedIn Url</label>
+                <span asp-validation-for="LinkedInLink" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <input asp-for="GitHubLink" class="form-control" autocomplete="townname" aria-required="true" />
+                <label asp-for="GitHubLink">GitHub Url</label>
+                <span asp-validation-for="GitHubLink" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <input asp-for="TwitterLink" class="form-control" autocomplete="townname" aria-required="true" />
+                <label asp-for="TwitterLink">GitHub Url</label>
+                <span asp-validation-for="TwitterLink" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2">
+                <input asp-for="Country" class="form-control" autocomplete="countryname" aria-required="true" />
+                <label asp-for="Country">Country name</label>
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
 
-        <div class="form-group mb-1">
-            <label asp-for="UserProfilePicture">Upload profile picture</label>
-            <input asp-for="UserProfilePicture" name="UserProfilePicture" class="form-control mb-1" style="width: 100%;" />
-        </div>
-        <div class="form-floating  mb-2">
-            <input asp-for="DateOfBirth" class="form-control" autocomplete="dateofbirth" aria-required="true" />
-            <label asp-for="DateOfBirth"></label>
-            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-        </div>
-        <div class="form-floating  mb-2">
-            <textarea asp-for="About" class="form-control"></textarea>
-            <label asp-for="About"></label>
-            <span asp-validation-for="About" class="text-danger"></span>
-        </div>
-        <button id="editButton" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Edit</button>
+            <div class="form-group mb-1">
+                <label asp-for="UserProfilePicture">Upload profile picture</label>
+                <input asp-for="UserProfilePicture" name="UserProfilePicture" class="form-control mb-1" style="width: 100%;" />
+            </div>
+            <div class="form-floating  mb-2">
+                <input asp-for="DateOfBirth" class="form-control" autocomplete="dateofbirth" aria-required="true" />
+                <label asp-for="DateOfBirth"></label>
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-floating  mb-2">
+                <textarea asp-for="About" class="form-control"></textarea>
+                <label asp-for="About"></label>
+                <span asp-validation-for="About" class="text-danger"></span>
+            </div>
+            <button id="editButton" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Edit</button>
 
-    </form>
-</div>
+        </form>
+    </div>
+    </div>

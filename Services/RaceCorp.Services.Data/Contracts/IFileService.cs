@@ -19,7 +19,5 @@
         Task<Logo> ProccessingLogoData(IFormFile file, string userId, string imagePath);
 
         Task<Image> ProccessingImageData(IFormFile file, string userId, string roothPath, string childrenFolderName);
-
-        Task<ProfilePicture> ProccessingProfilePictureData(IFormFile file, string userId, string roothPath, string childrenFolderName);
     }
 }

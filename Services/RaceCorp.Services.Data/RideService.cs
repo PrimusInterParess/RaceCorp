@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -232,7 +233,7 @@
                     GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
                     TownName = r.Town.Name,
                     MountainName = r.Mountain.Name,
-                    TraceStartTime = r.Trace.StartTime.ToString("f"),
+                    TraceStartTime = r.Trace.StartTime.ToString(GlobalConstants.DateStringFormat),
                 })
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)

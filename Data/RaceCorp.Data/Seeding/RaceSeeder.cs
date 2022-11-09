@@ -26,6 +26,7 @@
                 Description = "Most popular race in Bulgaria!",
                 FormatId = 2,
                 ApplicationUserId = userId,
+                LogoPath = "\\Images\\logos\\vitosha100.jpg",
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -47,6 +48,7 @@
                         StartTime = DateTime.Now.AddMonths(7),
                         ControlTime = TimeSpan.FromHours(18),
                         Length = 100,
+                        GpxPath = "\\Gpxs\\Vitosha100km\\vitosha100km.gpx",
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -60,7 +62,7 @@
                         },
                     },
                 },
-            }); ;
+            });
 
             await dbContext.Races.AddAsync(new Race
             {
@@ -70,6 +72,7 @@
                 Description = "Test yourself! We have tree different traces you can pick from! From beginers to pros!",
                 FormatId = 2,
                 ApplicationUserId = userId,
+                LogoPath = "\\Images\\logos\\murgash.jpg",
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -91,6 +94,7 @@
                         StartTime = DateTime.Now.AddMonths(5),
                         ControlTime = TimeSpan.FromHours(8),
                         Length = 19,
+                        GpxPath = "\\Gpxs\\Murgash\\murgashPicnic.gpx",
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -111,6 +115,8 @@
                         StartTime = DateTime.Now.AddMonths(5),
                         ControlTime = TimeSpan.FromHours(14),
                         Length = 44,
+                        GpxPath = "\\Gpxs\\Murgash\\murgashClassic.gpx",
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -131,6 +137,8 @@
                         StartTime = DateTime.Now.AddMonths(5),
                         ControlTime = TimeSpan.FromHours(18),
                         Length = 75,
+                        GpxPath = "\\Gpxs\\Murgash\\murgashEpic.gpx",
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -155,6 +163,7 @@
                 Description = "Speed,skills,concentration,endurance - all needed for the race!Test yourself!",
                 FormatId = 2,
                 ApplicationUserId = userId,
+                LogoPath = "\\Images\\logos\\bike4chepan.png",
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -176,6 +185,8 @@
                         StartTime = DateTime.Now.AddMonths(3),
                         ControlTime = TimeSpan.FromHours(12),
                         Length = 42,
+                        GpxPath = "\\Gpxs\\Bike4Chepan\\bike4ChepanLong.gpx",
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -196,6 +207,8 @@
                         StartTime = DateTime.Now.AddMonths(3).AddHours(13),
                         ControlTime = TimeSpan.FromHours(12),
                         Length = 42,
+                        GpxPath = "\\Gpxs\\Bike4Chepan\\bike4ChepanShort.gpx",
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -220,6 +233,7 @@
                 Description = "One of the best's XCO's you can race! Come and dig deep!",
                 FormatId = 1,
                 ApplicationUserId = userId,
+                LogoPath = "\\Images\\logos\\xcoDragalevci.jpg",
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -241,6 +255,8 @@
                         StartTime = DateTime.Now.AddMonths(5),
                         ControlTime = TimeSpan.FromHours(5),
                         Length = 18,
+                        GpxPath = "\\Gpxs\\XCODragalevo\\xcoDragalevo.gpx",
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -264,6 +280,8 @@
                 Description = "Roller Coaster. Come and have fun with one of the best racers in Sofia!",
                 FormatId = 1,
                 ApplicationUserId = userId,
+                LogoPath = "\\Images\\logos\\xcoSimeonovo.jpg",
+
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -285,6 +303,8 @@
                         StartTime = DateTime.Now.AddMonths(4),
                         ControlTime = TimeSpan.FromHours(4),
                         Length = 16,
+                        GpxPath = "\\Gpxs\\XCOSimeonovo\\xcoSimeonovo.gpx",
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -309,6 +329,8 @@
                 Description = "In the heart of Rodopi Mountain,race that can challenge your skills,endurance,will!",
                 FormatId = 2,
                 ApplicationUserId = userId,
+                LogoPath = "\\Images\\logos\\asenovgradskiBairi.png",
+
                 Logo = new Logo
                 {
                     ParentFolderName = "Images",
@@ -330,6 +352,8 @@
                         StartTime = DateTime.Now.AddMonths(10),
                         ControlTime = TimeSpan.FromHours(9),
                         Length = 42,
+                        GpxPath = "\\Gpxs\\AsenovgradskiBairi\\asenovgradskiBairiLong.gpx",
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",

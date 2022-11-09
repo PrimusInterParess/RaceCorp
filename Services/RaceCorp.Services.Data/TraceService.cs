@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -59,8 +60,8 @@
                 DifficultyId = trace.DifficultyId,
                 ControlTime = trace.ControlTime.TotalHours,
                 Length = trace.Length,
-                StartTime = trace.StartTime.ToString("HH:MM"),
-                LogoPath = LogoRootPath + trace.Race.LogoId + "." + trace.Race.Logo.Extension,
+                StartTime = trace.StartTime.ToString(GlobalConstants.DateStringFormat),
+                LogoPath = trace.Race.LogoPath,
                 GoogleDriveId = trace.Gpx.GoogleDriveId,
                 GpxId = trace.GpxId,
             };

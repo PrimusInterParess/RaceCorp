@@ -35,6 +35,8 @@
                     ControlTime = TimeSpan.FromHours(10),
                     Length = 39,
                     StartTime = DateTime.Now.AddDays(5),
+                    GpxPath = "\\Gpxs\\Golden Bridges\\goldenBridges.gpx",
+
                     Gpx = new Gpx
                     {
                         ParentFolderName = "Gpxs",
@@ -67,6 +69,8 @@
                     ControlTime = TimeSpan.FromHours(10),
                     Length = 19,
                     StartTime = DateTime.Now.AddDays(10),
+                    GpxPath = "\\Gpxs\\Town Portal\\townPortalSimeonovo-Dragaletsi.gpx",
+
                     Gpx = new Gpx
                     {
                         ParentFolderName = "Gpxs",
@@ -99,6 +103,8 @@
                     ControlTime = TimeSpan.FromHours(10),
                     Length = 19,
                     StartTime = DateTime.Now.AddDays(30),
+                    GpxPath = "\\Gpxs\\Town Portal\\townPortal.gpx",
+
                     Gpx = new Gpx
                     {
                         ParentFolderName = "Gpxs",
@@ -131,6 +137,8 @@
                     ControlTime = TimeSpan.FromHours(10),
                     Length = 24,
                     StartTime = DateTime.Now.AddDays(60),
+                    GpxPath = "\\Gpxs\\Town Portal\\townPortalGornaBaniaPancharevo.gpx",
+
                     Gpx = new Gpx
                     {
                         ParentFolderName = "Gpxs",
@@ -164,6 +172,8 @@
                     ControlTime = TimeSpan.FromHours(10),
                     Length = 39,
                     StartTime = DateTime.Now.AddDays(120),
+                    GpxPath = "\\Gpxs\\Kresna\\kresnaEpic.gpx",
+
                     Gpx = new Gpx
                     {
                         ParentFolderName = "Gpxs",

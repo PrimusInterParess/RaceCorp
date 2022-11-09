@@ -25,9 +25,8 @@
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IFileService fileService;
 
-
         public UserService(
-             IUserStore<ApplicationUser> userStore,
+            IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<ApplicationUser> userRepo,
@@ -44,18 +43,20 @@
 
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
         {
-            var user = this.userRepo.All().Include(u => u.ProfilePicture).Include(u => u.Town).FirstOrDefault(u => u.Id == inputModel.Id);
+            var user = this.userRepo.All().Include(u => u.Images).Include(u => u.Town).FirstOrDefault(u => u.Id == inputModel.Id);
 
             if (inputModel.UserProfilePicture != null)
             {
                 var image = await this.fileService
-                    .ProccessingProfilePictureData(
+                    .ProccessingImageData(
                     inputModel.UserProfilePicture,
                     inputModel.Id,
                     roothPath,
                     inputModel.FirstName + inputModel.LastName + GlobalConstants.ProfilePicterPostFix);
 
-                user.ProfilePicture = image;
+                user.ProfilePicturePath = $"\\{image.ParentFolderName}\\{image.ChildFolderName}\\{image.Id}.{image.Extension}";
+                image.Name = GlobalConstants.ProfilePictire;
+                user.Images.Add(image);
             }
 
             var townDb = this.townRepo.All().FirstOrDefault(t => t.Name == inputModel.Town);
@@ -70,6 +71,11 @@
                 await this.townRepo.AddAsync(townDb);
                 user.Town = townDb;
             }
+
+            user.FacoBookLink = inputModel.FacoBookLink;
+            user.LinkedInLink = inputModel.LinkedInLink;
+            user.TwitterLink = inputModel.TwitterLink;
+            user.GitHubLink = inputModel.GitHubLink;
 
             user.About = inputModel.About;
 

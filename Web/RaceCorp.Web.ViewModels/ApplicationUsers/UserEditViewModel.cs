@@ -39,6 +39,18 @@
         [StringLength(GlobalIntValues.DescriptionMaxLegth, ErrorMessage = GlobalErrorMessages.StringLengthError, MinimumLength = GlobalIntValues.DescriptionMinLegth)]
         public string About { get; set; }
 
+        [Url]
+        public string LinkedInLink { get; set; }
+
+        [Url]
+        public string FacoBookLink { get; set; }
+
+        [Url]
+
+        public string GitHubLink { get; set; }
+
+        public string TwitterLink { get; set; }
+
         public virtual IFormFile UserProfilePicture { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

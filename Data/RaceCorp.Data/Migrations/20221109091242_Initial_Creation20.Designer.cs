@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221108080211_Initial_Creation15")]
-    partial class Initial_Creation15
+    [Migration("20221109091242_Initial_Creation20")]
+    partial class Initial_Creation20
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -176,6 +176,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
@@ -243,8 +246,8 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProfilePictureId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -275,10 +278,6 @@ namespace RaceCorp.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProfilePictureId")
-                        .IsUnique()
-                        .HasFilter("[ProfilePictureId] IS NOT NULL");
 
                     b.HasIndex("TownId");
 
@@ -630,45 +629,6 @@ namespace RaceCorp.Data.Migrations
                     b.ToTable("Mountains");
                 });
 
-            modelBuilder.Entity("RaceCorp.Data.Models.ProfilePicture", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ChildFolderName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ParentFolderName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("ProfilePictures");
-                });
-
             modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
                 {
                     b.Property<int>("Id")
@@ -1015,17 +975,11 @@ namespace RaceCorp.Data.Migrations
                         .WithMany("TeamMembers")
                         .HasForeignKey("MemberInTeamId");
 
-                    b.HasOne("RaceCorp.Data.Models.ProfilePicture", "ProfilePicture")
-                        .WithOne("ApplicationUser")
-                        .HasForeignKey("RaceCorp.Data.Models.ApplicationUser", "ProfilePictureId");
-
                     b.HasOne("RaceCorp.Data.Models.Town", "Town")
                         .WithMany("ApplicationUsers")
                         .HasForeignKey("TownId");
 
                     b.Navigation("MemberInTeam");
-
-                    b.Navigation("ProfilePicture");
 
                     b.Navigation("Town");
                 });
@@ -1119,7 +1073,7 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Images")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ApplicationUser");
                 });
@@ -1310,11 +1264,6 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Races");
 
                     b.Navigation("Rides");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.ProfilePicture", b =>
-                {
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>

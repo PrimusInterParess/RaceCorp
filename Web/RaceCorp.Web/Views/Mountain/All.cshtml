@@ -1,4 +1,5 @@
-﻿@using RaceCorp.Web.ViewModels.Mountain;
+﻿@using RaceCorp.Common
+@using RaceCorp.Web.ViewModels.Mountain;
 @model MountainListViewModel
 @{
     this.ViewData["Title"] = "All Mountains";
@@ -10,7 +11,7 @@
     </div>
     <hr />
     <div>
-        <img class="col-md-8" src="@ViewData["imageUrl"]">
+        <img class="col-md-8 " src="@GlobalConstants.MountainCarocelPicture">
     </div>
 
     @if (Model.Mountains.Count() != 0)

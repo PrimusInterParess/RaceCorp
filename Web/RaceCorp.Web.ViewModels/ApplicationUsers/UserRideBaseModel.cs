@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Web.ViewModels.ApplicationUsers
 {
     using AutoMapper;
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
@@ -15,7 +16,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationUserRide, UserRideBaseModel>().ForMember(x => x.RideTraceStartTime, opt
-                       => opt.MapFrom(x => x.Ride.Date.ToString("f")));
+                       => opt.MapFrom(x => x.Ride.Date.ToString(GlobalConstants.DateStringFormat)));
         }
     }
 }

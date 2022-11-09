@@ -5,6 +5,7 @@
     using System.Linq;
 
     using AutoMapper;
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.ApplicationUsers;
@@ -20,18 +21,17 @@
 
         public ICollection<UserEventRegisteredModel> RegisteredUsers { get; set; } = new List<UserEventRegisteredModel>();
 
-
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Race, RaceProfileViewModel>()
                 .ForMember(x => x.LogoPath, opt
-                 => opt.MapFrom(x => LogoRootPath + x.LogoId + "." + x.Logo.Extension))
+                 => opt.MapFrom(x => x.LogoPath))
                 .ForMember(x => x.Town, opt
                        => opt.MapFrom(x => x.Town.Name))
                 .ForMember(x => x.Mountain, opt
                     => opt.MapFrom(x => x.Mountain.Name))
                 .ForMember(x => x.Date, opt
-                   => opt.MapFrom(x => x.Date.ToString("D")));
+                   => opt.MapFrom(x => x.Date.ToString(GlobalConstants.DateStringFormat)));
 
             configuration.CreateMap<Trace, TraceInRaceProfileViewModel>()
                 .ForMember(x => x.DifficultyName, opt

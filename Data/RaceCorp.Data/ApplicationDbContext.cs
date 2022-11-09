@@ -26,8 +26,6 @@
 
         public DbSet<Image> Images { get; set; }
 
-        public DbSet<ProfilePicture> ProfilePictures { get; set; }
-
         public DbSet<Team> Teams { get; set; }
 
         public DbSet<Gpx> Gpxs { get; set; }
@@ -113,9 +111,9 @@
               .HasForeignKey(u => u.MemberInTeamId);
 
             builder.Entity<ApplicationUser>()
-            .HasOne(u => u.ProfilePicture)
-            .WithOne(t => t.ApplicationUser)
-            .HasForeignKey<ApplicationUser>(u => u.ProfilePictureId);
+          .HasMany(a => a.Images)
+          .WithOne(i => i.ApplicationUser)
+          .HasForeignKey(i => i.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Team>()
                 .HasOne(t => t.ApplicationUser)
@@ -133,7 +131,6 @@
                             .HasForeignKey<Ride>(r => r.TraceId);
 
             builder.Entity<Trace>().HasOne(t => t.Gpx).WithOne(g => g.Trace).HasForeignKey<Trace>(t => t.GpxId);
-
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

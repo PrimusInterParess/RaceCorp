@@ -94,5 +94,6 @@
             await this.userService.EditAsync(inputModel, this.environment.WebRootPath);
             return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = inputModel.Id });
         }
+
     }
 }

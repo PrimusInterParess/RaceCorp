@@ -13,7 +13,8 @@
     using RaceCorp.Web.ViewModels.Trace;
 
     using static RaceCorp.Services.Constants.Drive;
-    using static RaceCorp.Services.Constants.Messages;
+        using static RaceCorp.Services.Constants.Messages;
+
     using static RaceCorp.Services.Constants.Common;
 
     public class TraceController : BaseController

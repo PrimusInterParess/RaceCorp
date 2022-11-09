@@ -22,14 +22,12 @@
         private readonly string[] imageExtensions = new[] { "jpg", "png", "gif" };
         private readonly IRepository<Logo> logoRepo;
         private readonly IRepository<Image> imageRepo;
-        private readonly IDeletableEntityRepository<ProfilePicture> profilePictureRepo;
 
-        public FileService(IDeletableEntityRepository<Logo> logoRepo, IDeletableEntityRepository<Image> imageRepo, IDeletableEntityRepository<ProfilePicture> profilePictureRepo)
+        public FileService(IDeletableEntityRepository<Logo> logoRepo, IDeletableEntityRepository<Image> imageRepo)
         {
             this.logoRepo = logoRepo;
             this.imageRepo = imageRepo;
-            this.profilePictureRepo = profilePictureRepo;
-        }
+                 }
 
         public async Task<Logo> ProccessingLogoData(IFormFile file, string userId, string imagePath)
         {
@@ -119,37 +117,6 @@
             }
 
             return null;
-        }
-
-        public async Task<ProfilePicture> ProccessingProfilePictureData(IFormFile file, string userId, string roothPath, string childrenFolderName)
-        {
-            var extension = this.ValidateFile(file, GlobalConstants.Image);
-
-            if (extension == null)
-            {
-                throw new ArgumentNullException(InvalidImageMessage);
-            }
-
-            var profileDto = new ProfilePicture()
-            {
-                ParentFolderName = ImageParentFolderName,
-                ChildFolderName = childrenFolderName,
-                Extension = extension,
-                ApplicationUserId = userId,
-            };
-
-            var imageRoothPath = $"{roothPath}\\{ImageParentFolderName}";
-
-            await this.SaveFileIntoFileSystem(
-                   file,
-                   imageRoothPath,
-                   childrenFolderName,
-                   profileDto.Id,
-                   extension);
-
-            await this.profilePictureRepo.AddAsync(profileDto);
-
-            return profileDto;
         }
     }
 }

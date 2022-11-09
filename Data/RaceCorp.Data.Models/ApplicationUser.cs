@@ -19,6 +19,14 @@ namespace RaceCorp.Data.Models
 
         public string LastName { get; set; }
 
+        public string LinkedInLink { get; set; }
+
+        public string FacoBookLink { get; set; }
+
+        public string GitHubLink { get; set; }
+
+        public string TwitterLink { get; set; }
+
         public Gender Gender { get; set; }
 
         [Required]
@@ -30,9 +38,7 @@ namespace RaceCorp.Data.Models
 
         public string Country { get; set; }
 
-        public string ProfilePictureId { get; set; }
-
-        public virtual ProfilePicture ProfilePicture { get; set; }
+        public string ProfilePicturePath { get; set; }
 
         public string? TeamId { get; set; }
 
