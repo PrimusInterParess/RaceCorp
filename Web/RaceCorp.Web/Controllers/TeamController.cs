@@ -88,5 +88,18 @@
 
             return this.View(model);
         }
+
+        public IActionResult Join(string teamId, string userId)
+        {
+            var hasPassed = this.teamService.RequestJoin(teamId, userId);
+
+            if (hasPassed)
+            {
+                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = teamId });
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+
+        }
     }
 }

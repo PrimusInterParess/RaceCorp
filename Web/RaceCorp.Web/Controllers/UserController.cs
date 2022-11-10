@@ -15,7 +15,7 @@
     public class UserController : BaseController
     {
         private readonly IUserService userService;
-    
+
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -32,7 +32,7 @@
         [HttpGet]
         public IActionResult Profile(string id)
         {
-            var userDto = this.userService.GetById<UserProfileViewModel>(id);
+            var userDto =  this.userService.GetById<UserProfileViewModel>(id);
             if (userDto != null)
             {
                 return this.View(userDto);

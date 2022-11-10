@@ -710,6 +710,47 @@ namespace RaceCorp.Data.Migrations
                     b.ToTable("Races");
                 });
 
+            modelBuilder.Entity("RaceCorp.Data.Models.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RequesterId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Requests");
+                });
+
             modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
                 {
                     b.Property<int>("Id")
@@ -1158,6 +1199,15 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Town");
                 });
 
+            modelBuilder.Entity("RaceCorp.Data.Models.Request", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Requests")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
                 {
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
@@ -1257,6 +1307,8 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Logos");
 
                     b.Navigation("Races");
+
+                    b.Navigation("Requests");
 
                     b.Navigation("Rides");
 

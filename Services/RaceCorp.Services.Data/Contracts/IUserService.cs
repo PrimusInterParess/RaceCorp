@@ -11,5 +11,7 @@
         public T GetById<T>(string id);
 
         Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath);
+
+        UserProfileViewModel Test(string id);
     }
 }

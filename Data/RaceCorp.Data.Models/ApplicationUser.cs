@@ -59,6 +59,8 @@ namespace RaceCorp.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
+        public virtual ICollection<Request> Requests { get; set; } = new HashSet<Request>();
+
         public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
 
         public virtual ICollection<Logo> Logos { get; set; } = new HashSet<Logo>();

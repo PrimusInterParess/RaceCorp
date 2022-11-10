@@ -24,6 +24,9 @@
         {
         }
 
+
+        public DbSet<Request> Requests { get; set; }
+
         public DbSet<Image> Images { get; set; }
 
         public DbSet<Team> Teams { get; set; }

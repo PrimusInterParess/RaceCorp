@@ -118,6 +118,19 @@
             return this.userRepo.All().Where(u => u.Id == id).To<T>().FirstOrDefault();
         }
 
+        public UserProfileViewModel Test(string id)
+        {
+            var user = this.userRepo
+                .AllAsNoTracking()
+                .Include(u => u.CreatedRaces)
+                .Include(u => u.CreatedRides)
+                .Include(u => u.Requests)
+                .FirstOrDefault(u => u.Id == id);
+
+            return null;
+
+        }
+
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)
         {
             var claim = this.userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == claimType);

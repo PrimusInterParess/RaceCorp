@@ -19,5 +19,8 @@ namespace RaceCorp.Common
         public const string TeamAlreadyExists = "Invalid team name!";
 
         public const string AlreadyHaveCreatedTeam = "You have alredy created team!";
+
+        public const string InvalidRequest = "You made invalid Request! Fudge off";
+
     }
 }

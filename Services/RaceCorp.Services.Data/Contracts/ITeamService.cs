@@ -12,5 +12,7 @@
         List<T> All<T>();
 
         T ById<T>(string id);
+
+        bool RequestJoin(string teamId, string userId);
     }
 }

@@ -9,44 +9,66 @@
         <div class="media clearfix">
             <div class="media-left pr30">
                 <a asp-action="Edit" asp-controller="User" asp-area="" asp-route-id="@Model.Id">
-                    <img style="width:30rem"; class="media-object mw150" src="@Model.ProfilePicturePath">
+                    <img style="width:30rem" ; class="media-object mw150" src="@Model.ProfilePicturePath">
                 </a>
             </div>
-            <div class="media-body va-m">
+            <div class="media-body va-m text-center">
                 <h2 class="media-heading">
                     @Model.FirstName @Model.LastName
                     <small> - Profile</small>
                 </h2>
                 <p class="lead">@Model.About</p>
-                <div class="media-links">
-                    <ul class="list-inline list-unstyled">
-                        <li>
-                            <a href="@Model.FacoBookLink" title="facebook link">
-                                <span class="fa fa-facebook-square fs35 text-primary"></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@Model.TwitterLink" title="twitter link">
-                                <span class="fa fa-twitter-square fs35 text-info"></span>
-                            </a>
-                        </li>
+                <div class="row mb-5">
+                    <div class="media-links nav-buttons">
+                        <ul class="list-inline list-unstyled">
+                            <li>
+                                <a href="@Model.FacoBookLink" title="facebook link">
+                                    <span class="fa fa-facebook-square fs35 text-primary"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Model.TwitterLink" title="twitter link">
+                                    <span class="fa fa-twitter-square fs35 text-info"></span>
+                                </a>
+                            </li>
 
-                        <li class="hidden">
-                            <a href="@Model.LinkedInLink" title="linkedin link">
-                                <span class="fa fa-linkedin-square fs35 text-info"></span>
+                            <li class="hidden">
+                                <a href="@Model.LinkedInLink" title="linkedin link">
+                                    <span class="fa fa-linkedin-square fs35 text-info"></span>
+                                </a>
+                            </li>
+                            <li class="hidden">
+                                <a href="@Model.GitHubLink" title="github link">
+                                    <span class="fa fa-github-square fs35 text-dark"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    @if (Model.TeamId != null)
+                    {
+                        <h3>Team</h3>
+                        <div class="media-left pr30">
+                            <a asp-action="Profile" asp-controller="Team" asp-route-id="@Model.TeamId" asp-area="">
+                                <img style="width:30rem" ; class="media-object mw90" src="@Model.TeamLogoImagePath">
                             </a>
-                        </li>
-                        <li class="hidden">
-                            <a href="@Model.GitHubLink" title="github link">
-                                <span class="fa fa-github-square fs35 text-dark"></span>
+                        </div>
+                    }
+                    @if (Model.MemberInTeamId != null)
+                    {
+                        <h3>Team</h3>
+                        <div class="media-left pr30">
+                            <a asp-action="Profile" asp-controller="Team" asp-route-id="@Model.MemberInTeamId" asp-area="">
+                                <img style="width:30rem" ; class="media-object mw90" src="@Model.MemberInTeamLogoImagePath">
                             </a>
-                        </li>
-
-                    </ul>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="row">
         <div class="col-md-4">
@@ -137,7 +159,7 @@
 
                                 @foreach (var raceTrace in Model.Traces)
                                 {
-                                    <a class="pull-left" href="#"> <img class="media-object mn thumbnail mw50" src="@raceTrace.LogoPaht" alt="..."> </a>
+                                    <a class="pull-left"> <img class="media-object mn thumbnail mw50" src="@raceTrace.LogoPaht"> </a>
                                     <div class="media-body">
                                         <h5 class="media-heading mb20">
                                             <a asp-action="Profile" asp-controller="Race" asp-route-id="@raceTrace.RaceId" type="button" style="outline" class="btn btn-lg btn-block">@raceTrace.RaceName  , @raceTrace.TraceName</a>
@@ -167,7 +189,7 @@
 
                                 @foreach (var ride in Model.Rides)
                                 {
-                                    <a class="pull-left" href="#"> <img class="media-object mn thumbnail mw50" src="@GlobalConstants.RideDefaultImage" alt="..."> </a>
+                                    <a class="pull-left"> <img class="media-object mn thumbnail mw50" src="@GlobalConstants.RideDefaultImage"> </a>
                                     <div class="media-body">
                                         <h5 class="media-heading mb20">
                                             <a asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.RideId" type="button" style="outline" class="btn btn-lg btn-block">@ride.RideName</a>

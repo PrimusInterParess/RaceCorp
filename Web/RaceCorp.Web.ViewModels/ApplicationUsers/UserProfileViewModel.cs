@@ -7,6 +7,7 @@
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
+    using RaceCorp.Web.ViewModels.Common;
 
     public class UserProfileViewModel : IMapTo<ApplicationUser>, IHaveCustomMappings
     {
@@ -26,6 +27,18 @@
 
         public string About { get; set; }
 
+        public string TeamId { get; set; }
+
+        public string TeamName { get; set; }
+
+        public string TeamLogoImagePath { get; set; }
+
+        public string MemberInTeamId { get; set; }
+
+        public string MemberInTeamName { get; set; }
+
+        public string MemberInTeamLogoImagePath { get; set; }
+
         public string ProfilePicturePath { get; set; }
 
         public string LinkedInLink { get; set; }
@@ -36,20 +49,27 @@
 
         public string TwitterLink { get; set; }
 
-        public virtual ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
+        public  ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
 
-        public virtual ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();
+        public  ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();
 
-        public List<UserRideBaseModel> Rides { get; set; } = new List<UserRideBaseModel>();
+        public ICollection<UserRideBaseModel> Rides { get; set; } = new List<UserRideBaseModel>();
 
-        public List<UserTraceBaseModel> Traces { get; set; } = new List<UserTraceBaseModel>();
+        public ICollection<UserTraceBaseModel> Traces { get; set; } = new List<UserTraceBaseModel>();
+
+        public ICollection<RequestBaseModel> Requests { get; set; } = new List<RequestBaseModel>();
 
         public void CreateMappings(IProfileExpression configuration)
         {
             // the last one to close the door!
-            configuration.CreateMap<ApplicationUser, UserProfileViewModel>().ForMember(x => x.ProfilePicturePath, opt
-                       => opt.MapFrom(x => x.ProfilePicturePath == null ?
-                       "\\Images\\default\\Murgash.jpg" : x.ProfilePicturePath));
+            configuration.CreateMap<ApplicationUser, UserProfileViewModel>()
+                .ForMember(x => x.ProfilePicturePath, opt =>
+                opt.MapFrom(x => x.ProfilePicturePath == null ?
+                       "\\Images\\default\\Murgash.jpg" : x.ProfilePicturePath))
+                .ForMember(x => x.TeamId, opt => opt.MapFrom(x => x.Team.Id))
+                .ForMember(x => x.MemberInTeamId, opt => opt.MapFrom(x => x.MemberInTeam.Id))
+                .ForMember(x => x.MemberInTeamLogoImagePath, opt => opt.MapFrom(x => x.MemberInTeam.LogoImagePath))
+                .ForMember(x => x.MemberInTeamName, opt => opt.MapFrom(x => x.MemberInTeam.Name));
         }
     }
 }
