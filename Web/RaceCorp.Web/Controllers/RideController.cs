@@ -111,6 +111,11 @@
         {
             var model = this.rideService.GetById<RideProfileVIewModel>(id);
 
+            if (model == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+            }
+
             return this.View(model);
         }
 
@@ -131,6 +136,12 @@
         public IActionResult Edit(int id)
         {
             var model = this.rideService.GetById<RideEditVIewModel>(id);
+
+            if (model == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+            }
+
             model.Formats = this.formatServices.GetFormatKVP();
             model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
             return this.View(model);
@@ -170,9 +181,14 @@
         {
             var isDeleted = await this.rideService.DeleteAsync(id);
 
-            this.TempData["MessageDeleted"] = "Your ride was successfully deleted!";
+            if (isDeleted)
+            {
+                this.TempData["MessageDeleted"] = "Your ride was successfully deleted!";
 
-            return this.RedirectToAction("All", "Ride");
+                return this.RedirectToAction("All", "Ride");
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
         }
 
         public IActionResult UpcomingRides(int id = 1)
@@ -184,44 +200,6 @@
 
             var rides = this.rideService.GetUpcomingRides(id);
             return this.View(rides);
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Register(EventRegisterModel eventModel)
-        {
-            try
-            {
-                var registering = await this.eventService.RegisterUserEvent(eventModel);
-                if (registering)
-                {
-                    this.TempData["Registered"] = "Your are now registered!";
-
-                    return this.RedirectToAction("Profile", new { id = eventModel.Id });
-                }
-
-                return this.RedirectToAction("ErrorPage", "Home");
-            }
-            catch (Exception)
-            {
-                return this.RedirectToAction("ErrorPage", "Home");
-            }
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Unregister(EventRegisterModel eventModel)
-        {
-            var isRemoved = await this.eventService.Unregister(eventModel);
-
-            if (isRemoved)
-            {
-                this.TempData["Unregistered"] = "Your are unregistered!!";
-
-                return this.RedirectToAction("Profile", new { id = eventModel.Id });
-            }
-
-            return this.RedirectToAction("ErrorPage", "Home");
         }
     }
 }

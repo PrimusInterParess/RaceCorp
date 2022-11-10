@@ -100,7 +100,7 @@
 
             if (model == null)
             {
-                return this.RedirectToAction(nameof(RaceController.All));
+                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
             }
 
             return this.View(model);
@@ -112,6 +112,12 @@
         public IActionResult Edit(int id)
         {
             var model = this.raceService.GetById<RaceEditViewModel>(id);
+
+            if (model == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+            }
+
             model.Formats = this.formatsList.GetFormatKVP();
 
             return this.View(model);
@@ -179,48 +185,9 @@
 
             if (isDeleted)
             {
+                this.TempData["MessageDeleted"] = "Your race was successfully deleted!";
+
                 return this.RedirectToAction("All", "Race");
-            }
-
-            return this.RedirectToAction("ErrorPage", "Home");
-        }
-
-        [HttpPost]
-        [Authorize]
-
-        public async Task<IActionResult> Register(EventRegisterModel eventModel)
-        {
-            try
-            {
-                var registering = await this.eventService.RegisterUserEvent(eventModel);
-                if (registering)
-                {
-                    this.TempData["Registered"] = "Your are now registered!";
-
-                    return this.RedirectToAction("Profile", new { id = eventModel.Id });
-                }
-
-                return this.RedirectToAction("ErrorPage", "Home");
-            }
-            catch (Exception e)
-            {
-                this.TempData["CannotParticipate"] = e.Message;
-
-                return this.RedirectToAction("Profile", new { id = eventModel.Id });
-            }
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Unregister(EventRegisterModel eventModel)
-        {
-            var isRemoved = await this.eventService.Unregister(eventModel);
-
-            if (isRemoved)
-            {
-                this.TempData["Unregistered"] = "Your are unregistered!!";
-
-                return this.RedirectToAction("Profile", new { id = eventModel.Id });
             }
 
             return this.RedirectToAction("ErrorPage", "Home");

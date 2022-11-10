@@ -19,7 +19,7 @@
 
         public List<TraceInRaceProfileViewModel> Traces { get; set; }
 
-        public ICollection<UserEventRegisteredModel> RegisteredUsers { get; set; } = new List<UserEventRegisteredModel>();
+        public ICollection<UserEventRegisteredModelRace> RegisteredUsers { get; set; } = new List<UserEventRegisteredModelRace>();
 
         public void CreateMappings(IProfileExpression configuration)
         {

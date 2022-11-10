@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@using RaceCorp.Common
 @model RaceProfileViewModel
 @{
     this.ViewData["Title"] = "Race Profile";
@@ -114,21 +115,21 @@
                                         <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
 
 
-                                        @if (hasPassed)
+                                        @if (hasPassed && currentUserId != null)
                                         {
                                             <a class="form-control btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
 
                                         }
-                                        else if (currentUserId != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId))
+                                        else if (isRegistered && currentUserId != null)
                                         {
-                                            <form method="post" asp-controller="Race" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Race">
+                                            <form method="post" asp-controller="Event" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
                                                 <button class="form-control btn btn-outline-danger mb-1" type="submit">Unregister</button>
                                             </form>
 
                                         }
-                                        else if (currentUserIdClaim != null && trace.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId) == false)
+                                        else if (isRegistered == false && currentUserId != null)
                                         {
-                                            <form method="post" asp-controller="Race" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="Race">
+                                            <form method="post" asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
                                                 <button class="form-control btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
                                             </form>
                                         }
@@ -158,26 +159,30 @@
         }
         @if (Model.RegisteredUsers.Count() != 0)
         {
-            <div class="scrollable mt-2">
+            <div class="scrollable-race">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Racer</th>
-                            <th scope="col">Team</th>
+                            <td scope="col">#</td>
+                            <td scope="col">Racer</td>
+                            <td scope="col">Team</td>
+                            <td scope="col">Town</td>
+                            <td scope="col">Registered date</td>
+
                         </tr>
                     </thead>
                     <tbody>
-
 
                         @{
                             var count = 0;
                             @foreach (var user in Model.RegisteredUsers)
                             {
                                 <tr>
-                                    <th scope="row">@(count += 1)</th>
-                                    <td><a class="btn btn-outline-secondary text-center" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
+                                    <td scope="row">@(count += 1)</td>
+                                    <td><a ctype="button" style="outline" class="btn btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
                                     <td class="text-center">BTRevolution</td>
+                                    <td class="text-center">@user.TownName</td>
+                                    <td scope="col">@user.CreatedOn</td>
                                 </tr>
                             }
                         }

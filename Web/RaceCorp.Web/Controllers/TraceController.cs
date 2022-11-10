@@ -12,10 +12,7 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Trace;
 
-    using static RaceCorp.Services.Constants.Drive;
-        using static RaceCorp.Services.Constants.Messages;
-
-    using static RaceCorp.Services.Constants.Common;
+    using static RaceCorp.Services.Constants.Messages;
 
     public class TraceController : BaseController
     {
@@ -42,19 +39,17 @@
             this.userManager = userManager;
         }
 
+        [HttpGet]
         public IActionResult RaceTraceProfile(int raceId, int traceId)
         {
-            try
-            {
-                var model = this.traceService
-                    .GetRaceTraceProfileViewModel(raceId, traceId);
+            var model = this.traceService.GetById<RaceTraceProfileModel>(raceId, traceId);
 
-                return this.View(model);
-            }
-            catch (Exception)
+            if (model == null)
             {
-                return this.RedirectToAction("Profile", "Race", new { id = raceId });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = " " });
             }
+
+            return this.View(model);
         }
 
         [HttpGet]
@@ -63,6 +58,11 @@
         public IActionResult EditRaceTrace(int raceId, int traceId)
         {
             var model = this.traceService.GetById<RaceTraceEditModel>(raceId, traceId);
+
+            if (model == null)
+            {
+                this.RedirectToAction("ErrorPage", "Home", new { area = " " });
+            }
 
             model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
 
@@ -141,10 +141,18 @@
             var user = await this.userManager
                 .GetUserAsync(this.User);
 
-            await this.traceService.CreateRaceTraceAsync(
-                model,
-                $"{this.environment.WebRootPath}",
-                user.Id);
+            try
+            {
+                await this.traceService.CreateRaceTraceAsync(
+               model,
+               $"{this.environment.WebRootPath}",
+               user.Id);
+            }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError("", e.Message);
+                return this.View(model);
+            }
 
             this.TempData["Message"] = "Trace was successfully created!";
 

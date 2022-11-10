@@ -88,6 +88,7 @@ namespace RaceCorp.Web
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITeamService, TeamService>();
         }
 
         private static void Configure(WebApplication app)
@@ -109,7 +110,7 @@ namespace RaceCorp.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/ErrorPage");
                 app.UseHsts();
             }
 

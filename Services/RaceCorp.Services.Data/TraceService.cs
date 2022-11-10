@@ -36,37 +36,6 @@
             this.gpxService = gpxService;
         }
 
-        public RaceTraceProfileModel GetRaceTraceProfileViewModel(int raceId, int traceId)
-        {
-            var trace = this.traceRepo
-                .AllAsNoTracking()
-                .Include(t => t.Race).ThenInclude(r => r.Logo)
-                .Include(t => t.Difficulty)
-                .Include(t => t.Gpx)
-                .FirstOrDefault(t => t.RaceId == raceId && t.Id == traceId);
-
-            if (trace == null)
-            {
-                throw new Exception(InvalidTrace);
-            }
-
-            return new RaceTraceProfileModel()
-            {
-                Id = trace.Id,
-                Name = trace.Name,
-                RaceName = trace.Race.Name,
-                RaceId = (int)trace.RaceId,
-                Difficulty = trace.Difficulty.Level.ToString(),
-                DifficultyId = trace.DifficultyId,
-                ControlTime = trace.ControlTime.TotalHours,
-                Length = trace.Length,
-                StartTime = trace.StartTime.ToString(GlobalConstants.DateStringFormat),
-                LogoPath = trace.Race.LogoPath,
-                GoogleDriveId = trace.Gpx.GoogleDriveId,
-                GpxId = trace.GpxId,
-            };
-        }
-
         public async Task EditAsync(RaceTraceEditModel model, string roothPath, string userId)
         {
             var trace = this.traceRepo
@@ -120,11 +89,21 @@
 
         public async Task CreateRaceTraceAsync(RaceTraceEditModel model, string roothPath, string userId)
         {
+
+
             var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
+
+            if (raceName == null)
+            {
+                throw new NullReferenceException(GlobalErrorMessages.InvalidInputData);
+            }
 
             var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
 
-            var gpx = await this.gpxService
+
+            try
+            {
+                var gpx = await this.gpxService
                .ProccessingData(
                model.GpxFile,
                userId,
@@ -132,9 +111,14 @@
                roothPath,
                serviceAccountPath);
 
-            var trace = await this.ProccedingData(model);
-            trace.Gpx = gpx;
-            trace.RaceId = model.RaceId;
+                var trace = await this.ProccedingData(model);
+                trace.Gpx = gpx;
+                trace.RaceId = model.RaceId;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(e.Message);
+            }
 
             await this.traceRepo.SaveChangesAsync();
         }
@@ -159,6 +143,11 @@
         public async Task<bool> DeleteTraceAsync(int id)
         {
             var trace = this.traceRepo.All().FirstOrDefault(t => t.Id == id);
+
+            if (trace == null)
+            {
+                throw new NullReferenceException(GlobalErrorMessages.InvalidInputData);
+            }
 
             this.traceRepo.Delete(trace);
 

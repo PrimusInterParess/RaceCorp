@@ -1,4 +1,5 @@
-﻿@model RaceCorp.Web.ViewModels.Ride.RideProfileVIewModel
+﻿@using RaceCorp.Common
+@model RaceCorp.Web.ViewModels.Ride.RideProfileVIewModel
 
 @{
     this.ViewData["Title"] = "Ride Profile";
@@ -43,20 +44,20 @@
             <button class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</button>
         </li>
     }
-    else if (isRegistered)
+    else if (isRegistered && currentUserId != null)
     {
         <li class="me-2">
             <form method="post"
-              asp-controller="Ride" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
+              asp-controller="Event" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
                 <button class="btn btn-outline-success mb-1 " type="submit">Unregister</button>
             </form>
         </li>
     }
-    else if (currentUserIdClaim != null)
+    else if (isRegistered == false && currentUserId != null)
     {
         <li class="me-2">
             <form method="post"
-              asp-controller="Ride" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="Ride">
+              asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
                 <button class="btn btn-outline-success mb-1" type="submit">Register</button>
             </form>
         </li>
@@ -108,9 +109,9 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Racer</th>
-                            <th scope="col">Team</th>
-                            <th scope="col">Town</th>
+                            <td scope="col">Racer</td>
+                            <td scope="col">Team</td>
+                            <td scope="col">Town</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -120,7 +121,7 @@
                             {
                                 <tr>
                                     <th scope="row">@(count += 1)</th>
-                                    <td><a type="button" style="outline" class="btn btn-lg btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
+                                    <td><a type="button" style="outline" class="btn btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
                                     <td class="text-center">BTRevolution</td>
                                     <td class="text-center">Town name here</td>
                                 </tr>

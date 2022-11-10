@@ -82,6 +82,7 @@
 
             var userRide = new ApplicationUserRide
             {
+                CreatedOn = DateTime.UtcNow,
                 Ride = ride,
                 ApplicationUser = user,
             };
@@ -125,15 +126,19 @@
 
             var userTrace = new ApplicationUserTrace
             {
+                CreatedOn = DateTime.UtcNow,
                 Race = race,
                 Trace = trace,
                 ApplicationUser = user,
             };
 
+            user.Traces.Add(userTrace);
+
             if (isAlredyRegistered == false)
             {
                 var userRace = new ApplicationUserRace
                 {
+                    CreatedOn = DateTime.UtcNow,
                     Race = race,
                     Trace = trace,
                     ApplicationUser = user,

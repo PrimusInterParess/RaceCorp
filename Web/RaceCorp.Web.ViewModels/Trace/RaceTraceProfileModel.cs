@@ -1,6 +1,14 @@
 ﻿namespace RaceCorp.Web.ViewModels.Trace
 {
-    public class RaceTraceProfileModel
+    using System.Collections.Generic;
+
+    using AutoMapper;
+    using RaceCorp.Data.Models;
+    using RaceCorp.Services.Mapping;
+    using RaceCorp.Web.ViewModels.ApplicationUsers;
+    using RaceCorp.Web.ViewModels.EventRegister;
+
+    public class RaceTraceProfileModel : IMapFrom<Trace>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -12,8 +20,6 @@
 
         public string Difficulty { get; set; }
 
-        public string LogoPath { get; set; }
-
         public int? Length { get; set; }
 
         public int DifficultyId { get; set; }
@@ -22,8 +28,21 @@
 
         public string StartTime { get; set; }
 
-        public string GoogleDriveId { get; set; }
+        public string GpxGoogleDriveId { get; set; }
 
         public string GpxId { get; set; }
+
+        public string GpxPath { get; set; }
+
+        public ICollection<UserEventRegisteredModelTrace> RegisteredUsers { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Trace, RaceTraceProfileModel>()
+                .ForMember(x => x.Difficulty, opt
+                   => opt.MapFrom(x => x.Difficulty.Level.ToString()))
+                .ForMember(x => x.ControlTime, opt
+                   => opt.MapFrom(x => x.ControlTime.TotalHours));
+        }
     }
 }

@@ -92,20 +92,30 @@
 
             race.Town = townData;
 
-
-            var logo = await this.logoService
+            try
+            {
+                var logo = await this.logoService
                 .ProccessingData(
                 model.RaceLogo,
                 userId,
                 roothPath);
+                race.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
+                race.Logo = logo;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(e.Message);
+            }
 
             if (model.Difficulties.Count != 0)
             {
-                var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
+                var serviceAccountPath = Path.GetFullPath(GlobalConstants.CredentialsPath);
 
                 foreach (var traceInputModel in model.Difficulties)
                 {
-                    var gpx = await this.gpxService
+                    try
+                    {
+                        var gpx = await this.gpxService
                         .ProccessingData(
                         traceInputModel.GpxFile,
                         userId,
@@ -113,18 +123,19 @@
                         roothPath,
                         serviceAccountPath);
 
-                    var trace = await this.traceService
+                        var trace = await this.traceService
                         .ProccedingData(traceInputModel);
 
-                    trace.GpxPath = $"\\{gpx.ParentFolderName}\\{gpx.ChildFolderName}\\{gpx.Id}.{gpx.Extension}";
-                    trace.Gpx = gpx;
-
-                    race.Traces.Add(trace);
+                        trace.GpxPath = $"\\{gpx.ParentFolderName}\\{gpx.ChildFolderName}\\{gpx.Id}.{gpx.Extension}";
+                        trace.Gpx = gpx;
+                        race.Traces.Add(trace);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new InvalidOperationException(e.Message);
+                    }
                 }
             }
-
-            race.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
-            race.Logo = logo;
 
             try
             {
@@ -196,20 +207,32 @@
         {
             var raceDb = this.raceRepo.All().FirstOrDefault(r => r.Id == model.Id);
 
+            if (raceDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRaceId);
+            }
+
             raceDb.Name = model.Name;
             raceDb.Description = model.Description;
             raceDb.FormatId = int.Parse(model.FormatId);
 
             if (model.RaceLogo != null)
             {
-                var logo = await this.logoService
-                 .ProccessingData(
-                 model.RaceLogo,
-                 userId,
-                 roothPath);
+                try
+                {
+                    var logo = await this.logoService
+                    .ProccessingData(
+                    model.RaceLogo,
+                    userId,
+                    roothPath);
 
-                raceDb.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
-                raceDb.Logo = logo;
+                    raceDb.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
+                    raceDb.Logo = logo;
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException(e.Message);
+                }
             }
 
             var mountainDb = await this.mountanService.ProccesingData(model.Mountain);

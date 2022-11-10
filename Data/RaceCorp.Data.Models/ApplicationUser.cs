@@ -4,7 +4,7 @@ namespace RaceCorp.Data.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
+
     using Microsoft.AspNetCore.Identity;
 
     using RaceCorp.Data.Common.Models;
@@ -29,7 +29,6 @@ namespace RaceCorp.Data.Models
 
         public Gender Gender { get; set; }
 
-        [Required]
         public DateTime DateOfBirth { get; set; }
 
         public int? TownId { get; set; }
@@ -40,15 +39,15 @@ namespace RaceCorp.Data.Models
 
         public string ProfilePicturePath { get; set; }
 
-        public string? TeamId { get; set; }
+        public string TeamId { get; set; }
 
         public virtual Team Team { get; set; }
 
-        public string? MemberInTeamId { get; set; }
-
-        public string About { get; set; }
+        public string MemberInTeamId { get; set; }
 
         public virtual Team MemberInTeam { get; set; }
+
+        public string About { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }

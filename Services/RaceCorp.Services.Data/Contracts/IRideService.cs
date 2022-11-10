@@ -14,12 +14,12 @@
 
         RideAllViewModel GetUpcomingRides(int page, int itemsPerPage = 3);
 
-        Task<bool> Unregister(int id, string userId);
+       // Task<bool> Unregister(int id, string userId);
 
         T GetById<T>(int id);
 
         Task<bool> DeleteAsync(int id);
 
-        Task<bool> RegisterUserToRide(int id, string userId);
+       // Task<bool> RegisterUserToRide(int id, string userId);
     }
 }

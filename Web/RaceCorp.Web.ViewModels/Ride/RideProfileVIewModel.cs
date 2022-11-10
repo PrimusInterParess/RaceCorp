@@ -32,7 +32,7 @@
 
         public string TraceGpxId { get; set; }
 
-        public ICollection<UserEventRegisteredModel> RegisteredUsers { get; set; } = new List<UserEventRegisteredModel>();
+        public ICollection<UserEventRegisteredModelRide> RegisteredUsers { get; set; } = new List<UserEventRegisteredModelRide>();
 
         public void CreateMappings(IProfileExpression configuration)
         {

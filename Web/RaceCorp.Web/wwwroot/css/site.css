@@ -1060,9 +1060,28 @@ a {
     color: #0366d6;
 }
 
+/* table*/
+table,
+table td {
+    text-align: center;
+}
+
+th {
+    text-align: left;
+}
+
+/* table*/
+
+
 .scrollable-ride {
     height: 350px;
     width: 360px;
+    overflow-y: auto;
+}
+
+.scrollable-race {
+    height: 300px;
+    width: 1340px;
     overflow-y: auto;
 }
 

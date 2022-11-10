@@ -1,0 +1,27 @@
+﻿@using RaceCorp.Web.ViewModels.Team
+@model List<TeamAllViewModel>
+@{
+    this.ViewData["Title"] = "All Teams";
+}
+<h1>All teams</h1>
+<div class="row">
+    @foreach (var team in Model)
+    {
+
+
+        <div class="col-4">
+            <div class="form-group card col-md-4 position-relative me-2 mb-2">
+                <div class="card" style="width: 25rem;">
+                    <a asp-action="Profile" asp-controller="Team" asp-area="" asp-route-id="@team.Id">
+                        <img src="@team.LogoImagePath" class="card-img-top" alt="OLEMALE">
+                        <div class="card-body">
+                            <h5 class="card-title">@team.Name</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+    }
+</div>

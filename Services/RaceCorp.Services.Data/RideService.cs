@@ -247,47 +247,5 @@
                 Rides = rides,
             };
         }
-
-        public async Task<bool> RegisterUserToRide(int id, string userId)
-        {
-            var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == id);
-
-            if (ride.RegisteredUsers.Any(u => u.ApplicationUserId == userId))
-            {
-                return false;
-            }
-
-            var userRide = new ApplicationUserRide
-            {
-                ApplicationUserId = userId,
-                RideId = id,
-            };
-
-            await this.userRideRepo.AddAsync(userRide);
-
-            ride.RegisteredUsers.Add(userRide);
-
-            await this.rideRepo.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<bool> Unregister(int id, string userId)
-        {
-            var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == id);
-            var registeredUser = ride.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == userId);
-
-            try
-            {
-                this.userRideRepo.Delete(registeredUser);
-                await this.userRideRepo.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException(e.Message);
-            }
-
-            return true;
-        }
     }
 }

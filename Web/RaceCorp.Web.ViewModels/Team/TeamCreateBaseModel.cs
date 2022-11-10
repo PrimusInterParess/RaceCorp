@@ -1,8 +1,8 @@
-﻿namespace RaceCorp.Web.ViewModels.Common
+﻿namespace RaceCorp.Web.ViewModels.Team
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-
+    using Microsoft.AspNetCore.Http;
     using RaceCorp.Data.Models;
 
     using static RaceCorp.Services.Constants.Common;
@@ -24,6 +24,8 @@
         [DisplayName("Town")]
         [StringLength(maximumLength: 20, ErrorMessage = TownNameLenghtError, MinimumLength = 2)]
         public string TownName { get; set; }
+
+        public IFormFile Logo { get; set; }
 
         public string CreatorId { get; set; }
     }

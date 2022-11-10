@@ -12,6 +12,9 @@
 
         public const string Gpx = "gpx";
 
+        public const string EventTypeRace = "Race";
+        public const string EventTypeRide = "Ride";
+
         public const string ProfilePicterPostFix = "ProfilePicture";
 
         public const string DateStringFormat = "f";
@@ -30,6 +33,8 @@
         public const string MountainCarocelPicture = "\\Images\\System\\8ef223eb-d02f-47e9-b07c-9cabb74a87c9.jpg";
         public const string RacesCarocelPicture = "\\Images\\System\\117656b5-e99d-4dc6-aefa-d544a01a4821.jpg";
         public const string RidesCarocelPicture = "\\Images\\System\\3f8236c9-8883-4403-8157-b1ed262ce1ed.jpg";
+
+        public const string CredentialsPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
 
     }
 }

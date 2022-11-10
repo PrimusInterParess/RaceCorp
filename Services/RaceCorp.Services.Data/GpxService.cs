@@ -83,15 +83,22 @@
 
             var gpxFilePath = $"{gpxRoothPath}\\{childrenFolderName}\\{gpxDto.Id}.{extention}";
 
-            var googleId = await this.googleDriveService
-                .UloadGpxFileToDrive(
-                gpxFilePath,
-                pathToServiceAccountKeyFile,
-                childrenFolderName,
-                DirectoryId);
+            try
+            {
+                var googleId = await this.googleDriveService
+               .UloadGpxFileToDrive(
+               gpxFilePath,
+               pathToServiceAccountKeyFile,
+               childrenFolderName,
+               DirectoryId);
 
-            gpxDto.GoogleDriveId = googleId;
-            gpxDto.GoogleDriveDirectoryId = DirectoryId;
+                gpxDto.GoogleDriveId = googleId;
+                gpxDto.GoogleDriveDirectoryId = DirectoryId;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(e.Message);
+            }
 
             await this.gpxRepo.AddAsync(gpxDto);
 

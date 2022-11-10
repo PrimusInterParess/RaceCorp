@@ -14,15 +14,18 @@
 
         public string Description { get; set; }
 
+        public string LogoImagePath { get; set; }
+
         public int TownId { get; set; }
 
         public virtual Town Town { get; set; }
 
-        [AllowNull]
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         public virtual ICollection<ApplicationUser> TeamMembers { get; set; } = new HashSet<ApplicationUser>();
+
+        public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
     }
 }
