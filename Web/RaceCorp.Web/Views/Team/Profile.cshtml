@@ -1,27 +1,44 @@
 ﻿@model RaceCorp.Web.ViewModels.Team.TeamProfileViewModel
 
+
+@if (this.TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger">@this.TempData["ErrorMessage"]</div>
+}
+
+@if (this.TempData.ContainsKey("Joined"))
+{
+    <div class="alert alert-success">@this.TempData["Joined"]</div>
+}
+
 <div class="row">
+</div>
+
+
+<div class="about-section">
+    <h1>@Model.Name</h1>
+    <p>@Model.Description</p>
+    <H3>Join the team</H3>
     <a asp-action="Join" asp-controller="Team" asp-route-teamId="@Model.Id" asp-route-userId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
         <img class="resize img-thumbnail float-left" src="@Model.LogoImagePath">
-        <h4>Join the team!</h4>
     </a>
 </div>
+
+<h2 style="text-align:center">Our Team</h2>
 <div class="row">
-
-
     @foreach (var teamMember in Model.TeamMembers)
     {
         <div class="column">
             <div class="card">
-                <img src="@teamMember.ProfilePicturePath" alt="@teamMember.FirstName" style="width:100%">
+                <img src="@teamMember.ProfilePicturePath" alt="@teamMember.FirstName" class="my-image mt-4" style="width:100%">
                 <div class="container">
-                    <h2>John Doe</h2>
-                    <p class="title">Designer</p>
-                    <p>Some text that describes me lorem ipsum ipsum lorem.</p>
-                    <p>example@example.com</p>
-                    <p><button class="button">Contact</button></p>
+                    <h2>@teamMember.FirstName @teamMember.LastName</h2>
+
+                    <p><form method="get"><button asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@teamMember.Id" type="submit" class="button">Profile</button></form></p>
+
                 </div>
             </div>
         </div>
     }
+
 </div>

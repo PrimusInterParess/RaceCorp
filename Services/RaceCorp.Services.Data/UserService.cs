@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading;
@@ -24,6 +25,7 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IFileService fileService;
+        private readonly IDeletableEntityRepository<Request> requestRepo;
 
         public UserService(
             IUserStore<ApplicationUser> userStore,
@@ -31,7 +33,8 @@
             UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Town> townRepo,
-            IFileService fileService)
+            IFileService fileService,
+            IDeletableEntityRepository<Request> requestRepo)
         {
             this.userStore = userStore;
             this.signInManager = signInManager;
@@ -39,6 +42,7 @@
             this.userRepo = userRepo;
             this.townRepo = townRepo;
             this.fileService = fileService;
+            this.requestRepo = requestRepo;
         }
 
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
@@ -118,17 +122,49 @@
             return this.userRepo.All().Where(u => u.Id == id).To<T>().FirstOrDefault();
         }
 
-        public UserProfileViewModel Test(string id)
+        public List<T> GetRequest<T>(string userId)
         {
-            var user = this.userRepo
+            return this.requestRepo
                 .AllAsNoTracking()
-                .Include(u => u.CreatedRaces)
-                .Include(u => u.CreatedRides)
-                .Include(u => u.Requests)
-                .FirstOrDefault(u => u.Id == id);
+                .Include(r => r.ApplicationUser)
+                .Where(r => r.ApplicationUserId == userId)
+                .OrderBy(r => r.IsApproved)
+                .To<T>()
+                .ToList();
+        }
 
-            return null;
+        public async Task<bool> ProccessRequestAsync(int requestId, string userId)
+        {
+            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Team).FirstOrDefault(u => u.Id == userId);
 
+            if (userDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var requestDb = userDb.Requests.FirstOrDefault(r => r.Id == requestId);
+
+            if (requestDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var requesterDb = this.userRepo.All().FirstOrDefault(u => u.Id == requestDb.RequesterId);
+
+            requestDb.IsApproved = true;
+
+            requesterDb.MemberInTeam = userDb.Team;
+            userDb.Team.TeamMembers.Add(requesterDb);
+
+            try
+            {
+                await this.userRepo.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)

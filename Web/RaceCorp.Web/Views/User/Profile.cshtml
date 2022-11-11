@@ -1,16 +1,36 @@
 ﻿@using RaceCorp.Common
 @model RaceCorp.Web.ViewModels.ApplicationUsers.UserProfileViewModel;
 
+@{
+    var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+    var isOwner = false;
+    if (currentUserId != null)
+    {
+        isOwner = currentUserId == Model.Id;
+    }
+
+    var hasTeam = Model.TeamId != null;
+
+}
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <section id="content" class="container ">
     <!-- Begin .page-heading -->
     <div class="page-heading mt-3">
         <div class="media clearfix">
             <div class="media-left pr30">
-                <a asp-action="Edit" asp-controller="User" asp-area="" asp-route-id="@Model.Id">
+                @if (isOwner)
+                {
+                    <a asp-action="Edit" asp-controller="User" asp-area="" asp-route-id="@Model.Id">
+                        <img style="width:30rem" ; class="media-object mw150" src="@Model.ProfilePicturePath">
+                    </a>
+                }
+                else
+                {
                     <img style="width:30rem" ; class="media-object mw150" src="@Model.ProfilePicturePath">
-                </a>
+
+                }
+
             </div>
             <div class="media-body va-m text-center">
                 <h2 class="media-heading">
@@ -42,26 +62,58 @@
                                     <span class="fa fa-github-square fs35 text-dark"></span>
                                 </a>
                             </li>
+
                         </ul>
                     </div>
+                    @if (isOwner)
+                    {
+                        <div class="nav-buttons">
+                            <ul>
+                                @if (hasTeam)
+                                {
+                                    <li>
+                                        <form method="get">
+                                            <a asp-action="Requests" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="notification">
+                                                <span>Requests</span>
+                                                <span class="badge">@Model.RequestsCount</span>
+                                            </a>
+                                        </form>
+                                    </li>
+                                }
+
+                                <li>
+
+                                    <a class="notification">
+                                        <span>Messages</span>
+                                        <span class="badge"></span>
+                                    </a>
+
+                                </li>
+                            </ul>
+                        </div>
+                    }
+
                 </div>
                 <div class="row mt-5">
                     @if (Model.TeamId != null)
                     {
-                        <h3>Team</h3>
+
                         <div class="media-left pr30">
-                            <a asp-action="Profile" asp-controller="Team" asp-route-id="@Model.TeamId" asp-area="">
-                                <img style="width:30rem" ; class="media-object mw90" src="@Model.TeamLogoImagePath">
-                            </a>
+
+
+                            <p><form method="get"><button style="outline" asp-action="Profile" asp-controller="Team" asp-route-id="@Model.TeamId" type="submit" class="btn btn-lg btn-block"> <h3>Member of  @Model.TeamName</h3></button></form></p>
+
+
                         </div>
                     }
-                    @if (Model.MemberInTeamId != null)
+                    else if (Model.MemberInTeamId != null)
                     {
-                        <h3>Team</h3>
                         <div class="media-left pr30">
-                            <a asp-action="Profile" asp-controller="Team" asp-route-id="@Model.MemberInTeamId" asp-area="">
-                                <img style="width:30rem" ; class="media-object mw90" src="@Model.MemberInTeamLogoImagePath">
-                            </a>
+
+
+                            <p><form method="get"><button style="outline" asp-action="Profile" asp-controller="Team" asp-route-id="@Model.MemberInTeamId" type="submit" class="btn btn-block"> <h3>Member of  @Model.MemberInTeamName</h3></button></form></p>
+
+
                         </div>
                     }
                 </div>
@@ -172,8 +224,15 @@
                             }
                             else
                             {
-                                <h3>You are not yet registered for any race!</h3>
-                                <a asp-action="All" asp-controller="Race">Why don't you register for a race ?</a>
+                                @if (isOwner)
+                                {
+                                    <h3>You are not yet registered for any race!</h3>
+                                    <a asp-action="All" asp-controller="Race">Why don't you register for a race ?</a>
+                                }
+                                else
+                                {
+                                    <h2>Too good for any race</h2>
+                                }
                             }
                         </div>
 
@@ -202,8 +261,12 @@
                             }
                             else
                             {
-                                <h3>You are not yet registered for any ride!</h3>
-                                <a asp-action="All" asp-controller="Ride">Why don't you register for a ride ?</a>
+                                @if (isOwner)
+                                {
+                                    <h3>You are not yet registered for any ride!</h3>
+                                    <a asp-action="All" asp-controller="Ride">Why don't you register for a ride ?</a>
+                                }
+
                             }
                         </div>
 

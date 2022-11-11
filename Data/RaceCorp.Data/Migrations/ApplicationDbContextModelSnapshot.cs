@@ -1142,7 +1142,8 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasOne("RaceCorp.Data.Models.Team", "Team")
                         .WithMany("Images")
-                        .HasForeignKey("TeamId");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ApplicationUser");
 

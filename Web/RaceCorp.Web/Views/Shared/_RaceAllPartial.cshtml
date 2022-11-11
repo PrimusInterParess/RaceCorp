@@ -21,7 +21,7 @@ else
     <div class="row">
         @foreach (var race in this.Model.Races)
         {
-            <div class="form-group card col-md-4">
+            @*<div class="form-group card col-md-4">
                 <img src="@race.LogoPath" class="card-img-top">
                 <div class="card-body text-center">
                     <a class="btn btn-outline-secondary" asp-controller="Race" asp-action="Profile" asp-route-id="@race.Id"><h5>@race.Name</h5></a>
@@ -32,6 +32,19 @@ else
                 <ul class="list-group list-group-flush text-center">
                     <li class="list-group-item"><b>@race.Date</b></li>
                 </ul>
+            </div>*@
+
+            <div class="column">
+                <div class="card">
+                    <img src="@race.LogoPath" alt="@race.Name" class="my-image mt-4" style="width:100%">
+                    <div class="container">
+                        <h2>@race.Name</h2>
+                        <p>@race.Description</p>
+
+                        <a class="btn btn-outline-secondary" asp-controller="Race" asp-action="Profile" asp-route-id="@race.Id"><h5>@race.Name</h5></a>
+                      <p>@race.Date</p>
+                    </div>
+                </div>
             </div>
         }
     </div>

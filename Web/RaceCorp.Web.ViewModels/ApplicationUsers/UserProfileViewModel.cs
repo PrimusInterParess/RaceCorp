@@ -49,15 +49,15 @@
 
         public string TwitterLink { get; set; }
 
-        public  ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
+        public int RequestsCount { get; set; }
 
-        public  ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();
+        public ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
+
+        public ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();
 
         public ICollection<UserRideBaseModel> Rides { get; set; } = new List<UserRideBaseModel>();
 
         public ICollection<UserTraceBaseModel> Traces { get; set; } = new List<UserTraceBaseModel>();
-
-        public ICollection<RequestBaseModel> Requests { get; set; } = new List<RequestBaseModel>();
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -69,7 +69,8 @@
                 .ForMember(x => x.TeamId, opt => opt.MapFrom(x => x.Team.Id))
                 .ForMember(x => x.MemberInTeamId, opt => opt.MapFrom(x => x.MemberInTeam.Id))
                 .ForMember(x => x.MemberInTeamLogoImagePath, opt => opt.MapFrom(x => x.MemberInTeam.LogoImagePath))
-                .ForMember(x => x.MemberInTeamName, opt => opt.MapFrom(x => x.MemberInTeam.Name));
+                .ForMember(x => x.MemberInTeamName, opt => opt.MapFrom(x => x.MemberInTeam.Name))
+                .ForMember(x => x.RequestsCount, opt => opt.MapFrom(x => x.Requests.Where(r => r.IsApproved == false).ToList().Count));
         }
     }
 }

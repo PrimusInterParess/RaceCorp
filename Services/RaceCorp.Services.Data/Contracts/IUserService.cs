@@ -1,5 +1,6 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@
 
         Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath);
 
-        UserProfileViewModel Test(string id);
+        List<T> GetRequest<T>(string userId);
+
+        Task<bool> ProccessRequestAsync(int requestId, string userId);
     }
 }

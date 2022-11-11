@@ -1,5 +1,6 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Team;
@@ -59,13 +61,13 @@
             {
                 await this.teamService.CreateAsync(inputModel, this.environment.WebRootPath);
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
-
-                throw;
+                this.TempData["AlreadyHaveTeam"] = e.Message;
             }
 
             return this.RedirectToAction("All");
+
         }
 
         [HttpGet]
@@ -89,17 +91,28 @@
             return this.View(model);
         }
 
-        public IActionResult Join(string teamId, string userId)
+        public async Task<IActionResult> Join(string teamId, string userId)
         {
-            var hasPassed = this.teamService.RequestJoin(teamId, userId);
+            bool hasPassed = false;
+
+            try
+            {
+                hasPassed = await this.teamService.RequestJoin(teamId, userId);
+            }
+            catch (Exception e)
+            {
+                this.TempData["ErrorMessage"] = e.Message;
+                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = teamId });
+            }
 
             if (hasPassed)
             {
+                this.TempData["Joined"] = GlobalConstants.SuccessfulRequest;
+
                 return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = teamId });
             }
 
             return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
-
         }
     }
 }

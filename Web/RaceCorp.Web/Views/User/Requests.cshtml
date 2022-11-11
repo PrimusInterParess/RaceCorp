@@ -1,0 +1,51 @@
+﻿@model RaceCorp.Web.ViewModels.ApplicationUsers.UserAllRequestsViewModel;
+
+@{
+    this.ViewData["Tittle"] = "Requests";
+}
+@if (Model.Requests.Count != 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td scope="col"><b>#</b></td>
+                <td scope="col"><b>Description</b></td>
+                <td scope="col"><b>Date</b></td>
+                <td scope="col"><b>Approval status</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var count = 0;
+            }
+            @foreach (var request in Model.Requests)
+            {
+
+                <tr>
+                    <td scope="row"><b>@(count += 1)</b></td>
+
+                    <td>
+                        <p><form method="get"><a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@request.RequesterId" type="submit" class="btn" style="outline">@request.Description</a></form></p>
+
+                    </td>
+
+                    <td>@request.CreatedOn</td>
+
+                    @if (request.IsApproved)
+                    {
+                        <td>Approved</td>
+                    }
+                    else
+                    {
+                        <td><form method="post" asp-action="ProccessRequest" asp-controller="User" asp-area="" asp-route-requestId="@request.Id" asp-route-userId="@request.ApplicationUserId"><button type="submit" class="btn">Approve</button></form></td>
+
+                    }
+
+                </tr>
+
+
+            }
+
+        </tbody>
+    </table>
+}

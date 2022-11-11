@@ -1,6 +1,8 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -15,7 +17,6 @@
     public class UserController : BaseController
     {
         private readonly IUserService userService;
-
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -29,10 +30,40 @@
             this.userManager = userManager;
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> ProccessRequest(int requestId, string userId)
+        {
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId == null || currentUserId != userId)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            var isApproved = await this.userService.ProccessRequestAsync(requestId, userId);
+
+            return this.RedirectToAction("Requests", "User", new { area = string.Empty, id = userId });
+        }
+
+        [HttpGet]
+        public IActionResult Requests(string id)
+        {
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId == null || currentUserId != id)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+            }
+
+            var userDto = this.userService.GetById<UserAllRequestsViewModel>(id);
+
+            return this.View(userDto);
+        }
+
         [HttpGet]
         public IActionResult Profile(string id)
         {
-            var userDto =  this.userService.GetById<UserProfileViewModel>(id);
+            var userDto = this.userService.GetById<UserProfileViewModel>(id);
             if (userDto != null)
             {
                 return this.View(userDto);

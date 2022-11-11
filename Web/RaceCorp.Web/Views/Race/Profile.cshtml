@@ -52,7 +52,7 @@
 
     <div class="col-md-4 mb-3">
         <form method="post" asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">
-            <button class="form-control btn btn-outline-danger mb-1 btn-block" type="submit">Delete</button>
+            <butaton class="form-control btn btn-outline-danger mb-1 btn-block" type="submit">Delete</butaton>
         </form>
     </div>
 </div>
@@ -179,7 +179,7 @@
                             {
                                 <tr>
                                     <td scope="row">@(count += 1)</td>
-                                    <td><a ctype="button" style="outline" class="btn btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
+                                    <td><a type="button" style="outline" class="btn btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
                                     <td class="text-center">BTRevolution</td>
                                     <td class="text-center">@user.TownName</td>
                                     <td scope="col">@user.CreatedOn</td>

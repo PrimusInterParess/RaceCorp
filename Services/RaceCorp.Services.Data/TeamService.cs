@@ -54,7 +54,7 @@
                 throw new InvalidOperationException(GlobalErrorMessages.TeamAlreadyExists);
             }
 
-            var user = this.userRepo.All().Include(u => u.Team).FirstOrDefault();
+            var user = this.userRepo.All().Include(u => u.Team).FirstOrDefault(u => u.Id == inputMode.CreatorId);
 
             if (user.Team != null)
             {
@@ -81,6 +81,8 @@
                 Description = inputMode.Description,
             };
 
+            user.MemberInTeam = team;
+
             try
             {
                 var logoImage = await this.fileService.ProccessingImageData(inputMode.Logo, user.Id, roothPath, inputMode.Name);
@@ -103,11 +105,12 @@
             }
         }
 
-        public bool RequestJoin(string teamId, string userId)
+        public async Task<bool> RequestJoin(string teamId, string userId)
         {
             var teamDb = this.teamRepo
                 .All()
                 .Include(t => t.ApplicationUser)
+                .ThenInclude(u => u.Requests)
                 .FirstOrDefault(t => t.Id == teamId);
 
             var teamOwner = teamDb.ApplicationUser;
@@ -115,6 +118,16 @@
             if (teamDb == null)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (teamOwner.Id == userId)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (teamOwner.Requests.Any(r => r.RequesterId == userId))
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
             }
 
             var requester = this.userRepo
@@ -138,8 +151,16 @@
 
             teamOwner.Requests.Add(request);
 
-            this.requestRepo.AddAsync(request);
-            this.requestRepo.SaveChangesAsync();
+            try
+            {
+                await this.requestRepo.AddAsync(request);
+                await this.requestRepo.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
 
             return true;
         }

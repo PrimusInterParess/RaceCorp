@@ -108,6 +108,8 @@
             builder.Entity<ApplicationUserRide>().HasOne(l => l.ApplicationUser).WithMany(u => u.Rides).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUserTrace>().HasOne(l => l.ApplicationUser).WithMany(u => u.Traces).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Image>().HasOne(i => i.Team).WithMany(t => t.Images).OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<ApplicationUser>()
                .HasOne(u => u.MemberInTeam)
               .WithMany(t => t.TeamMembers)

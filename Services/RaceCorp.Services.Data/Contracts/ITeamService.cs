@@ -13,6 +13,6 @@
 
         T ById<T>(string id);
 
-        bool RequestJoin(string teamId, string userId);
+        Task<bool> RequestJoin(string teamId, string userId);
     }
 }

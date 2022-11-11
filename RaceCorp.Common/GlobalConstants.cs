@@ -36,5 +36,9 @@
 
         public const string CredentialsPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
 
+        public const string SuccessfulRequest = "You have successfully requested to join the team!";
+
+        public const string AlreadyHaveCreatedTeam = "You already have created team!";
+
     }
 }

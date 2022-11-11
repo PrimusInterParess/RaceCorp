@@ -22,5 +22,7 @@ namespace RaceCorp.Common
 
         public const string InvalidRequest = "You made invalid Request! Fudge off";
 
+        public const string AlreadyRequested = "You have already requested to join the team";
+
     }
 }

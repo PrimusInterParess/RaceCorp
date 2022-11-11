@@ -3,25 +3,24 @@
 @{
     this.ViewData["Title"] = "All Teams";
 }
-<h1>All teams</h1>
+
+@if (this.TempData.ContainsKey("AlreadyHaveTeam"))
+{
+    <div class="alert alert-danger">@this.TempData["AlreadyHaveTeam"]</div>
+
+}
+<h2 style="text-align:center">@this.ViewData["Title"]</h2>
 <div class="row">
     @foreach (var team in Model)
     {
-
-
-        <div class="col-4">
-            <div class="form-group card col-md-4 position-relative me-2 mb-2">
-                <div class="card" style="width: 25rem;">
-                    <a asp-action="Profile" asp-controller="Team" asp-area="" asp-route-id="@team.Id">
-                        <img src="@team.LogoImagePath" class="card-img-top" alt="OLEMALE">
-                        <div class="card-body">
-                            <h5 class="card-title">@team.Name</h5>
-                        </div>
-                    </a>
+        <div class="column">
+            <div class="card">
+                <img src="@team.LogoImagePath" alt="@team.Name" style="width:100%">
+                <div class="container">
+                    <h2>@team.Name</h2>
+                    <p><form method="get"><button asp-action="Profile" asp-controller="Team" asp-route-id="@team.Id" type="submit" class="button">Profile</button></form></p>
                 </div>
             </div>
         </div>
-
-
     }
 </div>
