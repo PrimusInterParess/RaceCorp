@@ -54,5 +54,10 @@
 
             return this.RedirectToAction("ErrorPage", "Home");
         }
+
+        public IActionResult Messages(string id)
+        {
+            return this.View();
+        }
     }
 }
