@@ -33,7 +33,7 @@
         [StringLength(GlobalIntValues.StringMaxLenth, ErrorMessage = GlobalErrorMessages.StringLengthError, MinimumLength = GlobalIntValues.StringMinLenth)]
         public string Country { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; } = DateTime.UtcNow;
 
         [Required]
         [StringLength(GlobalIntValues.DescriptionMaxLegth, ErrorMessage = GlobalErrorMessages.StringLengthError, MinimumLength = GlobalIntValues.DescriptionMinLegth)]

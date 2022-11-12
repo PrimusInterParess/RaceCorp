@@ -1,0 +1,34 @@
+﻿@{
+    var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    var isOwner = false;
+    if (currentUserId != null)
+    {
+        isOwner = currentUserId == Model.Id;
+    }
+
+    var hasTeam = Model.TeamId != null;
+}
+
+<ul class="nav-buttons-user">
+
+    @if (hasTeam)
+    {
+        <li>
+            <form method="get">
+                <button asp-action="Requests" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
+                    📨 Requests
+                    <div class="notification" role="status">@Model.RequestsCount</div>
+                </button>
+            </form>
+        </li>
+    }
+    <li>
+        <form method="get">
+            <button asp-action="Requests" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
+                📨 Messages
+                <div class="notification" role="status"></div>
+            </button>
+        </form>
+    </li>
+</ul>

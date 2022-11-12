@@ -13,10 +13,12 @@
     var hasTeam = Model.TeamId != null;
 
 }
+<partial name="_UserNavPartial" model="@this.Model" />
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <section id="content" class="container ">
     <!-- Begin .page-heading -->
-    <div class="page-heading mt-3">
+    <div class="page-heading mt-1">
         <div class="media clearfix">
             <div class="media-left pr30">
                 @if (isOwner)
@@ -65,34 +67,6 @@
 
                         </ul>
                     </div>
-                    @if (isOwner)
-                    {
-                        <div class="nav-buttons">
-                            <ul>
-                                @if (hasTeam)
-                                {
-                                    <li>
-                                        <form method="get">
-                                            <a asp-action="Requests" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="notification">
-                                                <span>Requests</span>
-                                                <span class="badge">@Model.RequestsCount</span>
-                                            </a>
-                                        </form>
-                                    </li>
-                                }
-
-                                <li>
-
-                                    <a class="notification">
-                                        <span>Messages</span>
-                                        <span class="badge"></span>
-                                    </a>
-
-                                </li>
-                            </ul>
-                        </div>
-                    }
-
                 </div>
                 <div class="row mt-5">
                     @if (Model.TeamId != null)
