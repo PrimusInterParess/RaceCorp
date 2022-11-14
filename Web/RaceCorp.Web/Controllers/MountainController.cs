@@ -56,25 +56,25 @@
             return this.View(model);
         }
 
-        public IActionResult ProfileRides(int mountainId, int id = 1)
+        public IActionResult ProfileRides(int modelId, int id = 1)
         {
             if (id <= 0)
             {
                 return this.NotFound();
             }
 
-            var rides = this.mountanService.AllRides(mountainId, id);
+            var rides = this.mountanService.AllRides(modelId, id);
             return this.View(rides);
         }
 
-        public IActionResult ProfileRaces(int mountainId, int id = 1)
+        public IActionResult ProfileRaces(int modelId, int id = 1)
         {
             if (id <= 0)
             {
                 return this.NotFound();
             }
 
-            var races = this.mountanService.AllRaces(mountainId, id);
+            var races = this.mountanService.AllRaces(modelId, id);
             return this.View(races);
         }
     }

@@ -23,7 +23,7 @@
         {
             if (i <= Model.PagesCount)
             {
-                <li class="page-item"><a class="page-link" asp-controller="@ViewData["controller"]" asp-action="@ViewData["action"]" asp-route-townId="@ViewData["townId"]" asp-route-id="@i">@i</a></li>
+                <li class="page-item"><a class="page-link" asp-controller="@ViewData["controller"]" asp-action="@ViewData["action"]" asp-route-Id="@ViewData["townId"]" asp-route-id="@i">@i</a></li>
             }
         }
         <li class="page-item @if (!Model.HasNextPage) {

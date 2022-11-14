@@ -100,7 +100,7 @@
 
             if (model == null)
             {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             return this.View(model);
@@ -115,7 +115,7 @@
 
             if (model == null)
             {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             model.Formats = this.formatsList.GetFormatKVP();
@@ -151,7 +151,6 @@
             }
 
             this.TempData["Message"] = "Your race was successfully edited!";
-
             return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
         }
 

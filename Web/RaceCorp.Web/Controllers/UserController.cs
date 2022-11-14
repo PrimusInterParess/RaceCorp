@@ -30,7 +30,6 @@
             this.userManager = userManager;
         }
 
-
         [HttpPost]
         public async Task<IActionResult> ProccessRequest(int requestId, string userId)
         {
@@ -52,7 +51,7 @@
             var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId == null || currentUserId != id)
             {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             var userDto = this.userService.GetById<UserAllRequestsViewModel>(id);
@@ -81,7 +80,7 @@
 
             if (user.Id != id)
             {
-                this.RedirectToAction("ErrorPage", "Home", new { area = " " });
+                this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             var userEditModel = this.userService.GetById<UserEditViewModel>(id);

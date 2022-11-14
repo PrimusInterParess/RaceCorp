@@ -46,7 +46,7 @@
 
             if (model == null)
             {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = " " });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             return this.View(model);
@@ -61,7 +61,7 @@
 
             if (model == null)
             {
-                this.RedirectToAction("ErrorPage", "Home", new { area = " " });
+                this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             model.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
@@ -150,7 +150,7 @@
             }
             catch (Exception e)
             {
-                this.ModelState.AddModelError("", e.Message);
+                this.ModelState.AddModelError(string.Empty, e.Message);
                 return this.View(model);
             }
 

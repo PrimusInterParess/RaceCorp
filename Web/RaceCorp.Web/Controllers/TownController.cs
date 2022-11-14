@@ -38,25 +38,25 @@
             return this.View();
         }
 
-        public IActionResult ProfileRides(int townId, int id = 1)
+        public IActionResult ProfileRides(int modelId, int id = 1)
         {
             if (id <= 0)
             {
                 return this.NotFound();
             }
 
-            var rides = this.townService.AllRides(townId, id);
+            var rides = this.townService.AllRides(modelId, id);
             return this.View(rides);
         }
 
-        public IActionResult ProfileRaces(int townId, int id = 1)
+        public IActionResult ProfileRaces(int modelId, int id = 1)
         {
             if (id <= 0)
             {
                 return this.NotFound();
             }
 
-            var races = this.townService.AllRaces(townId, id);
+            var races = this.townService.AllRaces(modelId, id);
             return this.View(races);
         }
 
