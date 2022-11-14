@@ -1,0 +1,19 @@
+﻿@using RaceCorp.Web.ViewModels.ApplicationUsers
+@model  List<UserAllViewModel>;
+
+
+
+@foreach (var user in Model)
+{
+    <div class="column">
+        <div class="card">
+            <img src="@user.ProfilePicturePath" alt="@user.FirstName" class="my-image mt-4" style="width:100%">
+            <div class="container">
+                <h2>@user.FirstName @user.LastName</h2>
+
+                <p><form method="get"><button asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@user.Id" type="submit" class="button">Profile</button></form></p>
+
+            </div>
+        </div>
+    </div>
+}

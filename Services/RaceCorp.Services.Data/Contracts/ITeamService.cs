@@ -12,7 +12,5 @@
         List<T> All<T>();
 
         T ById<T>(string id);
-
-        Task<bool> RequestJoin(string teamId, string userId);
     }
 }

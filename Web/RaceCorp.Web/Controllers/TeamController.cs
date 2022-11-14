@@ -91,28 +91,6 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Join(string teamId, string userId)
-        {
-            bool hasPassed = false;
-
-            try
-            {
-                hasPassed = await this.teamService.RequestJoin(teamId, userId);
-            }
-            catch (Exception e)
-            {
-                this.TempData["ErrorMessage"] = e.Message;
-                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = teamId });
-            }
-
-            if (hasPassed)
-            {
-                this.TempData["Joined"] = GlobalConstants.SuccessfulRequest;
-
-                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = teamId });
-            }
-
-            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
-        }
+      
     }
 }

@@ -31,20 +31,7 @@
             this.userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ProccessRequest(int requestId, string userId)
-        {
-            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (currentUserId == null || currentUserId != userId)
-            {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
-            }
-
-            var isApproved = await this.userService.ProccessRequestAsync(requestId, userId);
-
-            return this.RedirectToAction("Requests", "User", new { area = string.Empty, id = userId });
-        }
+       
 
         [HttpGet]
         public IActionResult Requests(string id)
@@ -65,9 +52,14 @@
         [HttpGet]
         public IActionResult Profile(string id)
         {
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var userDto = this.userService.GetById<UserProfileViewModel>(id);
-            if (userDto != null)
+
+            if (currentUserId != null && userDto != null)
             {
+                userDto.IsConnected = userDto.Connections.Any(c => c.Id == currentUserId) || currentUserId == id;
+
                 return this.View(userDto);
             }
 
@@ -114,6 +106,40 @@
             }
 
             return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = inputModel.Id });
+        }
+
+        public IActionResult Message(string id)
+        {
+            var model = new MessageBaseModel
+            {
+                SenderId = id,
+            };
+            return this.View(model);
+        }
+
+        public IActionResult All()
+        {
+            var allUsers = this.userService.GetAllAsync<UserAllViewModel>();
+
+            return this.View(allUsers);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ConnectRequest(string targetUserId)
+        {
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            try
+            {
+                await this.userService.ConnectRequestAsync(currentUserId, targetUserId);
+            }
+            catch (Exception e)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = targetUserId });
         }
     }
 }

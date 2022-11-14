@@ -19,20 +19,17 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IFileService fileService;
-        private readonly IDeletableEntityRepository<Request> requestRepo;
 
         public TeamService(
             IDeletableEntityRepository<Team> teamRepo,
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Town> townRepo,
-            IFileService fileService,
-            IDeletableEntityRepository<Request> requestRepo)
+            IFileService fileService)
         {
             this.teamRepo = teamRepo;
             this.userRepo = userRepo;
             this.townRepo = townRepo;
             this.fileService = fileService;
-            this.requestRepo = requestRepo;
         }
 
         public List<T> All<T>()
@@ -103,66 +100,6 @@
             {
                 throw new InvalidOperationException(e.Message);
             }
-        }
-
-        public async Task<bool> RequestJoin(string teamId, string userId)
-        {
-            var teamDb = this.teamRepo
-                .All()
-                .Include(t => t.ApplicationUser)
-                .ThenInclude(u => u.Requests)
-                .FirstOrDefault(t => t.Id == teamId);
-
-            var teamOwner = teamDb.ApplicationUser;
-
-            if (teamDb == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            if (teamOwner.Id == userId)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            if (teamOwner.Requests.Any(r => r.RequesterId == userId))
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
-            }
-
-            var requester = this.userRepo
-                .All()
-                .Include(u => u.Team)
-                .Include(u => u.MemberInTeam)
-                .FirstOrDefault(u => u.Id == userId);
-
-            if (requester == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            var request = new Request()
-            {
-                ApplicationUser = teamOwner,
-                RequesterId = userId,
-                Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
-                CreatedOn = DateTime.UtcNow,
-            };
-
-            teamOwner.Requests.Add(request);
-
-            try
-            {
-                await this.requestRepo.AddAsync(request);
-                await this.requestRepo.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                return false;
-            }
-
-            return true;
         }
     }
 }

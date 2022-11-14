@@ -25,6 +25,7 @@ namespace RaceCorp.Web
     using RaceCorp.Services.Messaging;
     using RaceCorp.Web.Areas.Administration.Infrastructure;
     using RaceCorp.Web.Areas.Administration.Infrastructure.Contracts;
+    using RaceCorp.Web.Hubs;
     using RaceCorp.Web.ViewModels;
 
     public class Program
@@ -63,6 +64,8 @@ namespace RaceCorp.Web
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddSignalR();
+
             services.AddSingleton(configuration);
 
             // Data repositories
@@ -91,7 +94,7 @@ namespace RaceCorp.Web
             services.AddTransient<ITeamService, TeamService>();
         }
 
-        private static void Configure(WebApplication app)
+        private static async void Configure(WebApplication app)
         {
             // Seed data on application startup
             using (var serviceScope = app.Services.CreateScope())
@@ -120,9 +123,9 @@ namespace RaceCorp.Web
 
             app.UseAuthentication();
             app.UseRouting();
-
-            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapHub<ChatHub>("/chathub");
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");

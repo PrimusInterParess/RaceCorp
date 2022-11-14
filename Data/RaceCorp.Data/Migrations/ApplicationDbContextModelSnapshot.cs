@@ -180,6 +180,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -276,6 +279,8 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("IsDeleted");
 
@@ -1036,6 +1041,10 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("RaceCorp.Data.Models.Team", "MemberInTeam")
                         .WithMany("TeamMembers")
                         .HasForeignKey("MemberInTeamId");
@@ -1296,6 +1305,8 @@ namespace RaceCorp.Data.Migrations
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Claims");
+
+                    b.Navigation("Connections");
 
                     b.Navigation("CreatedRaces");
 

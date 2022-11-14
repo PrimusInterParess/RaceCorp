@@ -12,8 +12,12 @@
     {
         public string RequesterId { get; set; }
 
+        public virtual ApplicationUser Requester { get; set; }
+
         public string Description { get; set; }
 
+
+        // change applicationUser to targetUser
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }

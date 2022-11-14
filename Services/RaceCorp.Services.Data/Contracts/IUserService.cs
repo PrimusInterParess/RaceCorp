@@ -15,6 +15,11 @@
 
         List<T> GetRequest<T>(string userId);
 
-        Task<bool> ProccessRequestAsync(int requestId, string userId);
+  
+        List<T> GetAllAsync<T>();
+
+        Task AddAsync(string currentUserId, string targetUserId);
+
+        Task ConnectRequestAsync(string currentUserId, string targetUserId);
     }
 }

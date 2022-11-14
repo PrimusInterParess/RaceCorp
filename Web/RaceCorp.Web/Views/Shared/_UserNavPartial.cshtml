@@ -7,12 +7,11 @@
         isOwner = currentUserId == Model.Id;
     }
 
-    var hasTeam = Model.TeamId != null;
 }
 
 <ul class="nav-buttons-user">
 
-    @if (hasTeam)
+    @if (isOwner)
     {
         <li>
             <form method="get">
@@ -24,11 +23,35 @@
         </li>
     }
     <li>
-        <form method="get">
-            <button asp-action="Messages" asp-controller="Event" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
-                📨 Messages
-                <div class="notification" role="status"></div>
-            </button>
-        </form>
+
+        @if(isOwner)
+        {
+            <form method="get">
+                <button asp-action="Message" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
+                    📨 Messages
+                    <div class="notification" role="status"></div>
+                </button>
+            </form>
+        }
+        else
+        {
+            <form method="get">
+                <button asp-action="Message" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
+                    📨 Send Message
+                    <div class="notification" role="status"></div>
+                </button>
+            </form>
+        }
+        
     </li>
+    @if (Model.IsConnected == false && isOwner == false)
+    {
+        <li>
+            <form method="post">
+                <button asp-action="ConnectRequest" asp-controller="User" asp-area="" asp-route-targetUserId="@Model.Id" class="mailbox form-control">
+                    Connect
+                </button>
+            </form>
+        </li>
+    }
 </ul>

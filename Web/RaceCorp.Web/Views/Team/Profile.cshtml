@@ -1,4 +1,5 @@
-﻿@model RaceCorp.Web.ViewModels.Team.TeamProfileViewModel
+﻿@using RaceCorp.Common
+@model RaceCorp.Web.ViewModels.Team.TeamProfileViewModel
 
 
 @if (this.TempData.ContainsKey("ErrorMessage"))
@@ -19,7 +20,7 @@
     <h1>@Model.Name</h1>
     <p>@Model.Description</p>
     <H3>Join the team</H3>
-    <a asp-action="Join" asp-controller="Team" asp-route-teamId="@Model.Id" asp-route-userId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
+    <a asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamJoin" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
         <img class="resize img-thumbnail float-left" src="@Model.LogoImagePath">
     </a>
 </div>

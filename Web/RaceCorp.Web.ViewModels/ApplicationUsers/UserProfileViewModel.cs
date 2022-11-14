@@ -51,6 +51,10 @@
 
         public int RequestsCount { get; set; }
 
+        public bool IsConnected { get; set; } = false;
+
+        public ICollection<UserConnectionsViewModel> Connections { get; set; } = new HashSet<UserConnectionsViewModel>();
+
         public ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
 
         public ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();

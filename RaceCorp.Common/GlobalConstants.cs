@@ -40,5 +40,7 @@
 
         public const string AlreadyHaveCreatedTeam = "You already have created team!";
 
+        public const string RequestTypeTeamJoin = "TeamJoin";
+
     }
 }

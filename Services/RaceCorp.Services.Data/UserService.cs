@@ -45,6 +45,62 @@
             this.requestRepo = requestRepo;
         }
 
+        public async Task AddAsync(string currentUserId, string targetUserId)
+        {
+            var userDb = this.userRepo.All().Include(u => u.Connections).FirstOrDefault(u => u.Id == currentUserId);
+
+            var targetUserDb = this.userRepo.All().Include(u => u.Connections).FirstOrDefault(u => u.Id == targetUserId);
+
+            if (userDb != null && targetUserDb != null)
+            {
+                if (userDb.Connections.Any(c => c.Id == targetUserDb.Id))
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+
+                userDb.Connections.Add(targetUserDb);
+                targetUserDb.Connections.Add(userDb);
+
+                await this.userRepo.SaveChangesAsync();
+            }
+
+        }
+
+        public async Task ConnectRequestAsync(string currentUserId, string targetUserId)
+        {
+            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == currentUserId);
+
+            var targetUserDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == targetUserId);
+
+            if (userDb != null && targetUserDb != null)
+            {
+                if (targetUserDb.Connections.Any(c => c.Id == userDb.Id))
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+
+                var request = new Request()
+                {
+                    ApplicationUser = targetUserDb,
+                    Requester = userDb,
+                    Description = $"{userDb.FirstName} {userDb.LastName} want to connect with you",
+                    CreatedOn = DateTime.UtcNow,
+                };
+
+                targetUserDb.Requests.Add(request);
+
+                try
+                {
+                    await this.requestRepo.AddAsync(request);
+                    await this.userRepo.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+        }
+
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
         {
             var user = this.userRepo.All().Include(u => u.Images).Include(u => u.Town).FirstOrDefault(u => u.Id == inputModel.Id);
@@ -117,6 +173,11 @@
             return true;
         }
 
+        public List<T> GetAllAsync<T>()
+        {
+            return this.userRepo.AllAsNoTracking().To<T>().ToList();
+        }
+
         public T GetById<T>(string id)
         {
             return this.userRepo.All().Where(u => u.Id == id).To<T>().FirstOrDefault();
@@ -133,39 +194,7 @@
                 .ToList();
         }
 
-        public async Task<bool> ProccessRequestAsync(int requestId, string userId)
-        {
-            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Team).FirstOrDefault(u => u.Id == userId);
-
-            if (userDb == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            var requestDb = userDb.Requests.FirstOrDefault(r => r.Id == requestId);
-
-            if (requestDb == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            var requesterDb = this.userRepo.All().FirstOrDefault(u => u.Id == requestDb.RequesterId);
-
-            requestDb.IsApproved = true;
-
-            requesterDb.MemberInTeam = userDb.Team;
-            userDb.Team.TeamMembers.Add(requesterDb);
-
-            try
-            {
-                await this.userRepo.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+      
 
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)
         {

@@ -10,6 +10,7 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.EventRegister;
     using Trace = RaceCorp.Data.Models.Trace;
 
@@ -22,6 +23,9 @@
         private readonly IRepository<ApplicationUserRide> userRideRepo;
         private readonly IRepository<ApplicationUserRace> userRaceRepo;
         private readonly IRepository<ApplicationUserTrace> userTraceRepo;
+        private readonly IDeletableEntityRepository<Team> teamRepo;
+        private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
+        private readonly IDeletableEntityRepository<Request> requestRepo;
 
         public EventService(
             UserManager<ApplicationUser> userManager,
@@ -30,7 +34,10 @@
             IDeletableEntityRepository<Trace> traceRepo,
             IRepository<ApplicationUserRide> userRideRepo,
             IRepository<ApplicationUserRace> userRaceRepo,
-            IRepository<ApplicationUserTrace> userTraceRepo)
+            IRepository<ApplicationUserTrace> userTraceRepo,
+            IDeletableEntityRepository<Team> teamRepo,
+            IDeletableEntityRepository<ApplicationUser> userRepo,
+            IDeletableEntityRepository<Request> requestRepo)
         {
             this.userManager = userManager;
             this.rideRepo = rideRepo;
@@ -39,6 +46,9 @@
             this.userRideRepo = userRideRepo;
             this.userRaceRepo = userRaceRepo;
             this.userTraceRepo = userTraceRepo;
+            this.teamRepo = teamRepo;
+            this.userRepo = userRepo;
+            this.requestRepo = requestRepo;
         }
 
         public async Task<bool> RegisterUserEvent(EventRegisterModel eventModel)
@@ -99,6 +109,119 @@
             }
 
             return result;
+        }
+
+        public async Task<bool> JoinTeamAsync(string teamId, string userId)
+        {
+            var teamDb = this.teamRepo
+                .All()
+                .Include(t => t.ApplicationUser)
+                .ThenInclude(u => u.Requests)
+                .FirstOrDefault(t => t.Id == teamId);
+
+            var teamOwner = teamDb.ApplicationUser;
+
+            if (teamDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (teamOwner.Id == userId)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (teamOwner.Requests.Any(r => r.RequesterId == userId))
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
+            }
+
+            var requester = this.userRepo
+                .All()
+                .Include(u => u.Team)
+                .Include(u => u.MemberInTeam)
+                .FirstOrDefault(u => u.Id == userId);
+
+            if (requester == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var request = new Request()
+            {
+                ApplicationUser = teamOwner,
+                RequesterId = userId,
+                Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
+                CreatedOn = DateTime.UtcNow,
+            };
+
+            teamOwner.Requests.Add(request);
+
+            try
+            {
+                await this.requestRepo.AddAsync(request);
+                await this.requestRepo.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ProcessRequestAsync(int requestId, string userId)
+        {
+            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Team).FirstOrDefault(u => u.Id == userId);
+
+            if (userDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var requestDb = userDb.Requests.FirstOrDefault(r => r.Id == requestId);
+
+            if (requestDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var requesterDb = this.userRepo.All().FirstOrDefault(u => u.Id == requestDb.RequesterId);
+
+            requestDb.IsApproved = true;
+
+            requesterDb.MemberInTeam = userDb.Team;
+            userDb.Team.TeamMembers.Add(requesterDb);
+
+            try
+            {
+                await this.userRepo.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task DistributeRequest(RequestInputModel inputModel)
+        {
+            if (inputModel.Type == GlobalConstants.RequestTypeTeamJoin)
+            {
+                try
+                {
+                    await this.JoinTeamAsync(inputModel.TargetId, inputModel.RequesterId);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+            else
+            {
+
+            }
         }
 
         private async Task<bool> RegisterUserRide(EventRegisterModel eventModel)
@@ -291,5 +414,7 @@
 
             return true;
         }
+
+
     }
 }
