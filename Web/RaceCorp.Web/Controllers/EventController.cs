@@ -24,6 +24,7 @@
             try
             {
                 var registering = await this.eventService.RegisterUserEvent(eventModel);
+
                 if (registering)
                 {
                     this.TempData["Registered"] = "Your are now registered!";
@@ -31,12 +32,13 @@
                     return this.RedirectToAction("Profile", eventModel.EventType, new { id = eventModel.Id });
                 }
 
-                return this.RedirectToAction("ErrorPage", "Home");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return this.RedirectToAction("ErrorPage", "Home");
+                this.TempData["CannotParticipate"] = e.Message;
             }
+
+            return this.RedirectToAction("ErrorPage", "Home");
         }
 
         [HttpPost]

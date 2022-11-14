@@ -119,14 +119,14 @@
             return this.View(model);
         }
 
-        public IActionResult All(int id = 1)
+        public IActionResult All(int pageId = 1)
         {
-            if (id <= 0)
+            if (pageId <= 0)
             {
                 return this.NotFound();
             }
 
-            var rides = this.rideService.All(id);
+            var rides = this.rideService.All(pageId);
             return this.View(rides);
         }
 
@@ -191,14 +191,14 @@
             return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
         }
 
-        public IActionResult UpcomingRides(int id = 1)
+        public IActionResult UpcomingRides(int pageId = 1)
         {
-            if (id <= 0)
+            if (pageId <= 0)
             {
                 return this.NotFound();
             }
 
-            var rides = this.rideService.GetUpcomingRides(id);
+            var rides = this.rideService.GetUpcomingRides(pageId);
             return this.View(rides);
         }
     }

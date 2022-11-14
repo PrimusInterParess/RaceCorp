@@ -107,6 +107,8 @@
             builder.Entity<ApplicationUserRace>().HasOne(l => l.ApplicationUser).WithMany(u => u.Races).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUserRide>().HasOne(l => l.ApplicationUser).WithMany(u => u.Rides).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUserTrace>().HasOne(l => l.ApplicationUser).WithMany(u => u.Traces).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Image>().HasOne(i => i.Team).WithMany(t => t.Images).OnDelete(DeleteBehavior.Cascade);
 
@@ -123,7 +125,8 @@
             builder.Entity<Team>()
                 .HasOne(t => t.ApplicationUser)
                 .WithOne(u => u.Team)
-                .HasForeignKey<Team>(t => t.ApplicationUserId);
+                .HasForeignKey<Team>(t => t.ApplicationUserId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<Logo>()
                 .HasOne(l => l.Race)

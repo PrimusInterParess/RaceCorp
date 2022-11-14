@@ -121,6 +121,7 @@
             return this
                 .townsRepo
                 .AllAsNoTracking()
+                .OrderBy(t => t.Name)
                 .Where(t => t.Rides.Count() != 0 || t.Races.Count() != 0)
                 .To<T>()
                 .ToList();

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -56,6 +57,8 @@
 
             var userDto = this.userService.GetById<UserAllRequestsViewModel>(id);
 
+            // find a better way to order it
+            userDto.Requests.OrderBy(r => r.CreatedOn);
             return this.View(userDto);
         }
 

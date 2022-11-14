@@ -252,8 +252,10 @@
 
             var races = this.raceRepo
                 .AllAsNoTracking()
+                .OrderBy(x => x.Date)
                 .Where(r => r.Date > DateTime.Now)
                 .OrderBy(r => r.CreatedOn)
+                .ThenBy(r => r.Name)
                 .Select(r => new RaceInAllViewModel()
                 {
                     Id = r.Id,

@@ -30,19 +30,19 @@
         public IEnumerable<KeyValuePair<string, string>> GetMountainsKVP()
         {
             return this.mountainsRepo.All()
-               .Select(f => new MountainViewModel()
+               .Select(m => new MountainViewModel()
                {
-                   Id = f.Id,
-                   Name = f.Name,
-               }).Select(f => new KeyValuePair<string, string>(f.Id.ToString(), f.Name));
+                   Id = m.Id,
+                   Name = m.Name,
+               }).Select(m => new KeyValuePair<string, string>(m.Id.ToString(), m.Name));
         }
 
         public HashSet<MountainViewModel> GetMountains()
         {
-            return this.mountainsRepo.All().Select(t => new MountainViewModel
+            return this.mountainsRepo.All().Select(m => new MountainViewModel
             {
-                Id = t.Id,
-                Name = t.Name,
+                Id = m.Id,
+                Name = m.Name,
             }).ToHashSet();
         }
 
@@ -51,6 +51,7 @@
             return this
                  .mountainsRepo
                  .AllAsNoTracking()
+                 .OrderBy(m => m.Name)
                  .Where(m => m.Rides.Count() != 0 || m.Races.Count() != 0)
                  .To<T>()
                  .ToList();
@@ -59,24 +60,27 @@
         public MountainRidesProfileViewModel AllRides(int mountainId, int pageId, int itemsPerPage = 3)
         {
             var mountain = this.mountainsRepo.AllAsNoTracking()
-               .Include(t => t.Rides)
+               .Include(m => m.Rides)
                .ThenInclude(r => r.Town)
-               .Include(r => r.Rides)
+               .Include(m => m.Rides)
                .ThenInclude(r => r.Trace)
                .ThenInclude(t => t.Gpx)
-               .FirstOrDefault(t => t.Id == mountainId);
+               .FirstOrDefault(m => m.Id == mountainId);
 
             var count = mountain.Rides.Count();
 
-            var rides = mountain.Rides.Select(r => new RideInAllViewModel()
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Description = r.Description,
-                GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
-                TownName = r.Town.Name,
-                MountainName = r.Mountain.Name,
-            })
+            var rides = mountain
+                .Rides
+                .OrderBy(r => r.Date)
+                .Select(r => new RideInAllViewModel()
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
+                    TownName = r.Town.Name,
+                    MountainName = r.Mountain.Name,
+                })
                 .Skip((pageId - 1) * itemsPerPage)
                 .Take(itemsPerPage)
                 .ToList();
@@ -99,7 +103,8 @@
 
         public MountainRacesProfileViewModel AllRaces(int mountainId, int pageId, int itemsPerPage = 3)
         {
-            var mountain = this.mountainsRepo.AllAsNoTracking()
+            var mountain = this.mountainsRepo
+                .AllAsNoTracking()
               .Include(t => t.Races)
               .ThenInclude(r => r.Town)
               .Include(r => r.Races)
@@ -108,15 +113,18 @@
 
             var count = mountain.Races.Count();
 
-            var races = mountain.Races.Select(r => new RaceInAllViewModel()
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Description = r.Description,
-                LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
-                Town = r.Town.Name,
-                Mountain = r.Mountain.Name,
-            })
+            var races = mountain
+                .Races
+                .OrderBy(r => r.Date)
+                .Select(r => new RaceInAllViewModel()
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
+                    Town = r.Town.Name,
+                    Mountain = r.Mountain.Name,
+                })
            .Skip((pageId - 1) * itemsPerPage)
            .Take(itemsPerPage)
            .ToList();

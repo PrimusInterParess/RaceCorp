@@ -1,14 +1,17 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.EventRegister;
+    using Trace = RaceCorp.Data.Models.Trace;
 
     public class EventService : IEventService
     {
@@ -44,11 +47,25 @@
 
             if (eventModel.EventType == "Ride")
             {
-                result = await this.RegisterUserRide(eventModel);
+                try
+                {
+                    result = await this.RegisterUserRide(eventModel);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
             }
             else
             {
-                result = await this.RegisterUserRace(eventModel);
+                try
+                {
+                    result = await this.RegisterUserRace(eventModel);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
             }
 
             return result;
@@ -60,11 +77,25 @@
 
             if (eventModel.EventType == "Ride")
             {
-                result = await this.UnregisterUserRide(eventModel);
+                try
+                {
+                    result = await this.UnregisterUserRide(eventModel);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException(e.Message);
+                }
             }
             else
             {
-                result = await this.UnregisterUserRace(eventModel);
+                try
+                {
+                    result = await this.UnregisterUserRace(eventModel);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException(e.Message);
+                }
             }
 
             return result;
@@ -73,7 +104,17 @@
         private async Task<bool> RegisterUserRide(EventRegisterModel eventModel)
         {
             var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == eventModel.Id);
+            if (ride == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
+
             var user = await this.userManager.FindByIdAsync(eventModel.UserId);
+
+            if (user == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
 
             if (ride.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId))
             {
@@ -102,9 +143,25 @@
                 .Include(r => r.RegisteredUsers)
                 .FirstOrDefault(r => r.Id == eventModel.Id);
 
+            if (race == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
+
             var user = await this.userManager.FindByIdAsync(eventModel.UserId);
 
+            if (user == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
+
             var trace = race.Traces.FirstOrDefault(t => t.Id == int.Parse(eventModel.TraceId));
+
+            if (trace == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
+
             Trace traceUserRegisterIn = null;
 
             var isAlredyRegistered = race.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId);
@@ -120,7 +177,7 @@
 
                 if (currdentTraceSpan < traceAlreadyRegesteredInSpan)
                 {
-                    throw new InvalidOperationException($"Cannot Register for this trace.You are alredy registered for {traceUserRegisterIn.Name} and IT starts {traceUserRegisterIn.StartTime}");
+                    throw new InvalidOperationException($"Cannot Register for this trace.You are alredy registered for {traceUserRegisterIn.Name} and it starts {traceUserRegisterIn.StartTime}");
                 }
             }
 
@@ -163,11 +220,22 @@
         private async Task<bool> UnregisterUserRide(EventRegisterModel eventModel)
         {
             var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == eventModel.Id);
-            var registeredUser = ride.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
+
+            if (ride == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var user = ride.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
+
+            if (user == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
 
             try
             {
-                this.userRideRepo.Delete(registeredUser);
+                this.userRideRepo.Delete(user);
                 await this.userRideRepo.SaveChangesAsync();
             }
             catch (Exception e)
@@ -187,8 +255,18 @@
                 .Include(r => r.RegisteredUsers)
                 .FirstOrDefault(r => r.Id == eventModel.Id);
 
+            if (race == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
+
             var trace = race.Traces
                 .FirstOrDefault(t => t.Id == int.Parse(eventModel.TraceId));
+
+            if (trace == null)
+            {
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
+            }
 
             var participatesInAnotherTrace = race.Traces
                 .FirstOrDefault(t => t.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId && u.TraceId != trace.Id));

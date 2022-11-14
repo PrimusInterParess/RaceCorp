@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Common;
@@ -56,25 +57,25 @@
             return this.View(model);
         }
 
-        public IActionResult ProfileRides(int modelId, int id = 1)
+        public IActionResult ProfileRides(int modelId, int pageId = 1)
         {
-            if (id <= 0)
+            if (pageId <= 0)
             {
                 return this.NotFound();
             }
 
-            var rides = this.mountanService.AllRides(modelId, id);
+            var rides = this.mountanService.AllRides(modelId, pageId);
             return this.View(rides);
         }
 
-        public IActionResult ProfileRaces(int modelId, int id = 1)
+        public IActionResult ProfileRaces(int modelId, int pageId = 1)
         {
-            if (id <= 0)
+            if (pageId <= 0)
             {
                 return this.NotFound();
             }
 
-            var races = this.mountanService.AllRaces(modelId, id);
+            var races = this.mountanService.AllRaces(modelId, pageId);
             return this.View(races);
         }
     }

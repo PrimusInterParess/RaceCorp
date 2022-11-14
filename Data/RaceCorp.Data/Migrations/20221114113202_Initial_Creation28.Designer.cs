@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaceCorp.Data;
 
@@ -11,9 +12,10 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221114113202_Initial_Creation28")]
+    partial class Initial_Creation28
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1256,8 +1258,7 @@ namespace RaceCorp.Data.Migrations
                 {
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithOne("Team")
-                        .HasForeignKey("RaceCorp.Data.Models.Team", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("RaceCorp.Data.Models.Team", "ApplicationUserId");
 
                     b.HasOne("RaceCorp.Data.Models.Town", "Town")
                         .WithMany("Teams")

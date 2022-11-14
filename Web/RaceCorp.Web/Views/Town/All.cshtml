@@ -57,7 +57,7 @@
                                                             <a class="btn btn-outline-primary" asp-controller="Race" asp-action="Profile" asp-route-id="@race.Id"><b>@race.Name</b></a>
                                                         </div>
                                                     }
-                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Town" asp-action="ProfileRaces" asp-route-townId=@town.Id>All races from @town.Name</a>
+                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Town" asp-action="ProfileRaces" asp-route-modelId=@town.Id>All races from @town.Name</a>
 
                                                 }
                                             </div>
@@ -85,7 +85,7 @@
                                                             <a class="btn btn-outline-primary" asp-controller="Ride" asp-action="Profile" asp-route-id="@ride.Id"><b>@ride.Name</b></a>
                                                         </div>
                                                     }
-                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Town" asp-action="ProfileRides" asp-route-townId=@town.Id>All rides from @town.Name</a>
+                                                    <a class="btn btn-outline-primary mb-2" asp-controller="Town" asp-action="ProfileRides" asp-route-modelId=@town.Id>All rides from @town.Name</a>
 
                                                 }
                                             </div>

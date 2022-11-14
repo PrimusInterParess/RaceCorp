@@ -10,6 +10,6 @@
     {
         public string Id { get; set; }
 
-        public ICollection<RequestBaseModel> Requests { get; set; } 
+        public ICollection<RequestBaseModel> Requests { get; set; }
     }
 }

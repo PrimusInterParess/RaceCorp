@@ -60,6 +60,7 @@
 
             var rides = this.rideRepo
                 .AllAsNoTracking()
+                .OrderBy(r => r.CreatedOn)
                 .Include(r => r.Trace)
                 .Select(r => new RideInAllViewModel()
                 {
@@ -223,8 +224,9 @@
 
             var rides = this.rideRepo
                 .AllAsNoTracking()
-                .Include(r => r.Trace)
+                .OrderBy(r => r.Date)
                 .Where(r => r.Date > DateTime.Now)
+                .Include(r => r.Trace)
                 .Select(r => new RideInAllViewModel()
                 {
                     Id = r.Id,

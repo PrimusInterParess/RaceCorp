@@ -154,25 +154,25 @@
             return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
         }
 
-        public IActionResult All(int id = 1)
+        public IActionResult All(int pageId = 1)
         {
-            if (id <= 0)
+            if (pageId <= 0)
             {
                 return this.NotFound();
             }
 
-            var races = this.raceService.All(id);
+            var races = this.raceService.All(pageId);
             return this.View(races);
         }
 
-        public IActionResult UpcomingRaces(int id = 1)
+        public IActionResult UpcomingRaces(int pageId = 1)
         {
-            if (id <= 0)
+            if (pageId <= 0)
             {
                 return this.NotFound();
             }
 
-            var races = this.raceService.GetUpcomingRaces(id);
+            var races = this.raceService.GetUpcomingRaces(pageId);
             return this.View(races);
         }
 
