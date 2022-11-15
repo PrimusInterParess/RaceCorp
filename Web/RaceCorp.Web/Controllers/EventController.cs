@@ -65,43 +65,76 @@
             return this.View();
         }
 
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Request(RequestInputModel model)
         {
-            bool hasPassed = false;
-
             try
             {
-                hasPassed = await this.eventService.JoinTeamAsync(model.TargetId, model.RequesterId);
+                await this.eventService.ProccesRequest(model);
             }
             catch (Exception e)
             {
                 this.TempData["ErrorMessage"] = e.Message;
-                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+
+                if (model.Type == GlobalConstants.RequestTypeTeamJoin)
+                {
+                    return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+                }
+                else
+                {
+                    return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = model.TargetId });
+                }
             }
 
-            if (hasPassed)
+            if (model.Type == GlobalConstants.RequestTypeTeamJoin)
             {
-                this.TempData["Joined"] = GlobalConstants.SuccessfulRequest;
+                this.TempData["Joined"] = GlobalConstants.SuccessfulRequestJoin;
 
                 return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+            }
+            else if (model.Type == GlobalConstants.RequestTypeConnectUser)
+            {
+                this.TempData["Connect"] = GlobalConstants.SuccessfulRequestConnect;
+                return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = model.TargetId });
+            }
+            else if (model.Type == GlobalConstants.RequestTypeTeamLeave)
+            {
+                this.TempData["TeamLeave"] = GlobalConstants.SuccessfulTeamLeave;
+
+                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+            }
+            else if (model.Type == GlobalConstants.RequestTypeDisconnectUser)
+            {
+                this.TempData["Disconnect"] = GlobalConstants.SuccessfulDisconnect;
+
+                return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = model.TargetId });
             }
 
             return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProcessRequest(int requestId, string userId)
+        [Authorize]
+        public async Task<IActionResult> ApproveRequest(ApproveRequestModel model)
         {
             var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (currentUserId == null || currentUserId != userId)
+            if (currentUserId == null)
             {
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
-            var isApproved = await this.eventService.ProcessRequestAsync(requestId, userId);
+            try
+            {
+                await this.eventService.ProccesApproval(model);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
-            return this.RedirectToAction("Requests", "User", new { area = string.Empty, id = userId });
+            return this.RedirectToAction("Requests", "User", new { area = string.Empty, id = currentUserId });
         }
     }
 }

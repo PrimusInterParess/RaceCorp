@@ -20,6 +20,5 @@
 
         Task AddAsync(string currentUserId, string targetUserId);
 
-        Task ConnectRequestAsync(string currentUserId, string targetUserId);
     }
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using RaceCorp.Common
+@{
     var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
     var isOwner = false;
@@ -6,6 +7,8 @@
     {
         isOwner = currentUserId == Model.Id;
     }
+
+
 
 }
 
@@ -22,36 +25,65 @@
             </form>
         </li>
     }
-    <li>
 
-        @if(isOwner)
-        {
+
+    @if (isOwner)
+    {
+        <li>
             <form method="get">
                 <button asp-action="Message" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
                     📨 Messages
                     <div class="notification" role="status"></div>
                 </button>
             </form>
-        }
-        else
-        {
+        </li>
+
+    }
+    else if (Model.CanMessageMe)
+    {
+        <li>
             <form method="get">
                 <button asp-action="Message" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
                     📨 Send Message
                     <div class="notification" role="status"></div>
                 </button>
             </form>
-        }
-        
-    </li>
-    @if (Model.IsConnected == false && isOwner == false)
-    {
+        </li>
+
         <li>
             <form method="post">
-                <button asp-action="ConnectRequest" asp-controller="User" asp-area="" asp-route-targetUserId="@Model.Id" class="mailbox form-control">
-                    Connect
+                <button asp-action="Request" asp-controller="Event" asp-area="" asp-route-type="@GlobalConstants.RequestTypeDisconnectUser" asp-route-requesterId="@currentUserId" asp-route-targetId="@Model.Id" class="mailbox form-control">
+                    Disconnect
                 </button>
             </form>
         </li>
+
+    }
+
+
+    @if (Model.IsConnected == false && isOwner == false)
+    {
+
+        if (Model.RequestedConnection == false)
+        {
+            @*                <a asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamJoin" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
+    *@
+            <li>
+                <form method="post">
+                    <button asp-action="Request" asp-controller="Event" asp-area="" asp-route-type="@GlobalConstants.RequestTypeConnectUser" asp-route-requesterId="@currentUserId" asp-route-targetId="@Model.Id" class="mailbox form-control">
+                        Connect
+                    </button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li>
+                <button type="button" class="mailbox form-control">
+                    Requested Connection
+                </button>
+            </li>
+        }
+
     }
 </ul>

@@ -1,4 +1,4 @@
-﻿    @model RaceCorp.Web.ViewModels.ApplicationUsers.UserAllRequestsViewModel;
+﻿@model RaceCorp.Web.ViewModels.ApplicationUsers.UserAllRequestsViewModel;
 
 @{
     this.ViewData["Tittle"] = "Requests";
@@ -37,13 +37,11 @@
                     }
                     else
                     {
-                        <td><form method="post" asp-action="ProcessRequest" asp-controller="Event" asp-area="" asp-route-requestId="@request.Id" asp-route-userId="@request.ApplicationUserId"><button type="submit" class="btn">Approve</button></form></td>
+                        <td><form method="post" asp-action="ApproveRequest" asp-controller="Event" asp-area="" asp-route-RequestType="@request.Type" asp-route-requestId="@request.Id"><button type="submit" class="btn">Approve</button></form></td>
 
                     }
 
                 </tr>
-
-
             }
 
         </tbody>

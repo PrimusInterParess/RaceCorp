@@ -53,6 +53,12 @@
 
         public bool IsConnected { get; set; } = false;
 
+        public bool RequestedConnection { get; set; } = false;
+
+        public bool CanMessageMe { get; set; } = false;
+
+        public ICollection<RequestModel> ConnectRequest { get; set; }
+
         public ICollection<UserConnectionsViewModel> Connections { get; set; } = new HashSet<UserConnectionsViewModel>();
 
         public ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
@@ -74,7 +80,9 @@
                 .ForMember(x => x.MemberInTeamId, opt => opt.MapFrom(x => x.MemberInTeam.Id))
                 .ForMember(x => x.MemberInTeamLogoImagePath, opt => opt.MapFrom(x => x.MemberInTeam.LogoImagePath))
                 .ForMember(x => x.MemberInTeamName, opt => opt.MapFrom(x => x.MemberInTeam.Name))
-                .ForMember(x => x.RequestsCount, opt => opt.MapFrom(x => x.Requests.Where(r => r.IsApproved == false).ToList().Count));
+                .ForMember(x => x.RequestsCount, opt => opt.MapFrom(x => x.Requests.Where(r => r.IsApproved == false).ToList().Count))
+                .ForMember(x => x.ConnectRequest, opt => opt.MapFrom(x => x.Requests.Where(r => r.Type == GlobalConstants.RequestTypeConnectUser)));
+
         }
     }
 }

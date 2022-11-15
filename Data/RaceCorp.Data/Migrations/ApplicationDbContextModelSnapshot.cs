@@ -745,6 +745,9 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RequesterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -752,6 +755,8 @@ namespace RaceCorp.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("RequesterId");
 
                     b.ToTable("Requests");
                 });
@@ -1216,7 +1221,13 @@ namespace RaceCorp.Data.Migrations
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Requester")
+                        .WithMany()
+                        .HasForeignKey("RequesterId");
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Requester");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>

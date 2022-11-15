@@ -63,42 +63,6 @@
 
                 await this.userRepo.SaveChangesAsync();
             }
-
-        }
-
-        public async Task ConnectRequestAsync(string currentUserId, string targetUserId)
-        {
-            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == currentUserId);
-
-            var targetUserDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == targetUserId);
-
-            if (userDb != null && targetUserDb != null)
-            {
-                if (targetUserDb.Connections.Any(c => c.Id == userDb.Id))
-                {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-                }
-
-                var request = new Request()
-                {
-                    ApplicationUser = targetUserDb,
-                    Requester = userDb,
-                    Description = $"{userDb.FirstName} {userDb.LastName} want to connect with you",
-                    CreatedOn = DateTime.UtcNow,
-                };
-
-                targetUserDb.Requests.Add(request);
-
-                try
-                {
-                    await this.requestRepo.AddAsync(request);
-                    await this.userRepo.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-                }
-            }
         }
 
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
@@ -193,8 +157,6 @@
                 .To<T>()
                 .ToList();
         }
-
-      
 
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)
         {

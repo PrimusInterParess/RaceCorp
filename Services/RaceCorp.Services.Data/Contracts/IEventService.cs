@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
     using System.Threading.Tasks;
+
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.EventRegister;
 
@@ -10,10 +11,8 @@
 
         Task<bool> Unregister(EventRegisterModel eventModel);
 
-        Task<bool> JoinTeamAsync(string teamId, string userId);
+        Task ProccesRequest(RequestInputModel inputModel);
 
-        Task<bool> ProcessRequestAsync(int requestId, string userId);
-
-        Task DistributeRequest(RequestInputModel inputModel);
+        Task ProccesApproval(ApproveRequestModel inputModel);
     }
 }

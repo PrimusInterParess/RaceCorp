@@ -13,6 +13,21 @@
     var hasTeam = Model.TeamId != null;
 
 }
+
+@if (this.TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger">@this.TempData["ErrorMessage"]</div>
+}
+
+@if (this.TempData.ContainsKey("Connect"))
+{
+    <div class="alert alert-danger">@this.TempData["Connect"]</div>
+}
+
+@if (this.TempData.ContainsKey("Disconnect"))
+{
+    <div class="alert alert-danger">@this.TempData["Disconnect"]</div>
+}
 <partial name="_UserNavPartial" model="@this.Model" />
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">

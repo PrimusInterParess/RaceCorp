@@ -31,7 +31,7 @@
             this.userManager = userManager;
         }
 
-       
+
 
         [HttpGet]
         public IActionResult Requests(string id)
@@ -59,6 +59,10 @@
             if (currentUserId != null && userDto != null)
             {
                 userDto.IsConnected = userDto.Connections.Any(c => c.Id == currentUserId) || currentUserId == id;
+
+                userDto.RequestedConnection = userDto.ConnectRequest.Any(r => r.RequesterId == currentUserId);
+
+                userDto.CanMessageMe = userDto.Connections.Any(c => c.Id == currentUserId);
 
                 return this.View(userDto);
             }
@@ -124,22 +128,5 @@
             return this.View(allUsers);
         }
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> ConnectRequest(string targetUserId)
-        {
-            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            try
-            {
-                await this.userService.ConnectRequestAsync(currentUserId, targetUserId);
-            }
-            catch (Exception e)
-            {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
-            }
-
-            return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = targetUserId });
-        }
     }
 }

@@ -1,7 +1,12 @@
 ﻿@using RaceCorp.Web.ViewModels.ApplicationUsers
-@model  List<UserAllViewModel>;
+@model List<UserAllViewModel>;
+@{
+    this.ViewData["Title"] = "All Users";
+}
+<div class="text-center mt-1">
+    <h1>@this.ViewData["Title"]</h1>
 
-
+</div>
 
 @foreach (var user in Model)
 {

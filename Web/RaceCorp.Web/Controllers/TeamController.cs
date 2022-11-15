@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -67,7 +68,6 @@
             }
 
             return this.RedirectToAction("All");
-
         }
 
         [HttpGet]
@@ -79,18 +79,28 @@
             return this.View(model);
         }
 
-        public IActionResult Profile(string id)
+        public async Task<IActionResult> ProfileAsync(string id)
         {
             var model = this.teamService.ById<TeamProfileViewModel>(id);
+            var currentUser = await this.userManager
+              .GetUserAsync(this.User);
 
             if (model == null)
             {
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
+            if (currentUser == null)
+            {
+                model.IsMember = true;
+            }
+            else
+            {
+                model.IsMember = model.TeamMembers.Any(m => m.Id == currentUser.Id);
+                model.RequestedJoin = model.JoinRequests.Any(r => r.RequesterId == currentUser.Id);
+            }
+
             return this.View(model);
         }
-
-      
     }
 }

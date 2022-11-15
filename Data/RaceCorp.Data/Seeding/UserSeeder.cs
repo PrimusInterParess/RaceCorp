@@ -32,6 +32,7 @@
                 LastName = "Borisov",
                 TownId = 1,
                 Country = "Bulgaria",
+                ProfilePicturePath = GlobalConstants.DaniProfilePicturePath,
                 PasswordHash = "AQAAAAEAACcQAAAAEFtyhksza71QGv3QHjiJZpH1N7QnVRPMCdPLZzsg9TpkL4ivLAXUiIZiGixtuUQsog==",
                 Roles = new List<IdentityUserRole<string>>() { new IdentityUserRole<string>() { RoleId = adminRoleId }, },
 
@@ -48,6 +49,7 @@
                 LastName = "Borisova",
                 TownId = 1,
                 Country = "Bulgaria",
+                ProfilePicturePath = GlobalConstants.KariProfilePicturePath,
                 PasswordHash = "AQAAAAEAACcQAAAAEFtyhksza71QGv3QHjiJZpH1N7QnVRPMCdPLZzsg9TpkL4ivLAXUiIZiGixtuUQsog==",
                 Roles = new List<IdentityUserRole<string>>() { new IdentityUserRole<string>() { RoleId = userRoleId }, },
             });
@@ -63,6 +65,7 @@
                 LastName = "Borisov",
                 TownId = 1,
                 Country = "Bulgaria",
+                ProfilePicturePath = GlobalConstants.KrumProfilePicturePath,
                 PasswordHash = "AQAAAAEAACcQAAAAEFtyhksza71QGv3QHjiJZpH1N7QnVRPMCdPLZzsg9TpkL4ivLAXUiIZiGixtuUQsog==",
                 Roles = new List<IdentityUserRole<string>>() { new IdentityUserRole<string>() { RoleId = userRoleId }, },
             });
@@ -78,6 +81,7 @@
                 LastName = "Borisova",
                 TownId = 1,
                 Country = "Bulgaria",
+                ProfilePicturePath = GlobalConstants.EstelleProfilePicturePath,
                 PasswordHash = "AQAAAAEAACcQAAAAEFtyhksza71QGv3QHjiJZpH1N7QnVRPMCdPLZzsg9TpkL4ivLAXUiIZiGixtuUQsog==",
                 Roles = new List<IdentityUserRole<string>>() { new IdentityUserRole<string>() { RoleId = userRoleId }, },
             });
@@ -93,6 +97,7 @@
                 LastName = "Borisova",
                 TownId = 1,
                 Country = "Bulgaria",
+                ProfilePicturePath = GlobalConstants.NebesnaProfilePicturePath,
                 PasswordHash = "AQAAAAEAACcQAAAAEFtyhksza71QGv3QHjiJZpH1N7QnVRPMCdPLZzsg9TpkL4ivLAXUiIZiGixtuUQsog==",
                 Roles = new List<IdentityUserRole<string>>() { new IdentityUserRole<string>() { RoleId = userRoleId }, },
             });

@@ -15,6 +15,8 @@
 
         public string RequesterId { get; set; }
 
+        public string Type { get; set; }
+
         public bool IsApproved { get; set; }
 
         public string CreatedOn { get; set; }

@@ -36,11 +36,24 @@
 
         public const string CredentialsPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
 
-        public const string SuccessfulRequest = "You have successfully requested to join the team!";
+        public const string SuccessfulRequestJoin = "You have successfully requested to join the team!";
+        public const string SuccessfulRequestConnect = "You have successfully requested to connect!";
+        public const string SuccessfulTeamLeave = "You successfully left the team! Good luck!";
+        public const string SuccessfulDisconnect = "You successfully disconnected! Good luck!";
 
         public const string AlreadyHaveCreatedTeam = "You already have created team!";
 
         public const string RequestTypeTeamJoin = "TeamJoin";
 
+        public const string RequestTypeTeamLeave = "TeamLeave";
+        public const string RequestTypeDisconnectUser = "DisconnectUser";
+
+        public const string DaniProfilePicturePath = "\\Images\\defaulProfile\\dani.JPEG";
+        public const string KariProfilePicturePath = "\\Images\\defaulProfile\\kari.JPEG";
+        public const string NebesnaProfilePicturePath = "\\Images\\defaulProfile\\nebesna.jpg";
+        public const string EstelleProfilePicturePath = "\\Images\\defaulProfile\\estelle.jpg";
+        public const string KrumProfilePicturePath = "\\Images\\defaulProfile\\krum.jpg";
+
+        public const string RequestTypeConnectUser = "ConnectUser";
     }
 }

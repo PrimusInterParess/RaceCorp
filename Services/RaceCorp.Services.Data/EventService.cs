@@ -19,7 +19,6 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IDeletableEntityRepository<Ride> rideRepo;
         private readonly IDeletableEntityRepository<Race> raceRepo;
-        private readonly IDeletableEntityRepository<Trace> traceRepo;
         private readonly IRepository<ApplicationUserRide> userRideRepo;
         private readonly IRepository<ApplicationUserRace> userRaceRepo;
         private readonly IRepository<ApplicationUserTrace> userTraceRepo;
@@ -31,7 +30,6 @@
             UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<Ride> rideRepo,
             IDeletableEntityRepository<Race> raceRepo,
-            IDeletableEntityRepository<Trace> traceRepo,
             IRepository<ApplicationUserRide> userRideRepo,
             IRepository<ApplicationUserRace> userRaceRepo,
             IRepository<ApplicationUserTrace> userTraceRepo,
@@ -42,7 +40,6 @@
             this.userManager = userManager;
             this.rideRepo = rideRepo;
             this.raceRepo = raceRepo;
-            this.traceRepo = traceRepo;
             this.userRideRepo = userRideRepo;
             this.userRaceRepo = userRaceRepo;
             this.userTraceRepo = userTraceRepo;
@@ -111,107 +108,61 @@
             return result;
         }
 
-        public async Task<bool> JoinTeamAsync(string teamId, string userId)
-        {
-            var teamDb = this.teamRepo
-                .All()
-                .Include(t => t.ApplicationUser)
-                .ThenInclude(u => u.Requests)
-                .FirstOrDefault(t => t.Id == teamId);
-
-            var teamOwner = teamDb.ApplicationUser;
-
-            if (teamDb == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            if (teamOwner.Id == userId)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            if (teamOwner.Requests.Any(r => r.RequesterId == userId))
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
-            }
-
-            var requester = this.userRepo
-                .All()
-                .Include(u => u.Team)
-                .Include(u => u.MemberInTeam)
-                .FirstOrDefault(u => u.Id == userId);
-
-            if (requester == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            var request = new Request()
-            {
-                ApplicationUser = teamOwner,
-                RequesterId = userId,
-                Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
-                CreatedOn = DateTime.UtcNow,
-            };
-
-            teamOwner.Requests.Add(request);
-
-            try
-            {
-                await this.requestRepo.AddAsync(request);
-                await this.requestRepo.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                return false;
-            }
-
-            return true;
-        }
-
-        public async Task<bool> ProcessRequestAsync(int requestId, string userId)
-        {
-            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Team).FirstOrDefault(u => u.Id == userId);
-
-            if (userDb == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            var requestDb = userDb.Requests.FirstOrDefault(r => r.Id == requestId);
-
-            if (requestDb == null)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            var requesterDb = this.userRepo.All().FirstOrDefault(u => u.Id == requestDb.RequesterId);
-
-            requestDb.IsApproved = true;
-
-            requesterDb.MemberInTeam = userDb.Team;
-            userDb.Team.TeamMembers.Add(requesterDb);
-
-            try
-            {
-                await this.userRepo.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public async Task DistributeRequest(RequestInputModel inputModel)
+        public async Task ProccesRequest(RequestInputModel inputModel)
         {
             if (inputModel.Type == GlobalConstants.RequestTypeTeamJoin)
             {
                 try
                 {
-                    await this.JoinTeamAsync(inputModel.TargetId, inputModel.RequesterId);
+                    await this.RequestJoinTeamAsync(inputModel.TargetId, inputModel.RequesterId);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+            else if (inputModel.Type == GlobalConstants.RequestTypeConnectUser)
+            {
+                try
+                {
+                    await this.RequestConnectUserAsync(inputModel.RequesterId, inputModel.TargetId);
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+            else if (inputModel.Type == GlobalConstants.RequestTypeTeamLeave)
+            {
+                try
+                {
+                    await this.LeaveTeamAsync(inputModel);
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+            else if (inputModel.Type == GlobalConstants.RequestTypeDisconnectUser)
+            {
+                try
+                {
+                    await this.DisconnectUserAsync(inputModel);
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+        }
+
+        public async Task ProccesApproval(ApproveRequestModel inputModel)
+        {
+            if (inputModel.RequestType == GlobalConstants.RequestTypeTeamJoin)
+            {
+                try
+                {
+                    await this.ApproveJoinRequestAsync(inputModel);
                 }
                 catch (Exception e)
                 {
@@ -220,7 +171,106 @@
             }
             else
             {
+                try
+                {
+                    await this.ApproveConnectRequestAsync(inputModel);
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+        }
 
+        private async Task DisconnectUserAsync(RequestInputModel inputModel)
+        {
+            var requester = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).FirstOrDefault(u => u.Id == inputModel.RequesterId);
+
+
+            if (requester == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var targetUser = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).FirstOrDefault(u => u.Id == inputModel.TargetId);
+
+            if (targetUser == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var requesterConnectRequest = requester.Requests
+                .FirstOrDefault(r => r.RequesterId == targetUser.Id && r.Type == GlobalConstants.RequestTypeConnectUser);
+
+            if (requesterConnectRequest != null)
+            {
+                requester.Requests.Remove(requesterConnectRequest);
+            }
+
+            var targetUserConnectRequest = targetUser.Requests
+               .FirstOrDefault(r => r.RequesterId == requester.Id && r.Type == GlobalConstants.RequestTypeConnectUser);
+
+            if (targetUserConnectRequest != null)
+            {
+                targetUser.Requests.Remove(targetUserConnectRequest);
+            }
+
+            var res1 = requester.Connections.Remove(targetUser);
+            var res2 = targetUser.Connections.Remove(requester);
+
+            try
+            {
+                await this.userRepo.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+        }
+
+        private async Task LeaveTeamAsync(RequestInputModel inputModel)
+        {
+            var teamDb = this.teamRepo
+                .All()
+                .Include(t => t.TeamMembers)
+                .Include(t => t.ApplicationUser)
+                .ThenInclude(u => u.Requests)
+                .FirstOrDefault(t => t.Id == inputModel.TargetId);
+
+            if (teamDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var requester = teamDb.TeamMembers.FirstOrDefault(m => m.Id == inputModel.RequesterId);
+
+
+            if (requester.Id == teamDb.ApplicationUserId)
+            {
+                var newOnwer = teamDb.TeamMembers.FirstOrDefault(m => m.Id != requester.Id);
+                if (newOnwer != null)
+                {
+                    newOnwer.Team = teamDb;
+                    teamDb.ApplicationUser = newOnwer;
+                }
+            }
+
+            var teamOnwer = teamDb.ApplicationUser;
+
+            var requestToRemove = teamOnwer
+                .Requests
+                .FirstOrDefault(r => r.IsApproved && r.RequesterId == requester.Id && r.Type == GlobalConstants.RequestTypeTeamJoin);
+
+            var isRemoved = teamOnwer.Requests.Remove(requestToRemove);
+            var isRemoved1 = teamDb.TeamMembers.Remove(requester);
+
+            try
+            {
+                await this.teamRepo.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
         }
 
@@ -415,6 +465,174 @@
             return true;
         }
 
+        private async Task<bool> RequestJoinTeamAsync(string teamId, string userId)
+        {
+            var teamDb = this.teamRepo
+                .All()
+                .Include(t => t.ApplicationUser)
+                .ThenInclude(u => u.Requests)
+                .FirstOrDefault(t => t.Id == teamId);
 
+            var teamOwner = teamDb.ApplicationUser;
+
+            if (teamDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (teamOwner.Id == userId)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (teamOwner.Requests.Any(r => r.RequesterId == userId))
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
+            }
+
+            var requester = this.userRepo
+                .All()
+                .Include(u => u.Team)
+                .Include(u => u.MemberInTeam)
+                .FirstOrDefault(u => u.Id == userId);
+
+            if (requester == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var request = new Request()
+            {
+                Type = GlobalConstants.RequestTypeTeamJoin,
+                ApplicationUser = teamOwner,
+                RequesterId = userId,
+                Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
+                CreatedOn = DateTime.UtcNow,
+            };
+
+            teamOwner.Requests.Add(request);
+
+            try
+            {
+                await this.requestRepo.AddAsync(request);
+                await this.requestRepo.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task RequestConnectUserAsync(string currentUserId, string targetUserId)
+        {
+            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == currentUserId);
+
+            var targetUserDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == targetUserId);
+
+            if (userDb != null && targetUserDb != null)
+            {
+                if (targetUserDb.Connections.Any(c => c.Id == userDb.Id) || targetUserDb.Requests.Any(r => r.Type == GlobalConstants.RequestTypeConnectUser && r.RequesterId == userDb.Id))
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+
+                var request = new Request()
+                {
+                    Type = GlobalConstants.RequestTypeConnectUser,
+                    ApplicationUser = targetUserDb,
+                    Requester = userDb,
+                    Description = $"{userDb.FirstName} {userDb.LastName} want to connect with you",
+                    CreatedOn = DateTime.UtcNow,
+                };
+
+                targetUserDb.Requests.Add(request);
+
+                try
+                {
+                    await this.requestRepo.AddAsync(request);
+                    await this.userRepo.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                }
+            }
+        }
+
+        private async Task<bool> ApproveJoinRequestAsync(ApproveRequestModel inputModel)
+        {
+            var requestDb = this.requestRepo
+                .All()
+                .Include(r => r.Requester).ThenInclude(u => u.MemberInTeam)
+                .Include(r => r.ApplicationUser).ThenInclude(u => u.Team)
+                .FirstOrDefault(r => r.Id == inputModel.RequestId);
+
+            var targetUser = requestDb.ApplicationUser;
+
+            if (targetUser == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (requestDb == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var requesterDb = this.userRepo.All().FirstOrDefault(u => u.Id == requestDb.RequesterId);
+
+            requestDb.IsApproved = true;
+
+
+            requesterDb.MemberInTeam = targetUser.Team;
+            targetUser.Team.TeamMembers.Add(requesterDb);
+
+            try
+            {
+                await this.userRepo.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task ApproveConnectRequestAsync(ApproveRequestModel inputModel)
+        {
+            var requestDb = this.requestRepo
+                .All()
+                .Include(r => r.Requester)
+                .Include(r => r.ApplicationUser)
+                .FirstOrDefault(r => r.Id == inputModel.RequestId);
+
+            var requester = requestDb.Requester;
+
+            var targetUser = requestDb.ApplicationUser;
+
+            if (requester == null || targetUser == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            if (requester.Connections.Any(c => c.Id == targetUser.Id))
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            targetUser.Connections.Add(requester);
+            requester.Connections.Add(targetUser);
+            requestDb.IsApproved = true;
+            try
+            {
+                await this.userRepo.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+        }
     }
 }

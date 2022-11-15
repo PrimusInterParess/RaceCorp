@@ -12,6 +12,11 @@
     <div class="alert alert-success">@this.TempData["Joined"]</div>
 }
 
+@if (this.TempData.ContainsKey("TeamLeave"))
+{
+    <div class="alert alert-success">@this.TempData["TeamLeave"]</div>
+}
+
 <div class="row">
 </div>
 
@@ -19,10 +24,29 @@
 <div class="about-section">
     <h1>@Model.Name</h1>
     <p>@Model.Description</p>
-    <H3>Join the team</H3>
-    <a asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamJoin" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
-        <img class="resize img-thumbnail float-left" src="@Model.LogoImagePath">
-    </a>
+    @if (Model.IsMember == false && Model.RequestedJoin == false)
+    {
+        <form method="post">
+            <button class="mailbox form-control" asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamJoin" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
+                Join
+            </button>
+        </form>
+    }
+    else if (Model.IsMember)
+    {
+        <form method="post">
+            <button class="mailbox form-control" asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamLeave" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
+                Leave team
+            </button>
+        </form>
+    }
+    else if (Model.RequestedJoin)
+    {
+        <button class="mailbox form-control">
+            Join request send
+        </button>
+    }
+
 </div>
 
 <h2 style="text-align:center">Our Team</h2>
