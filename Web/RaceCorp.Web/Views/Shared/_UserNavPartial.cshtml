@@ -27,11 +27,11 @@
     }
 
 
-    @if (isOwner)
+    @if (isOwner)   
     {
         <li>
             <form method="get">
-                <button asp-action="Message" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
+                <button asp-action="Inbox" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
                     📨 Messages
                     <div class="notification" role="status"></div>
                 </button>

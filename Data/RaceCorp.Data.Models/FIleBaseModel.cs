@@ -11,7 +11,7 @@
 
         public string Extension { get; set; }
 
-        public string? ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
 

@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using RaceCorp.Common;
@@ -116,7 +117,7 @@
                 {
                     await this.RequestJoinTeamAsync(inputModel.TargetId, inputModel.RequesterId);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
                 }
@@ -164,7 +165,7 @@
                 {
                     await this.ApproveJoinRequestAsync(inputModel);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
                 }
@@ -185,7 +186,6 @@
         private async Task DisconnectUserAsync(RequestInputModel inputModel)
         {
             var requester = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).FirstOrDefault(u => u.Id == inputModel.RequesterId);
-
 
             if (requester == null)
             {
@@ -243,7 +243,6 @@
             }
 
             var requester = teamDb.TeamMembers.FirstOrDefault(m => m.Id == inputModel.RequesterId);
-
 
             if (requester.Id == teamDb.ApplicationUserId)
             {
@@ -584,7 +583,6 @@
             var requesterDb = this.userRepo.All().FirstOrDefault(u => u.Id == requestDb.RequesterId);
 
             requestDb.IsApproved = true;
-
 
             requesterDb.MemberInTeam = targetUser.Team;
             targetUser.Team.TeamMembers.Add(requesterDb);

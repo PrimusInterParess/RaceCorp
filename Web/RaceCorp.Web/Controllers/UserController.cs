@@ -112,12 +112,12 @@
             return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = inputModel.Id });
         }
 
-        public IActionResult Message(string id)
+        [HttpGet]
+        [Authorize]
+        public IActionResult Inbox(string id)
         {
-            var model = new MessageBaseModel
-            {
-                SenderId = id,
-            };
+            var model = this.userService.GetById<UserInboxViewModel>(id);
+
             return this.View(model);
         }
 

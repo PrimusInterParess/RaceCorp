@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-
+    using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.CommonViewModels;
 
     public interface IHomeService

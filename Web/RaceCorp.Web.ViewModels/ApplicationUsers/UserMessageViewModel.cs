@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
-
-namespace RaceCorp.Web.ViewModels.ApplicationUsers
+﻿namespace RaceCorp.Web.ViewModels.ApplicationUsers
 {
-    public class UserMessageViewModel
+    using System.Collections.Generic;
+
+    using RaceCorp.Data.Models;
+    using RaceCorp.Services.Mapping;
+
+    public class UserMessageViewModel : IMapFrom<ApplicationUser>
     {
         public string Id { get; set; }
 
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
 
-        public ICollection<UserConnectionsViewModel> Messages { get; set; }
+        public string LastName { get; set; }
+
+        public string ProfilePicturePath { get; set; }
     }
 }

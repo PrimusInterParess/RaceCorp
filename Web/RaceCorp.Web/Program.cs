@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using RaceCorp.Data;
 namespace RaceCorp.Web
 {
     using System.Reflection;
@@ -125,11 +122,11 @@ namespace RaceCorp.Web
             app.UseRouting();
             app.UseAuthorization();
 
-            app.MapHub<ChatHub>("/chathub");
-
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+
+            app.MapHub<ChatHub>("/chathub");
         }
     }
 }
