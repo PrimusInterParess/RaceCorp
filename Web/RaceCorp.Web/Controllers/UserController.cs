@@ -31,8 +31,6 @@
             this.userManager = userManager;
         }
 
-
-
         [HttpGet]
         public IActionResult Requests(string id)
         {
@@ -128,5 +126,21 @@
             return this.View(allUsers);
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> MessageAsync(string receiverId)
+        {
+            var currentUser = await this.userManager
+               .GetUserAsync(this.User);
+
+            if (currentUser == null)
+            {
+                this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+
+
+            return this.View();
+        }
     }
 }

@@ -7,6 +7,11 @@ namespace RaceCorp.Web.Hubs
 
     public class ChatHub : Hub
     {
+
+        public ChatHub()
+        {
+
+        }
         public override Task OnConnectedAsync()
         {
             this.Groups.AddToGroupAsync(this.Context.ConnectionId, this.Context.User.Identity.Name);
@@ -20,7 +25,8 @@ namespace RaceCorp.Web.Hubs
 
         public Task SendMessageToGroup(string sender, string receiver, string message)
         {
-            return this.Clients.Group(receiver).SendAsync("ReceiveMessage", sender, message);
+
+            return this.Clients.User(receiver).SendAsync("ReceiveMessage", sender, message);
         }
     }
 }

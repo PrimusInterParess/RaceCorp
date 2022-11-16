@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221114201611_init_crea30")]
-    partial class init_crea30
+    [Migration("20221116105259_fsd")]
+    partial class fsd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -422,6 +422,38 @@ namespace RaceCorp.Data.Migrations
                     b.ToTable("ApplicationUserTrace");
                 });
 
+            modelBuilder.Entity("RaceCorp.Data.Models.Conversation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Conversations");
+                });
+
             modelBuilder.Entity("RaceCorp.Data.Models.Difficulty", b =>
                 {
                     b.Property<int>("Id")
@@ -621,6 +653,48 @@ namespace RaceCorp.Data.Migrations
                     b.ToTable("Logos");
                 });
 
+            modelBuilder.Entity("RaceCorp.Data.Models.Message", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConversatioId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RevceiverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversatioId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("RevceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("RaceCorp.Data.Models.Mountain", b =>
                 {
                     b.Property<int>("Id")
@@ -747,6 +821,9 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RequesterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -754,6 +831,8 @@ namespace RaceCorp.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("RequesterId");
 
                     b.ToTable("Requests");
                 });
@@ -1130,6 +1209,13 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Trace");
                 });
 
+            modelBuilder.Entity("RaceCorp.Data.Models.Conversation", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", null)
+                        .WithMany("Conversations")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>
                 {
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
@@ -1169,6 +1255,27 @@ namespace RaceCorp.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Message", b =>
+                {
+                    b.HasOne("RaceCorp.Data.Models.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversatioId");
+
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("RevceiverId");
+
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Race", b =>
@@ -1218,7 +1325,13 @@ namespace RaceCorp.Data.Migrations
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Requester")
+                        .WithMany()
+                        .HasForeignKey("RequesterId");
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Requester");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
@@ -1310,6 +1423,8 @@ namespace RaceCorp.Data.Migrations
 
                     b.Navigation("Connections");
 
+                    b.Navigation("Conversations");
+
                     b.Navigation("CreatedRaces");
 
                     b.Navigation("CreatedRides");
@@ -1333,6 +1448,11 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Team");
 
                     b.Navigation("Traces");
+                });
+
+            modelBuilder.Entity("RaceCorp.Data.Models.Conversation", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Difficulty", b =>

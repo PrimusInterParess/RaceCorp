@@ -55,5 +55,7 @@
         public const string KrumProfilePicturePath = "\\Images\\defaulProfile\\krum.jpg";
 
         public const string RequestTypeConnectUser = "ConnectUser";
+
+        public const string ConversationNameFormat = "{0}{1}";
     }
 }

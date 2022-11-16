@@ -24,6 +24,12 @@
         {
         }
 
+
+
+        public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Conversation> Conversations { get; set; }
+
         public DbSet<Request> Requests { get; set; }
 
         public DbSet<Image> Images { get; set; }
@@ -109,7 +115,16 @@
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Message>().HasOne(m => m.Receiver).WithMany().HasForeignKey(m => m.RevceiverId);
+            builder.Entity<Message>().HasOne(m => m.Sender).WithMany().HasForeignKey(m => m.SenderId);
+            builder.Entity<Message>().HasOne(m => m.Conversation).WithMany(c => c.Messages).HasForeignKey(m => m.ConversatioId);
+
             builder.Entity<Image>().HasOne(i => i.Team).WithMany(t => t.Images).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Gpx>()
+                .HasOne(g => g.ApplicationUser)
+                .WithMany(u=>u.Gpxs)
+                .HasForeignKey(g => g.ApplicationUserId);
 
             builder.Entity<ApplicationUser>()
                .HasOne(u => u.MemberInTeam)
