@@ -2,9 +2,13 @@
 {
     public class MessageInputModel
     {
-        public string SenderId { get; set; }
+        public string ReceiverProfilePicurePath { get; set; }
 
-        public string RevceiverId { get; set; }
+        public string ReceiverFirstName { get; set; }
+
+        public string ReceiverLastName { get; set; }
+
+        public string ReceiverId { get; set; }
 
         public string Content { get; set; }
     }

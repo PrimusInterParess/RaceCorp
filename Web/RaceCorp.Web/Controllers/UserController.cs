@@ -114,7 +114,7 @@
         [Authorize]
         public IActionResult Inbox(string id)
         {
-            var model = this.userService.GetById<UserInboxViewModel>(id);
+            var model = this.userService.GetByIdUserInboxViewModel(id);
 
             return this.View(model);
         }
@@ -128,7 +128,7 @@
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> MessageAsync(string receiverId)
+        public async Task<IActionResult> SendMessage(string receiverId)
         {
             var currentUser = await this.userManager
                .GetUserAsync(this.User);
@@ -138,9 +138,34 @@
                 this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
+            var model = await this.userService.GetMessageModelAsync(receiverId, currentUser.Id);
 
+            return this.View(model);
+        }
 
-            return this.View();
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SendMessage(MessageInputModel model)
+        {
+            var currentUser = await this.userManager
+               .GetUserAsync(this.User);
+
+            if (currentUser == null)
+            {
+                this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            try
+            {
+                await this.userService.SaveMessageAsync(model, currentUser.Id);
+
+            }
+            catch (Exception)
+            {
+                this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = model.ReceiverId });
         }
     }
 }

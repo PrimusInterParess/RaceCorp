@@ -7,11 +7,6 @@ namespace RaceCorp.Web.Hubs
 
     public class ChatHub : Hub
     {
-
-        public ChatHub()
-        {
-
-        }
         public override Task OnConnectedAsync()
         {
             this.Groups.AddToGroupAsync(this.Context.ConnectionId, this.Context.User.Identity.Name);

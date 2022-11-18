@@ -86,6 +86,9 @@
                                     <li>
                                         <a class="dropdown-item" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">View</a>
                                     </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-action="SendMessage" asp-controller="User">Send Message</a>
+                                    </li>
                                 </ul>
                             </div>
                         }

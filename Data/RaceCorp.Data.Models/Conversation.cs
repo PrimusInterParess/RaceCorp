@@ -8,7 +8,13 @@
 
     public class Conversation : BaseDeletableModel<string>
     {
-        public string Name { get; set; }
+        public string UserAId { get; set; }
+
+        public virtual ApplicationUser UserA { get; set; }
+
+        public string UserBId { get; set; }
+
+        public virtual ApplicationUser UserB { get; set; }
 
         public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
     }

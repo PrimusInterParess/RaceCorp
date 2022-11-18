@@ -440,14 +440,21 @@ namespace RaceCorp.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("UserAId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserBId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("UserAId");
+
+                    b.HasIndex("UserBId");
 
                     b.ToTable("Conversations");
                 });
@@ -1207,6 +1214,18 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", null)
                         .WithMany("Conversations")
                         .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "UserA")
+                        .WithMany()
+                        .HasForeignKey("UserAId");
+
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "UserB")
+                        .WithMany()
+                        .HasForeignKey("UserBId");
+
+                    b.Navigation("UserA");
+
+                    b.Navigation("UserB");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>

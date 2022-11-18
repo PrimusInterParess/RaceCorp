@@ -7,16 +7,12 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
-    public class UserInboxViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
+    public class UserInboxViewModel : IMapFrom<ApplicationUser>
     {
         public string Id { get; set; }
 
-        public ICollection<UserMessageViewModel> Connections { get; set; } = new HashSet<UserMessageViewModel>();
+        public string ProfilePicturePath { get; set; }
 
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<ApplicationUser, UserInboxViewModel>().ForMember(x => x.Connections, opt
-                       => opt.MapFrom(x => x.Connections));
-        }
+        public ICollection<UserConversationViewModel> Conversations { get; set; } = new HashSet<UserConversationViewModel>();
     }
 }

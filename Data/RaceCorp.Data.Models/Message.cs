@@ -6,6 +6,8 @@
 
     public class Message : BaseDeletableModel<string>
     {
+        public Message() => this.Id = Guid.NewGuid().ToString();
+
         public string ConversatioId { get; set; }
 
         public virtual Conversation Conversation { get; set; }

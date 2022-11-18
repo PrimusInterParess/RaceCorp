@@ -3,9 +3,9 @@
 @model UserInboxViewModel
 
 <style>
-    /*img {
-        border-radius: 60%;
-    }*/
+    img {
+        border-radius: 30%;
+    }
 </style>
 <div id="divContainer" class="container-messages">
     <h3 class=" text-center">Messaging</h3>
@@ -18,16 +18,15 @@
                     </div>
                 </div>
                 <div class="inbox_chat">
-                    @foreach (var user in Model.Connections)
+                    @foreach (var conversation in Model.Conversations)
                     {
                         <div class="chat_list active_chat">
-                            <div class="chat_people">
-                                <div class="chat_img"> <img src="@user.ProfilePicturePath" alt="@user.FirstName"> </div>
+                            <div class="chat_people" id="@conversation.Id">
+                                <div class="chat_img"> <img src="@conversation.UserProfilePicturePath" alt="@conversation.UserFirstName"> </div>
                                 <div class="chat_ib">
                                     <a class="btn">
-                                        <h5>@user.FirstName @user.LastName  </h5><span class="chat_date">Dec 25</span>
+                                        <h5>@conversation.UserFirstName @conversation.UserLastName  </h5><span>@conversation.LastMessageContent</span>
                                     </a>
-
                                 </div>
                             </div>
                         </div>
@@ -106,10 +105,12 @@
 
         window.addEventListener('load', (event) => {
 
-            var aElements = document.querySelectorAll("div.chat_ib a.btn").forEach(e => e.addEventListener("click", (evnt) => {
+            var aElements = document.querySelectorAll(".chat_people").forEach(e => e.addEventListener("click", (evnt) => {
                 evnt.preventDefault();
 
-                console.log("Hello From Kari");
+                evnt.target.id;
+
+                console.log(evnt.target.id);
             }));
 
 

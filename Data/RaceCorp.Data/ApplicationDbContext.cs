@@ -119,11 +119,15 @@
             builder.Entity<Message>().HasOne(m => m.Sender).WithMany().HasForeignKey(m => m.SenderId);
             builder.Entity<Message>().HasOne(m => m.Conversation).WithMany(c => c.Messages).HasForeignKey(m => m.ConversatioId);
 
+            builder.Entity<Conversation>().HasOne(c => c.UserA).WithMany().HasForeignKey(c => c.UserAId);
+
+            builder.Entity<Conversation>().HasOne(c => c.UserB).WithMany().HasForeignKey(c => c.UserBId);
+
             builder.Entity<Image>().HasOne(i => i.Team).WithMany(t => t.Images).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Gpx>()
                 .HasOne(g => g.ApplicationUser)
-                .WithMany(u=>u.Gpxs)
+                .WithMany(u => u.Gpxs)
                 .HasForeignKey(g => g.ApplicationUserId);
 
             builder.Entity<ApplicationUser>()

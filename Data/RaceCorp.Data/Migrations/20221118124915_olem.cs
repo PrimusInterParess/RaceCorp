@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class fsd : Migration
+    public partial class olem : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -316,7 +316,8 @@ namespace RaceCorp.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserAId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserBId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -331,6 +332,16 @@ namespace RaceCorp.Data.Migrations
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Conversations_AspNetUsers_UserAId",
+                        column: x => x.UserAId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Conversations_AspNetUsers_UserBId",
+                        column: x => x.UserBId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -341,7 +352,6 @@ namespace RaceCorp.Data.Migrations
                     GoogleDriveId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GoogleDriveDirectoryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TraceId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -360,11 +370,6 @@ namespace RaceCorp.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Gpxs_AspNetUsers_ApplicationUserId1",
-                        column: x => x.ApplicationUserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -803,6 +808,16 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Conversations_UserAId",
+                table: "Conversations",
+                column: "UserAId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Conversations_UserBId",
+                table: "Conversations",
+                column: "UserBId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Difficulties_IsDeleted",
                 table: "Difficulties",
                 column: "IsDeleted");
@@ -816,11 +831,6 @@ namespace RaceCorp.Data.Migrations
                 name: "IX_Gpxs_ApplicationUserId",
                 table: "Gpxs",
                 column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Gpxs_ApplicationUserId1",
-                table: "Gpxs",
-                column: "ApplicationUserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Gpxs_IsDeleted",

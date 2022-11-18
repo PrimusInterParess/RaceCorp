@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Http;
     using RaceCorp.Web.ViewModels.ApplicationUsers;
+    using RaceCorp.Web.ViewModels.Common;
 
     public interface IUserService
     {
@@ -15,10 +16,14 @@
 
         List<T> GetRequest<T>(string userId);
 
-  
         List<T> GetAllAsync<T>();
 
         Task AddAsync(string currentUserId, string targetUserId);
 
+        Task<MessageInputModel> GetMessageModelAsync(string receiverId, string senderId);
+
+        Task SaveMessageAsync(MessageInputModel model, string senderId);
+
+        UserInboxViewModel GetByIdUserInboxViewModel(string id);
     }
 }

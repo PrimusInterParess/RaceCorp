@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RaceCorp.Web.ViewModels.Common
+﻿namespace RaceCorp.Web.ViewModels.Common
 {
+    using System.Collections.Generic;
+
+    using RaceCorp.Web.ViewModels.ApplicationUsers;
+
     public class ConversationViewModel
     {
         public string Name { get; set; }
 
-        public ICollection<mess>
+        public ICollection<UserConversationViewModel> Messages { get; set; }
     }
 }

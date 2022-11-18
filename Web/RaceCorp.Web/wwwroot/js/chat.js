@@ -21,9 +21,13 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("userInput").value;
+
+    var receiver = document.getElementById("receiverInput").value;
+    var sender = document.getElementById("senderInput").value;
+
     var message = document.getElementById("messageInput").value;
-    connection.invoke("SendMessage", user, message).catch(function (err) {
+
+    connection.invoke("SendMessageToGroup", sender, receiver, message).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
