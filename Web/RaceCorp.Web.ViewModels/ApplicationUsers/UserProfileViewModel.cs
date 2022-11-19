@@ -51,6 +51,8 @@
 
         public int RequestsCount { get; set; }
 
+        public int UnreadMessages { get; set; }
+
         public bool IsConnected { get; set; } = false;
 
         public bool RequestedConnection { get; set; } = false;
@@ -81,7 +83,8 @@
                 .ForMember(x => x.MemberInTeamLogoImagePath, opt => opt.MapFrom(x => x.MemberInTeam.LogoImagePath))
                 .ForMember(x => x.MemberInTeamName, opt => opt.MapFrom(x => x.MemberInTeam.Name))
                 .ForMember(x => x.RequestsCount, opt => opt.MapFrom(x => x.Requests.Where(r => r.IsApproved == false).ToList().Count))
-                .ForMember(x => x.ConnectRequest, opt => opt.MapFrom(x => x.Requests.Where(r => r.Type == GlobalConstants.RequestTypeConnectUser)));
+                .ForMember(x => x.ConnectRequest, opt => opt.MapFrom(x => x.Requests.Where(r => r.Type == GlobalConstants.RequestTypeConnectUser)))
+                .ForMember(x => x.UnreadMessages, opt => opt.MapFrom(x => x.InboxMessages.Where(m => m.IsRead == false).ToList().Count));
 
         }
     }

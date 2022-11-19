@@ -2,16 +2,15 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
-//Disable the send button until connection is established.
+//Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
+    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    var encodedMsg = user + " says " + msg;
     var li = document.createElement("li");
+    li.textContent = encodedMsg;
     document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user} says ${message}`;
 });
 
 connection.start().then(function () {
@@ -21,14 +20,23 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-
-    var receiver = document.getElementById("receiverInput").value;
     var sender = document.getElementById("senderInput").value;
-
+    var receiver = document.getElementById("receiverInput").value;
     var message = document.getElementById("messageInput").value;
 
-    connection.invoke("SendMessageToGroup", sender, receiver, message).catch(function (err) {
-        return console.error(err.toString());
-    });
+    if (receiver != "") {
+
+        connection.invoke("SendMessageToGroup", sender, receiver, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+    else {
+        connection.invoke("SendMessage", sender, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
+
+
     event.preventDefault();
 });

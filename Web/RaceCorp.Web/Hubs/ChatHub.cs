@@ -9,6 +9,8 @@ namespace RaceCorp.Web.Hubs
     {
         public override Task OnConnectedAsync()
         {
+            var userName = this.Context.User.Identity.Name;
+
             this.Groups.AddToGroupAsync(this.Context.ConnectionId, this.Context.User.Identity.Name);
             return base.OnConnectedAsync();
         }
@@ -20,8 +22,7 @@ namespace RaceCorp.Web.Hubs
 
         public Task SendMessageToGroup(string sender, string receiver, string message)
         {
-
-            return this.Clients.User(receiver).SendAsync("ReceiveMessage", sender, message);
+            return this.Clients.Group(receiver).SendAsync("ReceiveMessage", sender, message);
         }
     }
 }

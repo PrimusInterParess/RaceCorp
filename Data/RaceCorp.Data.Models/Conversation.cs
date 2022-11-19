@@ -4,18 +4,21 @@
     using System.Collections.Generic;
 
     using RaceCorp.Data.Common.Models;
-    using RaceCorp.Data.Common.Repositories;
 
     public class Conversation : BaseDeletableModel<string>
     {
-        public string UserAId { get; set; }
+        public string UserId { get; set; }
 
-        public virtual ApplicationUser UserA { get; set; }
+        public string UserEmail { get; set; }
 
-        public string UserBId { get; set; }
+        public string LastMessageContent { get; set; }
 
-        public virtual ApplicationUser UserB { get; set; }
+        public string LastMessageDate { get; set; }
 
-        public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
+        public string UserFirstName { get; set; }
+
+        public string UserLastName { get; set; }
+
+        public string UserProfilePicturePath { get; set; }
     }
 }

@@ -20,7 +20,7 @@
 
         Task AddAsync(string currentUserId, string targetUserId);
 
-        Task<MessageInputModel> GetMessageModelAsync(string receiverId, string senderId);
+        MessageInputModel GetMessageModelAsync(string receiverId, string senderId);
 
         Task SaveMessageAsync(MessageInputModel model, string senderId);
 

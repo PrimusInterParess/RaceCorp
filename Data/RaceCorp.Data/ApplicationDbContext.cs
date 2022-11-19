@@ -115,13 +115,8 @@
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Message>().HasOne(m => m.Receiver).WithMany().HasForeignKey(m => m.RevceiverId);
-            builder.Entity<Message>().HasOne(m => m.Sender).WithMany().HasForeignKey(m => m.SenderId);
-            builder.Entity<Message>().HasOne(m => m.Conversation).WithMany(c => c.Messages).HasForeignKey(m => m.ConversatioId);
-
-            builder.Entity<Conversation>().HasOne(c => c.UserA).WithMany().HasForeignKey(c => c.UserAId);
-
-            builder.Entity<Conversation>().HasOne(c => c.UserB).WithMany().HasForeignKey(c => c.UserBId);
+            builder.Entity<Message>().HasOne(m => m.Receiver).WithMany(r => r.InboxMessages).HasForeignKey(m => m.RevceiverId);
+            builder.Entity<Message>().HasOne(m => m.Sender).WithMany(r => r.SentMessages).HasForeignKey(m => m.SenderId);
 
             builder.Entity<Image>().HasOne(i => i.Team).WithMany(t => t.Images).OnDelete(DeleteBehavior.Cascade);
 

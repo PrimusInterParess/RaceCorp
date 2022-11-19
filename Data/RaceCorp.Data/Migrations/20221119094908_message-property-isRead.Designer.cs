@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221118124915_olem")]
-    partial class olem
+    [Migration("20221119094908_message-property-isRead")]
+    partial class messagepropertyisRead
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -439,24 +439,35 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastMessageContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastMessageDate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserAId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserBId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("UserFirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserLastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("IsDeleted");
-
-                    b.HasIndex("UserAId");
-
-                    b.HasIndex("UserBId");
 
                     b.ToTable("Conversations");
                 });
@@ -663,9 +674,6 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ConversatioId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -673,6 +681,9 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
@@ -685,8 +696,6 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConversatioId");
 
                     b.HasIndex("IsDeleted");
 
@@ -1216,18 +1225,6 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", null)
                         .WithMany("Conversations")
                         .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "UserA")
-                        .WithMany()
-                        .HasForeignKey("UserAId");
-
-                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "UserB")
-                        .WithMany()
-                        .HasForeignKey("UserBId");
-
-                    b.Navigation("UserA");
-
-                    b.Navigation("UserB");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>
@@ -1269,19 +1266,13 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Message", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.Conversation", "Conversation")
-                        .WithMany("Messages")
-                        .HasForeignKey("ConversatioId");
-
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Receiver")
-                        .WithMany()
+                        .WithMany("InboxMessages")
                         .HasForeignKey("RevceiverId");
 
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Sender")
-                        .WithMany()
+                        .WithMany("SentMessages")
                         .HasForeignKey("SenderId");
-
-                    b.Navigation("Conversation");
 
                     b.Navigation("Receiver");
 
@@ -1443,6 +1434,8 @@ namespace RaceCorp.Data.Migrations
 
                     b.Navigation("Images");
 
+                    b.Navigation("InboxMessages");
+
                     b.Navigation("Logins");
 
                     b.Navigation("Logos");
@@ -1455,14 +1448,11 @@ namespace RaceCorp.Data.Migrations
 
                     b.Navigation("Roles");
 
+                    b.Navigation("SentMessages");
+
                     b.Navigation("Team");
 
                     b.Navigation("Traces");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.Conversation", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Difficulty", b =>

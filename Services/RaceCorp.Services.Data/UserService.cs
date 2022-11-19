@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.VisualBasic;
     using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
@@ -155,9 +156,7 @@
         {
             var userDb = this.userRepo
                 .AllAsNoTracking()
-                .Include(u => u.Conversations).ThenInclude(c => c.Messages.OrderByDescending(m => m.CreatedOn))
-                .Include(u => u.Conversations).ThenInclude(c => c.UserA)
-                .Include(u => u.Conversations).ThenInclude(c => c.UserB)
+                .Include(u => u.Conversations)
                 .FirstOrDefault(u => u.Id == id);
 
             return new UserInboxViewModel
@@ -167,46 +166,20 @@
                 Conversations = userDb.Conversations.Select(c => new UserConversationViewModel
                 {
                     Id = c.Id,
-                    LastMessageContent = c.Messages.LastOrDefault().Content,
-                    UserFirstName = c.UserA.Id != id ? c.UserA.FirstName : c.UserB.FirstName,
-                    UserLastName = c.UserA.Id != id ? c.UserA.LastName : c.UserB.LastName,
-                    UserProfilePicturePath = c.UserA.Id != id ? c.UserA.ProfilePicturePath : c.UserB.ProfilePicturePath,
+                    UserId = c.UserId,
+                    Email = c.UserEmail,
+                    LastMessageContent = c.LastMessageContent,
+                    UserFirstName = c.UserFirstName,
+                    UserLastName = c.UserLastName,
+                    UserProfilePicturePath = c.UserProfilePicturePath,
                 }).ToList(),
             };
         }
 
-        public async Task<MessageInputModel> GetMessageModelAsync(string receiverId, string senderId)
+        public MessageInputModel GetMessageModelAsync(string receiverId, string senderId)
         {
             var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
             var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == receiverId);
-
-            var conversation = this.conversationRepo.All().FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + sender.Id);
-
-            if (conversation == null)
-            {
-                conversation = new Conversation()
-                {
-                    Id = sender.Id + receiver.Id,
-                    CreatedOn = DateTime.UtcNow,
-                };
-
-                conversation.UserB = sender;
-                conversation.UserA = receiver;
-
-                sender.Conversations.Add(conversation);
-                receiver.Conversations.Add(conversation);
-
-                await this.conversationRepo.AddAsync(conversation);
-            }
-
-            try
-            {
-                await this.conversationRepo.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
 
             return new MessageInputModel
             {
@@ -230,54 +203,66 @@
 
         public async Task SaveMessageAsync(MessageInputModel model, string senderId)
         {
-            var conversation = this.conversationRepo.All().FirstOrDefault(c => c.Id == model.ReceiverId + senderId || c.Id == senderId + model.ReceiverId);
             var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == model.ReceiverId);
-
             var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
 
-            if (receiver == null)
+            //validate sender and receiver
+            if (sender.Conversations.Any(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId) == false)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
+                var conversationSender = new Conversation
+                {
+                    Id = receiver.Id + sender.Id, // Id shpould be guid
+                    CreatedOn = DateTime.UtcNow,
+                    UserId = sender.Id,
+                };
 
-            if (conversation == null)
-            {
-                conversation = new Conversation()
+                var conversationReceiver = new Conversation
                 {
                     Id = sender.Id + receiver.Id,
                     CreatedOn = DateTime.UtcNow,
+                    UserId = receiver.Id,
                 };
 
-
-                sender.Conversations.Add(conversation);
-                receiver.Conversations.Add(conversation);
-
-                conversation.UserA = sender;
-                conversation.UserB = receiver;
-
-                await this.conversationRepo.AddAsync(conversation);
-
+                receiver.Conversations.Add(conversationReceiver);
+                sender.Conversations.Add(conversationSender);
             }
 
             var message = new Message
             {
-                Conversation = conversation,
                 CreatedOn = DateTime.UtcNow,
                 Sender = sender,
                 Content = model.Content,
                 Receiver = receiver,
             };
 
-            conversation.Messages.Add(message);
+            var receiverConvrs = receiver.Conversations.FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
+            var senderConvrs = sender.Conversations.FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
+
+            this.UpdateConversation(receiverConvrs, message, sender);
+            this.UpdateConversation(senderConvrs, message, receiver);
+
+            receiver.InboxMessages.Add(message);
+            sender.SentMessages.Add(message);
 
             try
             {
-                await this.conversationRepo.SaveChangesAsync();
+                await this.userRepo.SaveChangesAsync();
             }
             catch (Exception)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
+        }
+
+        private void UpdateConversation(Conversation conversation, Message message, ApplicationUser user)
+        {
+            conversation.LastMessageContent = message.Content;
+            conversation.LastMessageDate = message.CreatedOn.ToString("g");
+            conversation.UserProfilePicturePath = user.ProfilePicturePath;
+            conversation.ModifiedOn = message.CreatedOn;
+            conversation.UserEmail = user.Email;
+            conversation.UserFirstName = user.FirstName;
+            conversation.UserLastName = user.LastName;
         }
 
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)

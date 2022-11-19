@@ -31,6 +31,11 @@
             this.userManager = userManager;
         }
 
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
         [HttpGet]
         public IActionResult Requests(string id)
         {
@@ -138,7 +143,7 @@
                 this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
-            var model = await this.userService.GetMessageModelAsync(receiverId, currentUser.Id);
+            var model = this.userService.GetMessageModelAsync(receiverId, currentUser.Id);
 
             return this.View(model);
         }
@@ -158,11 +163,10 @@
             try
             {
                 await this.userService.SaveMessageAsync(model, currentUser.Id);
-
             }
             catch (Exception)
             {
-                this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+               return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = model.ReceiverId });

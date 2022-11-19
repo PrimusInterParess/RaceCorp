@@ -33,7 +33,7 @@
             <form method="get">
                 <button asp-action="Inbox" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
                     📨 Messages
-                    <div class="notification" role="status"></div>
+                    <div class="notification" role="status">@Model.UnreadMessages</div>
                 </button>
             </form>
         </li>

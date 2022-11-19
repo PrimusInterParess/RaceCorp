@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class olem : Migration
+    public partial class init_cr : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -316,8 +316,13 @@ namespace RaceCorp.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserAId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserBId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastMessageContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastMessageDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserFirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserLastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserProfilePicturePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -330,16 +335,6 @@ namespace RaceCorp.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Conversations_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Conversations_AspNetUsers_UserAId",
-                        column: x => x.UserAId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Conversations_AspNetUsers_UserBId",
-                        column: x => x.UserBId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -396,6 +391,34 @@ namespace RaceCorp.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RevceiverId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_RevceiverId",
+                        column: x => x.RevceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -460,40 +483,6 @@ namespace RaceCorp.Data.Migrations
                         principalTable: "Towns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ConversatioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    RevceiverId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_RevceiverId",
-                        column: x => x.RevceiverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_SenderId",
-                        column: x => x.SenderId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Messages_Conversations_ConversatioId",
-                        column: x => x.ConversatioId,
-                        principalTable: "Conversations",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -808,16 +797,6 @@ namespace RaceCorp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conversations_UserAId",
-                table: "Conversations",
-                column: "UserAId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Conversations_UserBId",
-                table: "Conversations",
-                column: "UserBId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Difficulties_IsDeleted",
                 table: "Difficulties",
                 column: "IsDeleted");
@@ -861,11 +840,6 @@ namespace RaceCorp.Data.Migrations
                 name: "IX_Logos_IsDeleted",
                 table: "Logos",
                 column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Messages_ConversatioId",
-                table: "Messages",
-                column: "ConversatioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_IsDeleted",
@@ -1141,6 +1115,9 @@ namespace RaceCorp.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Conversations");
+
+            migrationBuilder.DropTable(
                 name: "Images");
 
             migrationBuilder.DropTable(
@@ -1157,9 +1134,6 @@ namespace RaceCorp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Conversations");
 
             migrationBuilder.DropTable(
                 name: "Traces");

@@ -8,10 +8,6 @@
     {
         public Message() => this.Id = Guid.NewGuid().ToString();
 
-        public string ConversatioId { get; set; }
-
-        public virtual Conversation Conversation { get; set; }
-
         public string SenderId { get; set; }
 
         public virtual ApplicationUser Sender { get; set; }
@@ -21,5 +17,7 @@
         public virtual ApplicationUser Receiver { get; set; }
 
         public string Content { get; set; }
+
+        public bool IsRead { get; set; }
     }
 }
