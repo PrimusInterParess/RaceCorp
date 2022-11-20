@@ -50,26 +50,6 @@
             this.conversationRepo = conversationRepo;
         }
 
-        public async Task AddAsync(string currentUserId, string targetUserId)
-        {
-            var userDb = this.userRepo.All().Include(u => u.Connections).FirstOrDefault(u => u.Id == currentUserId);
-
-            var targetUserDb = this.userRepo.All().Include(u => u.Connections).FirstOrDefault(u => u.Id == targetUserId);
-
-            if (userDb != null && targetUserDb != null)
-            {
-                if (userDb.Connections.Any(c => c.Id == targetUserDb.Id))
-                {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-                }
-
-                userDb.Connections.Add(targetUserDb);
-                targetUserDb.Connections.Add(userDb);
-
-                await this.userRepo.SaveChangesAsync();
-            }
-        }
-
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
         {
             var user = this.userRepo.All().Include(u => u.Images).Include(u => u.Town).FirstOrDefault(u => u.Id == inputModel.Id);
@@ -166,7 +146,8 @@
                 Conversations = userDb.Conversations.Select(c => new UserConversationViewModel
                 {
                     Id = c.Id,
-                    UserId = c.UserId,
+                    AuthorId = c.AuthorId,
+                    InterlocutorId = c.InterlocutorId,
                     Email = c.UserEmail,
                     LastMessageContent = c.LastMessageContent,
                     UserFirstName = c.UserFirstName,
@@ -205,22 +186,29 @@
         {
             var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == model.ReceiverId);
             var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
+            if (sender == null || receiver == null)
+            {
+                throw new NullReferenceException();
+            }
 
             //validate sender and receiver
             if (sender.Conversations.Any(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId) == false)
             {
                 var conversationSender = new Conversation
                 {
-                    Id = receiver.Id + sender.Id, // Id shpould be guid
+                    Id = receiver.Id + sender.Id,
                     CreatedOn = DateTime.UtcNow,
-                    UserId = sender.Id,
+                    AuthorId = sender.Id,
+                    InterlocutorId = receiver.Id,
                 };
 
                 var conversationReceiver = new Conversation
                 {
                     Id = sender.Id + receiver.Id,
                     CreatedOn = DateTime.UtcNow,
-                    UserId = receiver.Id,
+                    AuthorId = receiver.Id,
+                    InterlocutorId = sender.Id,
+
                 };
 
                 receiver.Conversations.Add(conversationReceiver);
@@ -277,6 +265,17 @@
             {
                 user.Claims.Where(c => c.ClaimType == claimType).FirstOrDefault().ClaimValue = value;
             }
+        }
+
+
+        public bool RequestedConnection(string currentUserId, string targetUserId)
+        {
+            return this.userRepo
+                .AllAsNoTracking()
+                .Include(u => u.Requests)
+                .FirstOrDefault(u => u.Id == currentUserId)
+                .Requests
+                .Any(r => r.RequesterId == targetUserId);
         }
     }
 }

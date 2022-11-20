@@ -20,15 +20,18 @@
         private readonly IUserService userService;
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMessageService messageService;
 
         public UserController(
             IUserService userService,
             IWebHostEnvironment environment,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IMessageService messageService)
         {
             this.userService = userService;
             this.environment = environment;
             this.userManager = userManager;
+            this.messageService = messageService;
         }
 
         public IActionResult Index()
@@ -52,20 +55,29 @@
             return this.View(userDto);
         }
 
+        [Authorize]
         [HttpGet]
-        public IActionResult Profile(string id)
+        public async Task<IActionResult> ProfileAsync(string id)
         {
-            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await this.userManager
+               .GetUserAsync(this.User);
+
+            if (currentUser == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
 
             var userDto = this.userService.GetById<UserProfileViewModel>(id);
 
-            if (currentUserId != null && userDto != null)
+            if (currentUser.Id != null && userDto != null)
             {
-                userDto.IsConnected = userDto.Connections.Any(c => c.Id == currentUserId) || currentUserId == id;
+                userDto.IsConnected = userDto.Connections.Any(c => c.Id == currentUser.Id + id || c.Id == id + currentUser.Id) || currentUser.Id == id;
 
-                userDto.RequestedConnection = userDto.ConnectRequest.Any(r => r.RequesterId == currentUserId);
+                userDto.RequestedConnection =
+                    userDto.ConnectRequest.Any(r => r.RequesterId == currentUser.Id) ||
+                    this.userService.RequestedConnection(currentUser.Id, userDto.Id);
 
-                userDto.CanMessageMe = userDto.Connections.Any(c => c.Id == currentUserId);
+                userDto.CanMessageMe = userDto.Connections.Any(c => c.Id == currentUser.Id + id || c.Id == id + currentUser.Id);
 
                 return this.View(userDto);
             }
@@ -166,10 +178,25 @@
             }
             catch (Exception)
             {
-               return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = model.ReceiverId });
+        }
+
+        public async Task<IActionResult> Messages(string authorId, string interlocutorId)
+        {
+            var currentUser = await this.userManager
+                    .GetUserAsync(this.User);
+
+            if (currentUser == null || currentUser.Id != authorId)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            var model = this.messageService.GetMessages<MessageInListViewModel>(authorId, interlocutorId);
+
+            return this.RedirectToAction("/");
         }
     }
 }

@@ -24,8 +24,6 @@
         {
         }
 
-
-
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Conversation> Conversations { get; set; }
@@ -114,6 +112,8 @@
             builder.Entity<ApplicationUserTrace>().HasOne(l => l.ApplicationUser).WithMany(u => u.Traces).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ApplicationUser>().HasMany(u => u.Connections).WithOne(c => c.ApplicationUser).HasForeignKey(c => c.ApplicationUserId);
 
             builder.Entity<Message>().HasOne(m => m.Receiver).WithMany(r => r.InboxMessages).HasForeignKey(m => m.RevceiverId);
             builder.Entity<Message>().HasOne(m => m.Sender).WithMany(r => r.SentMessages).HasForeignKey(m => m.SenderId);

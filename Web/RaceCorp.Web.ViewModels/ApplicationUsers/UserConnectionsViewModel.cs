@@ -3,7 +3,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
 
-    public class UserConnectionsViewModel : IMapFrom<ApplicationUser>
+    public class UserConnectionsViewModel : IMapFrom<Connection>
     {
         public string Id { get; set; }
     }

@@ -18,7 +18,7 @@
 
         List<T> GetAllAsync<T>();
 
-        Task AddAsync(string currentUserId, string targetUserId);
+        bool RequestedConnection(string currentUserId, string targetUserId);
 
         MessageInputModel GetMessageModelAsync(string receiverId, string senderId);
 

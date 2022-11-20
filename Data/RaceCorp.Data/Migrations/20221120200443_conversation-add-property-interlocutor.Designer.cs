@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaceCorp.Data;
 
@@ -11,9 +12,10 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221120200443_conversation-add-property-interlocutor")]
+    partial class conversationaddpropertyinterlocutor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,6 +182,9 @@ namespace RaceCorp.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -276,6 +281,8 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("IsDeleted");
 
@@ -413,40 +420,6 @@ namespace RaceCorp.Data.Migrations
                     b.HasIndex("TraceId");
 
                     b.ToTable("ApplicationUserTrace");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.Connection", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InterlocutorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("InterlocutorId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("Connection");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Conversation", b =>
@@ -1163,6 +1136,10 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("RaceCorp.Data.Models.Team", "MemberInTeam")
                         .WithMany("TeamMembers")
                         .HasForeignKey("MemberInTeamId");
@@ -1244,21 +1221,6 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Race");
 
                     b.Navigation("Trace");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.Connection", b =>
-                {
-                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Connections")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Interlocutor")
-                        .WithMany()
-                        .HasForeignKey("InterlocutorId");
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Interlocutor");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Conversation", b =>

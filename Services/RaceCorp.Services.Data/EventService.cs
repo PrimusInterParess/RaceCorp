@@ -26,6 +26,7 @@
         private readonly IDeletableEntityRepository<Team> teamRepo;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
         private readonly IDeletableEntityRepository<Request> requestRepo;
+        private readonly IDeletableEntityRepository<Connection> connectionRepo;
 
         public EventService(
             UserManager<ApplicationUser> userManager,
@@ -36,7 +37,8 @@
             IRepository<ApplicationUserTrace> userTraceRepo,
             IDeletableEntityRepository<Team> teamRepo,
             IDeletableEntityRepository<ApplicationUser> userRepo,
-            IDeletableEntityRepository<Request> requestRepo)
+            IDeletableEntityRepository<Request> requestRepo,
+            IDeletableEntityRepository<Connection> connectionRepo)
         {
             this.userManager = userManager;
             this.rideRepo = rideRepo;
@@ -47,6 +49,7 @@
             this.teamRepo = teamRepo;
             this.userRepo = userRepo;
             this.requestRepo = requestRepo;
+            this.connectionRepo = connectionRepo;
         }
 
         public async Task<bool> RegisterUserEvent(EventRegisterModel eventModel)
@@ -215,11 +218,16 @@
                 targetUser.Requests.Remove(targetUserConnectRequest);
             }
 
-            var res1 = requester.Connections.Remove(targetUser);
-            var res2 = targetUser.Connections.Remove(requester);
+            var requesterConnection = requester.Connections.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
+            var targetUserConnection = targetUser.Connections.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
+
+            var res1 = requester.Connections.Remove(requesterConnection);
+            var res2 = targetUser.Connections.Remove(targetUserConnection);
 
             try
             {
+                this.connectionRepo.Delete(requesterConnection);
+                this.connectionRepo.Delete(targetUserConnection);
                 await this.userRepo.SaveChangesAsync();
             }
             catch (Exception)
@@ -620,11 +628,49 @@
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
 
-            targetUser.Connections.Add(requester);
-            requester.Connections.Add(targetUser);
+            var alreadyExist = this.connectionRepo.AllWithDeleted().Any(c => c.Id == targetUser.Id + requester.Id);
+
+            if (alreadyExist == false)
+            {
+                targetUser.Connections.Add(new Connection
+                {
+                    Id = targetUser.Id + requester.Id,
+                    ApplicationUser = targetUser,
+                    CreatedOn = DateTime.UtcNow,
+                    Interlocutor = requester,
+                });
+
+                requester.Connections.Add(new Connection
+                {
+                    Id = requester.Id + targetUser.Id,
+                    ApplicationUser = requester,
+                    CreatedOn = DateTime.UtcNow,
+                    Interlocutor = targetUser,
+                });
+            }
+            else
+            {
+                var targetUserConneciton = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
+                var requesterUserConnection = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
+
+                targetUserConneciton.IsDeleted = false;
+                targetUserConneciton.Interlocutor = requester;
+                targetUserConneciton.ApplicationUser = targetUser;
+                targetUserConneciton.ModifiedOn = DateTime.UtcNow;
+
+                requesterUserConnection.IsDeleted = false;
+                requesterUserConnection.Interlocutor = targetUser;
+                requesterUserConnection.ApplicationUser = requester;
+                requesterUserConnection.ModifiedOn = DateTime.UtcNow;
+
+                targetUser.Connections.Add(targetUserConneciton);
+                requester.Connections.Add(requesterUserConnection);
+            }
+
             requestDb.IsApproved = true;
             try
             {
+                // this.requestRepo.Delete(requestDb);
                 await this.userRepo.SaveChangesAsync();
             }
             catch (Exception)

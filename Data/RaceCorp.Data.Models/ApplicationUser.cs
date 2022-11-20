@@ -65,7 +65,7 @@ namespace RaceCorp.Data.Models
 
         public virtual ICollection<Message> SentMessages { get; set; } = new HashSet<Message>();
 
-        public virtual ICollection<ApplicationUser> Connections { get; set; } = new HashSet<ApplicationUser>();
+        public virtual ICollection<Connection> Connections { get; set; } = new HashSet<Connection>();
 
         public virtual ICollection<Request> Requests { get; set; } = new HashSet<Request>();
 

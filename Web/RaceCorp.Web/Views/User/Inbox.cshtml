@@ -20,20 +20,19 @@
                 <div class="inbox_chat">
                     @foreach (var conversation in Model.Conversations)
                     {
-                        <div class="chat_list active_chat">
-                            <a class="btn">
-
+                        <a asp-controller="User" asp-area="" asp-action="Messages" asp-route-authorId="@conversation.AuthorId" asp-route-interlocutorId="@conversation.InterlocutorId">
+                            <div class="chat_list active_chat">
                                 <div class="chat_people" id="@conversation.Id">
-                                    <input type="hidden" class="conversationId" name="custId" value="@conversation.Id">
-                                    <div class="chat_img"> <img src="@conversation.UserProfilePicturePath" alt="@conversation.UserFirstName"> </div>
+                                    <div class="chat_img">
+                                        <img src="@conversation.UserProfilePicturePath" alt="@conversation.UserFirstName">
+                                    </div>
                                     <div class="chat_ib">
-
-                                        <h5>@conversation.UserFirstName @conversation.UserLastName</h5><span>@conversation.LastMessageContent</span>
+                                        <h5>@conversation.UserFirstName @conversation.UserLastName</h5>
+                                        <span>@conversation.LastMessageContent</span>
                                     </div>
                                 </div>
-                            </a>
-
-                        </div>
+                            </div>
+                        </a>
                     }
                 </div>
             </div>
