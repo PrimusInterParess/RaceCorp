@@ -34,7 +34,6 @@
 
                     return this.RedirectToAction("Profile", eventModel.EventType, new { id = eventModel.Id });
                 }
-
             }
             catch (Exception e)
             {
@@ -67,7 +66,7 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Request(RequestInputModel model)
+        public new async Task<IActionResult> Request(RequestInputModel model)
         {
             try
             {

@@ -126,7 +126,6 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
 
             foreach (var claim in userClaims)
             {
-
                 await this.userManager.RemoveClaimAsync(user, claim);
             }
         }

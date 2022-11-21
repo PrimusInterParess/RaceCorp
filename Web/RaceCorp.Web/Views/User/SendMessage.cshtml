@@ -37,7 +37,7 @@
 </style>
 
 <div class="container">
-    <img src="@Model.ReceiverProfilePicurePath" />
+    <img class="resize" src="@Model.ReceiverProfilePicurePath" />
     <form method="post">
         <b> Message @Model.ReceiverFirstName @Model.ReceiverLastName</b>
         <textarea asp-for="Content" placeholder="Write something.." style="height:200px"></textarea>

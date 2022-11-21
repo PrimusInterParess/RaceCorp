@@ -79,6 +79,8 @@
 
                 userDto.CanMessageMe = userDto.Connections.Any(c => c.Id == currentUser.Id + id || c.Id == id + currentUser.Id);
 
+                userDto.Connections = userDto.Connections.Take(6).OrderByDescending(c => c.CreatedOn).ToHashSet();
+
                 return this.View(userDto);
             }
 
@@ -196,7 +198,7 @@
 
             var model = this.messageService.GetMessages<MessageInListViewModel>(authorId, interlocutorId);
 
-            return this.RedirectToAction("/");
+            return this.Json(model);
         }
     }
 }

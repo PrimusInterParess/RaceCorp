@@ -129,7 +129,11 @@
 
         public T GetById<T>(string id)
         {
-            return this.userRepo.All().Where(u => u.Id == id).To<T>().FirstOrDefault();
+            return this.userRepo
+                .All()
+                .Where(u => u.Id == id)
+                .To<T>()
+                .FirstOrDefault();
         }
 
         public UserInboxViewModel GetByIdUserInboxViewModel(string id)

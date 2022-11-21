@@ -4,6 +4,22 @@ for details on configuring this project to bundle and minify static web assets. 
 /*team profile*/
 
 
+/* connection Grid - user profile*/
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 5vw);
+    grid-gap: 15px;
+}
+
+.gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* connection Grid - user profile*/
+
 /*MESSAGES*/
 .container-messages {
     max-width: 1170px;
@@ -12,8 +28,8 @@ for details on configuring this project to bundle and minify static web assets. 
 
 img {
     max-width: 100%;
-  
 }
+
 .img-chat {
     border-radius: 50%;
 }
@@ -476,6 +492,7 @@ html {
     height: 40px;
     padding: 8px;
 }
+
 .user {
     margin-right: 0px;
     margin-left: 0px;

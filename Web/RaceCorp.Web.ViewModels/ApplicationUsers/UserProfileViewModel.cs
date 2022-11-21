@@ -61,15 +61,15 @@
 
         public ICollection<RequestModel> ConnectRequest { get; set; }
 
-        public ICollection<UserConnectionsViewModel> Connections { get; set; } = new HashSet<UserConnectionsViewModel>();
+        public ICollection<UserConnectionsViewModel> Connections { get; set; }
 
-        public ICollection<CreatedRideBaseModel> CreatedRides { get; set; } = new HashSet<CreatedRideBaseModel>();
+        public ICollection<CreatedRideBaseModel> CreatedRides { get; set; }
 
-        public ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; } = new HashSet<CreatedRaceBaseModel>();
+        public ICollection<CreatedRaceBaseModel> CreatedRaces { get; set; }
 
-        public ICollection<UserRideBaseModel> Rides { get; set; } = new List<UserRideBaseModel>();
+        public ICollection<UserRideBaseModel> Rides { get; set; }
 
-        public ICollection<UserTraceBaseModel> Traces { get; set; } = new List<UserTraceBaseModel>();
+        public ICollection<UserTraceBaseModel> Traces { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -85,7 +85,6 @@
                 .ForMember(x => x.RequestsCount, opt => opt.MapFrom(x => x.Requests.Where(r => r.IsApproved == false).ToList().Count))
                 .ForMember(x => x.ConnectRequest, opt => opt.MapFrom(x => x.Requests.Where(r => r.Type == GlobalConstants.RequestTypeConnectUser)))
                 .ForMember(x => x.UnreadMessages, opt => opt.MapFrom(x => x.InboxMessages.Where(m => m.IsRead == false).ToList().Count));
-
         }
     }
 }

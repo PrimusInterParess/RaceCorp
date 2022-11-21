@@ -107,8 +107,31 @@
     </div>
 
 
+
+
     <div class="row">
+
         <div class="col-md-4">
+            @if (Model.Connections.Count != 0)
+            {
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-icon">
+                            <i class="fa fa-trophy"></i>
+                        </span>
+                        <span class="panel-title">My Connections</span>
+                        @foreach (var connection in Model.Connections)
+                        {
+                            <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@connection.InterlocutorId">
+                                <img class="media-object mn thumbnail mw50" src="@connection.InterlocutorProfilePicturePath">
+
+                            </a>
+                        }
+                    </div>
+                </div>
+
+            }
             <div class="panel">
                 <div class="panel-heading">
                     <span class="panel-icon">
@@ -199,11 +222,10 @@
                                     <a class="pull-left"> <img class="media-object mn thumbnail mw50" src="@raceTrace.LogoPaht"> </a>
                                     <div class="media-body">
                                         <h5 class="media-heading mb20">
-                                            <a asp-action="Profile" asp-controller="Race" asp-route-id="@raceTrace.RaceId" type="button" style="outline" class="btn btn-lg btn-block">@raceTrace.RaceName  , @raceTrace.TraceName</a>
+                                            <a asp-action="Profile" asp-controller="Race" asp-route-id="@raceTrace.RaceId" style="outline" class="btn btn-lg btn-block">@raceTrace.RaceName  , @raceTrace.TraceName</a>
 
                                             <small> - @raceTrace.TraceStartTime</small>
                                         </h5>
-
                                     </div>
                                 }
                             }
@@ -236,7 +258,7 @@
                                     <a class="pull-left"> <img class="media-object mn thumbnail mw50" src="@GlobalConstants.RideDefaultImage"> </a>
                                     <div class="media-body">
                                         <h5 class="media-heading mb20">
-                                            <a asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.RideId" type="button" style="outline" class="btn btn-lg btn-block">@ride.RideName</a>
+                                            <a asp-action="Profile" asp-controller="Ride" asp-route-id="@ride.RideId" style="outline" class="btn btn-lg btn-block">@ride.RideName</a>
 
                                             <small> - @ride.RideTraceStartTime</small>
                                         </h5>
