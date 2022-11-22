@@ -56,6 +56,6 @@
 
         public const string RequestTypeConnectUser = "ConnectUser";
 
-        public const string ConversationNameFormat = "{0}{1}";
+        public const string HubGroupNameFormat = "{0}{1}";
     }
 }

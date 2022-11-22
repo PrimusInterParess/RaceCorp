@@ -16,6 +16,7 @@ namespace RaceCorp.Web
     using RaceCorp.Data.Repositories;
     using RaceCorp.Data.Seeding;
     using RaceCorp.Services;
+
     using RaceCorp.Services.Data;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
@@ -90,6 +91,7 @@ namespace RaceCorp.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IGroupNameProvider, GroupNameProvider>();
         }
 
         private static async void Configure(WebApplication app)
