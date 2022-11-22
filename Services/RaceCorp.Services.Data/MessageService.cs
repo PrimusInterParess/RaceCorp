@@ -30,6 +30,7 @@ namespace RaceCorp.Services.Data
                 .Where(m =>
                 (m.RevceiverId == userId && m.SenderId == interlocutorId) ||
                 (m.RevceiverId == interlocutorId && m.SenderId == userId))
+                .OrderBy(m => m.CreatedOn)
                 .To<T>()
                 .ToList();
         }

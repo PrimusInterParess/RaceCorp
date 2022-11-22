@@ -25,5 +25,7 @@
         Task SaveMessageAsync(MessageInputModel model, string senderId);
 
         UserInboxViewModel GetByIdUserInboxViewModel(string id);
+
+        string GetUserEmail(string userId);
     }
 }

@@ -133,7 +133,9 @@
         [Authorize]
         public IActionResult Inbox(string id)
         {
+           
             var model = this.userService.GetByIdUserInboxViewModel(id);
+
 
             return this.View(model);
         }
@@ -191,14 +193,33 @@
             var currentUser = await this.userManager
                     .GetUserAsync(this.User);
 
+            var interlocutorEmail = this.userService.GetUserEmail(interlocutorId);
+
+            if (interlocutorEmail == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
             if (currentUser == null || currentUser.Id != authorId)
             {
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
-            var model = this.messageService.GetMessages<MessageInListViewModel>(authorId, interlocutorId);
+            var messages = this.messageService.GetMessages<MessageInListViewModel>(authorId, interlocutorId);
 
-            return this.Json(model);
+            if (messages.Count == 0)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            var authorEmail = currentUser.Email;
+
+            return this.Json(new
+            {
+                authorEmail = authorEmail,
+                interlocutorEmail = interlocutorEmail,
+                messages = messages,
+            });
         }
     }
 }

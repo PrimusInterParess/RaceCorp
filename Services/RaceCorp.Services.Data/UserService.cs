@@ -281,5 +281,10 @@
                 .Requests
                 .Any(r => r.RequesterId == targetUserId);
         }
+
+        public string GetUserEmail(string userId)
+        {
+            return this.userRepo.AllAsNoTracking().FirstOrDefault(u => u.Id == userId).Email;
+        }
     }
 }
