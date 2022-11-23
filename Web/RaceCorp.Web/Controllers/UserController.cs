@@ -133,11 +133,16 @@
         [Authorize]
         public IActionResult Inbox(string id)
         {
-           
-            var model = this.userService.GetByIdUserInboxViewModel(id);
+            try
+            {
+                var model = this.userService.GetByIdUserInboxViewModel(id);
+                return this.View(model);
 
-
-            return this.View(model);
+            }
+            catch (Exception)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
         }
 
         public IActionResult All()

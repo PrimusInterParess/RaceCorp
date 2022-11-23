@@ -157,6 +157,7 @@
                     UserFirstName = c.UserFirstName,
                     UserLastName = c.UserLastName,
                     UserProfilePicturePath = c.UserProfilePicturePath,
+                    LastMessageDate= c.LastMessageDate,
                 }).ToList(),
             };
         }
@@ -186,7 +187,7 @@
                 .ToList();
         }
 
-        public async Task SaveMessageAsync(MessageInputModel model, string senderId)
+        public async Task<Message> SaveMessageAsync(MessageInputModel model, string senderId)
         {
             var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == model.ReceiverId);
             var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
@@ -244,12 +245,14 @@
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
+
+            return message;
         }
 
         private void UpdateConversation(Conversation conversation, Message message, ApplicationUser user)
         {
             conversation.LastMessageContent = message.Content;
-            conversation.LastMessageDate = message.CreatedOn.ToString("g");
+            conversation.LastMessageDate = message.CreatedOn.ToString(GlobalConstants.DateMessageFormat);
             conversation.UserProfilePicturePath = user.ProfilePicturePath;
             conversation.ModifiedOn = message.CreatedOn;
             conversation.UserEmail = user.Email;

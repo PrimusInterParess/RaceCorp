@@ -21,6 +21,8 @@
 
         public string LastMessageContent { get; set; }
 
+        public string LastMessageDate { get; set; }
+
         public string Email { get; set; }
 
         public string UserProfilePicturePath { get; set; }

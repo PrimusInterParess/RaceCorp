@@ -27,6 +27,7 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
         private readonly IDeletableEntityRepository<Request> requestRepo;
         private readonly IDeletableEntityRepository<Connection> connectionRepo;
+        private readonly IDeletableEntityRepository<Conversation> conversationRepo;
 
         public EventService(
             UserManager<ApplicationUser> userManager,
@@ -38,7 +39,8 @@
             IDeletableEntityRepository<Team> teamRepo,
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Request> requestRepo,
-            IDeletableEntityRepository<Connection> connectionRepo)
+            IDeletableEntityRepository<Connection> connectionRepo,
+            IDeletableEntityRepository<Conversation> conversationRepo)
         {
             this.userManager = userManager;
             this.rideRepo = rideRepo;
@@ -50,6 +52,7 @@
             this.userRepo = userRepo;
             this.requestRepo = requestRepo;
             this.connectionRepo = connectionRepo;
+            this.conversationRepo = conversationRepo;
         }
 
         public async Task<bool> RegisterUserEvent(EventRegisterModel eventModel)
@@ -188,14 +191,14 @@
 
         private async Task DisconnectUserAsync(RequestInputModel inputModel)
         {
-            var requester = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).FirstOrDefault(u => u.Id == inputModel.RequesterId);
+            var requester = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).Include(c => c.Conversations).FirstOrDefault(u => u.Id == inputModel.RequesterId);
 
             if (requester == null)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var targetUser = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).FirstOrDefault(u => u.Id == inputModel.TargetId);
+            var targetUser = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).Include(c => c.Conversations).FirstOrDefault(u => u.Id == inputModel.TargetId);
 
             if (targetUser == null)
             {
@@ -221,11 +224,19 @@
             var requesterConnection = requester.Connections.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
             var targetUserConnection = targetUser.Connections.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
 
-            var res1 = requester.Connections.Remove(requesterConnection);
-            var res2 = targetUser.Connections.Remove(targetUserConnection);
+            var requesterConversation = requester.Conversations.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
+            var targetUserConversation = targetUser.Conversations.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
+
+            requester.Connections.Remove(requesterConnection);
+            targetUser.Connections.Remove(targetUserConnection);
+
+            requester.Conversations.Remove(requesterConversation);
+            targetUser.Conversations.Remove(targetUserConversation);
 
             try
             {
+                this.conversationRepo.Delete(requesterConversation);
+                this.conversationRepo.Delete(targetUserConversation);
                 this.connectionRepo.Delete(requesterConnection);
                 this.connectionRepo.Delete(targetUserConnection);
                 await this.userRepo.SaveChangesAsync();
@@ -628,9 +639,10 @@
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var alreadyExist = this.connectionRepo.AllWithDeleted().Any(c => c.Id == targetUser.Id + requester.Id);
+            var connectionExists = this.connectionRepo.AllWithDeleted().Any(c => c.Id == targetUser.Id + requester.Id);
 
-            if (alreadyExist == false)
+
+            if (connectionExists == false)
             {
                 targetUser.Connections.Add(new Connection
                 {
@@ -650,21 +662,53 @@
             }
             else
             {
-                var targetUserConneciton = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
-                var requesterUserConnection = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
+                var connectionASide = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
+                var connectionBSide = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
 
-                targetUserConneciton.IsDeleted = false;
-                targetUserConneciton.Interlocutor = requester;
-                targetUserConneciton.ApplicationUser = targetUser;
-                targetUserConneciton.ModifiedOn = DateTime.UtcNow;
+                if (connectionASide.ApplicationUserId == targetUser.Id)
+                {
+                    targetUser.Connections.Add(connectionASide);
+                    requester.Connections.Add(connectionBSide);
+                }
+                else
+                {
+                    targetUser.Connections.Add(connectionBSide);
+                    requester.Connections.Add(connectionASide);
+                }
 
-                requesterUserConnection.IsDeleted = false;
-                requesterUserConnection.Interlocutor = targetUser;
-                requesterUserConnection.ApplicationUser = requester;
-                requesterUserConnection.ModifiedOn = DateTime.UtcNow;
+                connectionASide.IsDeleted = false;
+                connectionBSide.IsDeleted = false;
 
-                targetUser.Connections.Add(targetUserConneciton);
-                requester.Connections.Add(requesterUserConnection);
+                connectionASide.ModifiedOn = DateTime.UtcNow;
+                connectionBSide.ModifiedOn = DateTime.UtcNow;
+
+                targetUser.Connections.Add(connectionASide);
+                requester.Connections.Add(connectionBSide);
+            }
+
+            var conversationExists = this.conversationRepo.AllWithDeleted().Any(c => c.Id == targetUser.Id + requester.Id);
+
+            if (conversationExists)
+            {
+                var sideAConversation = this.conversationRepo.AllWithDeleted().FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
+                var sideBConversation = this.conversationRepo.AllWithDeleted().FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
+
+                if (sideAConversation.AuthorId == targetUser.Id)
+                {
+                    targetUser.Conversations.Add(sideAConversation);
+                    requester.Conversations.Add(sideBConversation);
+                }
+                else
+                {
+                    targetUser.Conversations.Add(sideBConversation);
+                    requester.Conversations.Add(sideAConversation);
+                }
+
+                sideAConversation.IsDeleted = false;
+                sideBConversation.IsDeleted = false;
+
+                sideAConversation.ModifiedOn = DateTime.UtcNow;
+                sideBConversation.ModifiedOn = DateTime.UtcNow;
             }
 
             requestDb.IsApproved = true;

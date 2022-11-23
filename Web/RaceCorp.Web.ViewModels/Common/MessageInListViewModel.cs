@@ -36,8 +36,8 @@
         {
             configuration.CreateMap<Message, MessageInListViewModel>()
                 .ForMember(x => x.SenderEmail, opt => opt.MapFrom(x => x.Sender.Email))
-                .ForMember(x => x.ReceiverEmail, opt => opt.MapFrom(x => x.Receiver.Email));
-
+                .ForMember(x => x.ReceiverEmail, opt => opt.MapFrom(x => x.Receiver.Email))
+                .ForMember(x => x.CreatedOn, opt => opt.MapFrom(x => x.CreatedOn.ToString("d/M/yyyy HH:mm")));
         }
     }
 }

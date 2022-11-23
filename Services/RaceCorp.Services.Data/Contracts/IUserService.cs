@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using RaceCorp.Data.Models;
     using RaceCorp.Web.ViewModels.ApplicationUsers;
     using RaceCorp.Web.ViewModels.Common;
 
@@ -22,7 +23,7 @@
 
         MessageInputModel GetMessageModelAsync(string receiverId, string senderId);
 
-        Task SaveMessageAsync(MessageInputModel model, string senderId);
+        Task<Message> SaveMessageAsync(MessageInputModel model, string senderId);
 
         UserInboxViewModel GetByIdUserInboxViewModel(string id);
 

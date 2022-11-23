@@ -18,6 +18,7 @@
         public const string ProfilePicterPostFix = "ProfilePicture";
 
         public const string DateStringFormat = "f";
+        public const string DateMessageFormat = "d/M/yyyy HH:mm";
 
         public const string FirstNameDisplay = "First name";
         public const string LastNameDisplay = "Last name";
