@@ -40,22 +40,40 @@
 {
     <div class="alert alert-success">@this.TempData["CannotParticipate"]</div>
 }
-<div class="row">
-    <div class="col-md-4  mt-1 mb-3">
-        <a class="form-control btn btn-outline-success mb-1 " asp-controller="Trace" asp-action="CreateRaceTrace" asp-route-raceId="@Model.Id">Create trace</a>
 
-    </div>
-    <div class="col-md-4  mt-1 mb-3">
-        <a class="form-control btn btn-outline-secondary mb-1 " asp-route-id="@Model.Id" asp-action="Edit">Edit</a>
+<style>
+      .resize {
+      width: 100px;
+      height: auto;
+          }
 
-    </div>
+           .img-img {
+    border-radius: 40%;
+           }
+</style>
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+   this.User.IsInRole(GlobalConstants.UserRoleName))
+{
+    @if (currentUserId == Model.ApplicationUserId)
+    {
+        <div class="row">
+            <div class="col-md-4  mt-1 mb-3">
+                <a class="form-control btn btn-outline-success mb-1 " asp-controller="Trace" asp-action="CreateRaceTrace" asp-route-raceId="@Model.Id">Create trace</a>
 
-    <div class="col-md-4 mt-1 mb-3">
-        <form method="post" asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">
-            <button class="form-control btn btn-outline-danger mb-1 btn-block" type="submit">Delete</button>
-        </form>
-    </div>
-</div>
+            </div>
+            <div class="col-md-4  mt-1 mb-3">
+                <a class="form-control btn btn-outline-secondary mb-1 " asp-route-id="@Model.Id" asp-action="Edit">Edit</a>
+
+            </div>
+
+            <div class="col-md-4 mt-1 mb-3">
+                <form method="post" asp-controller="Race" asp-action="Delete" asp-route-id="@Model.Id">
+                    <button class="form-control btn btn-outline-danger mb-1 btn-block" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    }
+}
 
 <div class="text-center">
     <h5>@this.ViewData["Title"]</h5>
@@ -85,14 +103,23 @@
             <article>Where: The race takes place in mount <b>@Model.Mountain</b>, <b>@Model.Town</b></article>
         </div>
         <div class="col-md-3 mb-3">
-
             <article>When: <b>@Model.Date</b></article>
         </div>
-
     </div>
 
 
     <hr />
+    <div>
+        Race Owner : @Model.ApplicationUserFirstName @Model.ApplicationUserLastName
+        <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@Model.ApplicationUserId">
+            <img class="resize img-img" src="@Model.ApplicationUserProfilePicturePath" />
+
+        </a>
+    </div>
+    <hr />
+
+
+
     @if (Model.Traces.Count != 0)
     {
         <h4>Traces</h4>
@@ -115,24 +142,24 @@
                                         <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
 
 
-                                      @*  @if (hasPassed && currentUserId != null)
-                                        {
-                                            <a class="form-control btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
+                                        @*  @if (hasPassed && currentUserId != null)
+                                {
+                                <a class="form-control btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
 
-                                        }
-                                        else if (isRegistered && currentUserId != null)
-                                        {
-                                            <form method="post" asp-controller="Event" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
-                                                <button class="form-control btn btn-outline-danger mb-1" type="submit">Unregister</button>
-                                            </form>
+                                }
+                                else if (isRegistered && currentUserId != null)
+                                {
+                                <form method="post" asp-controller="Event" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
+                                <button class="form-control btn btn-outline-danger mb-1" type="submit">Unregister</button>
+                                </form>
 
-                                        }
-                                        else if (isRegistered == false && currentUserId != null)
-                                        {
-                                            <form method="post" asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
-                                                <button class="form-control btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
-                                            </form>
-                                        }*@
+                                }
+                                else if (isRegistered == false && currentUserId != null)
+                                {
+                                <form method="post" asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
+                                <button class="form-control btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
+                                </form>
+                                }*@
                                     </div>
                                 </li>
 

@@ -1,6 +1,7 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -9,32 +10,39 @@
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authentication.Google;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels;
+    using RaceCorp.Web.ViewModels.User;
     using RaceCorp.Web.ViewModels.CommonViewModels;
 
     public class HomeController : BaseController
     {
         private readonly IHomeService homeService;
+        private readonly IUserService userService;
 
-        public HomeController(IHomeService homeService)
+        public HomeController(IHomeService homeService, IUserService userService)
         {
             this.homeService = homeService;
+            this.userService = userService;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var indexViewModel = this.homeService.GetCategories();
+            var indexViewModel = this.homeService.GetIndexModel();
 
             return this.View(indexViewModel);
         }
 
         [HttpGet]
-        public IActionResult All(HomeAllViewModel model)
+        [Authorize]
+        public IActionResult AllUsers()
         {
-            return this.View(model);
+            var allUsers = this.userService.GetAllAsync<UserAllViewModel>();
+
+            return this.View(allUsers);
         }
 
         public IActionResult Privacy()

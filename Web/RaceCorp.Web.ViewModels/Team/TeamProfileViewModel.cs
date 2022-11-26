@@ -2,12 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using AutoMapper;
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
     using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.User;
 
     public class TeamProfileViewModel : IMapFrom<Team>, IHaveCustomMappings
     {

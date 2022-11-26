@@ -9,7 +9,11 @@
     {
         public string InterlocutorId { get; set; }
 
-        public string AuthorId { get; set; }
+        public virtual ApplicationUser Interlocutor { get; set; }
+
+        public string ApplicationUserId { get; set; }
+
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
         public string UserEmail { get; set; }
 

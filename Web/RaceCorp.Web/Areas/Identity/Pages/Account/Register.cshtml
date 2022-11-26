@@ -1,106 +1,142 @@
 ﻿@page
 @using RaceCorp.Data.Models.Enums;
+@using RaceCorp.Common;
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
+    img {
+  border-radius: 10%;
+}
+</style>
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating  mb-2">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating  mb-2">
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
-                <label asp-for="Input.FirstName"></label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-floating  mb-2">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="lastname" aria-required="true" />
-                <label asp-for="Input.LastName"></label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-grup  mb-2">
-                <select asp-for="Input.Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-select">
-                    <option selected>Gender</option>
-                </select>
-                <span asp-validation-for="Input.Gender" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-                <input asp-for="Input.Town" class="form-control" autocomplete="town" aria-required="true" />
-                <label asp-for="Input.Town"></label>
-                <span asp-validation-for="Input.Town" class="text-danger"></span>
-            </div>
-            <div class="form-floating  mb-2">
-                <input asp-for="Input.Country" class="form-control" autocomplete="country" aria-required="true" />
-                <label asp-for="Input.Country"></label>
-                <span asp-validation-for="Input.Country" class="text-danger"></span>
-            </div>
-            <div class="form-floating  mb-2">
-                <input asp-for="Input.DateOfBirth" class="form-control" autocomplete="dateofbirth" aria-required="true" />
-                <label asp-for="Input.DateOfBirth"></label>
-                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-floating  mb-2">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating  mb-2">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-floating  mb-2">
-                <textarea asp-for="Input.About" class="form-control"></textarea>
-                <label asp-for="Input.About"></label>
-                <span asp-validation-for="Input.About" class="text-danger"></span>
-            </div>
+<section class="vh-70 mt-1" style="background-color: #eee;">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                article
-                                about setting up this ASP.NET application to support logging in via external services
-                            </a>.
-                        </p>
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Register</p>
+
+                <form class="mx-1 mx-md-4" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="form3Example1c" asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
+                      <label class="form-label" for="form3Example1c">Your First Name</label>
+                      <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="form3Example1c" asp-for="Input.LastName" class="form-control" autocomplete="lastname" aria-required="true" />
+                      <label class="form-label" for="form3Example1c">Your Last Name</label>
+                      <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="email" id="form3Example3c"  class="form-control"  asp-for="Input.Email" autocomplete="email" aria-required="true" />                     
+                      <label class="form-label" for="form3Example3c">Your Email</label>
+                      <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-venus-mars fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                        <select asp-for="Input.Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-select">
+                            <option selected>Gender</option>
+                        </select>
+                        <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-house fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="form3Example3c" asp-for="Input.Town" class="form-control" autocomplete="town" aria-required="true" />
+                      <label class="form-label" for="form3Example3c">Town</label>
+                      <span asp-validation-for="Input.Town" class="text-danger"></span>                 
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex flex-row align-items-center mb-4">
+                     <i class="fas fa-flag fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="form3Example3c" asp-for="Input.Country" class="form-control" autocomplete="country" aria-required="true"/>
+                      <label class="form-label" for="form3Example3c">Contry</label>
+                      <span asp-validation-for="Input.Country" class="text-danger"></span>               
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-calendar-days fa-lg me-3 fa-fw"></i>
+                   <div class="form-outline flex-fill mb-0">
+                     <input id="form3Example3c" asp-for="Input.DateOfBirth" class="form-control" autocomplete="dateofbirth" aria-required="true"/>
+                     <label class="form-label" for="form3Example3c">Date of birth</label>
+                     <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>               
+                   </div>
+                 </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="form3Example4c"  asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true"/>
+                      <label class="form-label" for="form3Example4c">Password</label>
+                      <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="form3Example4cd" asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                      <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                      <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-memo fa-lg me-3 fa-fw"></i>
+                   <div class="form-outline flex-fill mb-0">
+                    <textarea asp-for="Input.About" class="form-control"></textarea>
+                     <label class="form-label" for="form3Example3c">About</label>
+                     <span asp-validation-for="Input.About" class="text-danger"></span>          
+                   </div>
+                 </div>
+              
+
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button id="registerSubmit" type="submit" class="btn btn-primary btn-lg">Register</button>
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                <img src="@GlobalConstants.RegisterDefaultImage" class="img-fluid" alt="Sample image">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

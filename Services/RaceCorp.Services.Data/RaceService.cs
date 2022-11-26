@@ -107,11 +107,11 @@
                 throw new InvalidOperationException(e.Message);
             }
 
-            if (model.Difficulties.Count != 0)
+            if (model.Traces.Count != 0)
             {
                 var serviceAccountPath = Path.GetFullPath(GlobalConstants.CredentialsPath);
 
-                foreach (var traceInputModel in model.Difficulties)
+                foreach (var traceInputModel in model.Traces)
                 {
                     try
                     {

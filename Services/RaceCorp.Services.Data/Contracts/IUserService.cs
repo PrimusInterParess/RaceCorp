@@ -1,13 +1,9 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
     using System.Collections.Generic;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Http;
-    using RaceCorp.Data.Models;
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.User;
 
     public interface IUserService
     {
@@ -20,12 +16,6 @@
         List<T> GetAllAsync<T>();
 
         bool RequestedConnection(string currentUserId, string targetUserId);
-
-        MessageInputModel GetMessageModelAsync(string receiverId, string senderId);
-
-        Task<Message> SaveMessageAsync(MessageInputModel model, string senderId);
-
-        UserInboxViewModel GetByIdUserInboxViewModel(string id);
 
         string GetUserEmail(string userId);
     }

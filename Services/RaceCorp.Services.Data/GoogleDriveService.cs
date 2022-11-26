@@ -15,16 +15,12 @@
 
     public class GoogleDriveService : IGoogleDriveService
     {
-        private const string ServiceAccountEmail = "testproject@testproject-366105.iam.gserviceaccount.com";
-        private const string DirectoryId = "1NeqkP2bplJdbeEGC8UIeY2oQkr317YYa";
-
         public async Task<string> UloadGpxFileToDrive(
             string gpxFilePath,
             string serviceAccountKeyPath,
             string uploadFileName,
             string directoryId)
         {
-
             try
             {
                 var credentials = GoogleCredential.FromFile(serviceAccountKeyPath).CreateScoped(DriveService.ScopeConstants.Drive);

@@ -4,7 +4,7 @@
 
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
+    using RaceCorp.Web.ViewModels.User;
 
     public class TraceInRaceProfileViewModel : IMapTo<Trace>
     {

@@ -9,6 +9,7 @@
         // strings
         public const int DefaultStrMinValue = 3;
         public const int DefaultStrMaxValue = 100;
+        public const int DefaultStrMaxValueSearch = 20;
 
         // race description
         public const int DefaultDescriptionMinValue = 20;

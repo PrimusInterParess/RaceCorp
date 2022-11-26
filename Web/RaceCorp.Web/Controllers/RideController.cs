@@ -113,7 +113,7 @@
 
             if (model == null)
             {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             return this.View(model);
@@ -139,7 +139,7 @@
 
             if (model == null)
             {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
             model.Formats = this.formatServices.GetFormatKVP();
@@ -188,7 +188,7 @@
                 return this.RedirectToAction("All", "Ride");
             }
 
-            return this.RedirectToAction("ErrorPage", "Home", new { area = "" });
+            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
         }
 
         public IActionResult UpcomingRides(int pageId = 1)

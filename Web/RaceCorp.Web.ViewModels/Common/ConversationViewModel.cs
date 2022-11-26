@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
+    using RaceCorp.Web.ViewModels.User;
 
     public class ConversationViewModel
     {

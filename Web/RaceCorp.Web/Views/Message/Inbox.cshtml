@@ -1,0 +1,282 @@
+﻿@using RaceCorp.Common
+@using RaceCorp.Web.ViewModels.User
+@model UserInboxViewModel
+
+<style>
+    .button4 {background-color: #e7e7e7; color: black;} /* Gray */
+    .badge.badge-success {
+   background-color: red;
+} 
+
+.badge-mine {
+   color: #212529;
+   background-color: #808080;
+}
+    </style>
+
+<div id="divContainer" class="container-messages mb-0">
+      <div class="messaging">
+        <div class="inbox_msg">
+            <div class="inbox_people">
+                <div class="headind_srch">
+                    <div class="recent_heading">
+                        <h4>Inbox</h4>
+                    </div>
+                </div>
+                <div class="inbox_chat">
+                    @foreach (var conversation in Model.Conversations)
+                    {
+                        <div class="chat_list active_chat" interlocutorId="@conversation.InterlocutorId" userId="@Model.Id">
+                            <div class="chat_people">
+                                <div class="chat_img">
+                                    <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@conversation.InterlocutorId">
+                                        <img src="@conversation.UserProfilePicturePath" alt="@conversation.UserFirstName">
+
+                                    </a>
+                                </div>
+                                                                 <div class="chat_ib">
+                                    <h5><b>@conversation.UserFirstName @conversation.UserLastName</b></h5>
+                                    <span><b>@conversation.LastMessageContent</b> |  @conversation.LastMessageDate</span>
+                                </div>
+                            </div>
+                            <button class="custom form-control border mt-1 button4 ">Open chat
+                                @if(@conversation.UnreadMessages==0)
+                                {
+                                     <span class="badge badge-mine">
+                                    <b>@conversation.UnreadMessages unread</b>
+                                    </span>
+                                }
+                                else{
+                                    <span class="badge badge-success">
+                                    <b>@conversation.UnreadMessages unread</b>
+                                    </span>
+                                    
+                                }
+                                </button>
+                                
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <div class="mesgs" id="mesgs">
+                <div class="msg_history" id="msg_history">
+                </div>
+                <div class="type_msg">
+                    <div class="input_msg_write">
+                        <input type="text" class="write_msg" id="messageInput" placeholder="Type a message" />
+                        <input type="hidden" id="receiverId" name="custId">
+                        <input type="hidden" id="senderId" name="custId">
+
+                        <button class="msg_send_btn" id="sendButton" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+@section Scripts {
+    <script>
+
+
+        "use strict";
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+        //Disable send button until connection is established
+        document.getElementById("sendButton").disabled = true;
+
+        connection.on("ReceiveMessage", function (message) {
+
+            if (message['senderId'] !== message['receiverId'] && message['senderId'] !== document.getElementById("senderId").value) {
+                let received = `<div class="incoming_msg">
+                                                                                                                       <div class="incoming_msg_img">
+                                                                                                                                 <img src="${message['senderProfilePicurePath']}" alt="OleMale">
+                                                                                                                                       </div>
+                                                                                                                                        <div class="received_msg">
+                                                                                                                                            <div class="received_withd_msg">
+                                                                                                                                                <p>
+                                                                                                                                                                           ${message['content']}
+                                                                                                                                                </p>
+                                                                                                                                                <span class="time_date">${message['createdOn']}</span>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>`
+
+                $("#msg_history").append(received);
+
+            }
+
+        });
+
+        connection.start().then(function () {
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("sendButton").addEventListener("click", function (event) {
+            var receiver = document.getElementById("receiverId").value;
+            var message = document.getElementById("messageInput").value;
+           
+
+            var message = document.getElementById("messageInput").value;
+
+            let send = `<div class="outgoing_msg">
+                                                                                                                          <div class="sent_msg">
+                                                                                                                              <p>
+                                                                                                                                          ${message}
+                                                                                                                              </p>
+                                                                                                                                      <span class="time_date"> </span>
+                                                                                                                          </div>
+                                                                                                                      </div>`
+
+            $("#msg_history").append(send);
+
+            document.getElementById("messageInput").value = '';
+
+            connection.invoke("SendMessageToGroup", receiver, message).catch(function (err) {
+                return console.error(err.toString());
+            });
+
+            event.preventDefault();
+        });
+
+        var eventElements = document.querySelectorAll(".custom").forEach(e => e.addEventListener("click", (evnt) => {
+            evnt.preventDefault();
+
+            let el = evnt.target.parentElement;
+
+            let userId = el.getAttribute('userId');
+            let interlocutorID = el.getAttribute('interlocutorId');
+
+            document.getElementById("senderId").value = userId;
+            document.getElementById("receiverId").value = interlocutorID;
+
+            // Create and Send the request
+            var fetch_status;
+            fetch(`https://localhost:44319/Message/Messages?authorId=${userId}&interlocutorId=${interlocutorID}`, {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json;charset=UTF-8"
+                }
+            })
+                .then(function (response) {
+                    // Save the response status in a variable to use later.
+                    fetch_status = response.status;
+                    // Handle success
+                    // eg. Convert the response to JSON and return
+                    return response.json();
+                })
+                .then(function (json) {
+                    // Check if the response were success
+                    if (fetch_status == 200) {
+                        // Use the converted JSON
+
+
+
+                        document.getElementById("sendButton").disabled = false;
+
+                        connection.invoke("JoinGroup", interlocutorID).catch(function (err) {
+                            return console.error(err.toString());
+                        });
+
+                        ProcessMessages(json['messages']);
+
+                        var objDiv = document.getElementById("msg_history");
+                        objDiv.scrollTop = objDiv.scrollHeight;
+
+                        function ProcessMessages(messages) {
+
+                            document.querySelector('.msg_history').remove();
+
+                            var messageHistoryEl = ` <div class="msg_history" id="msg_history">
+                                                                                                                                                                                                    </div>`;
+
+                            $("#mesgs").prepend(messageHistoryEl);
+
+
+                            for (const message of messages) {
+
+                                let receiverId = message['receiverId'];
+                                let senderId = message['senderId'];
+
+
+                                if (senderId === '@Model.Id') {
+                                    GenerateSendMessageElement(message);
+                                }
+                                else {
+                                    GenerateReceivedMessageElement(message);
+                                }
+
+                                function GenerateSendMessageElement(message) {
+
+                                    let messageId = message['id'];
+                                    let senderId = message['senderId'];
+
+                                    let content = message['content'];
+                                    let createdOn = message['createdOn'];
+
+
+                                    let sendMessageEl = `<div class="outgoing_msg">
+                                                                                                                                                                                                                                 <div class="sent_msg">
+                                                                                                                                                                                                                                     <p>
+                                                                                                                                                                                                                                         ${content}
+                                                                                                                                                                                                                                     </p>
+                                                                                                                                                                                                                                     <span class="time_date"> ${createdOn}</span>
+                                                                                                                                                                                                                                 </div>
+                                                                                                                                                                                                                             </div>`
+
+                                    $("#msg_history").append(sendMessageEl);
+                                }
+
+                                function GenerateReceivedMessageElement(message) {
+
+                                    let messageId = message['id'];
+                                    let senderId = message['senderId'];
+                                    let senderFirstName = message['senderFirstName'];
+                                    let senderLastName = message['senderLastName'];
+                                    let senderProfilePicturePath = message['senderProfilePicturePath'];
+
+                                    let content = message['content'];
+                                    let createdOn = message['createdOn'];
+
+                                    let receivedMessageEl = `<div class="incoming_msg"> <div class="incoming_msg_img">
+                                                                                                                                                                                                                                                            <img src="${senderProfilePicturePath}" alt="sunil">
+                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                    <div class="received_msg">
+                                                                                                                                                                                                                                                        <div class="received_withd_msg">
+                                                                                                                                                                                                                                                            <p>
+                                                                                                                                                                                                                                                                       ${content}
+                                                                                                                                                                                                                                                            </p>
+                                                                                                                                                                                                                                                            <span class="time_date">${createdOn}</span>
+                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                       </div>
+                                                                                                                                                                                                                                                   </div>`
+
+                                    $("#msg_history").append(receivedMessageEl);
+                                }
+                            }
+
+                        }
+                    }
+
+                })
+                .catch(function (error) {
+                    // Catch errors
+                    console.log(error);
+                });
+        }));
+
+
+
+
+    </script>
+                }

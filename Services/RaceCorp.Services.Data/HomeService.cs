@@ -50,7 +50,7 @@
             throw new NotImplementedException();
         }
 
-        public IndexViewModel GetCategories()
+        public IndexViewModel GetIndexModel()
         {
             var townImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == TownImageName);
 

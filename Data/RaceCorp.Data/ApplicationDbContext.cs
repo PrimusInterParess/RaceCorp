@@ -24,8 +24,6 @@
         {
         }
 
-        public DbSet<ChatGroupName> ChatGroupNames { get; set; }
-
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Conversation> Conversations { get; set; }
@@ -103,6 +101,15 @@
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            builder.Entity<ApplicationUser>().HasMany(u => u.SentMessages).WithOne(m => m.Sender).HasForeignKey(m => m.SenderId);
+            builder.Entity<ApplicationUser>().HasMany(u => u.InboxMessages).WithOne(m => m.Receiver).HasForeignKey(m => m.RevceiverId);
+
+            builder.Entity<Connection>().HasOne(c => c.ApplicationUser).WithMany(u => u.Connections).HasForeignKey(u => u.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Connection>().HasOne(c => c.ApplicationUser).WithMany(u => u.Connections).HasForeignKey(u => u.InterlocutorId).OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<ApplicationUser>().HasMany(u => u.Connections).WithOne(c => c.ApplicationUser).HasForeignKey(c => c.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<ApplicationUser>().HasMany(u => u.Conversations).WithOne(c => c.ApplicationUser).HasForeignKey(c => c.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
+
             builder.Entity<Gpx>().HasOne(g => g.ApplicationUser).WithMany().HasForeignKey(g => g.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Logo>().HasOne(l => l.ApplicationUser).WithMany(u => u.Logos).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Image>().HasOne(l => l.ApplicationUser).WithMany(u => u.Images).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.SetNull);
@@ -114,11 +121,6 @@
             builder.Entity<ApplicationUserTrace>().HasOne(l => l.ApplicationUser).WithMany(u => u.Traces).HasForeignKey(l => l.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUser>().HasMany(u => u.Requests).WithOne(r => r.ApplicationUser).HasForeignKey(r => r.ApplicationUserId).OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<ApplicationUser>().HasMany(u => u.Connections).WithOne(c => c.ApplicationUser).HasForeignKey(c => c.ApplicationUserId);
-
-            builder.Entity<Message>().HasOne(m => m.Receiver).WithMany(r => r.InboxMessages).HasForeignKey(m => m.RevceiverId);
-            builder.Entity<Message>().HasOne(m => m.Sender).WithMany(r => r.SentMessages).HasForeignKey(m => m.SenderId);
 
             builder.Entity<Image>().HasOne(i => i.Team).WithMany(t => t.Images).OnDelete(DeleteBehavior.Cascade);
 

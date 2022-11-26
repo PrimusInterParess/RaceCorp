@@ -1,13 +1,10 @@
-﻿
-namespace RaceCorp.Web.Hubs
+﻿namespace RaceCorp.Web.Hubs
 {
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.SignalR;
-    using NuGet.Protocol.Plugins;
     using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
@@ -20,17 +17,20 @@ namespace RaceCorp.Web.Hubs
         private readonly IDeletableEntityRepository<Data.Models.Message> messageRepo;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
         private readonly IUserService userService;
+        private readonly IMessageService messageService;
 
         public ChatHub(
             IGroupNameProvider groupNameProvider,
             IDeletableEntityRepository<Data.Models.Message> messageRepo,
             IDeletableEntityRepository<ApplicationUser> userRepo,
-            IUserService userService)
+            IUserService userService,
+            IMessageService messageService)
         {
             this.groupNameProvider = groupNameProvider;
             this.messageRepo = messageRepo;
             this.userRepo = userRepo;
             this.userService = userService;
+            this.messageService = messageService;
         }
 
         public async Task JoinGroup(string receiverId)
@@ -64,7 +64,7 @@ namespace RaceCorp.Web.Hubs
 
             if (senderId != receiverId)
             {
-                var task = this.userService.SaveMessageAsync(messageInputModel, senderId);
+                var task = this.messageService.SaveMessageAsync(messageInputModel, senderId);
 
                 var messageDb = task.Result;
 

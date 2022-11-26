@@ -457,9 +457,6 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -467,7 +464,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("InterlocutorId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -496,6 +493,8 @@ namespace RaceCorp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("InterlocutorId");
 
                     b.HasIndex("IsDeleted");
 
@@ -1250,10 +1249,11 @@ namespace RaceCorp.Data.Migrations
                 {
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Connections")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Interlocutor")
-                        .WithMany()
+                        .WithMany("InterlocutorConnections")
                         .HasForeignKey("InterlocutorId");
 
                     b.Navigation("ApplicationUser");
@@ -1263,9 +1263,18 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Conversation", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", null)
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Conversations")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Interlocutor")
+                        .WithMany("InterlocutorConversations")
+                        .HasForeignKey("InterlocutorId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Interlocutor");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Gpx", b =>
@@ -1476,6 +1485,10 @@ namespace RaceCorp.Data.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("InboxMessages");
+
+                    b.Navigation("InterlocutorConnections");
+
+                    b.Navigation("InterlocutorConversations");
 
                     b.Navigation("Logins");
 

@@ -46,7 +46,7 @@
     }
     else if (isRegistered && currentUserId != null)
     {
-        <li class="me-2">
+        <li class="me-2  mt-2">
             <form method="post"
               asp-controller="Event" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
                 <button class="btn btn-outline-success mb-1 " type="submit">Unregister</button>
@@ -55,7 +55,7 @@
     }
     else if (isRegistered == false && currentUserId != null)
     {
-        <li class="me-2">
+        <li class="me-2 mt-2">
             <form method="post"
               asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
                 <button class="btn btn-outline-success mb-1" type="submit">Register</button>
@@ -63,22 +63,30 @@
         </li>
 
     }
-    <li class="me-2">
+    <li class="me-2 mt-2">
         <form method="get">
             <button class="btn btn-outline-info mb-1 btn-block" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.TraceGpxId">Download Gpx file</button>
         </form>
     </li>
-    <li class="me-2">
-        <form method="get">
-            <button class="btn btn-outline-secondary mb-1 btn-block" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
-        </form>
-    </li>
-    <li class="me-2">
-        <form method="post"
+    @if (
+    this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+    this.User.IsInRole(GlobalConstants.UserRoleName))
+    {
+        @if (currentUserId == Model.ApplicationUserId)
+        {
+            <li class="me-2">
+                <form method="get">
+                    <button class="btn btn-outline-secondary mb-1 btn-block" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
+                </form>
+            </li>
+            <li class="me-2">
+                <form method="post"
               asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">
-            <button class="btn btn-outline-success mb-1" type="submit">Delete</button>
-        </form>
-    </li>
+                    <button class="btn btn-outline-success mb-1" type="submit">Delete</button>
+                </form>
+            </li>
+        }
+    }
 </ul>
 <div class="row">
     <div class="map-responsive col-md-5">

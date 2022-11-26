@@ -92,9 +92,10 @@ namespace RaceCorp.Web
             services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IGroupNameProvider, GroupNameProvider>();
+            services.AddTransient<ISearchService, SearchService>();
         }
 
-        private static async void Configure(WebApplication app)
+        private static void Configure(WebApplication app)
         {
             // Seed data on application startup
             using (var serviceScope = app.Services.CreateScope())

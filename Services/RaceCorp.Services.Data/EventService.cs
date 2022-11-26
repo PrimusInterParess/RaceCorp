@@ -13,6 +13,7 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.EventRegister;
+
     using Trace = RaceCorp.Data.Models.Trace;
 
     public class EventService : IEventService
@@ -641,7 +642,6 @@
 
             var connectionExists = this.connectionRepo.AllWithDeleted().Any(c => c.Id == targetUser.Id + requester.Id);
 
-
             if (connectionExists == false)
             {
                 targetUser.Connections.Add(new Connection
@@ -693,7 +693,7 @@
                 var sideAConversation = this.conversationRepo.AllWithDeleted().FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
                 var sideBConversation = this.conversationRepo.AllWithDeleted().FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
 
-                if (sideAConversation.AuthorId == targetUser.Id)
+                if (sideAConversation.ApplicationUserId == targetUser.Id)
                 {
                     targetUser.Conversations.Add(sideAConversation);
                     requester.Conversations.Add(sideBConversation);

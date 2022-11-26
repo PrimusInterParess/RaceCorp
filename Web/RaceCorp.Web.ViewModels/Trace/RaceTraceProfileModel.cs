@@ -5,8 +5,7 @@
     using AutoMapper;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
-    using RaceCorp.Web.ViewModels.EventRegister;
+    using RaceCorp.Web.ViewModels.User;
 
     public class RaceTraceProfileModel : IMapFrom<Trace>, IHaveCustomMappings
     {

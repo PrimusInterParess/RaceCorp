@@ -1,4 +1,5 @@
 ﻿@using RaceCorp.Common;
+@using RaceCorp.Data.Models.Enums
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,34 +26,25 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div class="dropdown me-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Create
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="Create">Create Race</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="Create">Create Ride</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="Create">Create Team</a>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <div class="dropdown me-2">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+
+                        <div class="dropdown">
+                            <button class="btn btn-outline-success" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 All
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="All">Users</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="All">Teams</a>
-                                </li>
+                                @if (
+                                this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+                                this.User.IsInRole(GlobalConstants.UserRoleName))
+                                {
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AllUsers">Users</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="All">Teams</a>
+                                    </li>
+                                }
+
                                 <li class="nav-item">
                                     <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="All">Rides</a>
                                 </li>
@@ -77,40 +69,33 @@
                         this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
                         this.User.IsInRole(GlobalConstants.UserRoleName))
                         {
-                            <div class="dropdown me-2">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Profile
+                            <div class="dropdown">
+                                <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Create
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">View</a>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="Create">Create Race</a>
                                     </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-action="SendMessage" asp-controller="User">Send Message</a>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="Create">Create Ride</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="Create">Create Team</a>
                                     </li>
                                 </ul>
                             </div>
+
+                            <a class="btn btn-outline-success" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Profile</a>
+
                         }
-                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                            <div class="dropdown me-10">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Uploads
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Town" asp-action="UploadPicture">Upload town picture</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Mountain" asp-action="UploadPicture">Upload mountain picture</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="UploadPicture">Upload upcoming race picture</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+
+
+                        <form method="post" class="d-flex" asp-action="Search" asp-controller="Search" asp-area="">
+                            <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
+                                <option selected>Area</option>
+                            </select>
+                            <input name="QueryInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                         <partial name="_LoginPartial" />

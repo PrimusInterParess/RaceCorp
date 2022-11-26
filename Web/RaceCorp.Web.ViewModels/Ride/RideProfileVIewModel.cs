@@ -6,13 +6,21 @@
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
+    using RaceCorp.Web.ViewModels.User;
 
     public class RideProfileVIewModel : IMapFrom<Ride>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public string ApplicationUserId { get; set; }
+
+        public string ApplicationUserProfilePicturePath { get; set; }
+
+        public string ApplicationUserFirstName { get; set; }
+
+        public string ApplicationUserLastName { get; set; }
 
         public string TraceName { get; set; }
 

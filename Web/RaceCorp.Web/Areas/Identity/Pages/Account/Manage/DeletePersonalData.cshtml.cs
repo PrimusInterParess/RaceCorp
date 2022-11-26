@@ -21,17 +21,20 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<DeletePersonalDataModel> logger;
+        private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
 
         public DeletePersonalDataModel(
             IDeletableEntityRepository<ApplicationRole> roleRepo,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            IDeletableEntityRepository<ApplicationUser> userRepo)
         {
             this.roleRepo = roleRepo;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
+            this.userRepo = userRepo;
         }
 
         /// <summary>
@@ -94,6 +97,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
 
             await this.ReasignUserFromRoles(user);
             await this.DeleteClaimsFromUser(user);
+            //this.DeleteConnections(user);
 
             var userId = await this.userManager.GetUserIdAsync(user);
             var result = await this.userManager.DeleteAsync(user);
@@ -109,6 +113,11 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
 
             return this.Redirect("~/");
         }
+
+        //private void DeleteConnections(ApplicationUser user)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private async Task ReasignUserFromRoles(ApplicationUser user)
         {

@@ -1,21 +1,25 @@
 ﻿namespace RaceCorp.Web.ViewModels.RaceViewModels
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using AutoMapper;
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
     using RaceCorp.Web.ViewModels.Trace;
-
-    using static RaceCorp.Services.Constants.Common;
+    using RaceCorp.Web.ViewModels.User;
 
     public class RaceProfileViewModel : RaceViewModel, IMapFrom<Race>, IHaveCustomMappings
     {
         public string Date { get; set; }
+
+        public string ApplicationUserId { get; set; }
+
+        public string ApplicationUserProfilePicturePath { get; set; }
+
+        public string ApplicationUserFirstName { get; set; }
+
+        public string ApplicationUserLastName { get; set; } 
 
         public List<TraceInRaceProfileViewModel> Traces { get; set; }
 

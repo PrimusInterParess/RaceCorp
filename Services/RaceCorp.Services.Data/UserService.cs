@@ -1,53 +1,42 @@
 ﻿namespace RaceCorp.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
-    using System.Threading;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.VisualBasic;
     using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.ApplicationUsers;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.User;
 
     public class UserService : IUserService
     {
-        private readonly IUserStore<ApplicationUser> userStore;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IFileService fileService;
         private readonly IDeletableEntityRepository<Request> requestRepo;
-        private readonly IDeletableEntityRepository<Conversation> conversationRepo;
 
         public UserService(
-            IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Town> townRepo,
             IFileService fileService,
-            IDeletableEntityRepository<Request> requestRepo,
-            IDeletableEntityRepository<Conversation> conversationRepo)
+            IDeletableEntityRepository<Request> requestRepo)
         {
-            this.userStore = userStore;
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.userRepo = userRepo;
             this.townRepo = townRepo;
             this.fileService = fileService;
             this.requestRepo = requestRepo;
-            this.conversationRepo = conversationRepo;
         }
 
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
@@ -136,46 +125,6 @@
                 .FirstOrDefault();
         }
 
-        public UserInboxViewModel GetByIdUserInboxViewModel(string id)
-        {
-            var userDb = this.userRepo
-                .AllAsNoTracking()
-                .Include(u => u.Conversations)
-                .FirstOrDefault(u => u.Id == id);
-
-            return new UserInboxViewModel
-            {
-                Id = id,
-                ProfilePicturePath = userDb.ProfilePicturePath,
-                Conversations = userDb.Conversations.Select(c => new UserConversationViewModel
-                {
-                    Id = c.Id,
-                    AuthorId = c.AuthorId,
-                    InterlocutorId = c.InterlocutorId,
-                    Email = c.UserEmail,
-                    LastMessageContent = c.LastMessageContent,
-                    UserFirstName = c.UserFirstName,
-                    UserLastName = c.UserLastName,
-                    UserProfilePicturePath = c.UserProfilePicturePath,
-                    LastMessageDate= c.LastMessageDate,
-                }).ToList(),
-            };
-        }
-
-        public MessageInputModel GetMessageModelAsync(string receiverId, string senderId)
-        {
-            var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
-            var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == receiverId);
-
-            return new MessageInputModel
-            {
-                ReceiverProfilePicurePath = receiver.ProfilePicturePath,
-                ReceiverFirstName = receiver.FirstName,
-                ReceiverId = receiver.Id,
-                ReceiverLastName = receiver.LastName,
-            };
-        }
-
         public List<T> GetRequest<T>(string userId)
         {
             return this.requestRepo
@@ -185,79 +134,6 @@
                 .OrderBy(r => r.IsApproved)
                 .To<T>()
                 .ToList();
-        }
-
-        public async Task<Message> SaveMessageAsync(MessageInputModel model, string senderId)
-        {
-            var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == model.ReceiverId);
-            var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
-            if (sender == null || receiver == null)
-            {
-                throw new NullReferenceException();
-            }
-
-            //validate sender and receiver
-            if (sender.Conversations.Any(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId) == false)
-            {
-                var conversationSender = new Conversation
-                {
-                    Id = receiver.Id + sender.Id,
-                    CreatedOn = DateTime.UtcNow,
-                    AuthorId = sender.Id,
-                    InterlocutorId = receiver.Id,
-                };
-
-                var conversationReceiver = new Conversation
-                {
-                    Id = sender.Id + receiver.Id,
-                    CreatedOn = DateTime.UtcNow,
-                    AuthorId = receiver.Id,
-                    InterlocutorId = sender.Id,
-
-                };
-
-                receiver.Conversations.Add(conversationReceiver);
-                sender.Conversations.Add(conversationSender);
-            }
-
-            var message = new Message
-            {
-                CreatedOn = DateTime.UtcNow,
-                Sender = sender,
-                Content = model.Content,
-                Receiver = receiver,
-            };
-
-            var receiverConvrs = receiver.Conversations.FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
-            var senderConvrs = sender.Conversations.FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
-
-            this.UpdateConversation(receiverConvrs, message, sender);
-            this.UpdateConversation(senderConvrs, message, receiver);
-
-            receiver.InboxMessages.Add(message);
-            sender.SentMessages.Add(message);
-
-            try
-            {
-                await this.userRepo.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
-
-            return message;
-        }
-
-        private void UpdateConversation(Conversation conversation, Message message, ApplicationUser user)
-        {
-            conversation.LastMessageContent = message.Content;
-            conversation.LastMessageDate = message.CreatedOn.ToString(GlobalConstants.DateMessageFormat);
-            conversation.UserProfilePicturePath = user.ProfilePicturePath;
-            conversation.ModifiedOn = message.CreatedOn;
-            conversation.UserEmail = user.Email;
-            conversation.UserFirstName = user.FirstName;
-            conversation.UserLastName = user.LastName;
         }
 
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)
@@ -274,7 +150,6 @@
             }
         }
 
-
         public bool RequestedConnection(string currentUserId, string targetUserId)
         {
             return this.userRepo
@@ -287,7 +162,7 @@
 
         public string GetUserEmail(string userId)
         {
-            return this.userRepo.AllAsNoTracking().FirstOrDefault(u => u.Id == userId).Email;
+            return this.userRepo.AllAsNoTracking().FirstOrDefault(u => u.Id == userId)?.Email;
         }
     }
 }

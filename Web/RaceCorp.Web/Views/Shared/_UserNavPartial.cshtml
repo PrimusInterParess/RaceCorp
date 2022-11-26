@@ -7,9 +7,6 @@
     {
         isOwner = currentUserId == Model.Id;
     }
-
-
-
 }
 
 <ul class="nav-buttons-user">
@@ -25,26 +22,21 @@
             </form>
         </li>
     }
-
-
     @if (isOwner)
     {
         <li>
             <form method="get">
-                <button asp-action="Inbox" asp-controller="User" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
+                <button asp-action="Inbox" asp-controller="Message" asp-area="" asp-route-id="@Model.Id" class="mailbox form-control">
                     📨 Messages
                     <div class="notification" role="status">@Model.UnreadMessages</div>
                 </button>
             </form>
         </li>
-
-
     }
     else if (Model.CanMessageMe)
     {
         <li>
-
-            <a asp-action="SendMessage" asp-controller="User" asp-area="" asp-route-receiverId="@Model.Id" asp-route-senderId="@currentUserId" class="btn mailbox form-control">
+            <a asp-action="SendMessage" asp-controller="Message" asp-area="" asp-route-receiverId="@Model.Id" asp-route-senderId="@currentUserId" class="btn mailbox form-control">
                 📨 Send Message
             </a>
 
@@ -60,14 +52,10 @@
 
     }
 
-
     @if (Model.IsConnected == false && isOwner == false)
     {
-
         if (Model.RequestedConnection == false)
         {
-            @*                <a asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamJoin" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
-    *@
             <li>
                 <form method="post">
                     <button asp-action="Request" asp-controller="Event" asp-area="" asp-route-type="@GlobalConstants.RequestTypeConnectUser" asp-route-requesterId="@currentUserId" asp-route-targetId="@Model.Id" class="mailbox form-control">
@@ -84,6 +72,5 @@
                 </button>
             </li>
         }
-
     }
 </ul>
