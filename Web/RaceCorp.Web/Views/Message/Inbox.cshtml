@@ -3,19 +3,23 @@
 @model UserInboxViewModel
 
 <style>
-    .button4 {background-color: #e7e7e7; color: black;} /* Gray */
+    .button4 {
+        background-color: #e7e7e7;
+        color: black;
+    }
+    /* Gray */
     .badge.badge-success {
-   background-color: red;
-} 
+        background-color: red;
+    }
 
-.badge-mine {
-   color: #212529;
-   background-color: #808080;
-}
-    </style>
+    .badge-mine {
+        color: #212529;
+        background-color: #808080;
+    }
+</style>
 
 <div id="divContainer" class="container-messages mb-0">
-      <div class="messaging">
+    <div class="messaging">
         <div class="inbox_msg">
             <div class="inbox_people">
                 <div class="headind_srch">
@@ -33,27 +37,32 @@
                                         <img src="@conversation.UserProfilePicturePath" alt="@conversation.UserFirstName">
 
                                     </a>
+
                                 </div>
-                                                                 <div class="chat_ib">
-                                    <h5><b>@conversation.UserFirstName @conversation.UserLastName</b></h5>
+
+                                <div class="chat_ib">
+                                    <h5><b>@conversation.UserFirstName @conversation.UserLastName</b></h5> 
                                     <span><b>@conversation.LastMessageContent</b> |  @conversation.LastMessageDate</span>
+                                    @if (@conversation.UnreadMessages == 0)
+                                    {
+                                        <span class="badge badge-mine">
+                                            <b>@conversation.UnreadMessages unread</b>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-success">
+                                            <b>@conversation.UnreadMessages unread</b>
+                                        </span>
+
+                                    }
                                 </div>
                             </div>
-                            <button class="custom form-control border mt-1 button4 ">Open chat
-                                @if(@conversation.UnreadMessages==0)
-                                {
-                                     <span class="badge badge-mine">
-                                    <b>@conversation.UnreadMessages unread</b>
-                                    </span>
-                                }
-                                else{
-                                    <span class="badge badge-success">
-                                    <b>@conversation.UnreadMessages unread</b>
-                                    </span>
-                                    
-                                }
-                                </button>
-                                
+                            <button class="custom form-control border mt-1 button4 ">
+                                Open chat
+                               
+                            </button>
+
                         </div>
 
                     }
@@ -95,23 +104,32 @@
 
         connection.on("ReceiveMessage", function (message) {
 
-            if (message['senderId'] !== message['receiverId'] && message['senderId'] !== document.getElementById("senderId").value) {
+            console.log('sender message' + message['senderId']);
+            console.log('receiver message' + message['receiverId']);
+            console.log('receiver divEl' + document.getElementById("receiverId").value);
+            console.log('sender divEl' + document.getElementById("senderId").value);
+
+
+
+            if (message['senderId'] !== message['receiverId'] && message['senderId'] !== document.getElementById("senderId").value && message['senderId'] === document.getElementById("receiverId").value) {
                 let received = `<div class="incoming_msg">
-                                                                                                                       <div class="incoming_msg_img">
-                                                                                                                                 <img src="${message['senderProfilePicurePath']}" alt="OleMale">
-                                                                                                                                       </div>
-                                                                                                                                        <div class="received_msg">
-                                                                                                                                            <div class="received_withd_msg">
-                                                                                                                                                <p>
-                                                                                                                                                                           ${message['content']}
-                                                                                                                                                </p>
-                                                                                                                                                <span class="time_date">${message['createdOn']}</span>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
-                                                                                                                                    </div>`
+                               <div class="incoming_msg_img">
+                               <img src="${message['senderProfilePicurePath']}" alt="OleMale">
+                                     </div>
+                                      <div class="received_msg">
+                                          <div class="received_withd_msg">
+                                              <p>
+                                                                         ${message['content']}
+                                              </p>
+                                              <span class="time_date">${message['createdOn']}</span>
+                                          </div>
+                                      </div>
+                                  </div>`
 
                 $("#msg_history").append(received);
 
+                var objDiv = document.getElementById("msg_history");
+                objDiv.scrollTop = objDiv.scrollHeight;
             }
 
         });
@@ -125,20 +143,23 @@
         document.getElementById("sendButton").addEventListener("click", function (event) {
             var receiver = document.getElementById("receiverId").value;
             var message = document.getElementById("messageInput").value;
-           
+
 
             var message = document.getElementById("messageInput").value;
 
             let send = `<div class="outgoing_msg">
-                                                                                                                          <div class="sent_msg">
-                                                                                                                              <p>
-                                                                                                                                          ${message}
-                                                                                                                              </p>
-                                                                                                                                      <span class="time_date"> </span>
-                                                                                                                          </div>
-                                                                                                                      </div>`
+                                                                                                                                          <div class="sent_msg">
+                                                                                                                                              <p>
+                                                                                                                                                          ${message}
+                                                                                                                                              </p>
+                                                                                                                                                      <span class="time_date"> </span>
+                                                                                                                                          </div>
+                                                                                                                                      </div>`
 
             $("#msg_history").append(send);
+
+            var objDiv = document.getElementById("msg_history");
+            objDiv.scrollTop = objDiv.scrollHeight;
 
             document.getElementById("messageInput").value = '';
 
@@ -198,7 +219,7 @@
                             document.querySelector('.msg_history').remove();
 
                             var messageHistoryEl = ` <div class="msg_history" id="msg_history">
-                                                                                                                                                                                                    </div>`;
+                                                                                                                                                                                                                    </div>`;
 
                             $("#mesgs").prepend(messageHistoryEl);
 
@@ -226,13 +247,13 @@
 
 
                                     let sendMessageEl = `<div class="outgoing_msg">
-                                                                                                                                                                                                                                 <div class="sent_msg">
-                                                                                                                                                                                                                                     <p>
-                                                                                                                                                                                                                                         ${content}
-                                                                                                                                                                                                                                     </p>
-                                                                                                                                                                                                                                     <span class="time_date"> ${createdOn}</span>
-                                                                                                                                                                                                                                 </div>
-                                                                                                                                                                                                                             </div>`
+                                                                                                                                                                                                                                                 <div class="sent_msg">
+                                                                                                                                                                                                                                                     <p>
+                                                                                                                                                                                                                                                         ${content}
+                                                                                                                                                                                                                                                     </p>
+                                                                                                                                                                                                                                                     <span class="time_date"> ${createdOn}</span>
+                                                                                                                                                                                                                                                 </div>
+                                                                                                                                                                                                                                             </div>`
 
                                     $("#msg_history").append(sendMessageEl);
                                 }
@@ -249,17 +270,17 @@
                                     let createdOn = message['createdOn'];
 
                                     let receivedMessageEl = `<div class="incoming_msg"> <div class="incoming_msg_img">
-                                                                                                                                                                                                                                                            <img src="${senderProfilePicturePath}" alt="sunil">
-                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                    <div class="received_msg">
-                                                                                                                                                                                                                                                        <div class="received_withd_msg">
-                                                                                                                                                                                                                                                            <p>
-                                                                                                                                                                                                                                                                       ${content}
-                                                                                                                                                                                                                                                            </p>
-                                                                                                                                                                                                                                                            <span class="time_date">${createdOn}</span>
-                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                       </div>
-                                                                                                                                                                                                                                                   </div>`
+                                                                                                                                                                                                                                                                            <img src="${senderProfilePicturePath}" alt="sunil">
+                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                    <div class="received_msg">
+                                                                                                                                                                                                                                                                        <div class="received_withd_msg">
+                                                                                                                                                                                                                                                                            <p>
+                                                                                                                                                                                                                                                                                       ${content}
+                                                                                                                                                                                                                                                                            </p>
+                                                                                                                                                                                                                                                                            <span class="time_date">${createdOn}</span>
+                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                       </div>
+                                                                                                                                                                                                                                                                   </div>`
 
                                     $("#msg_history").append(receivedMessageEl);
                                 }

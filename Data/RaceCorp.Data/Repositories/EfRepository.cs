@@ -42,7 +42,7 @@
         public Task<int> SaveChangesAsync() => this.Context.SaveChangesAsync();
 
         public void Dispose()
-        {
+            {
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }

@@ -2,7 +2,7 @@
 {
     public enum SearchCategory
     {
-        ApplicationUser = 1,
+        User = 1,
         Race = 2,
         Ride = 3,
         Mountain = 4,

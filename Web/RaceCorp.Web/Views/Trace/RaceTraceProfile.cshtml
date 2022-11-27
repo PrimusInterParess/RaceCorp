@@ -28,12 +28,21 @@
     <li class="me-5">
         <h1>@Model.Name</h1>
     </li>
-    <li class="me-2">
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Edit</a>
-    </li>
-    <li class="me-2">
-        <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="DeleteRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Delete</a>
-    </li>
+    @if (
+    this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+    this.User.IsInRole(GlobalConstants.UserRoleName))
+    {
+        @if (currentUserId == Model.RaceApplicationUserId)
+        {
+            <li class="me-2">
+                <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Edit</a>
+            </li>
+            <li class="me-2">
+                <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="DeleteRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Delete</a>
+            </li>
+        }
+
+    }
     <li class="me-2">
         <form method="get">
             <button class="btn btn-outline-info mb-1 btn-block" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.GpxId">Download Gpx file</button>

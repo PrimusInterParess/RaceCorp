@@ -4,6 +4,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+            .sidenav a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+                .sidenav a:hover {
+                    color: #f1f1f1;
+                }
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+        media screen and (max-height: 450px) {
+            .sidenav
+
+        {
+            padding-top: 15px;
+        }
+
+        .sidenav a {
+            font-size: 18px;
+        }
+
+        }
+    </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
@@ -28,86 +81,82 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
-                        <div class="dropdown">
-                            <button class="btn btn-outline-success" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                All
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                @if (
-                                this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
-                                this.User.IsInRole(GlobalConstants.UserRoleName))
-                                {
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AllUsers">Users</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="All">Teams</a>
-                                    </li>
-                                }
 
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="All">Rides</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="All">Races</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Town" asp-action="All">Towns</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Mountain" asp-action="All">Mountain</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="UpcomingRaces">Upcoming Races</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="UpcomingRides">Upcoming Rides</a>
-                                </li>
-                            </ul>
-                        </div>
                         @if (
                         this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
                         this.User.IsInRole(GlobalConstants.UserRoleName))
                         {
-                            <div class="dropdown">
-                                <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Create
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="Create">Create Race</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="Create">Create Ride</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="Create">Create Team</a>
-                                    </li>
-                                </ul>
-                            </div>
-
                             <a class="btn btn-outline-success" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Profile</a>
+                            <a class="btn btn-outline-success" asp-area="" asp-action="Inbox" asp-controller="Message" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Inbox</a>
 
+                            <form method="post" class="d-flex" asp-action="Search" asp-controller="Search" asp-area="">
+                                <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
+                                </select>
+                                <input name="QueryInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
                         }
-
-
-                        <form method="post" class="d-flex" asp-action="Search" asp-controller="Search" asp-area="">
-                            <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
-                                <option selected>Area</option>
-                            </select>
-                            <input name="QueryInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                        <partial name="_LoginPartial" />
+                       
+                      
                     </div>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
-        @* <partial name="_UserNavPartial" />*@
+
 
 
 
     </header>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+        @if (
+        this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+        this.User.IsInRole(GlobalConstants.UserRoleName))
+        {
+
+            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AllUsers">Users</a>
+
+
+            <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="All">Teams</a>
+
+        }
+
+        <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="All">Rides</a>
+
+
+        <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="All">Races</a>
+
+
+        <a class="dropdown-item" asp-area="" asp-controller="Town" asp-action="All">Towns</a>
+
+
+        <a class="dropdown-item" asp-area="" asp-controller="Mountain" asp-action="All">Mountains</a>
+
+
+        <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="UpcomingRaces">Upcoming Races</a>
+
+
+        <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="UpcomingRides">Upcoming Rides</a>
+
+        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+        this.User.IsInRole(GlobalConstants.UserRoleName))
+        {
+
+            <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="Create">Create Race</a>
+
+            <a class="dropdown-item" asp-area="" asp-controller="Ride" asp-action="Create">Create Ride</a>
+
+            <a class="dropdown-item" asp-area="" asp-controller="Team" asp-action="Create">Create Team</a>
+
+
+        }
+
+    </div>
+
+
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
 
     <div class="container">
         <partial name="_CookieConsentPartial" />
@@ -122,6 +171,15 @@
         </div>
     </footer>
 
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>

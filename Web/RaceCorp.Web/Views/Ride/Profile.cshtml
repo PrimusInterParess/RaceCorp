@@ -33,10 +33,29 @@
     <div class="alert alert-success">@this.TempData["Registered"]</div>
 }
 
+<style>
+      .resize {
+      width: 100px;
+      height: auto;
+          }
+
+           .img-img {
+    border-radius: 40%;
+           }
+</style>
+
 
 <ul class="nav">
     <li class="me-5">
         <h1>@Model.Name</h1>
+
+        <div>
+            Ride publisher : @Model.ApplicationUserFirstName @Model.ApplicationUserLastName
+            <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@Model.ApplicationUserId">
+                <img class="resize img-img" src="@Model.ApplicationUserProfilePicturePath" />
+
+            </a>
+        </div>
     </li>
     @if (hasPassed)
     {
@@ -74,12 +93,12 @@
     {
         @if (currentUserId == Model.ApplicationUserId)
         {
-            <li class="me-2">
+            <li class="me-2 mt-2">
                 <form method="get">
                     <button class="btn btn-outline-secondary mb-1 btn-block" asp-controller="Ride" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
                 </form>
             </li>
-            <li class="me-2">
+            <li class="me-2 mt-2">
                 <form method="post"
               asp-controller="Ride" asp-action="Delete" asp-route-id="@Model.Id">
                     <button class="btn btn-outline-success mb-1" type="submit">Delete</button>
@@ -88,7 +107,7 @@
         }
     }
 </ul>
-<div class="row">
+<div class="row mt-2">
     <div class="map-responsive col-md-5">
         <iframe src="@url"></iframe>
     </div>

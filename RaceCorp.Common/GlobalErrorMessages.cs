@@ -24,5 +24,7 @@ namespace RaceCorp.Common
 
         public const string AlreadyRequested = "You have already requested to join the team";
 
+        public const string InvalidSearchTerms = "Invalid search terms. Max words count is two";
+
     }
 }

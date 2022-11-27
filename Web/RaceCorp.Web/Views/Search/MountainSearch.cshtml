@@ -1,0 +1,87 @@
+﻿@using RaceCorp.Web.ViewModels.Search
+@model List<MountainSearchViewModel>
+
+     <div class="text-center col-md-12 offset-2">
+        <div class="col-md-8">
+            <hr />
+            <h4>Mountains</h4>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var mountain = Model[i];
+
+            var mountainAcordion = "mountainAcordion" + i;
+            var raceAcordion = "raceAcordion" + i;
+            var rideAcordion = "rideAcordion" + i;
+                    <div class="accordion mb-3" id="town">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-@i">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@mountainAcordion" aria-expanded="false">
+                                    <b>@mountain.Name</b>
+                                </button>
+                            </h2>
+                            <div id="@mountainAcordion" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                                <div class="accordion-body text-center">
+                                    <div class="accordion mb-3" id="race">
+                                        <div class="accordion-item">
+                                            <h2 class=" accordion-header" id="heading-@i">
+                                                <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@raceAcordion" aria-expanded="false">
+                                                    <b class="text-center">Races</b>
+                                                </button>
+                                            </h2>
+                                            <div id="@raceAcordion" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                                                <div class="accordion-body text-center">
+                                            @if (mountain.Races.Count() == 0)
+                                            {
+                                                            <b>No races registered!</b> 
+
+                                            }
+                                            else
+                                            {
+                                                @foreach (var race in mountain.Races)
+                                                {
+                                                                    <div class="mb-2">
+                                                                        <a class="btn btn-outline-primary" asp-controller="Race" asp-action="Profile" asp-route-id="@race.Id"><b>@race.Name</b></a>
+                                                                    </div>
+                                                }
+                                                                <a class="btn btn-outline-primary mb-2" asp-controller="Mountain" asp-action="ProfileRaces" asp-route-modelId=@mountain.Id>All races from @mountain.Name</a>
+
+                                            }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion mb-3" id="ride">
+                                        <div class="accordion-item">
+                                            <h2 class=" accordion-header" id="heading-@i">
+                                                <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@rideAcordion" aria-expanded="false">
+                                                    <b class="text-center">Rides</b>
+                                                </button>
+                                            </h2>
+                                            <div id="@rideAcordion" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                                                <div class="accordion-body text-center">
+                                            @if (mountain.Rides.Count() == 0)
+                                            {
+                                                            <b>No rides registered!</b> 
+                                            }
+                                            else
+                                            {
+                                                @foreach (var ride in mountain.Rides)
+                                                {
+                                                                    <div class="mb-2">
+                                                                        <a class="btn btn-outline-primary" asp-controller="Ride" asp-action="Profile" asp-route-id="@ride.Id"><b>@ride.Name</b></a>
+                                                                    </div>
+                                                }
+                                                                <a class="btn btn-outline-primary mb-2" asp-controller="Mountain" asp-action="ProfileRides" asp-route-modelId=@mountain.Id>All rides from @mountain.Name</a>
+
+                                            }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        }
+            </div>
+        </div>

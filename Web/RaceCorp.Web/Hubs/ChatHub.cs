@@ -36,6 +36,7 @@
         public async Task JoinGroup(string receiverId)
         {
             var groupName = this.groupNameProvider.GetGroupName(receiverId, this.Context.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             await this.Groups.AddToGroupAsync(this.Context.ConnectionId, groupName);
         }
 

@@ -15,6 +15,8 @@
 
         public string RaceName { get; set; }
 
+        public string RaceApplicationUserId { get; set; }
+
         public int RaceId { get; set; }
 
         public string Difficulty { get; set; }

@@ -1,0 +1,87 @@
+﻿@using RaceCorp.Web.ViewModels.Search
+@model List<TownSearchViewModel>
+
+
+<div class="text-center col-md-12 offset-2">
+    <div class="col-md-8">
+        <hr />
+        <h4>Towns</h4>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var town = Model[i];
+
+            var townAcordion = "townAcordion" + i;
+            var raceAcordion = "raceAcordion" + i;
+            var rideAcordion = "rideAcordion" + i;
+            <div class="accordion mb-3 " id="town">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-@i">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@townAcordion" aria-expanded="false">
+                            <b>@town.Name</b>
+                        </button>
+                    </h2>
+                    <div id="@townAcordion" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                        <div class="accordion-body text-center">
+                            <div class="accordion mb-3" id="race">
+                                <div class="accordion-item">
+                                    <h2 class=" accordion-header" id="heading-@i">
+                                        <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@raceAcordion" aria-expanded="false">
+                                            <b class="text-center">Races</b>
+                                        </button>
+                                    </h2>
+                                    <div id="@raceAcordion" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                                        <div class="accordion-body text-center">
+                                            @if (town.Races.Count() == 0)
+                                            {
+                                                <b>No races registered!</b>
+                                            }
+                                            else
+                                            {
+                                                @foreach (var race in town.Races)
+                                                {
+                                                    <div class="mb-2">
+                                                        <a class="btn btn-outline-primary" asp-controller="Race" asp-action="Profile" asp-route-id="@race.Id"><b>@race.Name</b></a>
+                                                    </div>
+                                                }
+                                                <a class="btn btn-outline-primary mb-2" asp-controller="Town" asp-action="ProfileRaces" asp-route-modelId=@town.Id>All races from @town.Name</a>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion mb-3" id="ride">
+                                <div class="accordion-item">
+                                    <h2 class=" accordion-header" id="heading-@i">
+                                        <button class="accordion-button text-center" type="button" data-bs-toggle="collapse" data-bs-target="#@rideAcordion" aria-expanded="false">
+                                            <b class="text-center">Rides</b>
+                                        </button>
+                                    </h2>
+                                    <div id="@rideAcordion" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#departments">
+                                        <div class="accordion-body text-center">
+                                            @if (town.Rides.Count() == 0)
+                                            {
+                                                <b>No rides registered!</b>
+                                            }
+                                            else
+                                            {
+                                                @foreach (var ride in town.Rides)
+                                                {
+                                                    <div class="mb-2">
+                                                        <a class="btn btn-outline-primary" asp-controller="Ride" asp-action="Profile" asp-route-id="@ride.Id"><b>@ride.Name</b></a>
+                                                    </div>
+                                                }
+                                                <a class="btn btn-outline-primary mb-2" asp-controller="Town" asp-action="ProfileRides" asp-route-modelId=@town.Id>All rides from @town.Name</a>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
