@@ -81,39 +81,5 @@
 
             return this.RedirectToAction("Profile", "User", new { area = string.Empty, id = model.ReceiverId });
         }
-
-        public async Task<IActionResult> Messages(string authorId, string interlocutorId)
-        {
-            var currentUser = await this.userManager
-                    .GetUserAsync(this.User);
-
-            var interlocutorEmail = this.userService.GetUserEmail(interlocutorId);
-
-            if (interlocutorEmail == null)
-            {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
-            }
-
-            if (currentUser == null || currentUser.Id != authorId)
-            {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
-            }
-
-            var messages = await this.messageService.GetMessages<MessageInListViewModel>(authorId, interlocutorId);
-
-            if (messages.Count == 0)
-            {
-                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
-            }
-
-            var authorEmail = currentUser.Email;
-
-            return this.Json(new
-            {
-                authorEmail = authorEmail,
-                interlocutorEmail = interlocutorEmail,
-                messages = messages,
-            });
-        }
     }
 }

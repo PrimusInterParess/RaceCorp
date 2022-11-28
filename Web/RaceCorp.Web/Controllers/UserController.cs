@@ -45,15 +45,30 @@
 
             if (currentUser.Id != null && userDto != null)
             {
-                userDto.IsConnected = userDto.Connections.Any(c => c.Id == currentUser.Id + id || c.Id == id + currentUser.Id) || currentUser.Id == id;
+                userDto.IsConnected = userDto
+                    .Connections
+                    .Any(
+                    c => c.Id == currentUser.Id + id ||
+                    c.Id == id + currentUser.Id) ||
+                    currentUser.Id == id;
 
-                userDto.RequestedConnection =
-                    userDto.ConnectRequest.Any(r => r.RequesterId == currentUser.Id) ||
+                userDto.RequestedConnection = userDto
+                    .ConnectRequest
+                    .Any(
+                    r => r.RequesterId == currentUser.Id) ||
                     this.userService.RequestedConnection(currentUser.Id, userDto.Id);
 
-                userDto.CanMessageMe = userDto.Connections.Any(c => c.Id == currentUser.Id + id || c.Id == id + currentUser.Id);
+                userDto.CanMessageMe = userDto
+                    .Connections
+                    .Any(
+                    c => c.Id == currentUser.Id + id ||
+                    c.Id == id + currentUser.Id);
 
-                userDto.Connections = userDto.Connections.Take(6).OrderByDescending(c => c.CreatedOn).ToHashSet();
+                userDto.Connections = userDto
+                    .Connections
+                    .Take(6)
+                    .OrderByDescending(c => c.CreatedOn)
+                    .ToHashSet();
 
                 return this.View(userDto);
             }
@@ -108,7 +123,9 @@
         public IActionResult Requests(string id)
         {
             var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (currentUserId == null || currentUserId != id)
+
+            if (currentUserId == null ||
+                currentUserId != id)
             {
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }

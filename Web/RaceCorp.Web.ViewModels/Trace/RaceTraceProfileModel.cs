@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using AutoMapper;
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.User;
@@ -43,7 +44,9 @@
                 .ForMember(x => x.Difficulty, opt
                    => opt.MapFrom(x => x.Difficulty.Level.ToString()))
                 .ForMember(x => x.ControlTime, opt
-                   => opt.MapFrom(x => x.ControlTime.TotalHours));
+                   => opt.MapFrom(x => x.ControlTime.TotalHours))
+                 .ForMember(x => x.StartTime, opt
+                   => opt.MapFrom(x => x.StartTime.ToString(GlobalConstants.DateStringFormat)));
         }
     }
 }

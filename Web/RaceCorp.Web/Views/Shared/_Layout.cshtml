@@ -17,17 +17,17 @@
             z-index: 1;
             top: 0;
             left: 0;
-            background-color: #111;
+            background-color: #EACFC9;
             overflow-x: hidden;
             transition: 0.5s;
-            padding-top: 60px;
+            padding-top: 120px;
         }
 
             .sidenav a {
                 padding: 8px 8px 8px 32px;
                 text-decoration: none;
                 font-size: 25px;
-                color: #818181;
+                color: #4D4745;
                 display: block;
                 transition: 0.3s;
             }
@@ -44,18 +44,15 @@
                 margin-left: 50px;
             }
 
-        media screen and (max-height: 450px) {
-            .sidenav
+            /*media screen and (max-height: 450px) {
+                    .sidenav{
+                    padding-top: 15px;
+                }*/
 
-        {
-            padding-top: 15px;
-        }
+            .sidenav a {
+                font-size: 18px;
+            }
 
-        .sidenav a {
-            font-size: 18px;
-        }
-
-        }
     </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -86,18 +83,29 @@
                         this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
                         this.User.IsInRole(GlobalConstants.UserRoleName))
                         {
-                            <a class="btn btn-outline-success" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Profile</a>
-                            <a class="btn btn-outline-success" asp-area="" asp-action="Inbox" asp-controller="Message" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Inbox</a>
+                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                                <a class="btn btn-outline-success" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Profile</a>
+                            </div>
+
+                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                                <a class="btn btn-outline-success" asp-area="" asp-action="Inbox" asp-controller="Message" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Inbox</a>
+                            </div>
 
                             <form method="post" class="d-flex" asp-action="Search" asp-controller="Search" asp-area="">
                                 <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
                                 </select>
-                                <input name="QueryInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success" type="submit">Search</button>
+
+                                <input name="QueryInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
                             </form>
                         }
-                       
-                      
+
+
                     </div>
                     <partial name="_LoginPartial" />
                 </div>
@@ -156,7 +164,7 @@
     </div>
 
 
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; menu</span>
 
     <div class="container">
         <partial name="_CookieConsentPartial" />

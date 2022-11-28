@@ -90,7 +90,7 @@
             var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
             var townDb = await this.townService.ProccesingData(model.Town);
 
-            var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
+            var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
 
             var gpx = await this.gpxService
                 .ProccessingData(
@@ -165,7 +165,7 @@
             if (model.Trace.GpxFile != null)
             {
                 var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
-                var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
+                var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
 
                 var gpx = await this.gpxService
                 .ProccessingData(
@@ -220,6 +220,7 @@
         {
             var count = this.rideRepo
                  .All()
+                 .Where(r => r.Date > DateTime.Now)
                  .Count();
 
             var rides = this.rideRepo

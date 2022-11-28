@@ -140,26 +140,6 @@
                                 <li class="list-group-item">
                                     <div class="row form-group">
                                         <a class="btn btn-outline-secondary" asp-area="" asp-controller="Trace" asp-action="RaceTraceProfile" asp-route-traceId="@trace.Id" asp-route-raceId="@Model.Id"><b>@trace.Name</b></a>
-
-
-                                        @*  @if (hasPassed && currentUserId != null)
-                                {
-                                <a class="form-control btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
-
-                                }
-                                else if (isRegistered && currentUserId != null)
-                                {
-                                <form method="post" asp-controller="Event" asp-action="Unregister" asp-route-traceId="@trace.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
-                                <button class="form-control btn btn-outline-danger mb-1" type="submit">Unregister</button>
-                                </form>
-
-                                }
-                                else if (isRegistered == false && currentUserId != null)
-                                {
-                                <form method="post" asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@trace.Id" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRace">
-                                <button class="form-control btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
-                                </form>
-                                }*@
                                     </div>
                                 </li>
 
@@ -172,9 +152,9 @@
                                         Control time:
                                     </b>@trace.ControlTime h
                                     <b>
-                                        Starting time:
-
-                                    </b>@trace.StartTime
+                                        Start time:
+                                    </b>
+                                    @trace.StartTime
                                 </li>
 
                             </ul>

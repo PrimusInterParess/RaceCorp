@@ -2,7 +2,6 @@
 
 @{
     this.ViewData["Title"] = "Create Race";
-    this.ViewData["KVP"] = Newtonsoft.Json.JsonConvert.SerializeObject(Model.DifficultiesKVP);
     this.ViewData["ButtonName"] = "Create";
 
 }
@@ -10,123 +9,15 @@
     <partial name="_RaceInputFormPartial" model="@Model" />
 </div>
 
+
+<script src="~/js/traceAdd.js"></script>
+
 @section Scripts{
     <script>
-
-        var count = 0;
-        var selectListId = count + 1;
-
-        function addAnotherItem(event) {
-            event.preventDefault();
-
-            var stringData = @Html.Raw(Json.Serialize(ViewData["KVP"]));
-
-            var kvpArray = JSON.parse(stringData);
-
-            var selectList = document.createElement("select");
-            selectList.id = count;
-            selectList.setAttribute('asp-for',`Difficulties[${count}].DifficultyId`);
-            selectList.setAttribute('name', `Difficulties[${count}].DifficultyId`);
-            selectList.classList.add('form-control');
-
-            for (var i = 0; i < kvpArray.length; i++) {
-                var option = document.createElement("option");
-                option.value = kvpArray[i].Key;
-                option.text = kvpArray[i].Value;
-                selectList.appendChild(option);
-            }
-
-            var childElement = `
-            <div class="form-control mb-3" id=block${count}>
-                                                      <div  class="input-group mb-3">
-                                                     <span class="input-group-text" id="basic-addon1">Trace name</span>
-                                                      <input type="text" class="form-control" name='Difficulties[${count}].Name' placeholder="Trace Name">
-                                                      <span asp-validation-for='Difficulties[${count}].Name' class="text-danger"></span>
-                                                    </div>
-                                                    <div  class="input-group mb-3">
-                                                      <span class="input-group-text" id="basic-addon1">Length</span>
-                                                      <input type="text" class="form-control" name='Difficulties[${count}].Length' placeholder="Trace Length in kilometers">
-                                                      <span asp-validation-for='Difficulties[${count}].Length' class="text-danger"></span>
-                                                    </div>
-                                                    <div id="select${count}" class="input-group mb-3">
-                                                      <span class="input-group-text" id="basic-addon3">Difficulty</span>
-                                                      <span asp-validation-for='Difficulties[${count}].DifficultyId' class="text-danger"></span>
-                                                    </div>
-                                                    <div class="input-group mb-3">
-                                                      <span class="input-group-text" id="basic-addon2">Control time</span>
-                                                      <input type="text" class="form-control" name='Difficulties[${count}].ControlTime'  placeholder="Trace Control time in hours">
-                                                      <span asp-validation-for='Difficulties[${count}].ControlTime' class="text-danger"></span>
-                                                    </div>
-                                                    <div class="input-group mb-3">
-                                                      <span class="input-group-text" id="basic-addon3">Start Time</span>
-                                                              <input type="datetime-local" class="form-control" name='Difficulties[${count}].StartTime' placeholder="">
-                                                      <span asp-validation-for='Difficulties[${count}].StartTime' class="text-danger"></span>
-                                                    </div>
-                                                    <div class="input-group mb-3">
-                                                       <span class="input-group-text">Gpx</span>
-                                                       <input  type="file" name='Difficulties[${count}].GpxFile' class="form-control" id='Difficulties[${count}].GpxFile' >
-                                                    </div>
-                                                    </div>`;
-
-            //      <div class="form-group mb-1" >
-            //       <label asp -for= "RaceLogo" > Upload Race Logo: </label>
-            //        < input asp -for= "RaceLogo" name = "RaceLogo" class= "form-control mb-1" style = "width: 100%;" />
-            //            </div>
-
-
-            $("#ol").append(childElement);
-
-            var divElement = document.getElementById(`select${count}`);
-            divElement.appendChild(selectList);
-
-            var createDeleteChild = document.createElement('button');
-            createDeleteChild.setAttribute('href', '#');
-            createDeleteChild.textContent = 'Delete';
-            createDeleteChild.addEventListener('click', deleteItem);
-            createDeleteChild.classList.add('btn');
-            createDeleteChild.classList.add('border');
-            createDeleteChild.classList.add('border-dark');
-            createDeleteChild.classList.add('text-danger');
-
-            var divEl = document.getElementById(`block${count}`);
-            var btnsDivEl = document.getElementById("btns");
-
-            if (btnsDivEl.childElementCount == 1) {
-                btnsDivEl.appendChild(createDeleteChild);
-            }
-            count += 1;
-
-            var olDivEl = document.getElementById("ol");
-
-            function deleteItem(event) {
-                event.preventDefault();
-                document.getElementById(`block${count - 1}`).remove();
-
-                if (olDivEl.childElementCount == 0) {
-                    createDeleteChild.remove();
-                }
-                count -= 1;
-            }
-        }
 
         var formEl = document.getElementById("formInput");
 
         formEl.addEventListener('onload', getElements());
-
-        function getElements(evnt) {
-
-            var divToAttachTo = document.getElementById("attachHere");
-
-            var toAttach = `
-                                    <label class="mb-2 mt-2"><b>Traces</b></label>
-                                      <div id="btns">
-                                          <button class="btn border border-dark" onclick="addAnotherItem(event)">add</button>
-                                      </div>
-                                      <div class="mb-2 mt-2" id="ol">
-                                      </div>`;
-
-            $("#attachHere").append(toAttach);
-        }
     </script>
 }
 

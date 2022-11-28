@@ -1,10 +1,11 @@
 namespace RaceCorp.Web
 {
     using System.Reflection;
-
+   
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -128,6 +129,7 @@ namespace RaceCorp.Web
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
             app.MapRazorPages();
 
             app.MapHub<ChatHub>("/chathub");

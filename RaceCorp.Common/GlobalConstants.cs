@@ -17,8 +17,9 @@
 
         public const string ProfilePicterPostFix = "ProfilePicture";
 
-        public const string DateStringFormat = "f";
+        public const string DateStringFormat = "d/MMMM/yyyy HH:mm";
         public const string DateMessageFormat = "d/M/yyyy HH:mm";
+        public const string DateStringLongFormat = "D";
 
         public const string FirstNameDisplay = "First name";
         public const string LastNameDisplay = "Last name";
@@ -37,7 +38,6 @@
         public const string RacesCarocelPicture = "\\Images\\System\\117656b5-e99d-4dc6-aefa-d544a01a4821.jpg";
         public const string RidesCarocelPicture = "\\Images\\System\\3f8236c9-8883-4403-8157-b1ed262ce1ed.jpg";
 
-        public const string CredentialsPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
 
         public const string SuccessfulRequestJoin = "You have successfully requested to join the team!";
         public const string SuccessfulRequestConnect = "You have successfully requested to connect!";
@@ -60,5 +60,9 @@
         public const string RequestTypeConnectUser = "ConnectUser";
 
         public const string HubGroupNameFormat = "{0}{1}";
+
+        public const string GoogleCredentialsFilePath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
+        public const string CredentialsPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
+
     }
 }

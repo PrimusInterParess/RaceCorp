@@ -19,7 +19,7 @@
 
         public string ApplicationUserFirstName { get; set; }
 
-        public string ApplicationUserLastName { get; set; } 
+        public string ApplicationUserLastName { get; set; }
 
         public List<TraceInRaceProfileViewModel> Traces { get; set; }
 
@@ -35,7 +35,7 @@
                 .ForMember(x => x.Mountain, opt
                     => opt.MapFrom(x => x.Mountain.Name))
                 .ForMember(x => x.Date, opt
-                   => opt.MapFrom(x => x.Date.ToString(GlobalConstants.DateStringFormat)));
+                   => opt.MapFrom(x => x.Date.ToString(GlobalConstants.DateStringLongFormat)));
 
             configuration.CreateMap<Trace, TraceInRaceProfileViewModel>()
                 .ForMember(x => x.DifficultyName, opt
@@ -43,7 +43,7 @@
                 .ForMember(x => x.ControlTime, opt
                    => opt.MapFrom(x => x.ControlTime.TotalHours))
                 .ForMember(x => x.StartTime, opt
-                   => opt.MapFrom(x => x.StartTime.ToString("f")));
+                   => opt.MapFrom(x => x.StartTime.ToString(GlobalConstants.DateStringFormat)));
         }
     }
 }

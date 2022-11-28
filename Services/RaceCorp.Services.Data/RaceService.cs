@@ -109,7 +109,7 @@
 
             if (model.Traces.Count != 0)
             {
-                var serviceAccountPath = Path.GetFullPath(GlobalConstants.CredentialsPath);
+                var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
 
                 foreach (var traceInputModel in model.Traces)
                 {
@@ -248,6 +248,7 @@
         {
             var count = this.raceRepo
                  .All()
+                 .Where(r => r.Date > DateTime.Now)
                  .Count();
 
             var races = this.raceRepo

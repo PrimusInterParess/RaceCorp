@@ -13,7 +13,6 @@
 
         public SearchController(ISearchService searchService)
         {
-
             this.searchService = searchService;
         }
 
@@ -29,7 +28,7 @@
                 return this.RedirectToAction($"{action}Search", new { input = inputModel.QueryInput });
             }
 
-            return this.RedirectToAction("/");
+            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
         }
 
         [HttpGet]

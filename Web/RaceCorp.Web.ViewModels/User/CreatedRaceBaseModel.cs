@@ -10,6 +10,7 @@
         public int Id { get; set; }
 
         public string Name { get; set; }
+
         public int RegisterdUsers { get; set; }
 
         public string Date { get; set; }
@@ -22,7 +23,7 @@
                 .ForMember(x => x.Name, opt
                        => opt.MapFrom(x => x.Name))
                 .ForMember(x => x.Date, opt
-                       => opt.MapFrom(x => x.Date.ToString(GlobalConstants.DateStringFormat))); 
+                       => opt.MapFrom(x => x.Date.ToString(GlobalConstants.DateStringLongFormat)));
         }
     }
 }
