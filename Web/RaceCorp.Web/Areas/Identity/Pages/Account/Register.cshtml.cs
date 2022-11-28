@@ -88,7 +88,6 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             [Display(Name = GlobalConstants.DateOfBirhDisplay)]
             public DateTime DateOfBirth { get; set; }
 
-
             [Required]
             [StringLength(GlobalIntValues.PasswordMaxLenth, ErrorMessage = GlobalErrorMessages.StringLengthError, MinimumLength = GlobalIntValues.PasswordMinLenth)]
             [Display(Name = "Password")]

@@ -17,11 +17,11 @@
   border-radius: 4%;
 }
 
-    media (max-width: 991.98px) {
+   /* media (max-width: 991.98px) {
       .cascading-right {
         margin-right: 0;
       }
-    }
+    }*/
   </style>
 
   <!-- Jumbotron -->
@@ -67,17 +67,20 @@
               <!-- Register buttons -->
               <div class="text-center">
                 <p>or sign up with:</p>
-                <button type="button" class="btn btn-link btn-floating mx-1">
-                  <i class="fab fa-facebook-f"></i>
-                </button>
-
-                <button type="button" class="btn btn-link btn-floating mx-1">
-                  <i class="fab fa-google"></i>
-                </button>
-
-               
-              </div>
+                                             
+                             </div>
             </form>
+
+             <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                    <div>
+                                        <p>
+                                            @foreach (var provider in Model.ExternalLogins)
+                                            {
+                                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"> <i class="fab fa-google"></i></button>
+                                            }
+                                        </p>
+                                    </div>
+                                </form>
           </div>
         </div>
       </div>
@@ -90,38 +93,6 @@
   </div>
   <!-- Jumbotron -->
 </section>
-<!-- Section: Design Block -->
-
-  @*      <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
-</div>*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
