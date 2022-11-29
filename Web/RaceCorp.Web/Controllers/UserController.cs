@@ -133,7 +133,7 @@
             var userDto = this.userService.GetById<UserAllRequestsViewModel>(id);
 
             // find a better way to sort it
-            userDto.Requests.OrderBy(r => r.CreatedOn);
+            userDto.ReceivedRequests.OrderBy(r => r.CreatedOn);
             return this.View(userDto);
         }
     }

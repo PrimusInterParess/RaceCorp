@@ -37,7 +37,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Team, TeamProfileViewModel>()
-                                .ForMember(x => x.JoinRequests, opt => opt.MapFrom(x => x.ApplicationUser.Requests.Where(r => r.Type == GlobalConstants.RequestTypeTeamJoin)));
+                                .ForMember(x => x.JoinRequests, opt => opt.MapFrom(x => x.ApplicationUser.SendRequests.Where(r => r.Type == GlobalConstants.RequestTypeTeamJoin)));
         }
     }
 }

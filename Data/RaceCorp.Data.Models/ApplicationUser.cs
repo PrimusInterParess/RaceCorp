@@ -71,7 +71,9 @@ namespace RaceCorp.Data.Models
 
         public virtual ICollection<Connection> Connections { get; set; } = new HashSet<Connection>();
 
-        public virtual ICollection<Request> Requests { get; set; } = new HashSet<Request>();
+        public virtual ICollection<Request> ReceivedRequests { get; set; } = new HashSet<Request>();
+
+        public virtual ICollection<Request> SendRequests { get; set; } = new HashSet<Request>();
 
         public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
 

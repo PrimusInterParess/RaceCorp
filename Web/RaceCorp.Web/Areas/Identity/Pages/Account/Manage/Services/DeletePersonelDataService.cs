@@ -18,19 +18,22 @@
         private readonly IDeletableEntityRepository<Conversation> conversationRepo;
         private readonly IDeletableEntityRepository<Connection> connectionRepo;
         private readonly IDeletableEntityRepository<Message> messageRepo;
+        private readonly IDeletableEntityRepository<Request> requestRepo;
 
         public DeletePersonelDataService(
             UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Conversation> conversationRepo,
-            IDeletableEntityRepository<Connection> connectionRepo
-            ,IDeletableEntityRepository<Message> messageRepo)
+            IDeletableEntityRepository<Connection> connectionRepo,
+            IDeletableEntityRepository<Message> messageRepo,
+            IDeletableEntityRepository<Request> requestRepo)
         {
             this.userManager = userManager;
             this.userRepo = userRepo;
             this.conversationRepo = conversationRepo;
             this.connectionRepo = connectionRepo;
             this.messageRepo = messageRepo;
+            this.requestRepo = requestRepo;
         }
 
         public async Task DeleteUser(string userId)
@@ -50,6 +53,19 @@
             this.DeleteUserConnections(user);
             this.DeleteConversations(user);
             this.DeleteMessages(user);
+            this.DeleteRequests(user);
+        }
+
+        private void DeleteRequests(ApplicationUser user)
+        {
+            var requests = this.requestRepo
+                .AllWithDeleted()
+                .Where(r => r.TargetUserId == user.Id || r.RequesterId == user.Id).ToList();
+
+            foreach (var request in requests)
+            {
+                this.requestRepo.HardDelete(request);
+            }
         }
 
         private void DeleteMessages(ApplicationUser user)

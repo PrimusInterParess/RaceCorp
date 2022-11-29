@@ -130,8 +130,8 @@
         {
             return this.requestRepo
                 .AllAsNoTracking()
-                .Include(r => r.ApplicationUser)
-                .Where(r => r.ApplicationUserId == userId)
+                .Include(r => r.TargetUser)
+                .Where(r => r.TargetUserId == userId)
                 .OrderBy(r => r.IsApproved)
                 .To<T>()
                 .ToList();
@@ -155,9 +155,9 @@
         {
             return this.userRepo
                 .AllAsNoTracking()
-                .Include(u => u.Requests)
+                .Include(u => u.SendRequests)
                 .FirstOrDefault(u => u.Id == currentUserId)
-                .Requests
+                .SendRequests
                 .Any(r => r.RequesterId == targetUserId);
         }
 

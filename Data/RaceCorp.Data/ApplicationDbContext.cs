@@ -190,17 +190,17 @@
 
             builder
                 .Entity<ApplicationUser>()
-                .HasMany(u => u.Requests)
-                .WithOne(r => r.ApplicationUser)
-                .HasForeignKey(r => r.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasMany(u => u.ReceivedRequests)
+                .WithOne(r => r.TargetUser)
+                .HasForeignKey(r => r.TargetUserId)
+                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder
                 .Entity<ApplicationUser>()
-                .HasMany(u => u.Requests)
-                .WithOne(r => r.ApplicationUser)
-                .HasForeignKey(r => r.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasMany(u => u.SendRequests)
+                .WithOne(r => r.Requester)
+                .HasForeignKey(r => r.RequesterId)
+                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Entity<ApplicationUser>()
                 .HasOne(u => u.MemberInTeam)
@@ -232,11 +232,12 @@
                 .WithMany(u => u.InterlocutorConnections)
                 .HasForeignKey(u => u.InterlocutorId);
 
+            // connection
             builder
-                .Entity<Image>()
-                .HasOne(i => i.Team)
-                .WithMany(t => t.Images)
-                .OnDelete(DeleteBehavior.Cascade);
+                 .Entity<Image>()
+                 .HasOne(i => i.Team)
+                 .WithMany(t => t.Images)
+                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Logo>()
                 .HasOne(l => l.Race)

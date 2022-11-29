@@ -11,7 +11,7 @@
 
         public string Description { get; set; }
 
-        public string ApplicationUserId { get; set; }
+        public string TargetUserId { get; set; }
 
         public string RequesterId { get; set; }
 

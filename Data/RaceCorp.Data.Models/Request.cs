@@ -19,9 +19,9 @@
         public string Type { get; set; }
 
         // change applicationUser to targetUser
-        public string ApplicationUserId { get; set; }
+        public string TargetUserId { get; set; }
 
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser TargetUser { get; set; }
 
         public bool IsApproved { get; set; }
     }

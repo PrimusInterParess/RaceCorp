@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221129132457_olemale1")]
-    partial class olemale1
+    [Migration("20221129194733_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -841,9 +841,6 @@ namespace RaceCorp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -865,16 +862,19 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("RequesterId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("TargetUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("RequesterId");
+
+                    b.HasIndex("TargetUserId");
 
                     b.ToTable("Requests");
                 });
@@ -1373,18 +1373,17 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.Request", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Requests")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Requester")
-                        .WithMany()
+                        .WithMany("SendRequests")
                         .HasForeignKey("RequesterId");
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "TargetUser")
+                        .WithMany("ReceivedRequests")
+                        .HasForeignKey("TargetUserId");
 
                     b.Navigation("Requester");
+
+                    b.Navigation("TargetUser");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.Ride", b =>
@@ -1498,11 +1497,13 @@ namespace RaceCorp.Data.Migrations
 
                     b.Navigation("Races");
 
-                    b.Navigation("Requests");
+                    b.Navigation("ReceivedRequests");
 
                     b.Navigation("Rides");
 
                     b.Navigation("Roles");
+
+                    b.Navigation("SendRequests");
 
                     b.Navigation("SentMessages");
 
