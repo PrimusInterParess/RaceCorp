@@ -58,6 +58,7 @@ namespace RaceCorp.Data.Models
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
+
         public virtual ICollection<Conversation> InterlocutorConversations { get; set; } = new HashSet<Conversation>();
 
         public virtual ICollection<Conversation> Conversations { get; set; } = new HashSet<Conversation>();

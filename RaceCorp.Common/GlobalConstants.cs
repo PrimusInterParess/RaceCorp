@@ -64,5 +64,10 @@
         public const string GoogleCredentialsFilePath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
         public const string CredentialsPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
 
+        public const string PortHome = "44319";
+        public const string PortWork = "5001";
+
+        public const string UregisteredMessage = "Your are unregistered!";
+        public const string RegisteredMessage = "Your are now registered!";
     }
 }

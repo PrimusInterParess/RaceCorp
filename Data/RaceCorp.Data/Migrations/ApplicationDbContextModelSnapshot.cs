@@ -1250,7 +1250,7 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Connections")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Interlocutor")
                         .WithMany("InterlocutorConnections")
@@ -1266,7 +1266,7 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Conversations")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Interlocutor")
                         .WithMany("InterlocutorConversations")

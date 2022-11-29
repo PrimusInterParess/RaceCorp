@@ -109,13 +109,16 @@
 
 
     <hr />
-    <div>
-        Race Owner : @Model.ApplicationUserFirstName @Model.ApplicationUserLastName
-        <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@Model.ApplicationUserId">
-            <img class="resize img-img" src="@Model.ApplicationUserProfilePicturePath" />
+    @if (Model.ApplicationUserId != null)
+    {
+        <div>
+            Race Owner : @Model.ApplicationUserFirstName @Model.ApplicationUserLastName
+            <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@Model.ApplicationUserId">
+                <img class="resize img-img" src="@Model.ApplicationUserProfilePicturePath" />
 
-        </a>
-    </div>
+            </a>
+        </div>
+    }
     <hr />
 
 

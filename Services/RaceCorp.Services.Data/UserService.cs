@@ -41,7 +41,8 @@
 
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
         {
-            var user = this.userRepo.All().Include(u => u.Images).Include(u => u.Town).FirstOrDefault(u => u.Id == inputModel.Id);
+            var user = this.userRepo.All()
+                .Include(u => u.Images).Include(u => u.Town).FirstOrDefault(u => u.Id == inputModel.Id);
 
             if (inputModel.UserProfilePicture != null)
             {

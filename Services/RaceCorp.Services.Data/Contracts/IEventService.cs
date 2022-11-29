@@ -7,9 +7,9 @@
 
     public interface IEventService
     {
-        Task<bool> RegisterUserEvent(EventRegisterModel eventModel);
+        Task RegisterUserEvent(EventRegisterModel eventModel);
 
-        Task<bool> Unregister(EventRegisterModel eventModel);
+        Task Unregister(EventRegisterModel eventModel);
 
         Task ProccesRequest(RequestInputModel inputModel);
 

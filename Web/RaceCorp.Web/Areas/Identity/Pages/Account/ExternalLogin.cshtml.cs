@@ -5,7 +5,9 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
 #nullable disable
 
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Security.Claims;
     using System.Text;
     using System.Text.Encodings.Web;
@@ -18,8 +20,11 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using RaceCorp.Common;
+    using RaceCorp.Data;
+    using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
 
     [AllowAnonymous]
@@ -30,6 +35,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> userStore;
         private readonly IUserEmailStore<ApplicationUser> emailStore;
         private readonly IEmailSender emailSender;
+        private readonly IDeletableEntityRepository<ApplicationRole> roleRepo;
         private readonly ILogger<ExternalLoginModel> logger;
 
         public ExternalLoginModel(
@@ -37,7 +43,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IDeletableEntityRepository<ApplicationRole> roleRepo)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
@@ -45,6 +52,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             this.emailStore = this.GetEmailStore();
             this.logger = logger;
             this.emailSender = emailSender;
+            this.roleRepo = roleRepo;
         }
 
         /// <summary>
@@ -164,7 +172,13 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 var result = await this.userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    var roleId = this.roleRepo.All().FirstOrDefault(r => r.Name == GlobalConstants.UserRoleName)?.Id;
                     await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
+                    user.Roles = new List<IdentityUserRole<string>>()
+                {
+                    new IdentityUserRole<string>() { RoleId = roleId },
+                };
+
                     result = await this.userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {

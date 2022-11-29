@@ -65,6 +65,8 @@
             catch (System.Exception e)
             {
                 this.TempData["AlreadyHaveTeam"] = e.Message;
+                this.ModelState.AddModelError(string.Empty, e.Message);
+                return this.View(inputModel);
             }
 
             return this.RedirectToAction("All");

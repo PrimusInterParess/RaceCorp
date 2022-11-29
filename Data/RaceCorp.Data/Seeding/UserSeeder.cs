@@ -34,8 +34,10 @@
                 Country = "Bulgaria",
                 ProfilePicturePath = GlobalConstants.DaniProfilePicturePath,
                 PasswordHash = "AQAAAAEAACcQAAAAEFtyhksza71QGv3QHjiJZpH1N7QnVRPMCdPLZzsg9TpkL4ivLAXUiIZiGixtuUQsog==",
-                Roles = new List<IdentityUserRole<string>>() { new IdentityUserRole<string>() { RoleId = adminRoleId }, },
-
+                Roles = new List<IdentityUserRole<string>>()
+                {
+                    new IdentityUserRole<string>() { RoleId = adminRoleId },
+                },
             });
 
             await dbContext.AddAsync(new ApplicationUser

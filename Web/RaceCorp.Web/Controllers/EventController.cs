@@ -26,42 +26,50 @@
         {
             try
             {
-                var registering = await this.eventService.RegisterUserEvent(eventModel);
+                await this.eventService.RegisterUserEvent(eventModel);
 
-                if (registering)
-                {
-                    this.TempData["Registered"] = "Your are now registered!";
+                this.TempData["Registered"] = GlobalConstants.RegisteredMessage;
 
-                    return this.RedirectToAction("Profile", eventModel.EventType, new { id = eventModel.Id });
-                }
+                return this.RedirectToAction("Profile", eventModel.EventType, new { id = eventModel.Id });
             }
             catch (Exception e)
             {
                 this.TempData["CannotParticipate"] = e.Message;
-            }
 
-            return this.RedirectToAction("ErrorPage", "Home");
+                if (e.GetType() == typeof(ArgumentException))
+                {
+                    this.TempData["ErrorMessage"] = e.Message;
+
+                    return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+                }
+
+                return this.RedirectToAction("Profile", eventModel.EventType, new { id = eventModel.Id });
+            }
         }
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Unregister(EventRegisterModel eventModel)
         {
-            var isRemoved = await this.eventService.Unregister(eventModel);
-
-            if (isRemoved)
+            try
             {
-                this.TempData["Unregistered"] = "Your are unregistered!!";
+                await this.eventService.Unregister(eventModel);
+            }
+            catch (Exception e)
+            {
+                this.TempData["ErrorMessage"] = e.Message;
+
+                if (e.GetType() == typeof(ArgumentException))
+                {
+                    return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+                }
 
                 return this.RedirectToAction("Profile", eventModel.EventType, new { id = eventModel.Id });
             }
 
-            return this.RedirectToAction("ErrorPage", "Home");
-        }
+            this.TempData["Unregistered"] = GlobalConstants.UregisteredMessage;
 
-        public IActionResult Messages(string id)
-        {
-            return this.View();
+            return this.RedirectToAction("Profile", eventModel.EventType, new { id = eventModel.Id });
         }
 
         [HttpPost]
@@ -75,6 +83,11 @@
             catch (Exception e)
             {
                 this.TempData["ErrorMessage"] = e.Message;
+
+                if (e.GetType() == typeof(ArgumentException))
+                {
+                    return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+                }
 
                 if (model.Type == GlobalConstants.RequestTypeTeamJoin)
                 {
@@ -127,13 +140,19 @@
             try
             {
                 await this.eventService.ProccesApproval(model);
+                return this.RedirectToAction("Requests", "User", new { area = string.Empty, id = currentUserId });
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
-            }
+                this.TempData["ErrorMessage"] = e.Message;
 
-            return this.RedirectToAction("Requests", "User", new { area = string.Empty, id = currentUserId });
+                if (e.GetType() == typeof(ArgumentException))
+                {
+                    return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+                }
+
+                return this.RedirectToAction("Requests", "User", new { area = string.Empty, id = currentUserId });
+            }
         }
     }
 }

@@ -14,9 +14,12 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
     using Microsoft.Extensions.Logging;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Manage.Services;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Manage.Services.Contracts;
 
     public class DeletePersonalDataModel : PageModel
     {
+        private readonly IDeletePersonelDataService deletePersonelDataService;
         private readonly IDeletableEntityRepository<ApplicationRole> roleRepo;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
@@ -24,12 +27,14 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
 
         public DeletePersonalDataModel(
+            IDeletePersonelDataService deletePersonelDataService,
             IDeletableEntityRepository<ApplicationRole> roleRepo,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<DeletePersonalDataModel> logger,
             IDeletableEntityRepository<ApplicationUser> userRepo)
         {
+            this.deletePersonelDataService = deletePersonelDataService;
             this.roleRepo = roleRepo;
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -95,9 +100,16 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            await this.ReasignUserFromRoles(user);
-            await this.DeleteClaimsFromUser(user);
-            //this.DeleteConnections(user);
+            try
+            {
+                await this.deletePersonelDataService.DeleteUser(user.Id);
+                await this.userRepo.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.Page();
+            }
 
             var userId = await this.userManager.GetUserIdAsync(user);
             var result = await this.userManager.DeleteAsync(user);
@@ -112,31 +124,6 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account.Manage
             this.logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
 
             return this.Redirect("~/");
-        }
-
-        //private void DeleteConnections(ApplicationUser user)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        private async Task ReasignUserFromRoles(ApplicationUser user)
-        {
-            var userRoles = await this.userManager.GetRolesAsync(user);
-
-            foreach (var role in userRoles)
-            {
-                await this.userManager.RemoveFromRoleAsync(user, role);
-            }
-        }
-
-        private async Task DeleteClaimsFromUser(ApplicationUser user)
-        {
-            var userClaims = await this.userManager.GetClaimsAsync(user);
-
-            foreach (var claim in userClaims)
-            {
-                await this.userManager.RemoveClaimAsync(user, claim);
-            }
         }
     }
 }

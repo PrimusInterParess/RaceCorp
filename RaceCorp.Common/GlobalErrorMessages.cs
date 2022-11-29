@@ -20,11 +20,22 @@ namespace RaceCorp.Common
 
         public const string AlreadyHaveCreatedTeam = "You have alredy created team!";
 
-        public const string InvalidRequest = "You made invalid Request! Fudge off";
+        public const string InvalidRequest = "You made invalid request!";
 
         public const string AlreadyRequested = "You have already requested to join the team";
 
         public const string InvalidSearchTerms = "Invalid search terms. Max words count is two";
 
+        public const string TeamNoLongerExists = "Team no longer exists.Have a nice life!";
+
+        public const string InvalidTeam = "Invalid team!";
+
+        public const string UnauthorizedRequest = "Unauthorized request";
+
+        public const string AlreadyRequestedConnection = "Connection is already requested!";
+
+        public const string AlreadyConnected = "Already connected!";
+
+        public const string AlreadyRegisteredForAnotherTrace = "Cannot register for this trace.You are already registered for {0} and it starts {1}";
     }
 }

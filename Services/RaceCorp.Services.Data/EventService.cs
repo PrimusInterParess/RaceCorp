@@ -56,64 +56,64 @@
             this.conversationRepo = conversationRepo;
         }
 
-        public async Task<bool> RegisterUserEvent(EventRegisterModel eventModel)
+        public async Task RegisterUserEvent(EventRegisterModel eventModel)
         {
-            var result = false;
-
             if (eventModel.EventType == "Ride")
             {
                 try
                 {
-                    result = await this.RegisterUserRide(eventModel);
+                    await this.RegisterUserRide(eventModel);
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(e.Message);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
             else
             {
                 try
                 {
-                    result = await this.RegisterUserRace(eventModel);
+                    await this.RegisterUserRace(eventModel);
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(e.Message);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
-
-            return result;
         }
 
-        public async Task<bool> Unregister(EventRegisterModel eventModel)
+        public async Task Unregister(EventRegisterModel eventModel)
         {
-            var result = false;
-
             if (eventModel.EventType == "Ride")
             {
                 try
                 {
-                    result = await this.UnregisterUserRide(eventModel);
+                     await this.UnregisterUserRide(eventModel);
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidOperationException(e.Message);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
             else
             {
                 try
                 {
-                    result = await this.UnregisterUserRace(eventModel);
+                     await this.UnregisterUserRace(eventModel);
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidOperationException(e.Message);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
-
-            return result;
         }
 
         public async Task ProccesRequest(RequestInputModel inputModel)
@@ -124,9 +124,11 @@
                 {
                     await this.RequestJoinTeamAsync(inputModel.TargetId, inputModel.RequesterId);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                          new ArgumentException(e.Message) :
+                          new InvalidOperationException(e.Message);
                 }
             }
             else if (inputModel.Type == GlobalConstants.RequestTypeConnectUser)
@@ -135,9 +137,11 @@
                 {
                     await this.RequestConnectUserAsync(inputModel.RequesterId, inputModel.TargetId);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
             else if (inputModel.Type == GlobalConstants.RequestTypeTeamLeave)
@@ -146,9 +150,11 @@
                 {
                     await this.LeaveTeamAsync(inputModel);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
             else if (inputModel.Type == GlobalConstants.RequestTypeDisconnectUser)
@@ -157,9 +163,11 @@
                 {
                     await this.DisconnectUserAsync(inputModel);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
         }
@@ -172,9 +180,11 @@
                 {
                     await this.ApproveJoinRequestAsync(inputModel);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                        new ArgumentException(e.Message) :
+                        new InvalidOperationException(e.Message);
                 }
             }
             else
@@ -183,31 +193,45 @@
                 {
                     await this.ApproveConnectRequestAsync(inputModel);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                    throw e.GetType() == typeof(ArgumentException) ?
+                         new ArgumentException(e.Message) :
+                         new InvalidOperationException(e.Message);
                 }
             }
         }
 
         private async Task DisconnectUserAsync(RequestInputModel inputModel)
         {
-            var requester = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).Include(c => c.Conversations).FirstOrDefault(u => u.Id == inputModel.RequesterId);
+            var requester = this.userRepo
+                .All()
+                .Include(u => u.Connections)
+                .Include(u => u.Requests)
+                .Include(c => c.Conversations)
+                .FirstOrDefault(u => u.Id == inputModel.RequesterId);
 
             if (requester == null)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var targetUser = this.userRepo.All().Include(u => u.Connections).Include(u => u.Requests).Include(c => c.Conversations).FirstOrDefault(u => u.Id == inputModel.TargetId);
+            var targetUser = this.userRepo
+                .All()
+                .Include(u => u.Connections)
+                .Include(u => u.Requests)
+                .Include(c => c.Conversations)
+                .FirstOrDefault(u => u.Id == inputModel.TargetId);
 
             if (targetUser == null)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
             var requesterConnectRequest = requester.Requests
-                .FirstOrDefault(r => r.RequesterId == targetUser.Id && r.Type == GlobalConstants.RequestTypeConnectUser);
+                .FirstOrDefault(
+                r => r.RequesterId == targetUser.Id &&
+                r.Type == GlobalConstants.RequestTypeConnectUser);
 
             if (requesterConnectRequest != null)
             {
@@ -215,31 +239,62 @@
             }
 
             var targetUserConnectRequest = targetUser.Requests
-               .FirstOrDefault(r => r.RequesterId == requester.Id && r.Type == GlobalConstants.RequestTypeConnectUser);
+               .FirstOrDefault(
+                r => r.RequesterId == requester.Id &&
+               r.Type == GlobalConstants.RequestTypeConnectUser);
 
             if (targetUserConnectRequest != null)
             {
                 targetUser.Requests.Remove(targetUserConnectRequest);
             }
 
-            var requesterConnection = requester.Connections.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
-            var targetUserConnection = targetUser.Connections.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
+            var requesterConnection = requester.Connections
+                .FirstOrDefault(
+                c => c.Id == requester.Id + targetUser.Id ||
+                c.Id == targetUser.Id + requester.Id);
 
-            var requesterConversation = requester.Conversations.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
-            var targetUserConversation = targetUser.Conversations.FirstOrDefault(c => c.Id == requester.Id + targetUser.Id || c.Id == targetUser.Id + requester.Id);
+            if (requesterConnection != null)
+            {
+                requester.Connections.Remove(requesterConnection);
+                this.connectionRepo.Delete(requesterConnection);
 
-            requester.Connections.Remove(requesterConnection);
-            targetUser.Connections.Remove(targetUserConnection);
+            }
 
-            requester.Conversations.Remove(requesterConversation);
-            targetUser.Conversations.Remove(targetUserConversation);
+            var targetUserConnection = targetUser.Connections
+              .FirstOrDefault(
+              c => c.Id == requester.Id + targetUser.Id ||
+              c.Id == targetUser.Id + requester.Id);
+
+            if (targetUserConnection != null)
+            {
+                targetUser.Connections.Remove(targetUserConnection);
+                this.connectionRepo.Delete(targetUserConnection);
+            }
+
+            var requesterConversation = requester.Conversations
+                .FirstOrDefault(
+                c => c.Id == requester.Id + targetUser.Id ||
+                c.Id == targetUser.Id + requester.Id);
+
+            if (requesterConversation != null)
+            {
+                requester.Conversations.Remove(requesterConversation);
+                this.conversationRepo.Delete(requesterConversation);
+            }
+
+            var targetUserConversation = targetUser.Conversations
+                .FirstOrDefault(
+                c => c.Id == requester.Id + targetUser.Id ||
+                c.Id == targetUser.Id + requester.Id);
+
+            if (targetUserConversation != null)
+            {
+                targetUser.Conversations.Remove(targetUserConversation);
+                this.conversationRepo.Delete(targetUserConversation);
+            }
 
             try
             {
-                this.conversationRepo.Delete(requesterConversation);
-                this.conversationRepo.Delete(targetUserConversation);
-                this.connectionRepo.Delete(requesterConnection);
-                this.connectionRepo.Delete(targetUserConnection);
                 await this.userRepo.SaveChangesAsync();
             }
             catch (Exception)
@@ -259,10 +314,15 @@
 
             if (teamDb == null)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidTeam);
             }
 
             var requester = teamDb.TeamMembers.FirstOrDefault(m => m.Id == inputModel.RequesterId);
+
+            if (requester == null)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.UnauthorizedRequest);
+            }
 
             if (requester.Id == teamDb.ApplicationUserId)
             {
@@ -271,17 +331,42 @@
                 {
                     newOnwer.Team = teamDb;
                     teamDb.ApplicationUser = newOnwer;
+
+                    teamDb.TeamMembers.Remove(requester);
+
+                    await this.teamRepo.SaveChangesAsync();
+
+                    return;
                 }
             }
 
             var teamOnwer = teamDb.ApplicationUser;
 
-            var requestToRemove = teamOnwer
+            if (teamOnwer != null)
+            {
+                var requestToRemove = teamOnwer
                 .Requests
                 .FirstOrDefault(r => r.IsApproved && r.RequesterId == requester.Id && r.Type == GlobalConstants.RequestTypeTeamJoin);
 
-            var isRemoved = teamOnwer.Requests.Remove(requestToRemove);
-            var isRemoved1 = teamDb.TeamMembers.Remove(requester);
+                if (requestToRemove != null)
+                {
+                    teamOnwer.Requests.Remove(requestToRemove);
+                    teamDb.TeamMembers.Remove(requester);
+                }
+            }
+
+            if (teamOnwer == null)
+            {
+                teamDb.TeamMembers.Remove(requester);
+            }
+
+            if (teamDb.TeamMembers.Count == 0)
+            {
+                this.teamRepo.HardDelete(teamDb);
+                await this.teamRepo.SaveChangesAsync();
+
+                throw new ArgumentException(GlobalErrorMessages.TeamNoLongerExists);
+            }
 
             try
             {
@@ -293,15 +378,20 @@
             }
         }
 
-        private async Task<bool> RegisterUserRide(EventRegisterModel eventModel)
+        private async Task RegisterUserRide(EventRegisterModel eventModel)
         {
-            var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == eventModel.Id);
+            var ride = this.rideRepo
+                .All()
+                .Include(r => r.RegisteredUsers)
+                .FirstOrDefault(r => r.Id == eventModel.Id);
+
             if (ride == null)
             {
-                throw new Exception(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var user = await this.userManager.FindByIdAsync(eventModel.UserId);
+            var user = await this.userManager
+                .FindByIdAsync(eventModel.UserId);
 
             if (user == null)
             {
@@ -310,7 +400,7 @@
 
             if (ride.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId))
             {
-                return false;
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
             }
 
             var userRide = new ApplicationUserRide
@@ -322,11 +412,9 @@
 
             await this.userRideRepo.AddAsync(userRide);
             await this.rideRepo.SaveChangesAsync();
-
-            return true;
         }
 
-        private async Task<bool> RegisterUserRace(EventRegisterModel eventModel)
+        private async Task RegisterUserRace(EventRegisterModel eventModel)
         {
             var race = this.raceRepo
                 .All()
@@ -337,26 +425,30 @@
 
             if (race == null)
             {
-                throw new Exception(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var user = await this.userManager.FindByIdAsync(eventModel.UserId);
+            var user = await this.userManager
+                .FindByIdAsync(eventModel.UserId);
 
             if (user == null)
             {
                 throw new Exception(GlobalErrorMessages.InvalidRequest);
             }
 
-            var trace = race.Traces.FirstOrDefault(t => t.Id == int.Parse(eventModel.TraceId));
+            var trace = race.Traces
+                .FirstOrDefault(t => t.Id == int.Parse(eventModel.TraceId));
 
             if (trace == null)
             {
-                throw new Exception(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
             Trace traceUserRegisterIn = null;
 
-            var isAlredyRegistered = race.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId);
+            var isAlredyRegistered = race
+                .RegisteredUsers
+                .Any(u => u.ApplicationUserId == eventModel.UserId);
 
             if (isAlredyRegistered)
             {
@@ -369,7 +461,8 @@
 
                 if (currdentTraceSpan < traceAlreadyRegesteredInSpan)
                 {
-                    throw new InvalidOperationException($"Cannot Register for this trace.You are alredy registered for {traceUserRegisterIn.Name} and it starts {traceUserRegisterIn.StartTime}");
+                    throw new InvalidOperationException(
+                        string.Format(GlobalErrorMessages.AlreadyRegisteredForAnotherTrace, traceUserRegisterIn.Name, traceUserRegisterIn.StartTime.ToString(GlobalConstants.DateStringFormat)));
                 }
             }
 
@@ -403,26 +496,29 @@
             }
             catch (Exception)
             {
-                throw new Exception("Error registering User for race");
+                throw new Exception(GlobalErrorMessages.InvalidRequest);
             }
-
-            return true;
         }
 
-        private async Task<bool> UnregisterUserRide(EventRegisterModel eventModel)
+        private async Task UnregisterUserRide(EventRegisterModel eventModel)
         {
-            var ride = this.rideRepo.All().Include(r => r.RegisteredUsers).FirstOrDefault(r => r.Id == eventModel.Id);
+            var ride = this.rideRepo
+                .All()
+                .Include(r => r.RegisteredUsers)
+                .FirstOrDefault(r => r.Id == eventModel.Id);
 
             if (ride == null)
             {
-                throw new Exception(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var user = ride.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
+            var user = ride
+                .RegisteredUsers
+                .FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
 
             if (user == null)
             {
-                throw new Exception(GlobalErrorMessages.InvalidRequest);
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
 
             try
@@ -434,11 +530,9 @@
             {
                 throw new InvalidOperationException(e.Message);
             }
-
-            return true;
         }
 
-        private async Task<bool> UnregisterUserRace(EventRegisterModel eventModel)
+        private async Task UnregisterUserRace(EventRegisterModel eventModel)
         {
             var race = this.raceRepo
                 .All()
@@ -449,7 +543,7 @@
 
             if (race == null)
             {
-                throw new Exception(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
             var trace = race.Traces
@@ -457,19 +551,25 @@
 
             if (trace == null)
             {
-                throw new Exception(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
             var participatesInAnotherTrace = race.Traces
-                .FirstOrDefault(t => t.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId && u.TraceId != trace.Id));
+                .FirstOrDefault(t =>
+                t.RegisteredUsers.Any(u => u.ApplicationUserId == eventModel.UserId && u.TraceId != trace.Id));
 
             if (participatesInAnotherTrace == null)
             {
-                var registeredUserRace = race.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
+                var registeredUserRace = race.RegisteredUsers.FirstOrDefault(u =>
+                u.ApplicationUserId == eventModel.UserId);
+
                 this.userRaceRepo.Delete(registeredUserRace);
             }
 
-            var registeredUserTrace = trace.RegisteredUsers.FirstOrDefault(u => u.ApplicationUserId == eventModel.UserId);
+            var registeredUserTrace = trace
+                .RegisteredUsers
+                .FirstOrDefault(u =>
+            u.ApplicationUserId == eventModel.UserId);
 
             try
             {
@@ -480,11 +580,9 @@
             {
                 throw new InvalidOperationException(e.Message);
             }
-
-            return true;
         }
 
-        private async Task<bool> RequestJoinTeamAsync(string teamId, string userId)
+        private async Task RequestJoinTeamAsync(string teamId, string userId)
         {
             var teamDb = this.teamRepo
                 .All()
@@ -492,12 +590,12 @@
                 .ThenInclude(u => u.Requests)
                 .FirstOrDefault(t => t.Id == teamId);
 
-            var teamOwner = teamDb.ApplicationUser;
-
             if (teamDb == null)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidTeam);
             }
+
+            var teamOwner = teamDb.ApplicationUser;
 
             if (teamOwner.Id == userId)
             {
@@ -538,49 +636,60 @@
             }
             catch (Exception)
             {
-                return false;
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
-
-            return true;
         }
 
         private async Task RequestConnectUserAsync(string currentUserId, string targetUserId)
         {
-            var userDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == currentUserId);
+            var userDb = this.userRepo
+                .All()
+                .Include(u => u.Requests)
+                .Include(u => u.Connections)
+                .FirstOrDefault(u => u.Id == currentUserId);
 
-            var targetUserDb = this.userRepo.All().Include(u => u.Requests).Include(u => u.Connections).FirstOrDefault(u => u.Id == targetUserId);
+            var targetUserDb = this.userRepo
+                .All()
+                .Include(u => u.Requests)
+                .Include(u => u.Connections)
+                .FirstOrDefault(u => u.Id == targetUserId);
 
-            if (userDb != null && targetUserDb != null)
+            if (userDb == null ||
+                targetUserDb == null)
             {
-                if (targetUserDb.Connections.Any(c => c.Id == userDb.Id) || targetUserDb.Requests.Any(r => r.Type == GlobalConstants.RequestTypeConnectUser && r.RequesterId == userDb.Id))
-                {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-                }
-
-                var request = new Request()
-                {
-                    Type = GlobalConstants.RequestTypeConnectUser,
-                    ApplicationUser = targetUserDb,
-                    Requester = userDb,
-                    Description = $"{userDb.FirstName} {userDb.LastName} want to connect with you",
-                    CreatedOn = DateTime.UtcNow,
-                };
-
-                targetUserDb.Requests.Add(request);
-
-                try
-                {
-                    await this.requestRepo.AddAsync(request);
-                    await this.userRepo.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-                }
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
+
+            if (targetUserDb.Connections.Any(c => c.Id == userDb.Id) ||
+                targetUserDb.Requests.Any(r => r.Type == GlobalConstants.RequestTypeConnectUser && r.RequesterId == userDb.Id))
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequestedConnection);
+            }
+
+            var request = new Request()
+            {
+                Type = GlobalConstants.RequestTypeConnectUser,
+                ApplicationUser = targetUserDb,
+                Requester = userDb,
+                Description = $"{userDb.FirstName} {userDb.LastName} want to connect with you",
+                CreatedOn = DateTime.UtcNow,
+            };
+
+            targetUserDb.Requests.Add(request);
+
+            try
+            {
+                await this.requestRepo.AddAsync(request);
+                await this.userRepo.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
+            }
+
         }
 
-        private async Task<bool> ApproveJoinRequestAsync(ApproveRequestModel inputModel)
+        private async Task ApproveJoinRequestAsync(ApproveRequestModel inputModel)
         {
             var requestDb = this.requestRepo
                 .All()
@@ -588,19 +697,26 @@
                 .Include(r => r.ApplicationUser).ThenInclude(u => u.Team)
                 .FirstOrDefault(r => r.Id == inputModel.RequestId);
 
+            if (requestDb == null)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
+            }
+
             var targetUser = requestDb.ApplicationUser;
 
             if (targetUser == null)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            if (requestDb == null)
+            var requesterDb = this.userRepo
+                .All()
+                .FirstOrDefault(u => u.Id == requestDb.RequesterId);
+
+            if (requesterDb == null)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
-
-            var requesterDb = this.userRepo.All().FirstOrDefault(u => u.Id == requestDb.RequesterId);
 
             requestDb.IsApproved = true;
 
@@ -610,11 +726,10 @@
             try
             {
                 await this.userRepo.SaveChangesAsync();
-                return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                throw new InvalidOperationException(e.Message);
             }
         }
 
@@ -626,21 +741,27 @@
                 .Include(r => r.ApplicationUser)
                 .FirstOrDefault(r => r.Id == inputModel.RequestId);
 
-            var requester = requestDb.Requester;
+            if (requestDb == null)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
+            }
 
+            var requester = requestDb.Requester;
             var targetUser = requestDb.ApplicationUser;
 
             if (requester == null || targetUser == null)
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
             if (requester.Connections.Any(c => c.Id == targetUser.Id))
             {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+                throw new InvalidOperationException(GlobalErrorMessages.AlreadyConnected);
             }
 
-            var connectionExists = this.connectionRepo.AllWithDeleted().Any(c => c.Id == targetUser.Id + requester.Id);
+            var connectionExists = this.connectionRepo
+                .AllWithDeleted()
+                .Any(c => c.Id == targetUser.Id + requester.Id);
 
             if (connectionExists == false)
             {
@@ -662,8 +783,13 @@
             }
             else
             {
-                var connectionASide = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
-                var connectionBSide = this.connectionRepo.AllWithDeleted().FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
+                var connectionASide = this.connectionRepo
+                    .AllWithDeleted()
+                    .FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
+
+                var connectionBSide = this.connectionRepo
+                    .AllWithDeleted()
+                    .FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
 
                 if (connectionASide.ApplicationUserId == targetUser.Id)
                 {
@@ -686,12 +812,19 @@
                 requester.Connections.Add(connectionBSide);
             }
 
-            var conversationExists = this.conversationRepo.AllWithDeleted().Any(c => c.Id == targetUser.Id + requester.Id);
+            var conversationExists = this.conversationRepo
+                .AllWithDeleted()
+                .Any(c => c.Id == targetUser.Id + requester.Id);
 
             if (conversationExists)
             {
-                var sideAConversation = this.conversationRepo.AllWithDeleted().FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
-                var sideBConversation = this.conversationRepo.AllWithDeleted().FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
+                var sideAConversation = this.conversationRepo
+                    .AllWithDeleted()
+                    .FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
+
+                var sideBConversation = this.conversationRepo
+                    .AllWithDeleted()
+                    .FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
 
                 if (sideAConversation.ApplicationUserId == targetUser.Id)
                 {
@@ -714,7 +847,6 @@
             requestDb.IsApproved = true;
             try
             {
-                // this.requestRepo.Delete(requestDb);
                 await this.userRepo.SaveChangesAsync();
             }
             catch (Exception)

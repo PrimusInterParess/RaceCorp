@@ -17,6 +17,11 @@
     <div class="alert alert-success">@this.TempData["Message"]</div>
 }
 
+@if (this.TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-success">@this.TempData["ErrorMessage"]</div>
+}
+
 <div id="carouselExampleCaptions" class="carousel slide col-md-10 offset-1" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>

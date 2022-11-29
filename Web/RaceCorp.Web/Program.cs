@@ -24,6 +24,8 @@ namespace RaceCorp.Web
     using RaceCorp.Services.Messaging;
     using RaceCorp.Web.Areas.Administration.Infrastructure;
     using RaceCorp.Web.Areas.Administration.Infrastructure.Contracts;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Manage.Services;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Manage.Services.Contracts;
     using RaceCorp.Web.Hubs;
     using RaceCorp.Web.ViewModels;
 
@@ -100,6 +102,7 @@ namespace RaceCorp.Web
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IGroupNameProvider, GroupNameProvider>();
             services.AddTransient<ISearchService, SearchService>();
+            services.AddTransient<IDeletePersonelDataService, DeletePersonelDataService>();
         }
 
         private static void Configure(WebApplication app)
