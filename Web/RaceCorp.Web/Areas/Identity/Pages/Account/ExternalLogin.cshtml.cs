@@ -173,10 +173,9 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
+
+
             string pictureUri = string.Empty;
-            string givenName = string.Empty;
-            string lastName = string.Empty;
-            string gender = string.Empty;
 
             if (info.LoginProvider.ToLower() == "google")
             {
@@ -186,14 +185,13 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 string peopleApiKey = this.configuration["Authentication:Google:ApiKey"];
                 var googleAccountId = info.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
                 var photosResponse = await httpClient.GetFromJsonAsync<PeopleApiPhotos>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=photos&key={peopleApiKey}");
-                //  var genderResponse = await httpClient.GetFromJsonAsync<PeopleApiGenders>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=genders&key={peopleApiKey}");
-                //   var namesResponse = await httpClient.GetFromJsonAsync<PeopleApiNames>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=names&key={peopleApiKey}");
 
                 pictureUri = photosResponse?.photos.FirstOrDefault()?.url;
-                //gender = genderResponse?.genders.FirstOrDefault()?.value;
-                //givenName = namesResponse?.names.FirstOrDefault()?.firstName;
-                //lastName = namesResponse?.names.FirstOrDefault()?.lastName;
+
             }
+
+            var firstName = info.Principal.FindFirst(ClaimTypes.GivenName).Value;
+            var lastName = info.Principal.FindFirst(ClaimTypes.Surname).Value;
 
             if (this.ModelState.IsValid)
             {
@@ -205,10 +203,25 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 var result = await this.userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    user.FirstName = this.Input.Email.Split("@")[0];
+                    if (firstName != null)
+                    {
+                        user.FirstName = firstName;
+                    }
+
+                    if (lastName != null)
+                    {
+                        user.LastName = lastName;
+                    }
+
+                    if (firstName != null && lastName != null)
+                    {
+                        await this.userManager.AddClaimAsync(user, new Claim(ClaimTypes.GivenName, $"{firstName} {lastName}"));
+                    }
+
                     user.ProfilePicturePath = pictureUri;
                     var roleId = this.roleRepo.All().FirstOrDefault(r => r.Name == GlobalConstants.UserRoleName)?.Id;
                     await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
+
                     user.Roles = new List<IdentityUserRole<string>>()
                 {
                     new IdentityUserRole<string>() { RoleId = roleId },
