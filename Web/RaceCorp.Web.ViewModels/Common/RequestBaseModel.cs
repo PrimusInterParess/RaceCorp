@@ -25,7 +25,6 @@
         {
             configuration.CreateMap<Request, RequestBaseModel>()
                                 .ForMember(x => x.CreatedOn, opt => opt.MapFrom(x => x.CreatedOn.ToString(GlobalConstants.DateStringFormat)));
-
         }
     }
 }

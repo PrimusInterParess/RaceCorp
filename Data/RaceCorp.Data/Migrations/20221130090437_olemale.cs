@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class init : Migration
+    public partial class olemale : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -478,7 +478,8 @@ namespace RaceCorp.Data.Migrations
                         name: "FK_Requests_AspNetUsers_TargetUserId",
                         column: x => x.TargetUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

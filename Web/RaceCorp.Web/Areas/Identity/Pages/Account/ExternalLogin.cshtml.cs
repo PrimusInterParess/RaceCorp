@@ -8,6 +8,9 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Json;
     using System.Security.Claims;
     using System.Text;
     using System.Text.Encodings.Web;
@@ -21,11 +24,13 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using RaceCorp.Common;
     using RaceCorp.Data;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Dtos;
 
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
@@ -36,6 +41,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> emailStore;
         private readonly IEmailSender emailSender;
         private readonly IDeletableEntityRepository<ApplicationRole> roleRepo;
+        private readonly IHttpClientFactory httpClientFactory;
+        private readonly IConfiguration configuration;
         private readonly ILogger<ExternalLoginModel> logger;
 
         public ExternalLoginModel(
@@ -44,7 +51,9 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
-            IDeletableEntityRepository<ApplicationRole> roleRepo)
+            IDeletableEntityRepository<ApplicationRole> roleRepo,
+            IHttpClientFactory httpClientFactory,
+            IConfiguration configuration)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
@@ -53,6 +62,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             this.logger = logger;
             this.emailSender = emailSender;
             this.roleRepo = roleRepo;
+            this.httpClientFactory = httpClientFactory;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -162,6 +173,28 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
+            string pictureUri = string.Empty;
+            string givenName = string.Empty;
+            string lastName = string.Empty;
+            string gender = string.Empty;
+
+            if (info.LoginProvider.ToLower() == "google")
+            {
+
+
+                var httpClient = this.httpClientFactory.CreateClient();
+                string peopleApiKey = this.configuration["Authentication:Google:ApiKey"];
+                var googleAccountId = info.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
+                var photosResponse = await httpClient.GetFromJsonAsync<PeopleApiPhotos>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=photos&key={peopleApiKey}");
+                //  var genderResponse = await httpClient.GetFromJsonAsync<PeopleApiGenders>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=genders&key={peopleApiKey}");
+                //   var namesResponse = await httpClient.GetFromJsonAsync<PeopleApiNames>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=names&key={peopleApiKey}");
+
+                pictureUri = photosResponse?.photos.FirstOrDefault()?.url;
+                //gender = genderResponse?.genders.FirstOrDefault()?.value;
+                //givenName = namesResponse?.names.FirstOrDefault()?.firstName;
+                //lastName = namesResponse?.names.FirstOrDefault()?.lastName;
+            }
+
             if (this.ModelState.IsValid)
             {
                 var user = this.CreateUser();
@@ -172,6 +205,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 var result = await this.userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    user.FirstName = this.Input.Email.Split("@")[0];
+                    user.ProfilePicturePath = pictureUri;
                     var roleId = this.roleRepo.All().FirstOrDefault(r => r.Name == GlobalConstants.UserRoleName)?.Id;
                     await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
                     user.Roles = new List<IdentityUserRole<string>>()

@@ -190,17 +190,10 @@
 
             builder
                 .Entity<ApplicationUser>()
-                .HasMany(u => u.ReceivedRequests)
+                .HasMany(u => u.Requests)
                 .WithOne(r => r.TargetUser)
                 .HasForeignKey(r => r.TargetUserId)
-                 .OnDelete(DeleteBehavior.ClientSetNull);
-
-            builder
-                .Entity<ApplicationUser>()
-                .HasMany(u => u.SendRequests)
-                .WithOne(r => r.Requester)
-                .HasForeignKey(r => r.RequesterId)
-                 .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ApplicationUser>()
                 .HasOne(u => u.MemberInTeam)

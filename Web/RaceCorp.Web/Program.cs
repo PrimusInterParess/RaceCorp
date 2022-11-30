@@ -64,7 +64,7 @@ namespace RaceCorp.Web
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
-
+            services.AddHttpClient();
             services.AddSignalR();
 
             services.AddSingleton(configuration);
@@ -127,7 +127,7 @@ namespace RaceCorp.Web
                 app.UseExceptionHandler("/Home/ErrorPage");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

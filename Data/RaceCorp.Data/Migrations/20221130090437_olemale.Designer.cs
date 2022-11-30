@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221129194733_init")]
-    partial class init
+    [Migration("20221130090437_olemale")]
+    partial class olemale
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1374,12 +1374,13 @@ namespace RaceCorp.Data.Migrations
             modelBuilder.Entity("RaceCorp.Data.Models.Request", b =>
                 {
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Requester")
-                        .WithMany("SendRequests")
+                        .WithMany()
                         .HasForeignKey("RequesterId");
 
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "TargetUser")
-                        .WithMany("ReceivedRequests")
-                        .HasForeignKey("TargetUserId");
+                        .WithMany("Requests")
+                        .HasForeignKey("TargetUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Requester");
 
@@ -1497,13 +1498,11 @@ namespace RaceCorp.Data.Migrations
 
                     b.Navigation("Races");
 
-                    b.Navigation("ReceivedRequests");
+                    b.Navigation("Requests");
 
                     b.Navigation("Rides");
 
                     b.Navigation("Roles");
-
-                    b.Navigation("SendRequests");
 
                     b.Navigation("SentMessages");
 

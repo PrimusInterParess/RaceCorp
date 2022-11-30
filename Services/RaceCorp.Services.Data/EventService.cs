@@ -205,13 +205,11 @@
         private async Task DisconnectUserAsync(RequestInputModel inputModel)
         {
             var requester = this.userRepo
-                .All()
-                .Include(u => u.Connections)
-                .Include(u => u.SendRequests)
-                .Include(u=>u.ReceivedRequests)
-                .Include(c => c.Conversations)
-                .FirstOrDefault(u => u.Id == inputModel.RequesterId);
-
+               .All()
+               .Include(u => u.Connections)
+               .Include(u => u.Requests)
+               .Include(c => c.Conversations)
+               .FirstOrDefault(u => u.Id == inputModel.RequesterId);
             if (requester == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
@@ -220,63 +218,36 @@
             var targetUser = this.userRepo
                 .All()
                 .Include(u => u.Connections)
-                .Include(u => u.ReceivedRequests)
-                .Include(u => u.SendRequests)
+                .Include(u => u.Requests)
                 .Include(c => c.Conversations)
                 .FirstOrDefault(u => u.Id == inputModel.TargetId);
-
             if (targetUser == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var requesterConnectRequest = requester.SendRequests
+            var requesterConnectRequest = requester.Requests
                 .FirstOrDefault(
-                r => r.TargetUserId == targetUser.Id &&
+                r => r.RequesterId == targetUser.Id &&
                 r.Type == GlobalConstants.RequestTypeConnectUser);
-
             if (requesterConnectRequest != null)
             {
-                requester.SendRequests.Remove(requesterConnectRequest);
-                this.requestRepo.HardDelete(requesterConnectRequest);
+                requester.Requests.Remove(requesterConnectRequest);
             }
 
-            var requesterConnectReceived = requester.ReceivedRequests.FirstOrDefault(r => r.TargetUserId == targetUser.Id &&
-                r.Type == GlobalConstants.RequestTypeConnectUser);
-
-            if (requesterConnectReceived != null)
-            {
-                requester.ReceivedRequests.Remove(requesterConnectReceived);
-                this.requestRepo.HardDelete(requesterConnectReceived);
-            }
-;
-            var targetUserConnectRequest = targetUser.ReceivedRequests
+            var targetUserConnectRequest = targetUser.Requests
                .FirstOrDefault(
                 r => r.RequesterId == requester.Id &&
                r.Type == GlobalConstants.RequestTypeConnectUser);
-
             if (targetUserConnectRequest != null)
             {
-                targetUser.ReceivedRequests.Remove(targetUserConnectRequest);
-                this.requestRepo.HardDelete(targetUserConnectRequest);
-            }
-
-            var targetUserConnectRequestSend = targetUser.SendRequests
-               .FirstOrDefault(
-                r => r.RequesterId == requester.Id &&
-               r.Type == GlobalConstants.RequestTypeConnectUser);
-
-            if (targetUserConnectRequestSend != null)
-            {
-                targetUser.SendRequests.Remove(targetUserConnectRequestSend);
-                this.requestRepo.HardDelete(targetUserConnectRequestSend);
+                targetUser.Requests.Remove(targetUserConnectRequest);
             }
 
             var requesterConnection = requester.Connections
                 .FirstOrDefault(
                 c => c.Id == requester.Id + targetUser.Id ||
                 c.Id == targetUser.Id + requester.Id);
-
             if (requesterConnection != null)
             {
                 requester.Connections.Remove(requesterConnection);
@@ -287,7 +258,6 @@
               .FirstOrDefault(
               c => c.Id == requester.Id + targetUser.Id ||
               c.Id == targetUser.Id + requester.Id);
-
             if (targetUserConnection != null)
             {
                 targetUser.Connections.Remove(targetUserConnection);
@@ -298,7 +268,6 @@
                 .FirstOrDefault(
                 c => c.Id == requester.Id + targetUser.Id ||
                 c.Id == targetUser.Id + requester.Id);
-
             if (requesterConversation != null)
             {
                 requester.Conversations.Remove(requesterConversation);
@@ -332,7 +301,7 @@
                 .All()
                 .Include(t => t.TeamMembers)
                 .Include(t => t.ApplicationUser)
-                .ThenInclude(u => u.ReceivedRequests)
+                .ThenInclude(u => u.Requests)
                 .FirstOrDefault(t => t.Id == inputModel.TargetId);
 
             if (teamDb == null)
@@ -340,11 +309,7 @@
                 throw new ArgumentException(GlobalErrorMessages.InvalidTeam);
             }
 
-            var requester = this.userRepo
-                .All()
-                .Include(u => u.SendRequests)
-                .FirstOrDefault(u => u.Id == inputModel.RequesterId);
-
+            var requester = teamDb.TeamMembers.FirstOrDefault(m => m.Id == inputModel.RequesterId);
             if (requester == null)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.UnauthorizedRequest);
@@ -357,34 +322,22 @@
                 {
                     newOnwer.Team = teamDb;
                     teamDb.ApplicationUser = newOnwer;
-
                     teamDb.TeamMembers.Remove(requester);
-
                     await this.teamRepo.SaveChangesAsync();
-
                     return;
                 }
             }
 
             var teamOnwer = teamDb.ApplicationUser;
-
             if (teamOnwer != null)
             {
-                var requestToRemoveTeamOwner = teamOnwer
-                .ReceivedRequests
+                var requestToRemove = teamOnwer
+                .Requests
                 .FirstOrDefault(r => r.IsApproved && r.RequesterId == requester.Id && r.Type == GlobalConstants.RequestTypeTeamJoin);
-
-                if (requestToRemoveTeamOwner != null)
+                if (requestToRemove != null)
                 {
-                    teamOnwer.ReceivedRequests.Remove(requestToRemoveTeamOwner);
+                    teamOnwer.Requests.Remove(requestToRemove);
                     teamDb.TeamMembers.Remove(requester);
-                }
-
-                var requesterToRemoveRequester = requester.SendRequests.FirstOrDefault(r => r.IsApproved && r.TargetUser.Id == teamOnwer.Id && r.Type == GlobalConstants.RequestTypeTeamJoin);
-
-                if (requesterToRemoveRequester != null)
-                {
-                    requester.SendRequests.Remove(requesterToRemoveRequester);
                 }
             }
 
@@ -397,7 +350,6 @@
             {
                 this.teamRepo.HardDelete(teamDb);
                 await this.teamRepo.SaveChangesAsync();
-
                 throw new ArgumentException(GlobalErrorMessages.TeamNoLongerExists);
             }
 
@@ -618,41 +570,33 @@
         private async Task RequestJoinTeamAsync(string teamId, string requesterId)
         {
             var teamDb = this.teamRepo
-                .All()
-                .Include(t => t.ApplicationUser)
-                .ThenInclude(u => u.ReceivedRequests)
-                .FirstOrDefault(t => t.Id == teamId);
-
+                 .All()
+                 .Include(t => t.ApplicationUser)
+                 .ThenInclude(u => u.Requests)
+                 .FirstOrDefault(t => t.Id == teamId);
             if (teamDb == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidTeam);
             }
-
             var teamOwner = teamDb.ApplicationUser;
-
             if (teamOwner.Id == requesterId)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
-
-            if (teamOwner.SendRequests.Any(r => r.RequesterId == requesterId))
+            if (teamOwner.Requests.Any(r => r.RequesterId == requesterId))
             {
                 throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
             }
-
             var requester = this.userRepo
                 .All()
                 .Include(u => u.Team)
                 .Include(u => u.MemberInTeam)
-                .Include(u => u.SendRequests)
                 .FirstOrDefault(u => u.Id == requesterId);
-
             if (requester == null)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
-
-            var requestReceived = new Request()
+            var request = new Request()
             {
                 Type = GlobalConstants.RequestTypeTeamJoin,
                 TargetUser = teamOwner,
@@ -660,14 +604,10 @@
                 Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
                 CreatedOn = DateTime.UtcNow,
             };
-
-
-            teamOwner.ReceivedRequests.Add(requestReceived);
-
+            teamOwner.Requests.Add(request);
             try
             {
-                await this.requestRepo.AddAsync(requestReceived);
-
+                await this.requestRepo.AddAsync(request);
                 await this.requestRepo.SaveChangesAsync();
             }
             catch (Exception)
@@ -678,45 +618,38 @@
 
         private async Task RequestConnectUserAsync(string currentUserId, string targetUserId)
         {
-            var requester = this.userRepo
-                .All()
-                .Include(u => u.ReceivedRequests)
-                .Include(u => u.Connections)
-                .FirstOrDefault(u => u.Id == currentUserId);
-
+            var userDb = this.userRepo
+               .All()
+               .Include(u => u.Requests)
+               .Include(u => u.Connections)
+               .FirstOrDefault(u => u.Id == currentUserId);
             var targetUserDb = this.userRepo
                 .All()
-                .Include(u => u.ReceivedRequests)
+                .Include(u => u.Requests)
                 .Include(u => u.Connections)
                 .FirstOrDefault(u => u.Id == targetUserId);
-
-            if (requester == null ||
+            if (userDb == null ||
                 targetUserDb == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
-
-            if (targetUserDb.Connections.Any(c => c.Id == requester.Id + targetUserId || c.Id == targetUserId + requester.Id) ||
-                targetUserDb.ReceivedRequests.Any(r => r.Type == GlobalConstants.RequestTypeConnectUser && r.RequesterId == requester.Id) ||
-                requester.ReceivedRequests.Any(r => r.Type == GlobalConstants.RequestTypeConnectUser && r.RequesterId == targetUserId))
+            if (targetUserDb.Connections.Any(c => c.Id == userDb.Id) ||
+                targetUserDb.Requests.Any(r => r.Type == GlobalConstants.RequestTypeConnectUser && r.RequesterId == userDb.Id))
             {
                 throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequestedConnection);
             }
-
-            var targetUserRequest = new Request()
+            var request = new Request()
             {
                 Type = GlobalConstants.RequestTypeConnectUser,
                 TargetUser = targetUserDb,
-                Requester = requester,
-                Description = $"{requester.FirstName} {requester.LastName} want to connect with you",
+                Requester = userDb,
+                Description = $"{userDb.FirstName} {userDb.LastName} want to connect with you",
                 CreatedOn = DateTime.UtcNow,
             };
-
-            targetUserDb.ReceivedRequests.Add(targetUserRequest);
-
+            targetUserDb.Requests.Add(request);
             try
             {
-                await this.requestRepo.AddAsync(targetUserRequest);
+                await this.requestRepo.AddAsync(request);
                 await this.userRepo.SaveChangesAsync();
             }
             catch (Exception)
@@ -790,10 +723,7 @@
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            if (requester.Connections.Any(
-                c => c.Id == targetUser.Id + requester.Id ||
-                c.Id == requester.Id + targetUser.Id) ||
-                requester.ReceivedRequests.Any(r => r.Requester.Id == targetUser.Id && r.Type == GlobalConstants.RequestTypeConnectUser))
+            if (requester.Connections.Any(c => c.Id == targetUser.Id))
             {
                 throw new InvalidOperationException(GlobalErrorMessages.AlreadyConnected);
             }
@@ -843,10 +773,8 @@
 
                 connectionASide.IsDeleted = false;
                 connectionBSide.IsDeleted = false;
-
                 connectionASide.ModifiedOn = DateTime.UtcNow;
                 connectionBSide.ModifiedOn = DateTime.UtcNow;
-
                 targetUser.Connections.Add(connectionASide);
                 requester.Connections.Add(connectionBSide);
             }
@@ -860,11 +788,9 @@
                 var sideAConversation = this.conversationRepo
                     .AllWithDeleted()
                     .FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
-
                 var sideBConversation = this.conversationRepo
                     .AllWithDeleted()
                     .FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
-
                 if (sideAConversation.ApplicationUserId == targetUser.Id)
                 {
                     targetUser.Conversations.Add(sideAConversation);
@@ -875,15 +801,14 @@
                     targetUser.Conversations.Add(sideBConversation);
                     requester.Conversations.Add(sideAConversation);
                 }
-
                 sideAConversation.IsDeleted = false;
                 sideBConversation.IsDeleted = false;
-
                 sideAConversation.ModifiedOn = DateTime.UtcNow;
                 sideBConversation.ModifiedOn = DateTime.UtcNow;
             }
 
             requestDb.IsApproved = true;
+
             try
             {
                 await this.userRepo.SaveChangesAsync();

@@ -137,6 +137,21 @@
                 .ToList();
         }
 
+        public bool RequestedConnection(string currentUserId, string targetUserId)
+        {
+            return this.userRepo
+                .AllAsNoTracking()
+                .Include(u => u.Requests)
+                .FirstOrDefault(u => u.Id == currentUserId)
+                .Requests
+                .Any(r => r.RequesterId == targetUserId);
+        }
+
+        public string GetUserEmail(string userId)
+        {
+            return this.userRepo.AllAsNoTracking().FirstOrDefault(u => u.Id == userId)?.Email;
+        }
+
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)
         {
             var claim = this.userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == claimType);
@@ -149,21 +164,6 @@
             {
                 user.Claims.Where(c => c.ClaimType == claimType).FirstOrDefault().ClaimValue = value;
             }
-        }
-
-        public bool RequestedConnection(string currentUserId, string targetUserId)
-        {
-            return this.userRepo
-                .AllAsNoTracking()
-                .Include(u => u.SendRequests)
-                .FirstOrDefault(u => u.Id == currentUserId)
-                .SendRequests
-                .Any(r => r.RequesterId == targetUserId);
-        }
-
-        public string GetUserEmail(string userId)
-        {
-            return this.userRepo.AllAsNoTracking().FirstOrDefault(u => u.Id == userId)?.Email;
         }
     }
 }
