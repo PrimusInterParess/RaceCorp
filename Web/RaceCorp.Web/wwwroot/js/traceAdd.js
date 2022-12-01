@@ -9,7 +9,7 @@ function addAnotherItem(event) {
     var kvpArray;
 
     var fetch_status;
-    fetch(`https://localhost:5001/api/difficulty/difficulties/`, {
+    fetch(`/api/difficulty/difficulties/`, {
         method: "GET",
         headers: {
             "Content-type": "application/json;charset=UTF-8"
