@@ -193,7 +193,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             var firstName = info.Principal.FindFirst(ClaimTypes.GivenName).Value;
             var lastName = info.Principal.FindFirst(ClaimTypes.Surname).Value;
 
-            if (this.ModelState.IsValid)
+            if (this.ModelState.IsValid)    
             {
                 var user = this.CreateUser();
 
