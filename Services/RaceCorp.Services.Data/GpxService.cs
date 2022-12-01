@@ -35,7 +35,9 @@
 
         public Gpx GetGpxById(string id)
         {
-            return this.gpxRepo.AllAsNoTracking().FirstOrDefault(f => f.Id == id);
+            return this.gpxRepo
+                .AllAsNoTracking()
+                .FirstOrDefault(f => f.Id == id);
         }
 
         public async Task<Gpx> ProccessingData(
@@ -69,7 +71,8 @@
 
             try
             {
-                await this.fileService.SaveFileIntoFileSystem(
+                await this.fileService
+                    .SaveFileIntoFileSystem(
                     file,
                     gpxRoothPath,
                     childrenFolderName,

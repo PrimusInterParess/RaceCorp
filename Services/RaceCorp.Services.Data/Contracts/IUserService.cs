@@ -7,7 +7,11 @@
 
     public interface IUserService
     {
-        public T GetById<T>(string id);
+        T GetById<T>(string id);
+
+        UserProfileViewModel GetProfileModelById(string id, string currentUserId);
+
+        UserAllRequestsViewModel GetRequestsModel(string userId);
 
         Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath);
 

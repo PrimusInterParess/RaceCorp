@@ -148,7 +148,7 @@
             }
         }
 
-        public RaceAllViewModel All(int page, int itemsPerPage = 3)
+        public RaceAllViewModel All(int page, int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var count = this.raceRepo
                 .All()
@@ -205,7 +205,9 @@
 
         public async Task EditAsync(RaceEditViewModel model, string roothPath, string userId)
         {
-            var raceDb = this.raceRepo.All().FirstOrDefault(r => r.Id == model.Id);
+            var raceDb = this.raceRepo
+                .All()
+                .FirstOrDefault(r => r.Id == model.Id);
 
             if (raceDb == null)
             {
@@ -235,8 +237,11 @@
                 }
             }
 
-            var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
-            var townDb = await this.townService.ProccesingData(model.Town);
+            var mountainDb = await this.mountanService
+                .ProccesingData(model.Mountain);
+
+            var townDb = await this.townService
+                .ProccesingData(model.Town);
 
             raceDb.Mountain = mountainDb;
             raceDb.Town = townDb;
@@ -244,7 +249,7 @@
             await this.raceRepo.SaveChangesAsync();
         }
 
-        public RaceAllViewModel GetUpcomingRaces(int page, int itemsPerPage = 3)
+        public RaceAllViewModel GetUpcomingRaces(int page, int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var count = this.raceRepo
                  .All()
@@ -282,7 +287,9 @@
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var race = this.raceRepo.All().FirstOrDefault(r => r.Id == id);
+            var race = this.raceRepo
+                .All()
+                .FirstOrDefault(r => r.Id == id);
 
             this.raceRepo.Delete(race);
 

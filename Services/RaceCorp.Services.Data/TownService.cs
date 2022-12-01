@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -32,7 +32,7 @@
         public TownRacesProfileViewModel AllRaces(
             int townId,
             int pageId,
-            int itemsPerPage = 3)
+            int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var town = this.townsRepo.AllAsNoTracking()
                .Include(t => t.Races)
@@ -75,7 +75,7 @@
         public TownRidesProfileViewModel AllRides(
             int townId,
             int pageId,
-            int itemsPerPage = 3)
+            int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var town = this.townsRepo.AllAsNoTracking()
                 .Include(t => t.Rides)
@@ -86,7 +86,6 @@
                 .FirstOrDefault(t => t.Id == townId);
 
             var count = town.Rides.Count();
-
             var rides = town.Rides.Select(r => new RideInAllViewModel()
             {
                 Id = r.Id,
@@ -139,7 +138,9 @@
 
         public async Task<Town> ProccesingData(string name)
         {
-            var townDb = this.townsRepo.All().FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+            var townDb = this.townsRepo
+                .All()
+                .FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
 
             if (townDb == null)
             {

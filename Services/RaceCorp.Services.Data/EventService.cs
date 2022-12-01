@@ -210,6 +210,7 @@
                .Include(u => u.Requests)
                .Include(c => c.Conversations)
                .FirstOrDefault(u => u.Id == inputModel.RequesterId);
+
             if (requester == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
@@ -221,6 +222,7 @@
                 .Include(u => u.Requests)
                 .Include(c => c.Conversations)
                 .FirstOrDefault(u => u.Id == inputModel.TargetId);
+
             if (targetUser == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
@@ -230,6 +232,7 @@
                 .FirstOrDefault(
                 r => r.RequesterId == targetUser.Id &&
                 r.Type == GlobalConstants.RequestTypeConnectUser);
+
             if (requesterConnectRequest != null)
             {
                 requester.Requests.Remove(requesterConnectRequest);
@@ -239,6 +242,7 @@
                .FirstOrDefault(
                 r => r.RequesterId == requester.Id &&
                r.Type == GlobalConstants.RequestTypeConnectUser);
+
             if (targetUserConnectRequest != null)
             {
                 targetUser.Requests.Remove(targetUserConnectRequest);
@@ -248,6 +252,7 @@
                 .FirstOrDefault(
                 c => c.Id == requester.Id + targetUser.Id ||
                 c.Id == targetUser.Id + requester.Id);
+
             if (requesterConnection != null)
             {
                 requester.Connections.Remove(requesterConnection);
@@ -258,6 +263,7 @@
               .FirstOrDefault(
               c => c.Id == requester.Id + targetUser.Id ||
               c.Id == targetUser.Id + requester.Id);
+
             if (targetUserConnection != null)
             {
                 targetUser.Connections.Remove(targetUserConnection);
@@ -268,6 +274,7 @@
                 .FirstOrDefault(
                 c => c.Id == requester.Id + targetUser.Id ||
                 c.Id == targetUser.Id + requester.Id);
+
             if (requesterConversation != null)
             {
                 requester.Conversations.Remove(requesterConversation);
@@ -310,6 +317,7 @@
             }
 
             var requester = teamDb.TeamMembers.FirstOrDefault(m => m.Id == inputModel.RequesterId);
+
             if (requester == null)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.UnauthorizedRequest);
@@ -570,28 +578,35 @@
                  .Include(t => t.ApplicationUser)
                  .ThenInclude(u => u.Requests)
                  .FirstOrDefault(t => t.Id == teamId);
+
             if (teamDb == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidTeam);
             }
+
             var teamOwner = teamDb.ApplicationUser;
+
             if (teamOwner.Id == requesterId)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
+
             if (teamOwner.Requests.Any(r => r.RequesterId == requesterId))
             {
                 throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
             }
+
             var requester = this.userRepo
                 .All()
                 .Include(u => u.Team)
                 .Include(u => u.MemberInTeam)
                 .FirstOrDefault(u => u.Id == requesterId);
+
             if (requester == null)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
+
             var request = new Request()
             {
                 Type = GlobalConstants.RequestTypeTeamJoin,
@@ -600,7 +615,9 @@
                 Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
                 CreatedOn = DateTime.UtcNow,
             };
+
             teamOwner.Requests.Add(request);
+
             try
             {
                 await this.requestRepo.AddAsync(request);
@@ -619,21 +636,25 @@
                .Include(u => u.Requests)
                .Include(u => u.Connections)
                .FirstOrDefault(u => u.Id == currentUserId);
+
             var targetUserDb = this.userRepo
                 .All()
                 .Include(u => u.Requests)
                 .Include(u => u.Connections)
                 .FirstOrDefault(u => u.Id == targetUserId);
+
             if (userDb == null ||
                 targetUserDb == null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
+
             if (targetUserDb.Connections.Any(c => c.Id == userDb.Id) ||
                 targetUserDb.Requests.Any(r => r.Type == GlobalConstants.RequestTypeConnectUser && r.RequesterId == userDb.Id))
             {
                 throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequestedConnection);
             }
+
             var request = new Request()
             {
                 Type = GlobalConstants.RequestTypeConnectUser,
@@ -642,7 +663,9 @@
                 Description = $"{userDb.FirstName} {userDb.LastName} want to connect with you",
                 CreatedOn = DateTime.UtcNow,
             };
+
             targetUserDb.Requests.Add(request);
+
             try
             {
                 await this.requestRepo.AddAsync(request);
@@ -769,8 +792,10 @@
 
                 connectionASide.IsDeleted = false;
                 connectionBSide.IsDeleted = false;
+
                 connectionASide.ModifiedOn = DateTime.UtcNow;
                 connectionBSide.ModifiedOn = DateTime.UtcNow;
+
                 targetUser.Connections.Add(connectionASide);
                 requester.Connections.Add(connectionBSide);
             }
@@ -784,9 +809,11 @@
                 var sideAConversation = this.conversationRepo
                     .AllWithDeleted()
                     .FirstOrDefault(c => c.Id == targetUser.Id + requester.Id);
+
                 var sideBConversation = this.conversationRepo
                     .AllWithDeleted()
                     .FirstOrDefault(c => c.Id == requester.Id + targetUser.Id);
+
                 if (sideAConversation.ApplicationUserId == targetUser.Id)
                 {
                     targetUser.Conversations.Add(sideAConversation);
@@ -797,8 +824,10 @@
                     targetUser.Conversations.Add(sideBConversation);
                     requester.Conversations.Add(sideAConversation);
                 }
+
                 sideAConversation.IsDeleted = false;
                 sideBConversation.IsDeleted = false;
+
                 sideAConversation.ModifiedOn = DateTime.UtcNow;
                 sideBConversation.ModifiedOn = DateTime.UtcNow;
             }

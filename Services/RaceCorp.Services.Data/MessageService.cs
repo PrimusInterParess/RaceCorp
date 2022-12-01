@@ -29,7 +29,9 @@
 
         public async Task<List<T>> GetMessages<T>(string userId, string interlocutorId)
         {
-            var user = this.userRepo.All()
+            var user = this.userRepo
+                  
+                  .All()
                   .Include(u => u.InboxMessages)
                   .FirstOrDefault(u => u.Id == userId);
 
@@ -82,8 +84,15 @@
 
         public MessageInputModel GetMessageModelAsync(string receiverId, string senderId)
         {
-            var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
-            var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == receiverId);
+            var sender = this.userRepo
+                .All()
+                .Include(u => u.Conversations)
+                .FirstOrDefault(u => u.Id == senderId);
+
+            var receiver = this.userRepo
+                .All()
+                .Include(u => u.Conversations)
+                .FirstOrDefault(u => u.Id == receiverId);
 
             return new MessageInputModel
             {
@@ -96,8 +105,16 @@
 
         public async Task<Message> SaveMessageAsync(MessageInputModel model, string senderId)
         {
-            var receiver = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == model.ReceiverId);
-            var sender = this.userRepo.All().Include(u => u.Conversations).FirstOrDefault(u => u.Id == senderId);
+            var receiver = this.userRepo
+                .All()
+                .Include(u => u.Conversations)
+                .FirstOrDefault(u => u.Id == model.ReceiverId);
+
+            var sender = this.userRepo
+                .All()
+                .Include(u => u.Conversations)
+                .FirstOrDefault(u => u.Id == senderId);
+
             if (sender == null || receiver == null)
             {
                 throw new NullReferenceException();
@@ -134,8 +151,11 @@
                 Receiver = receiver,
             };
 
-            var receiverConvrs = receiver.Conversations.FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
-            var senderConvrs = sender.Conversations.FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
+            var receiverConvrs = receiver.Conversations
+                .FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
+
+            var senderConvrs = sender.Conversations
+                .FirstOrDefault(c => c.Id == sender.Id + receiver.Id || c.Id == receiver.Id + senderId);
 
             this.UpdateConversation(receiverConvrs, message, sender);
             this.UpdateConversation(senderConvrs, message, receiver);

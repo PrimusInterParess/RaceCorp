@@ -52,7 +52,7 @@
 
         public RideAllViewModel All(
             int page,
-            int itemsPerPage = 3)
+            int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var count = this.rideRepo
                 .All()
@@ -70,7 +70,7 @@
                     GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
                     TownName = r.Town.Name,
                     MountainName = r.Mountain.Name,
-                    TraceStartTime = r.Trace.StartTime.ToString("f"),
+                    TraceStartTime = r.Trace.StartTime.ToString(GlobalConstants.DateMessageFormat),
                 })
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)
@@ -87,8 +87,11 @@
 
         public async Task CreateAsync(RideCreateViewModel model, string roothPath, string userId)
         {
-            var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
-            var townDb = await this.townService.ProccesingData(model.Town);
+            var mountainDb = await this.mountanService
+                .ProccesingData(model.Mountain);
+
+            var townDb = await this.townService
+                .ProccesingData(model.Town);
 
             var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
 
@@ -100,7 +103,8 @@
                 roothPath,
                 serviceAccountPath);
 
-            var trace = await this.traceService.ProccedingData(model.Trace);
+            var trace = await this.traceService
+                .ProccedingData(model.Trace);
 
             trace.Gpx = gpx;
 
@@ -141,8 +145,11 @@
                 throw new Exception(IvalidOperationMessage);
             }
 
-            var mountainDb = await this.mountanService.ProccesingData(model.Mountain);
-            var townDb = await this.townService.ProccesingData(model.Town);
+            var mountainDb = await this.mountanService
+                .ProccesingData(model.Mountain);
+
+            var townDb = await this.townService
+                .ProccesingData(model.Town);
 
             rideDb.Mountain = mountainDb;
             rideDb.Town = townDb;
@@ -165,6 +172,7 @@
             if (model.Trace.GpxFile != null)
             {
                 var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
+
                 var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
 
                 var gpx = await this.gpxService
@@ -202,7 +210,9 @@
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var ride = this.rideRepo.All().FirstOrDefault(r => r.Id == id);
+            var ride = this.rideRepo
+                .All()
+                .FirstOrDefault(r => r.Id == id);
 
             this.rideRepo.Delete(ride);
 
@@ -216,7 +226,7 @@
             return true;
         }
 
-        public RideAllViewModel GetUpcomingRides(int page, int itemsPerPage = 3)
+        public RideAllViewModel GetUpcomingRides(int page, int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var count = this.rideRepo
                  .All()

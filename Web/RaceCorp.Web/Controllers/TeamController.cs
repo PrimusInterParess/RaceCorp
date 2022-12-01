@@ -178,29 +178,22 @@
             return this.View(model);
         }
 
+        [HttpGet]
+        [Authorize]
+
         public async Task<IActionResult> ProfileAsync(string id)
         {
-            var model = this.teamService.ById<TeamProfileViewModel>(id);
             var currentUser = await this.userManager
               .GetUserAsync(this.User);
 
-            if (model == null)
+            if (currentUser == null)
             {
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
-            if (currentUser == null)
-            {
-                model.IsMember = false;
-            }
-            else
-            {
-                model.CurrentUserIsOwner = model.ApplicationUserId == currentUser.Id;
-                model.IsMember = model.TeamMembers.Any(m => m.Id == currentUser.Id);
-                model.RequestedJoin = model.JoinRequests.Any(r => r.RequesterId == currentUser.Id);
-            }
+            var teamDto = this.teamService.GetProfileById(id, currentUser.Id);
 
-            return this.View(model);
+            return this.View(teamDto);
         }
     }
 }

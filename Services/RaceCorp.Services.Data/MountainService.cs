@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
@@ -39,7 +40,9 @@
 
         public HashSet<MountainViewModel> GetMountains()
         {
-            return this.mountainsRepo.All().Select(m => new MountainViewModel
+            return this.mountainsRepo
+                .All()
+                .Select(m => new MountainViewModel
             {
                 Id = m.Id,
                 Name = m.Name,
@@ -59,7 +62,8 @@
 
         public MountainRidesProfileViewModel AllRides(int mountainId, int pageId, int itemsPerPage = 3)
         {
-            var mountain = this.mountainsRepo.AllAsNoTracking()
+            var mountain = this.mountainsRepo
+               .AllAsNoTracking()
                .Include(m => m.Rides)
                .ThenInclude(r => r.Town)
                .Include(m => m.Rides)
@@ -101,10 +105,10 @@
             };
         }
 
-        public MountainRacesProfileViewModel AllRaces(int mountainId, int pageId, int itemsPerPage = 3)
+        public MountainRacesProfileViewModel AllRaces(int mountainId, int pageId, int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var mountain = this.mountainsRepo
-                .AllAsNoTracking()
+              .AllAsNoTracking()
               .Include(t => t.Races)
               .ThenInclude(r => r.Town)
               .Include(r => r.Races)
@@ -147,7 +151,9 @@
 
         public async Task<Mountain> ProccesingData(string name)
         {
-            var mountainDb = this.mountainsRepo.All().FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+            var mountainDb = this.mountainsRepo
+                .All()
+                .FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
 
             if (mountainDb == null)
             {

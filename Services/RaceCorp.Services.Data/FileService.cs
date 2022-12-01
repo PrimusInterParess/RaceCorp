@@ -23,7 +23,9 @@
         private readonly IRepository<Logo> logoRepo;
         private readonly IRepository<Image> imageRepo;
 
-        public FileService(IDeletableEntityRepository<Logo> logoRepo, IDeletableEntityRepository<Image> imageRepo)
+        public FileService(
+            IDeletableEntityRepository<Logo> logoRepo,
+            IDeletableEntityRepository<Image> imageRepo)
         {
             this.logoRepo = logoRepo;
             this.imageRepo = imageRepo;
@@ -104,7 +106,8 @@
 
             if (expectedFileType == GlobalConstants.Gpx)
             {
-                return this.gpxExtensions.FirstOrDefault(e => e == extention);
+                return this.gpxExtensions
+                    .FirstOrDefault(e => e == extention);
             }
             else if (expectedFileType == GlobalConstants.Image)
             {
@@ -113,7 +116,8 @@
                     return null;
                 }
 
-                return this.imageExtensions.FirstOrDefault(e => e == extention);
+                return this.imageExtensions
+                    .FirstOrDefault(e => e == extention);
             }
 
             return null;

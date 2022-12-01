@@ -19,11 +19,13 @@
 
         public HashSet<DifficultyViewModel> GetDifficulties()
         {
-            return this.difficultiesRepo.All().Select(d => new DifficultyViewModel
-            {
-                Id = d.Id,
-                Level = d.Level.ToString(),
-            }).ToHashSet();
+            return this.difficultiesRepo
+                .All()
+                .Select(d => new DifficultyViewModel
+                {
+                    Id = d.Id,
+                    Level = d.Level.ToString(),
+                }).ToHashSet();
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetDifficultiesKVP()

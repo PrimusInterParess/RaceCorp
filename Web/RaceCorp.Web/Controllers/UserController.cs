@@ -41,39 +41,16 @@
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
-            var userDto = this.userService.GetById<UserProfileViewModel>(id);
-
-            if (currentUser.Id != null && userDto != null)
+            try
             {
-                userDto.IsConnected = userDto
-                    .Connections
-                    .Any(
-                    c => c.Id == currentUser.Id + id ||
-                    c.Id == id + currentUser.Id) ||
-                    currentUser.Id == id;
-
-                userDto.RequestedConnection = userDto
-                    .ConnectRequest
-                    .Any(
-                    r => r.RequesterId == currentUser.Id) ||
-                    this.userService.RequestedConnection(currentUser.Id, userDto.Id);
-
-                userDto.CanMessageMe = userDto
-                    .Connections
-                    .Any(
-                    c => c.Id == currentUser.Id + id ||
-                    c.Id == id + currentUser.Id);
-
-                userDto.Connections = userDto
-                    .Connections
-                    .Take(6)
-                    .OrderByDescending(c => c.CreatedOn)
-                    .ToHashSet();
-
+                var userDto = this.userService.GetProfileModelById(id, currentUser.Id);
                 return this.View(userDto);
             }
-
-            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            catch (Exception e)
+            {
+                this.TempData["ErrorMessage"] = e.Message;
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
         }
 
         [HttpGet]
@@ -130,11 +107,18 @@
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
-            var userDto = this.userService.GetById<UserAllRequestsViewModel>(id);
+            try
+            {
+                var userDto = this.userService.GetRequestsModel(id);
+                return this.View(userDto);
+            }
+            catch (Exception e)
+            {
+                this.TempData["ErrorMessage"] = e.Message;
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
 
-            // find a better way to sort it
-            userDto.Requests.OrderBy(r => r.CreatedOn);
-            return this.View(userDto);
+
         }
     }
 }

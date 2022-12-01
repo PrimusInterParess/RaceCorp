@@ -34,31 +34,45 @@
 
         public List<T> All<T>()
         {
-            return this.teamRepo.All().To<T>().ToList();
+            return this.teamRepo
+                .All()
+                .To<T>()
+                .ToList();
         }
 
         public T ById<T>(string id)
         {
-            return this.teamRepo.AllAsNoTracking().To<T>().FirstOrDefault();
+            return this.teamRepo
+                .AllAsNoTracking()
+                .Where(t => t.Id == id)
+                .To<T>()
+                .FirstOrDefault();
         }
 
         public async Task CreateAsync(TeamCreateBaseModel inputMode, string roothPath)
         {
-            var alredyExists = this.teamRepo.All().Any(t => t.Name == inputMode.Name);
+            var alredyExists = this.teamRepo
+                .All()
+                .Any(t => t.Name == inputMode.Name);
 
             if (alredyExists)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.TeamAlreadyExists);
             }
 
-            var user = this.userRepo.All().Include(u => u.Team).FirstOrDefault(u => u.Id == inputMode.CreatorId);
+            var user = this.userRepo
+                .All()
+                .Include(u => u.Team)
+                .FirstOrDefault(u => u.Id == inputMode.CreatorId);
 
             if (user.Team != null)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.AlreadyHaveCreatedTeam);
             }
 
-            var town = this.townRepo.All().FirstOrDefault(t => t.Name.ToLower() == inputMode.TownName.ToLower());
+            var town = this.townRepo
+                .All()
+                .FirstOrDefault(t => t.Name.ToLower() == inputMode.TownName.ToLower());
 
             if (town == null)
             {
@@ -82,7 +96,9 @@
 
             try
             {
-                var logoImage = await this.fileService.ProccessingImageData(inputMode.Logo, user.Id, roothPath, inputMode.Name);
+                var logoImage = await this.fileService
+                    .ProccessingImageData(inputMode.Logo, user.Id, roothPath, inputMode.Name);
+
                 team.LogoImagePath = $"\\{logoImage.ParentFolderName}\\{logoImage.ChildFolderName}\\{logoImage.Id}.{logoImage.Extension}";
                 team.Images.Add(logoImage);
             }
@@ -117,7 +133,9 @@
 
             if (teamDb.Name != inputModel.Name)
             {
-                var nameAlreadyExists = this.teamRepo.All().Any(t => t.Name == inputModel.Name);
+                var nameAlreadyExists = this.teamRepo
+                    .All()
+                    .Any(t => t.Name == inputModel.Name);
 
                 if (nameAlreadyExists)
                 {
@@ -153,7 +171,9 @@
             {
                 try
                 {
-                    var logoImage = await this.fileService.ProccessingImageData(inputModel.Logo, inputModel.ApplicationUserId, roothPath, inputModel.Name);
+                    var logoImage = await this.fileService
+                        .ProccessingImageData(inputModel.Logo, inputModel.ApplicationUserId, roothPath, inputModel.Name);
+
                     teamDb.LogoImagePath = $"\\{logoImage.ParentFolderName}\\{logoImage.ChildFolderName}\\{logoImage.Id}.{logoImage.Extension}";
                     teamDb.Images.Add(logoImage);
                 }
@@ -175,9 +195,35 @@
             }
         }
 
+        public TeamProfileViewModel GetProfileById(string id, string currentUserId)
+        {
+            var teamDto = this.teamRepo
+                .AllAsNoTracking()
+                .Where(t => t.Id == id)
+                .To<TeamProfileViewModel>()
+                .FirstOrDefault();
+
+            if (teamDto == null)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidTeam);
+            }
+
+            teamDto.CurrentUserIsOwner = teamDto.ApplicationUserId == currentUserId;
+            teamDto.IsMember = teamDto.TeamMembers.Any(m => m.Id == currentUserId);
+            teamDto.RequestedJoin = teamDto.JoinRequests.Any(r => r.RequesterId == currentUserId);
+
+            return teamDto;
+
+        }
+
         public List<T> GetTeamMembers<T>(string teamId)
         {
-            return this.teamRepo.AllAsNoTracking().Include(t => t.TeamMembers).To<T>().ToList();
+            return this.teamRepo
+                .AllAsNoTracking()
+                .Where(t => t.Id == teamId)
+                .Include(t => t.TeamMembers)
+                .To<T>()
+                .ToList();
         }
 
         public async Task RemoveUserAsync(string teamId, string memberId)
@@ -194,9 +240,14 @@
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var memberDb = this.userRepo.All().Include(m => m.Team).Include(m => m.MemberInTeam).FirstOrDefault(m => m.Id == memberId);
+            var memberDb = this.userRepo
+                .All()
+                .Include(m => m.Team)
+                .Include(m => m.MemberInTeam)
+                .FirstOrDefault(m => m.Id == memberId);
 
-            if (memberDb == null || memberDb.Team != null)
+            if (memberDb == null ||
+                memberDb.Team != null)
             {
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
@@ -209,7 +260,7 @@
 
             if (requestToRemove != null)
             {
-                teamOwner.Requests.Remove(requestToRemove);                
+                teamOwner.Requests.Remove(requestToRemove);
             }
 
             teamDb.TeamMembers.Remove(memberDb);

@@ -47,9 +47,11 @@
             trace.DifficultyId = model.DifficultyId;
             trace.ControlTime = TimeSpan.FromHours((double)model.ControlTime);
 
-            var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
+            var serviceAccountPath = Path.GetFullPath(GlobalConstants.ServiceAccountPath);
 
-            var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
+            var raceName = this.raceRepo
+                .All()
+                .FirstOrDefault(r => r.Id == model.RaceId).Name;
 
             if (model.GpxFile != null)
             {
@@ -91,15 +93,16 @@
         {
 
 
-            var raceName = this.raceRepo.All().FirstOrDefault(r => r.Id == model.RaceId).Name;
+            var raceName = this.raceRepo
+                .All()
+                .FirstOrDefault(r => r.Id == model.RaceId).Name;
 
             if (raceName == null)
             {
                 throw new NullReferenceException(GlobalErrorMessages.InvalidInputData);
             }
 
-            var serviceAccountPath = Path.GetFullPath("\\Credentials\\testproject-366105-9ceb2767de2a.json");
-
+            var serviceAccountPath = Path.GetFullPath(GlobalConstants.ServiceAccountPath);
 
             try
             {
@@ -142,7 +145,9 @@
 
         public async Task<bool> DeleteTraceAsync(int id)
         {
-            var trace = this.traceRepo.All().FirstOrDefault(t => t.Id == id);
+            var trace = this.traceRepo
+                .All()
+                .FirstOrDefault(t => t.Id == id);
 
             if (trace == null)
             {

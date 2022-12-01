@@ -1,5 +1,6 @@
 ﻿namespace RaceCorp.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
@@ -42,7 +43,9 @@
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
         {
             var user = this.userRepo.All()
-                .Include(u => u.Images).Include(u => u.Town).FirstOrDefault(u => u.Id == inputModel.Id);
+                .Include(u => u.Images)
+                .Include(u => u.Town)
+                .FirstOrDefault(u => u.Id == inputModel.Id);
 
             if (inputModel.UserProfilePicture != null)
             {
@@ -58,7 +61,9 @@
                 user.Images.Add(image);
             }
 
-            var townDb = this.townRepo.All().FirstOrDefault(t => t.Name == inputModel.Town);
+            var townDb = this.townRepo
+                .All()
+                .FirstOrDefault(t => t.Name == inputModel.Town);
 
             if (townDb == null)
             {
@@ -114,7 +119,10 @@
 
         public List<T> GetAllAsync<T>()
         {
-            return this.userRepo.AllAsNoTracking().To<T>().ToList();
+            return this.userRepo
+                .AllAsNoTracking()
+                .To<T>()
+                .ToList();
         }
 
         public T GetById<T>(string id)
@@ -149,20 +157,92 @@
 
         public string GetUserEmail(string userId)
         {
-            return this.userRepo.AllAsNoTracking().FirstOrDefault(u => u.Id == userId)?.Email;
+            return this.userRepo
+                .AllAsNoTracking()
+                .FirstOrDefault(u => u.Id == userId)?.Email;
+        }
+
+        public UserProfileViewModel GetProfileModelById(string id, string currentUserId)
+        {
+            var userDto = this.userRepo
+                .All()
+                .Where(u => u.Id == id)
+                .To<UserProfileViewModel>()
+                .FirstOrDefault();
+
+            var currentUserExists = this.userRepo
+                .AllAsNoTracking()
+                .Any(u => u.Id == currentUserId);
+
+            if (userDto == null ||
+                currentUserExists == false)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            userDto.IsConnected = userDto
+                    .Connections
+                    .Any(
+                    c => c.Id == currentUserId + id ||
+                    c.Id == id + currentUserId) ||
+                    currentUserId == id;
+
+            userDto.RequestedConnection = userDto
+                .ConnectRequest
+                .Any(
+                r => r.RequesterId == currentUserId) ||
+                this.RequestedConnection(currentUserId, userDto.Id);
+
+            userDto.CanMessageMe = userDto
+                .Connections
+                .Any(
+                c => c.Id == currentUserId + id ||
+                c.Id == id + currentUserId);
+
+            userDto.Connections = userDto
+                .Connections
+                .Take(6)
+                .OrderByDescending(c => c.CreatedOn)
+                .ToHashSet();
+
+            return userDto;
+        }
+
+        public UserAllRequestsViewModel GetRequestsModel(string userId)
+        {
+            var userDto = this.userRepo
+                 .All()
+                 .Where(u => u.Id == userId)
+                 .To<UserAllRequestsViewModel>()
+                 .FirstOrDefault();
+
+            if (userDto == null)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            userDto.Requests.OrderByDescending(r => r.CreatedOn);
+
+            return userDto;
         }
 
         private async Task UpdateClaim(string claimType, string value, ApplicationUser user)
         {
-            var claim = this.userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == claimType);
+            var claim = this.userManager
+                .GetClaimsAsync(user)
+                .Result
+                .FirstOrDefault(c => c.Type == claimType);
 
             if (claim == null)
             {
-                await this.userManager.AddClaimAsync(user, new Claim(claimType, value));
+                await this.userManager
+                    .AddClaimAsync(user, new Claim(claimType, value));
             }
             else
             {
-                user.Claims.Where(c => c.ClaimType == claimType).FirstOrDefault().ClaimValue = value;
+                user.Claims
+                    .Where(c => c.ClaimType == claimType)
+                    .FirstOrDefault().ClaimValue = value;
             }
         }
     }

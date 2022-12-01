@@ -2,6 +2,12 @@
 {
     <div class="alert alert-success">@this.TempData["CannotParticipate"]</div>
 }
+
+@if (this.TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-success">@this.TempData["ErrorMessage"]</div>
+}
+
 <div class="wrapper">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
         <title>404</title>

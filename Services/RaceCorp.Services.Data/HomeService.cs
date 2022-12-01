@@ -52,17 +52,24 @@
 
         public IndexViewModel GetIndexModel()
         {
-            var townImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == TownImageName);
+            var townImage = this.imageRepo
+                .AllAsNoTracking()
+                .FirstOrDefault(x => x.Name == TownImageName);
 
-            var mountainImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == MountainImageName);
+            var mountainImage = this.imageRepo
+                .AllAsNoTracking()
+                .FirstOrDefault(x => x.Name == MountainImageName);
 
-            var upcommingRaceImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == UpcommingRaceImageName);
+            var upcommingRaceImage = this.imageRepo
+                .AllAsNoTracking()
+                .FirstOrDefault(x => x.Name == UpcommingRaceImageName);
 
-            var upcommingRidesImage = this.imageRepo.AllAsNoTracking().FirstOrDefault(x => x.Name == UpcommingRidesImageName);
+            var upcommingRidesImage = this.imageRepo
+                .AllAsNoTracking()
+                .FirstOrDefault(x => x.Name == UpcommingRidesImageName);
 
             var model = new IndexViewModel();
 
-            // LogoPath = LogoRootPath + r.LogoId + "." + r.Logo.Extension,
             if (townImage != null)
             {
                 model.TownImagePath = SystemRoothPath + townImage.Id + "." + townImage.Extension;

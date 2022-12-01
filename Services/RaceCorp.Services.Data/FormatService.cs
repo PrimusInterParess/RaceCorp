@@ -19,7 +19,9 @@
 
         public HashSet<FormatViewModel> GetFormats()
         {
-            return this.formatRepo.All().Select(f => new FormatViewModel()
+            return this.formatRepo
+                .All()
+                .Select(f => new FormatViewModel()
             {
                 Id = f.Id,
                 Name = f.Name,

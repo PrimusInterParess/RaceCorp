@@ -29,6 +29,7 @@
 
         public const string ProfilePictire = "ProfilePicture";
 
+        public const string ServiceAccountPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
         public const string RideDefaultImage = "\\Images\\default\\rideDefaultImage.jpg";
         public const string LoginDefaultImage = "\\Images\\default\\login.JPG";
         public const string RegisterDefaultImage = "\\Images\\default\\register.JPEG";
