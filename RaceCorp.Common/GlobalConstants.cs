@@ -69,5 +69,7 @@
 
         public const string UregisteredMessage = "Your are unregistered!";
         public const string RegisteredMessage = "Your are now registered!";
+
+        public const string RemovedTeamMember = "Team member Removed!";
     }
 }

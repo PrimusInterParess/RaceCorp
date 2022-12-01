@@ -19,6 +19,7 @@
         private readonly IDeletableEntityRepository<Connection> connectionRepo;
         private readonly IDeletableEntityRepository<Message> messageRepo;
         private readonly IDeletableEntityRepository<Request> requestRepo;
+        private readonly IDeletableEntityRepository<Team> teamRepo;
 
         public DeletePersonelDataService(
             UserManager<ApplicationUser> userManager,
@@ -26,7 +27,8 @@
             IDeletableEntityRepository<Conversation> conversationRepo,
             IDeletableEntityRepository<Connection> connectionRepo,
             IDeletableEntityRepository<Message> messageRepo,
-            IDeletableEntityRepository<Request> requestRepo)
+            IDeletableEntityRepository<Request> requestRepo,
+            IDeletableEntityRepository<Team> teamRepo)
         {
             this.userManager = userManager;
             this.userRepo = userRepo;
@@ -34,6 +36,7 @@
             this.connectionRepo = connectionRepo;
             this.messageRepo = messageRepo;
             this.requestRepo = requestRepo;
+            this.teamRepo = teamRepo;
         }
 
         public async Task DeleteUser(string userId)
@@ -45,6 +48,8 @@
                 .Include(u => u.Conversations)
                 .Include(u => u.InboxMessages)
                 .Include(u => u.SentMessages)
+                .Include(u => u.Team)
+                .ThenInclude(t => t.TeamMembers)
                 .FirstOrDefault(u => u.Id == userId);
 
             await this.ReasignUserFromRoles(user);
@@ -54,6 +59,25 @@
             this.DeleteConversations(user);
             this.DeleteMessages(user);
             this.DeleteRequests(user);
+            this.ManageTeamOwner(user);
+        }
+
+        private void ManageTeamOwner(ApplicationUser user)
+        {
+            var teamDb = user.Team;
+            if (teamDb != null)
+            {
+                if (teamDb.TeamMembers.Count > 1)
+                {
+                    var newTeamOwner = teamDb.TeamMembers.FirstOrDefault(m => m.Id != user.Id);
+
+                    newTeamOwner.Team = teamDb;
+                }
+                else
+                {
+                    this.teamRepo.HardDelete(teamDb);
+                }
+            }
         }
 
         private void DeleteRequests(ApplicationUser user)

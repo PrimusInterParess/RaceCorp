@@ -74,6 +74,103 @@
 
         [HttpGet]
         [Authorize]
+        public async Task<IActionResult> Edit(string teamId, string teamOwnerId)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (user == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+                user.Id == teamOwnerId)
+            {
+                var teamDto = this.teamService.ById<TeamEditViewModel>(teamId);
+
+                return this.View(teamDto);
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Edit(TeamEditViewModel inputModel)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+                (user != null && user.Id == inputModel.ApplicationUserId))
+            {
+                try
+                {
+                    await this.teamService.EditAsync(inputModel, this.environment.WebRootPath);
+                    return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = inputModel.Id });
+                }
+                catch (Exception e)
+                {
+                    if (e.GetType() == typeof(ArgumentException))
+                    {
+                        this.TempData["ErrorMessage"] = GlobalErrorMessages.InvalidRequest;
+
+                        return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+                    }
+
+                    this.ModelState.AddModelError(string.Empty, e.Message);
+                    return this.View(inputModel);
+                }
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> RemoveTeamMember(string teamId, string teamOwnerId)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+            (user != null && user.Id == teamOwnerId))
+            {
+                var teamMembers = this.teamService.ById<TeamRemoveMemberModel>(teamId);
+                teamMembers.CurrentUserIsOwner = teamMembers.ApplicationUserId == user.Id;
+
+                return this.View(teamMembers);
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> RemoveTeamMember(string teamId, string memberId, string teamOwnerId)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+            (user != null && user.Id == teamOwnerId && memberId != teamOwnerId))
+            {
+                try
+                {
+                    await this.teamService.RemoveUserAsync(teamId, memberId);
+                    this.TempData["ErrorMessage"] = GlobalConstants.RemovedTeamMember;
+                    return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = teamId });
+                }
+                catch (Exception e)
+                {
+                    this.TempData["ErrorMessage"] = GlobalErrorMessages.InvalidRequest;
+
+                    return this.RedirectToAction("Profile", "Team", new { area = string.Empty });
+                }
+            }
+
+            return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+        }
+
+        [HttpGet]
+        [Authorize]
         public IActionResult All()
         {
             var model = this.teamService.All<TeamAllViewModel>();
@@ -94,10 +191,11 @@
 
             if (currentUser == null)
             {
-                model.IsMember = true;
+                model.IsMember = false;
             }
             else
             {
+                model.CurrentUserIsOwner = model.ApplicationUserId == currentUser.Id;
                 model.IsMember = model.TeamMembers.Any(m => m.Id == currentUser.Id);
                 model.RequestedJoin = model.JoinRequests.Any(r => r.RequesterId == currentUser.Id);
             }

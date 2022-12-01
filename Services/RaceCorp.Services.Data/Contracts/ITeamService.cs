@@ -12,5 +12,11 @@
         List<T> All<T>();
 
         T ById<T>(string id);
+
+        Task EditAsync(TeamEditViewModel inputModel,string roothPath);
+
+        Task RemoveUserAsync(string teamId, string memberId);
+
+        List<T> GetTeamMembers<T>(string teamId);
     }
 }

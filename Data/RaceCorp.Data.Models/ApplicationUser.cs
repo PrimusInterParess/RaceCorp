@@ -19,11 +19,18 @@ namespace RaceCorp.Data.Models
 
         public string LastName { get; set; }
 
+        [Url]
         public string LinkedInLink { get; set; }
+
+        [Url]
 
         public string FacoBookLink { get; set; }
 
+        [Url]
+
         public string GitHubLink { get; set; }
+
+        [Url]
 
         public string TwitterLink { get; set; }
 

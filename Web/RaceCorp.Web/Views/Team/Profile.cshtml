@@ -1,6 +1,9 @@
 ﻿@using RaceCorp.Common
 @model RaceCorp.Web.ViewModels.Team.TeamProfileViewModel
 
+@{
+    var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
 
 @if (this.TempData.ContainsKey("ErrorMessage"))
 {
@@ -21,13 +24,27 @@
 </div>
 
 
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || Model.CurrentUserIsOwner)
+{
+    <a class="btn btn-outline-secondary form-control" asp-action="Edit" asp-controller="Team" asp-route-teamId="@Model.Id" asp-route-teamOwnerId="@Model.ApplicationUserId">
+        Edit
+    </a>
+
+    <a class="form-control btn btn-outline-danger" asp-action="RemoveTeamMember" asp-controller="Team" asp-route-teamId="@Model.Id" asp-route-teamOwnerId="@Model.ApplicationUserId">
+        Remove Team Member
+    </a>
+}
+
 <div class="about-section">
+
+
     <h1>@Model.Name</h1>
     <p>@Model.Description</p>
+    <p>@Model.TownName</p>
     @if (Model.IsMember == false && Model.RequestedJoin == false)
     {
         <form method="post">
-            <button class="mailbox form-control" asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamJoin" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
+            <button class="mailbox form-control" asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamJoin" asp-route-requesterId=@currentUserId>
                 Join
             </button>
         </form>
@@ -35,7 +52,7 @@
     else if (Model.IsMember)
     {
         <form method="post">
-            <button class="mailbox form-control" asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamLeave" asp-route-requesterId=@this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value>
+            <button class="mailbox form-control" asp-action="Request" asp-controller="Event" asp-route-targetId="@Model.Id" asp-route-type="@GlobalConstants.RequestTypeTeamLeave" asp-route-requesterId=@currentUserId>
                 Leave team
             </button>
         </form>

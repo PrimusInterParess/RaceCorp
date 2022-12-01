@@ -86,6 +86,8 @@
 
                 if (e.GetType() == typeof(ArgumentException))
                 {
+                    this.TempData["ErrorMessage"] = e.Message;
+
                     return this.RedirectToAction("Index", "Home", new { area = string.Empty });
                 }
 

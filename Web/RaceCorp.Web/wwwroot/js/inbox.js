@@ -86,7 +86,7 @@ var eventElements = document.querySelectorAll(".custom").forEach(e => e.addEvent
 
     // Create and Send the request
     var fetch_status;
-    fetch(`https://localhost:5001/api/message/messages?authorId=${userId}&interlocutorId=${interlocutorId}`, {
+    fetch(`https://localhost:44319/api/message/messages?authorId=${userId}&interlocutorId=${interlocutorId}`, {
         method: "GET",
         headers: {
             "Content-type": "application/json;charset=UTF-8"
@@ -103,8 +103,6 @@ var eventElements = document.querySelectorAll(".custom").forEach(e => e.addEvent
             // Check if the response were success
             if (fetch_status == 200) {
                 // Use the converted JSON
-
-
 
                 document.getElementById("sendButton").disabled = false;
 

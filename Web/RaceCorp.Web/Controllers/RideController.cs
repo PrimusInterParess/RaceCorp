@@ -1,26 +1,17 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
-    using System.ComponentModel;
-    using System.Net;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.Common;
-    using RaceCorp.Web.ViewModels.EventRegister;
     using RaceCorp.Web.ViewModels.Ride;
     using RaceCorp.Web.ViewModels.Trace;
 
-    using static System.Net.Mime.MediaTypeNames;
-
-    using static RaceCorp.Services.Constants.Common;
-    using static RaceCorp.Services.Constants.Drive;
     using static RaceCorp.Services.Constants.Messages;
 
     public class RideController : BaseController

@@ -19,8 +19,6 @@
     public class TownController : BaseController
     {
         private readonly ITownService townService;
-        private readonly IWebHostEnvironment environment;
-        private readonly UserManager<ApplicationUser> userManager;
 
         public TownController(
             ITownService townService,
@@ -28,8 +26,6 @@
             UserManager<ApplicationUser> userManager)
         {
             this.townService = townService;
-            this.environment = environment;
-            this.userManager = userManager;
         }
 
         [HttpGet]

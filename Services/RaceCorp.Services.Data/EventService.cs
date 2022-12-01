@@ -315,52 +315,48 @@
                 throw new InvalidOperationException(GlobalErrorMessages.UnauthorizedRequest);
             }
 
-            if (requester.Id == teamDb.ApplicationUserId)
+            var teamOnwer = teamDb.ApplicationUser;
+
+            var requestToRemove = teamOnwer
+                .Requests
+                .FirstOrDefault(r => r.IsApproved && r.RequesterId == requester.Id && r.Type == GlobalConstants.RequestTypeTeamJoin);
+
+            if (requester.Id == teamOnwer.Id)
             {
                 var newOnwer = teamDb.TeamMembers.FirstOrDefault(m => m.Id != requester.Id);
+
+                var requests = teamOnwer.Requests.Where(r => r.Type == GlobalConstants.RequestTypeTeamJoin).ToList();
+
+                foreach (var request in requests)
+                {
+                    this.requestRepo.HardDelete(request);
+                }
+
                 if (newOnwer != null)
                 {
                     newOnwer.Team = teamDb;
                     teamDb.ApplicationUser = newOnwer;
-                    teamDb.TeamMembers.Remove(requester);
-                    await this.teamRepo.SaveChangesAsync();
-                    return;
+                    teamDb.TeamMembers.Remove(teamOnwer);
                 }
-            }
-
-            var teamOnwer = teamDb.ApplicationUser;
-            if (teamOnwer != null)
-            {
-                var requestToRemove = teamOnwer
-                .Requests
-                .FirstOrDefault(r => r.IsApproved && r.RequesterId == requester.Id && r.Type == GlobalConstants.RequestTypeTeamJoin);
-                if (requestToRemove != null)
+                else
                 {
-                    teamOnwer.Requests.Remove(requestToRemove);
-                    teamDb.TeamMembers.Remove(requester);
+                    this.teamRepo.HardDelete(teamDb);
                 }
-            }
 
-            if (teamOnwer == null)
-            {
-                teamDb.TeamMembers.Remove(requester);
-            }
-
-            if (teamDb.TeamMembers.Count == 0)
-            {
-                this.teamRepo.HardDelete(teamDb);
                 await this.teamRepo.SaveChangesAsync();
-                throw new ArgumentException(GlobalErrorMessages.TeamNoLongerExists);
+
+                throw new ArgumentException(GlobalErrorMessages.TeamDeleted);
             }
 
-            try
+            if (requestToRemove != null)
             {
-                await this.teamRepo.SaveChangesAsync();
+                teamOnwer.Requests.Remove(requestToRemove);
             }
-            catch (Exception)
-            {
-                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
-            }
+
+            teamDb.TeamMembers.Remove(requester);
+            requester.MemberInTeam = null;
+
+            await this.teamRepo.SaveChangesAsync();
         }
 
         private async Task RegisterUserRide(EventRegisterModel eventModel)

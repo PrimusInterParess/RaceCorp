@@ -19,8 +19,6 @@
 
     public class RaceController : BaseController
     {
-        private const int ItemsPerPage = 2;
-
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
@@ -145,7 +143,7 @@
             }
             catch (Exception e)
             {
-                this.ModelState.AddModelError(" ", e.Message);
+                this.ModelState.AddModelError(string.Empty, e.Message);
                 model.Formats = this.formatsList.GetFormatKVP();
                 return this.View(model);
             }

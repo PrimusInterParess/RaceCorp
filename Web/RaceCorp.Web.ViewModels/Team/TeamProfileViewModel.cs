@@ -30,6 +30,10 @@
 
         public bool RequestedJoin { get; set; }
 
+        public string TownName { get; set; }
+
+        public bool CurrentUserIsOwner { get; set; } = false;
+
         public ICollection<TeamMember> TeamMembers { get; set; }
 
         public ICollection<RequestModel> JoinRequests { get; set; }
@@ -38,6 +42,7 @@
         {
             configuration.CreateMap<Team, TeamProfileViewModel>()
                                 .ForMember(x => x.JoinRequests, opt => opt.MapFrom(x => x.ApplicationUser.Requests.Where(r => r.Type == GlobalConstants.RequestTypeTeamJoin)));
+            ;
         }
     }
 }

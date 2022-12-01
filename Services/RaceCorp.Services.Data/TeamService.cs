@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
@@ -11,7 +12,6 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.Team;
-    using static System.Net.Mime.MediaTypeNames;
 
     public class TeamService : ITeamService
     {
@@ -100,6 +100,124 @@
             {
                 throw new InvalidOperationException(e.Message);
             }
+        }
+
+        public async Task EditAsync(TeamEditViewModel inputModel, string roothPath)
+        {
+            var teamDb = this.teamRepo
+                .All()
+                .Include(t => t.Images)
+                .Include(t => t.Town)
+                .FirstOrDefault(t => t.Id == inputModel.Id);
+
+            if (teamDb == null)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidTeam);
+            }
+
+            if (teamDb.Name != inputModel.Name)
+            {
+                var nameAlreadyExists = this.teamRepo.All().Any(t => t.Name == inputModel.Name);
+
+                if (nameAlreadyExists)
+                {
+                    throw new InvalidOperationException(GlobalErrorMessages.TeamAlreadyExists);
+                }
+
+                teamDb.Name = inputModel.Name;
+            }
+
+            if (teamDb.Town.Name != inputModel.TownName)
+            {
+                var town = this.townRepo
+                    .All()
+                    .FirstOrDefault(t => t.Name.ToLower() == inputModel.TownName.ToLower());
+
+                if (town == null)
+                {
+                    town = new Town
+                    {
+                        Name = inputModel.TownName,
+                        CreatedOn = DateTime.Now,
+                    };
+
+                    await this.townRepo.AddAsync(town);
+                }
+
+                teamDb.Town = town;
+            }
+
+            teamDb.Description = inputModel.Description;
+
+            if (inputModel.Logo != null)
+            {
+                try
+                {
+                    var logoImage = await this.fileService.ProccessingImageData(inputModel.Logo, inputModel.ApplicationUserId, roothPath, inputModel.Name);
+                    teamDb.LogoImagePath = $"\\{logoImage.ParentFolderName}\\{logoImage.ChildFolderName}\\{logoImage.Id}.{logoImage.Extension}";
+                    teamDb.Images.Add(logoImage);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException(e.Message);
+                }
+            }
+
+            teamDb.ModifiedOn = DateTime.Now;
+
+            try
+            {
+                await this.teamRepo.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+        }
+
+        public List<T> GetTeamMembers<T>(string teamId)
+        {
+            return this.teamRepo.AllAsNoTracking().Include(t => t.TeamMembers).To<T>().ToList();
+        }
+
+        public async Task RemoveUserAsync(string teamId, string memberId)
+        {
+            var teamDb = this.teamRepo
+                .All()
+                .Include(t => t.TeamMembers)
+                .Include(t => t.ApplicationUser)
+                .ThenInclude(to => to.Requests)
+                .FirstOrDefault(t => t.Id == teamId);
+
+            if (teamDb == null)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var memberDb = this.userRepo.All().Include(m => m.Team).Include(m => m.MemberInTeam).FirstOrDefault(m => m.Id == memberId);
+
+            if (memberDb == null || memberDb.Team != null)
+            {
+                throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var teamOwner = teamDb.ApplicationUser;
+
+            var requestToRemove = teamOwner
+               .Requests
+               .FirstOrDefault(r => r.IsApproved && r.RequesterId == memberDb.Id && r.Type == GlobalConstants.RequestTypeTeamJoin);
+
+            if (requestToRemove != null)
+            {
+                teamOwner.Requests.Remove(requestToRemove);                
+            }
+
+            teamDb.TeamMembers.Remove(memberDb);
+            memberDb.MemberInTeam = null;
+
+            teamDb.ModifiedOn = DateTime.Now;
+
+            await this.teamRepo.SaveChangesAsync();
         }
     }
 }
