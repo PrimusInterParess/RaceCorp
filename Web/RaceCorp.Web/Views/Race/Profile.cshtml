@@ -3,18 +3,6 @@
 @model RaceProfileViewModel
 @{
     this.ViewData["Title"] = "Race Profile";
-
-    var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
-    var isRegistered = false;
-    string currentUserId = null;
-
-    if (currentUserIdClaim != null)
-    {
-        currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
-    }
-
-    var hasPassed = DateTime.Parse(Model.Date) < DateTime.Now;
 }
 
 @if (this.TempData.ContainsKey("Message"))
@@ -42,19 +30,19 @@
 }
 
 <style>
-      .resize {
-      width: 100px;
-      height: auto;
-          }
+    .resize {
+        width: 100px;
+        height: auto;
+    }
 
-           .img-img {
-    border-radius: 40%;
-           }
+    .img-img {
+        border-radius: 40%;
+    }
 </style>
 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
-   this.User.IsInRole(GlobalConstants.UserRoleName))
+  this.User.IsInRole(GlobalConstants.UserRoleName))
 {
-    @if (currentUserId == Model.ApplicationUserId)
+    @if (Model.IsOwner)
     {
         <div class="row">
             <div class="col-md-4  mt-1 mb-3">
@@ -115,7 +103,6 @@
             Race Owner : @Model.ApplicationUserFirstName @Model.ApplicationUserLastName
             <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@Model.ApplicationUserId">
                 <img class="resize img-img" src="@Model.ApplicationUserProfilePicturePath" />
-
             </a>
         </div>
     }
@@ -187,10 +174,12 @@
                             var count = 0;
                             @foreach (var user in Model.RegisteredUsers)
                             {
+                                user.ApplicationUserMemberInTeamName = user.ApplicationUserMemberInTeamName == null ? "none" : user.ApplicationUserMemberInTeamName;
+
                                 <tr>
                                     <td scope="row">@(count += 1)</td>
                                     <td><a type="button" style="outline" class="btn btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
-                                    <td class="text-center">BTRevolution</td>
+                                    <td class="text-center">@user.ApplicationUserMemberInTeamName</td>
                                     <td class="text-center">@user.TownName</td>
                                     <td scope="col">@user.CreatedOn</td>
                                 </tr>

@@ -15,6 +15,12 @@
 
         public string ApplicationUserId { get; set; }
 
+        public bool IsOwner { get; set; }
+
+        public bool IsRegistered { get; set; }
+
+        public bool HasPassed { get; set; }
+
         public string ApplicationUserProfilePicturePath { get; set; }
 
         public string ApplicationUserFirstName { get; set; }

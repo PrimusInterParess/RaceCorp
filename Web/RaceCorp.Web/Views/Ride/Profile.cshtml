@@ -3,19 +3,14 @@
 
 @{
     this.ViewData["Title"] = "Ride Profile";
-    var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + Model.TraceGpxGoogleDriveId + "%22%5D%7D&embed&distance";
+
     var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
-    var isRegistered = false;
     string currentUserId = null;
+
     if (currentUserIdClaim != null)
     {
         currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
     }
-
-
-
-    var hasPassed = DateTime.Parse(Model.StartTime) < DateTime.Now;
 }
 
 @if (this.TempData.ContainsKey("Message"))
@@ -34,39 +29,39 @@
 }
 
 <style>
-      .resize {
-      width: 100px;
-      height: auto;
-          }
+    .resize {
+        width: 100px;
+        height: auto;
+    }
 
-           .img-img {
-    border-radius: 40%;
-           }
+    .img-img {
+        border-radius: 40%;
+    }
 </style>
 
 
 <ul class="nav">
     <li class="me-5">
         <h1>@Model.Name</h1>
-        @if(Model.ApplicationUserId != null)
+        @if (Model.ApplicationUserId != null)
         {
-             <div>
-            Ride publisher : @Model.ApplicationUserFirstName @Model.ApplicationUserLastName
-            <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@Model.ApplicationUserId">
-                <img class="resize img-img" src="@Model.ApplicationUserProfilePicturePath" />
-            </a>
-        </div>
+            <div>
+                Ride publisher : @Model.ApplicationUserFirstName @Model.ApplicationUserLastName
+                <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@Model.ApplicationUserId">
+                    <img class="resize img-img" src="@Model.ApplicationUserProfilePicturePath" />
+                </a>
+            </div>
         }
-       
+
     </li>
 
-    @if (hasPassed)
+    @if (Model.HasPassed)
     {
         <li>
             <button class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</button>
         </li>
     }
-    else if (isRegistered && currentUserId != null)
+    else if (Model.IsRegistered)
     {
         <li class="me-2  mt-2">
             <form method="post"
@@ -75,7 +70,7 @@
             </form>
         </li>
     }
-    else if (isRegistered == false && currentUserId != null)
+    else if (Model.IsRegistered == false && currentUserId != null)
     {
         <li class="me-2 mt-2">
             <form method="post"
@@ -94,7 +89,7 @@
     this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
     this.User.IsInRole(GlobalConstants.UserRoleName))
     {
-        @if (currentUserId == Model.ApplicationUserId)
+        @if (Model.IsOwner)
         {
             <li class="me-2 mt-2">
                 <form method="get">
@@ -112,7 +107,7 @@
 </ul>
 <div class="row mt-2">
     <div class="map-responsive col-md-5">
-        <iframe src="@url"></iframe>
+        <iframe src="@Model.TraceMapUrl"></iframe>
     </div>
     <div class="col-md-3">
         <div class="card-header">
@@ -149,11 +144,14 @@
                             int count = 0;
                             @foreach (var user in Model.RegisteredUsers)
                             {
+                                user.ApplicationUserMemberInTeamName = user.ApplicationUserMemberInTeamName == null ? "none" : user.ApplicationUserMemberInTeamName;
+
+
                                 <tr>
                                     <th scope="row">@(count += 1)</th>
                                     <td><a type="button" style="outline" class="btn btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
-                                    <td class="text-center">BTRevolution</td>
-                                    <td class="text-center">Town name here</td>
+                                    <td class="text-center">@user.ApplicationUserMemberInTeamName</td>
+                                    <td class="text-center">@user.ApplicationUserTownName</td>
                                 </tr>
                             }
                         }

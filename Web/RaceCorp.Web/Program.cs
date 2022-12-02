@@ -1,11 +1,10 @@
 namespace RaceCorp.Web
 {
     using System.Reflection;
-   
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,6 @@ namespace RaceCorp.Web
     using RaceCorp.Data.Repositories;
     using RaceCorp.Data.Seeding;
     using RaceCorp.Services;
-
     using RaceCorp.Services.Data;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
@@ -81,7 +79,7 @@ namespace RaceCorp.Web
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(configuration["SendGrid:ApiKey"]));
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IDifficultyService, DifficultyService>();
             services.AddTransient<IFormatServices, FormatService>();
@@ -127,7 +125,7 @@ namespace RaceCorp.Web
                 app.UseExceptionHandler("/Home/ErrorPage");
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

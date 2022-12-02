@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
 
     public class RideSeeder : ISeeder
@@ -36,6 +37,7 @@
                     Length = 39,
                     StartTime = DateTime.Now.AddDays(5),
                     GpxPath = "\\Gpxs\\Golden Bridges\\goldenBridges.gpx",
+                    MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1X-l7S5MX4rw9JrSrakVp-AAgVVXmHTQf"),
 
                     Gpx = new Gpx
                     {
@@ -70,6 +72,7 @@
                     Length = 19,
                     StartTime = DateTime.Now.AddDays(10),
                     GpxPath = "\\Gpxs\\Town Portal\\townPortalSimeonovo-Dragaletsi.gpx",
+                    MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1Jl4CvWN_nh6m14RO_-ugYSmpNa4R4uKa"),
 
                     Gpx = new Gpx
                     {
@@ -104,6 +107,7 @@
                     Length = 19,
                     StartTime = DateTime.Now.AddDays(30),
                     GpxPath = "\\Gpxs\\Town Portal\\townPortal.gpx",
+                    MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1v4Nx9YNGCeD8WySvhvj_ukGVDNUC4lz3"),
 
                     Gpx = new Gpx
                     {
@@ -138,6 +142,7 @@
                     Length = 24,
                     StartTime = DateTime.Now.AddDays(60),
                     GpxPath = "\\Gpxs\\Town Portal\\townPortalGornaBaniaPancharevo.gpx",
+                    MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1De6IwgWzfPTbPdY0cO-Eh1v9wQOfhwVw"),
 
                     Gpx = new Gpx
                     {
@@ -173,6 +178,7 @@
                     Length = 39,
                     StartTime = DateTime.Now.AddDays(120),
                     GpxPath = "\\Gpxs\\Kresna\\kresnaEpic.gpx",
+                    MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1EKOlp-9gBYmpY8hzx8jxlMbCdVdYS-gH"),
 
                     Gpx = new Gpx
                     {

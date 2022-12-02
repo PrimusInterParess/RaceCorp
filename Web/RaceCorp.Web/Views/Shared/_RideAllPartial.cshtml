@@ -21,27 +21,10 @@ else
     <div class="row">
         @foreach (var ride in this.Model.Rides)
         {
-            var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + ride.GoogleDriveId + "%22%5D%7D&embed&distance";
-
-           @* <div class="form-group card col-md-4 position-relative">
-                <div class="map-responsive-Card">
-                    <iframe src="@url"></iframe>
-                </div>
-                <div class="mt-1 card-body text-center">
-                    <a class="btn btn-outline-secondary" asp-controller="Ride" asp-action="Profile" asp-route-id="@ride.Id"><h5>@ride.Name</h5></a>
-                    <p class="card-text">
-                        <b> @ride.Description</b>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">@ride.TraceStartTime</li>
-                </ul>
-            </div>*@
-
             <div class="column">
                 <div class="card">
                     <div class="map-responsive-Card">
-                        <iframe src="@url"></iframe>
+                        <iframe src="@ride.TraceMapUrl"></iframe>
                     </div>
                     <div class="container">
                         <p>

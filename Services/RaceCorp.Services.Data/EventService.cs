@@ -607,14 +607,20 @@
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
 
-            var request = new Request()
+            if (requester.Team != null ||
+                requester.MemberInTeam != null)
             {
-                Type = GlobalConstants.RequestTypeTeamJoin,
-                TargetUser = teamOwner,
-                RequesterId = requesterId,
-                Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
-                CreatedOn = DateTime.UtcNow,
-            };
+                throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
+            }
+
+            var request = new Request()
+                {
+                    Type = GlobalConstants.RequestTypeTeamJoin,
+                    TargetUser = teamOwner,
+                    RequesterId = requesterId,
+                    Description = $"{requester.FirstName} {requester.LastName} want to join {teamDb.Name}",
+                    CreatedOn = DateTime.UtcNow,
+                };
 
             teamOwner.Requests.Add(request);
 

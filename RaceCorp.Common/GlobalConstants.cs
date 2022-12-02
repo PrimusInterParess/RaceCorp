@@ -17,7 +17,7 @@
 
         public const string ProfilePicterPostFix = "ProfilePicture";
 
-        public const string DateStringFormat = "d/MMMM/yyyy HH:mm";
+        public const string DateStringFormat = "d MMMM yyyy HH:mm";
         public const string DateMessageFormat = "d/M/yyyy HH:mm";
         public const string DateStringLongFormat = "D";
 
@@ -72,5 +72,9 @@
         public const string RegisteredMessage = "Your are now registered!";
 
         public const string RemovedTeamMember = "Team member Removed!";
+
+        public const string MapUrlTraceGpx = "https://gpx.studio/?state=%7B%22ids%22:%5B%22{0}%22%5D%7D&embed&distance";
+
+        public const string SecretText = "Keep 'Secret' save, and remember it. With it you can recover your password in case you forget it.";
     }
 }

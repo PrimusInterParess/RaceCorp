@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using RaceCorp.Common;
 
@@ -124,10 +125,11 @@
                         serviceAccountPath);
 
                         var trace = await this.traceService
-                        .ProccedingData(traceInputModel);
+                        .ProccedingData(traceInputModel, gpx.GoogleDriveId);
 
                         trace.GpxPath = $"\\{gpx.ParentFolderName}\\{gpx.ChildFolderName}\\{gpx.Id}.{gpx.Extension}";
                         trace.Gpx = gpx;
+
                         race.Traces.Add(trace);
                     }
                     catch (Exception e)
@@ -301,6 +303,21 @@
             }
 
             return true;
+        }
+
+        public void UpdateInfo(RaceProfileViewModel raceModel, ApplicationUser user)
+        {
+            if (user != null)
+            {
+                raceModel.IsRegistered = raceModel.RegisteredUsers.Any(u => u.ApplicationUserId == user.Id);
+                raceModel.IsOwner = raceModel.ApplicationUserId == user.Id;
+            }
+            else
+            {
+                raceModel.IsRegistered = false;
+            }
+
+            raceModel.HasPassed = DateTime.Parse(raceModel.Date) < DateTime.Now;
         }
     }
 }

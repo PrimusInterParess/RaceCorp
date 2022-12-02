@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using RaceCorp.Data.Models;
     using RaceCorp.Web.ViewModels.Common;
 
     using RaceCorp.Web.ViewModels.RaceViewModels;
@@ -24,5 +24,7 @@
         RaceAllViewModel GetUpcomingRaces(int page, int itemsPerPage = 3);
 
         Task<bool> DeleteAsync(int id);
+
+        void UpdateInfo(RaceProfileViewModel raceModel, ApplicationUser user);
     }
 }

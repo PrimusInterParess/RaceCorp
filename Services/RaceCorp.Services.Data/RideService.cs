@@ -67,7 +67,7 @@
                     Id = r.Id,
                     Name = r.Name,
                     Description = r.Description,
-                    GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
+                    TraceMapUrl = r.Trace.MapUrl,
                     TownName = r.Town.Name,
                     MountainName = r.Mountain.Name,
                     TraceStartTime = r.Trace.StartTime.ToString(GlobalConstants.DateMessageFormat),
@@ -104,7 +104,7 @@
                 serviceAccountPath);
 
             var trace = await this.traceService
-                .ProccedingData(model.Trace);
+                .ProccedingData(model.Trace, gpx.GoogleDriveId);
 
             trace.Gpx = gpx;
 
@@ -187,6 +187,7 @@
                     .AddAsync(gpx);
 
                 traceDb.Gpx = gpx;
+                traceDb.MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, gpx.GoogleDriveId);
             }
 
             try
@@ -243,7 +244,7 @@
                     Id = r.Id,
                     Name = r.Name,
                     Description = r.Description,
-                    GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
+                    TraceMapUrl = r.Trace.MapUrl,
                     TownName = r.Town.Name,
                     MountainName = r.Mountain.Name,
                     TraceStartTime = r.Trace.StartTime.ToString(GlobalConstants.DateStringFormat),
@@ -259,6 +260,21 @@
                 RacesCount = count,
                 Rides = rides,
             };
+        }
+
+        public void UpdateInfo(RideProfileVIewModel rideModel, ApplicationUser user)
+        {
+            if (user != null)
+            {
+                rideModel.IsRegistered = rideModel.RegisteredUsers.Any(u => u.ApplicationUserId == user.Id);
+                rideModel.IsOwner = rideModel.ApplicationUserId == user.Id;
+            }
+            else
+            {
+                rideModel.IsRegistered = false;
+            }
+
+            rideModel.HasPassed = DateTime.Parse(rideModel.StartTime) < DateTime.Now;
         }
     }
 }

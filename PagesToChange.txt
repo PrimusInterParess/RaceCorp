@@ -1,0 +1,9 @@
+https://localhost:44319/Identity/Account/ForgotPassword - change - link from login page
+
+https://localhost:44319/Identity/Account/ForgotPasswordConfirmation - change
+
+https://localhost:44319/Identity/Account/ResetPassword - change
+
+https://localhost:44319/Identity/Account/ResetPasswordConfirmation- change
+
+sending emails - remove magic strings

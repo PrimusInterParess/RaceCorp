@@ -158,7 +158,7 @@
                     this.TempData["ErrorMessage"] = GlobalConstants.RemovedTeamMember;
                     return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = teamId });
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     this.TempData["ErrorMessage"] = GlobalErrorMessages.InvalidRequest;
 

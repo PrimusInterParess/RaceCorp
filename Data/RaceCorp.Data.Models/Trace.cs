@@ -15,6 +15,8 @@
 
         public int Length { get; set; }
 
+        public string MapUrl { get; set; }
+
         public TimeSpan ControlTime { get; set; }
 
         public string GpxPath { get; set; }

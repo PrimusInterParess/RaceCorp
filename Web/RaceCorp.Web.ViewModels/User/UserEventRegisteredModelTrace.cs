@@ -14,7 +14,9 @@
 
         public string ApplicationUserLastName { get; set; }
 
-        public string ApplicationUserMemberInTeam { get; set; }
+        public string ApplicationUserTownName { get; set; }
+
+        public string ApplicationUserMemberInTeamName { get; set; }
 
         public string ApplicationUserMemberInTeamId { get; set; }
 
@@ -28,11 +30,7 @@
                 .ForMember(x => x.ApplicationUserLastName, opt
                        => opt.MapFrom(x => x.ApplicationUser.LastName))
                 .ForMember(x => x.CreatedOn, opt
-                      => opt.MapFrom(x => x.CreatedOn.ToString(GlobalConstants.DateStringFormat)))
-                 .ForMember(x => x.ApplicationUserMemberInTeam, opt
-                      => opt.MapFrom(x => x.ApplicationUser.MemberInTeam.Name))
-                 .ForMember(x => x.ApplicationUserMemberInTeam, opt
-                      => opt.MapFrom(x => x.ApplicationUser.MemberInTeamId));
+                      => opt.MapFrom(x => x.CreatedOn.ToString(GlobalConstants.DateStringFormat)));
         }
     }
 }

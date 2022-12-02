@@ -14,9 +14,9 @@
 
         public string ApplicationUserLastName { get; set; }
 
-        public string TownName { get; set; }
+        public string ApplicationUserMemberInTeamName { get; set; }
 
-        public string TeamName { get; set; }
+        public string TownName { get; set; }
 
         public string CreatedOn { get; set; }
 

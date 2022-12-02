@@ -189,7 +189,7 @@
             {
                 await this.teamRepo.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
@@ -213,7 +213,6 @@
             teamDto.RequestedJoin = teamDto.JoinRequests.Any(r => r.RequesterId == currentUserId);
 
             return teamDto;
-
         }
 
         public List<T> GetTeamMembers<T>(string teamId)

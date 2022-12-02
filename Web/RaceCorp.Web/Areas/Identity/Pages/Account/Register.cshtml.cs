@@ -14,7 +14,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
 
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
+
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
@@ -23,6 +23,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Data.Models.Enums;
+    using RaceCorp.Services.Messaging;
 
     public class RegisterModel : PageModel
     {
@@ -149,6 +150,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                         protocol: this.Request.Scheme);
 
                     await this.emailSender.SendEmailAsync(
+                        "diesonnekind@gmail.com",
+                        "Dani from RaceCorp",
                         this.Input.Email,
                         "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");

@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -73,6 +74,11 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
+            if (user == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
             try
             {
                 await this.raceService.CreateAsync(
@@ -92,9 +98,13 @@
             return this.RedirectToAction(nameof(RaceController.All));
         }
 
-        public IActionResult Profile(int id)
+        public async Task<IActionResult> ProfileAsync(int id)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
             var model = this.raceService.GetById<RaceProfileViewModel>(id);
+
+            this.raceService.UpdateInfo(model, user);
 
             if (model == null)
             {
@@ -149,7 +159,7 @@
             }
 
             this.TempData["Message"] = "Your race was successfully edited!";
-            return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
+            return this.RedirectToAction(nameof(RaceController.ProfileAsync), new { id = model.Id });
         }
 
         public IActionResult All(int pageId = 1)

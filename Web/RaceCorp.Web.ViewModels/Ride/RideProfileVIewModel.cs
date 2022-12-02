@@ -36,7 +36,13 @@
 
         public string Description { get; set; }
 
-        public string TraceGpxGoogleDriveId { get; set; }
+        public string TraceMapUrl { get; set; }
+
+        public bool IsOwner { get; set; }
+
+        public bool IsRegistered { get; set; }
+
+        public bool HasPassed { get; set; }
 
         public string TraceGpxId { get; set; }
 

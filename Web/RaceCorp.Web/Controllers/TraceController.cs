@@ -40,9 +40,13 @@
         }
 
         [HttpGet]
-        public IActionResult RaceTraceProfile(int raceId, int traceId)
+        public async Task<IActionResult> RaceTraceProfile(int raceId, int traceId)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
             var model = this.traceService.GetById<RaceTraceProfileModel>(raceId, traceId);
+
+            this.traceService.UpdateInfo(model, user);
 
             if (model == null)
             {

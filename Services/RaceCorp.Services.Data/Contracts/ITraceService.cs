@@ -17,8 +17,10 @@
 
         T GetById<T>(int raceId, int traceId);
 
-        Task<Trace> ProccedingData(TraceInputModel traceInputModel);
+        Task<Trace> ProccedingData(TraceInputModel traceInputModel, string gpxGoogleId);
 
         Task<bool> DeleteTraceAsync(int id);
+
+        void UpdateInfo(RaceTraceProfileModel traceModel,ApplicationUser user);
     }
 }

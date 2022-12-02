@@ -13,10 +13,12 @@
         public string ApplicationUserFirstName { get; set; }
 
         public string ApplicationUserLastName { get; set; }
+        public string ApplicationUserMemberInTeamName { get; set; }
 
-        public string MemberInTeam { get; set; }
+        public string ApplicationUserMemberInTeamId { get; set; }
 
-        public string MemberInTeamId { get; set; }
+        public string ApplicationUserTownName { get; set; }
+
 
         public string CreatedOn { get; set; }
 

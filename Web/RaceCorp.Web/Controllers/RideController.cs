@@ -98,7 +98,7 @@
         }
 
         [HttpGet]
-        public IActionResult Profile(int id)
+        public async Task<IActionResult> ProfileAsync(int id)
         {
             var model = this.rideService.GetById<RideProfileVIewModel>(id);
 
@@ -106,6 +106,9 @@
             {
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+            this.rideService.UpdateInfo(model, user);
 
             return this.View(model);
         }
@@ -163,7 +166,7 @@
 
             this.TempData["Message"] = "Your ride was successfully edited!";
 
-            return this.RedirectToAction(nameof(RideController.Profile), new { id = model.Id });
+            return this.RedirectToAction(nameof(RideController.ProfileAsync), new { id = model.Id });
         }
 
         [HttpPost]

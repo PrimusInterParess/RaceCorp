@@ -91,7 +91,7 @@
                 Id = r.Id,
                 Name = r.Name,
                 Description = r.Description,
-                GoogleDriveId = r.Trace.Gpx.GoogleDriveId,
+                TraceMapUrl = r.Trace.MapUrl,
                 TownName = r.Town.Name,
                 MountainName = r.Mountain.Name,
             })

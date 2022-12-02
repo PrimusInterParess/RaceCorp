@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
 
     public class RaceSeeder : ISeeder
@@ -49,6 +49,8 @@
                         ControlTime = TimeSpan.FromHours(18),
                         Length = 100,
                         GpxPath = "\\Gpxs\\Vitosha100km\\vitosha100km.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1arDdkmCrnPrYfZPKq6NlISKOOKq2BXFY"),
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -95,6 +97,8 @@
                         ControlTime = TimeSpan.FromHours(8),
                         Length = 19,
                         GpxPath = "\\Gpxs\\Murgash\\murgashPicnic.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1DQqa_i8S-FSfJNi9WEJLWWQl0bVM4LrV"),
+
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
@@ -116,6 +120,7 @@
                         ControlTime = TimeSpan.FromHours(14),
                         Length = 44,
                         GpxPath = "\\Gpxs\\Murgash\\murgashClassic.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1JodQPhuPOmba9KuyU8U-ZI2DFvlsUnkL"),
 
                         Gpx = new Gpx
                         {
@@ -138,6 +143,7 @@
                         ControlTime = TimeSpan.FromHours(18),
                         Length = 75,
                         GpxPath = "\\Gpxs\\Murgash\\murgashEpic.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "12X2AxNk2nMYBiYHYrg1OmTpjoB82rTI6"),
 
                         Gpx = new Gpx
                         {
@@ -186,6 +192,7 @@
                         ControlTime = TimeSpan.FromHours(12),
                         Length = 42,
                         GpxPath = "\\Gpxs\\Bike4Chepan\\bike4ChepanLong.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1JIhx8oyweUJmytzwbsPp5QBAbe0KuJVD"),
 
                         Gpx = new Gpx
                         {
@@ -208,11 +215,11 @@
                         ControlTime = TimeSpan.FromHours(12),
                         Length = 42,
                         GpxPath = "\\Gpxs\\Bike4Chepan\\bike4ChepanShort.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1Za4X3oxzkgXIqzgvBH3TLxtPQrUOoSC8"),
 
                         Gpx = new Gpx
                         {
                             ParentFolderName = "Gpxs",
-
                             CreatedOn = DateTime.Now,
                             Extension = "gpx",
                             ChildFolderName = "Bike4Chepan",
@@ -256,6 +263,7 @@
                         ControlTime = TimeSpan.FromHours(5),
                         Length = 18,
                         GpxPath = "\\Gpxs\\XCODragalevo\\xcoDragalevo.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1BXdW6q-1985PtsdGsf2vfU2CT7hP7equ"),
 
                         Gpx = new Gpx
                         {
@@ -304,6 +312,7 @@
                         ControlTime = TimeSpan.FromHours(4),
                         Length = 16,
                         GpxPath = "\\Gpxs\\XCOSimeonovo\\xcoSimeonovo.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1hg3hgYLJnIgxLi1vUAUHuMbNRdz030Hw"),
 
                         Gpx = new Gpx
                         {
@@ -353,6 +362,7 @@
                         ControlTime = TimeSpan.FromHours(9),
                         Length = 42,
                         GpxPath = "\\Gpxs\\AsenovgradskiBairi\\asenovgradskiBairiLong.gpx",
+                        MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, "1qc1_wE28CCfAzvpRQsmyzatBYYIS62Sr"),
 
                         Gpx = new Gpx
                         {

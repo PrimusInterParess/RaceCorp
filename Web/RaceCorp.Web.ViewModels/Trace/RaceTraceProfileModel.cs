@@ -30,11 +30,19 @@
 
         public string StartTime { get; set; }
 
-        public string GpxGoogleDriveId { get; set; }
+        public string MapUrl { get; set; }
 
         public string GpxId { get; set; }
 
         public string GpxPath { get; set; }
+
+        public bool IsOwner { get; set; }
+
+        public bool IsRegistered { get; set; }
+
+        public bool HasPassed { get; set; }
+
+        public string TraceRaceApplicationUserId { get; set; }
 
         public ICollection<UserEventRegisteredModelTrace> RegisteredUsers { get; set; }
 

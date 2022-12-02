@@ -1,7 +1,7 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
     using System.Threading.Tasks;
-
+    using RaceCorp.Data.Models;
     using RaceCorp.Web.ViewModels.Ride;
 
     public interface IRideService
@@ -14,12 +14,10 @@
 
         RideAllViewModel GetUpcomingRides(int page, int itemsPerPage = 3);
 
-       // Task<bool> Unregister(int id, string userId);
-
         T GetById<T>(int id);
 
         Task<bool> DeleteAsync(int id);
 
-       // Task<bool> RegisterUserToRide(int id, string userId);
+        void UpdateInfo(RideProfileVIewModel rideModel,ApplicationUser user);
     }
 }

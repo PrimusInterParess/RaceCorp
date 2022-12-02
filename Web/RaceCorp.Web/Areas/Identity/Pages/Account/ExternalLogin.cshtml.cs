@@ -19,17 +19,16 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using RaceCorp.Common;
     using RaceCorp.Data;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
+    using RaceCorp.Services.Messaging;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Dtos;
 
     [AllowAnonymous]
@@ -193,7 +192,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             var firstName = info.Principal.FindFirst(ClaimTypes.GivenName).Value;
             var lastName = info.Principal.FindFirst(ClaimTypes.Surname).Value;
 
-            if (this.ModelState.IsValid)    
+            if (this.ModelState.IsValid)
             {
                 var user = this.CreateUser();
 
@@ -241,7 +240,15 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                             values: new { area = "Identity", userId = userId, code = code },
                             protocol: this.Request.Scheme);
 
-                        await this.emailSender.SendEmailAsync(this.Input.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        try
+                        {
+                            await this.emailSender.SendEmailAsync("diesonnekind@gmail.com", "Dani from RaceCorp", this.Input.Email, "Email confirmation", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (this.userManager.Options.SignIn.RequireConfirmedAccount)

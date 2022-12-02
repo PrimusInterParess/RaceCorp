@@ -4,16 +4,12 @@
 @{
     this.ViewData["Title"] = "Trace Profile";
 
-    var url = "https://gpx.studio/?state=%7B%22ids%22:%5B%22" + Model.GpxGoogleDriveId + "%22%5D%7D&embed&distance";
-
     var currentUserIdClaim = this.User.FindFirst(ClaimTypes.NameIdentifier);
-    var isRegistered = false;
     string currentUserId = null;
 
     if (currentUserIdClaim != null)
     {
         currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        isRegistered = Model.RegisteredUsers.Any(u => u.ApplicationUserId == currentUserId);
     }
 
     var hasPassed = DateTime.Parse(Model.StartTime) < DateTime.Now;
@@ -32,7 +28,7 @@
     this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
     this.User.IsInRole(GlobalConstants.UserRoleName))
     {
-        @if (currentUserId == Model.RaceApplicationUserId)
+        @if (Model.IsOwner)
         {
             <li class="me-2">
                 <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Edit</a>
@@ -48,13 +44,13 @@
             <button class="btn btn-outline-info mb-1 btn-block" asp-controller="Trace" asp-action="DownloadGpx" asp-route-id="@Model.GpxId">Download Gpx file</button>
         </form>
     </li>
-    @if (hasPassed && currentUserId != null)
+    @if (Model.HasPassed)
     {
         <li>
             <a class="form-control btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</a>
         </li>
     }
-    else if (isRegistered && currentUserId != null)
+    else if (Model.IsRegistered)
     {
         <li>
             <form method="post" asp-controller="Event" asp-action="Unregister" asp-route-traceId="@Model.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.RaceId" asp-route-eventType="@GlobalConstants.EventTypeRace">
@@ -62,7 +58,7 @@
             </form>
         </li>
     }
-    else if (isRegistered == false && currentUserId != null)
+    else if (Model.IsRegistered == false && currentUserId != null)
     {
         <li>
             <form method="post" asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@Model.Id" asp-route-id="@Model.RaceId" asp-route-eventType="@GlobalConstants.EventTypeRace">
@@ -75,7 +71,7 @@
 
 <div class="row">
     <div class="map-responsive col-md-5">
-        <iframe src="@url"></iframe>
+        <iframe src="@Model.MapUrl"></iframe>
     </div>
     <div class="col-md-3">
 
@@ -111,11 +107,13 @@
                             int count = 0;
                             @foreach (var user in Model.RegisteredUsers)
                             {
+                                user.ApplicationUserMemberInTeamName = user.ApplicationUserMemberInTeamName == null ? "none" : user.ApplicationUserMemberInTeamName;
+
                                 <tr>
                                     <th scope="row">@(count += 1)</th>
                                     <td><a type="button" style="outline" class="btn btn-block" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@user.ApplicationUserId">@user.ApplicationUserFirstName @user.ApplicationUserLastName</a></td>
-                                    <td class="text-center">BTRevolution</td>
-                                    <td class="text-center">Town name here</td>
+                                    <td class="text-center">@user.ApplicationUserMemberInTeamName</td>
+                                    <td class="text-center">@user.ApplicationUserTownName</td>
                                 </tr>
                             }
                         }

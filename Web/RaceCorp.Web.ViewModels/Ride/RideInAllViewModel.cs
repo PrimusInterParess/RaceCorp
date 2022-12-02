@@ -14,7 +14,7 @@
 
         public string Description { get; set; }
 
-        public string GoogleDriveId { get; set; }
+        public string TraceMapUrl { get; set; }
 
         public string TownName { get; set; }
 

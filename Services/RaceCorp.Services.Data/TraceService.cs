@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,8 @@
                      roothPath,
                      serviceAccountPath);
 
+                    trace.MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, gpx.GoogleDriveId);
+
                     await this.gpxRepo
                     .AddAsync(gpx);
                     trace.Gpx = gpx;
@@ -91,8 +94,6 @@
 
         public async Task CreateRaceTraceAsync(RaceTraceEditModel model, string roothPath, string userId)
         {
-
-
             var raceName = this.raceRepo
                 .All()
                 .FirstOrDefault(r => r.Id == model.RaceId).Name;
@@ -114,7 +115,7 @@
                roothPath,
                serviceAccountPath);
 
-                var trace = await this.ProccedingData(model);
+                var trace = await this.ProccedingData(model, gpx.GoogleDriveId);
                 trace.Gpx = gpx;
                 trace.RaceId = model.RaceId;
             }
@@ -126,7 +127,7 @@
             await this.traceRepo.SaveChangesAsync();
         }
 
-        public async Task<Trace> ProccedingData(TraceInputModel traceInputModel)
+        public async Task<Trace> ProccedingData(TraceInputModel traceInputModel, string gpxGoogleDriveId)
         {
             var traceDto = new Trace()
             {
@@ -136,6 +137,7 @@
                 Length = (int)traceInputModel.Length,
                 CreatedOn = DateTime.Now,
                 StartTime = (DateTime)traceInputModel.StartTime,
+                MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, gpxGoogleDriveId),
             };
 
             await this.traceRepo.AddAsync(traceDto);
@@ -164,6 +166,21 @@
             }
 
             return true;
+        }
+
+        public void UpdateInfo(RaceTraceProfileModel traceModel, ApplicationUser user)
+        {
+            if (user != null)
+            {
+                traceModel.IsRegistered = traceModel.RegisteredUsers.Any(u => u.ApplicationUserId == user.Id);
+                traceModel.IsOwner = traceModel.TraceRaceApplicationUserId == user.Id;
+            }
+            else
+            {
+                traceModel.IsRegistered = false;
+            }
+
+            traceModel.HasPassed = DateTime.Parse(traceModel.StartTime) < DateTime.Now;
         }
     }
 }
