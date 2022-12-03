@@ -3,6 +3,7 @@
     using System;
 
     using RaceCorp.Data.Common.Models;
+    using RaceCorp.Data.Models.BaseModels;
 
     public class Logo : FileBaseModel
     {

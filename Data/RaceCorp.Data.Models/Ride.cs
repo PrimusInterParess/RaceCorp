@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using RaceCorp.Data.Common.Models;
+    using RaceCorp.Data.Models.BaseModels;
 
     public class Ride : RideBaseModel
     {

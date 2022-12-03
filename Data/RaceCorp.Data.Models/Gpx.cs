@@ -1,5 +1,7 @@
 ﻿namespace RaceCorp.Data.Models
 {
+    using RaceCorp.Data.Models.BaseModels;
+
     public class Gpx : FileBaseModel
     {
         public string GoogleDriveId { get; set; }

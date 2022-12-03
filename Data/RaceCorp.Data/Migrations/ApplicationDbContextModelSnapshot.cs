@@ -1299,7 +1299,7 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Images")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("RaceCorp.Data.Models.Team", "Team")
                         .WithMany("Images")
@@ -1420,7 +1420,7 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.Trace", "Trace")
                         .WithOne("Ride")
                         .HasForeignKey("RaceCorp.Data.Models.Ride", "TraceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RaceCorp.Data.Migrations
 {
-    public partial class olemale : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -526,9 +526,9 @@ namespace RaceCorp.Data.Migrations
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TownId = table.Column<int>(type: "int", nullable: false),
                     MountainId = table.Column<int>(type: "int", nullable: false),
@@ -592,7 +592,7 @@ namespace RaceCorp.Data.Migrations
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Images_Teams_TeamId",
                         column: x => x.TeamId,
@@ -609,6 +609,7 @@ namespace RaceCorp.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Length = table.Column<int>(type: "int", nullable: false),
+                    MapUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ControlTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     GpxPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GpxId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -653,9 +654,9 @@ namespace RaceCorp.Data.Migrations
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TownId = table.Column<int>(type: "int", nullable: false),
                     MountainId = table.Column<int>(type: "int", nullable: false),
@@ -693,7 +694,7 @@ namespace RaceCorp.Data.Migrations
                         column: x => x.TraceId,
                         principalTable: "Traces",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

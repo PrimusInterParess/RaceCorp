@@ -172,21 +172,16 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
-
-
             string pictureUri = string.Empty;
 
             if (info.LoginProvider.ToLower() == "google")
             {
-
-
                 var httpClient = this.httpClientFactory.CreateClient();
                 string peopleApiKey = this.configuration["Authentication:Google:ApiKey"];
                 var googleAccountId = info.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
                 var photosResponse = await httpClient.GetFromJsonAsync<PeopleApiPhotos>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=photos&key={peopleApiKey}");
 
                 pictureUri = photosResponse?.photos.FirstOrDefault()?.url;
-
             }
 
             var firstName = info.Principal.FindFirst(ClaimTypes.GivenName).Value;
@@ -242,8 +237,12 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
 
                         try
                         {
-                            await this.emailSender.SendEmailAsync("diesonnekind@gmail.com", "Dani from RaceCorp", this.Input.Email, "Email confirmation", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+                            await this.emailSender.SendEmailAsync(
+                                "diesonnekind@gmail.com",
+                                "Dani from RaceCorp",
+                                this.Input.Email,
+                                "Email confirmation",
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
                         }
                         catch (Exception e)
                         {

@@ -1,9 +1,9 @@
-﻿namespace RaceCorp.Data.Common.Models
+﻿namespace RaceCorp.Data.Models.BaseModels
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
 
+    using RaceCorp.Data.Common.Models;
     using RaceCorp.Data.Models;
 
     public abstract class RideBaseModel : BaseDeletableModel<int>

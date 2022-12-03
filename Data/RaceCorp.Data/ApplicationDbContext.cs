@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Reflection.Emit;
     using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
@@ -10,6 +11,7 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using RaceCorp.Data.Common.Models;
+    using RaceCorp.Data.Configurations;
     using RaceCorp.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
@@ -101,153 +103,19 @@
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            // TODO: Export into separete files!
-            // user
-            builder
-                .Entity<ApplicationUser>()
-                .HasMany(u => u.SentMessages)
-                .WithOne(m => m.Sender)
-                .HasForeignKey(m => m.SenderId);
+            builder.ApplyConfiguration(new ApplicationUserConfiguration());
+            builder.ApplyConfiguration(new ApplicationUserRaceConfiguration());
+            builder.ApplyConfiguration(new ApplicationUserRideConfiguration());
+            builder.ApplyConfiguration(new ApplicationUserTraceConfiguration());
+            builder.ApplyConfiguration(new ConnectionConfiguration());
+            builder.ApplyConfiguration(new GpxConfiguration());
+            builder.ApplyConfiguration(new ImageConfiguration());
+            builder.ApplyConfiguration(new LogoConfiguration());
+            builder.ApplyConfiguration(new RaceConfiguration());
+            builder.ApplyConfiguration(new RideConfiguration());
+            builder.ApplyConfiguration(new TeamConfiguration());
+            builder.ApplyConfiguration(new TraceConfiguration());
 
-            builder
-                .Entity<ApplicationUser>()
-                .HasMany(u => u.InboxMessages)
-                .WithOne(m => m.Receiver)
-                .HasForeignKey(m => m.RevceiverId);
-
-            builder
-                .Entity<ApplicationUser>()
-                .HasMany(u => u.Connections)
-                .WithOne(c => c.ApplicationUser)
-                .HasForeignKey(c => c.ApplicationUserId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            builder.Entity<ApplicationUser>()
-                .HasMany(u => u.Conversations)
-                .WithOne(c => c.ApplicationUser)
-                .HasForeignKey(c => c.ApplicationUserId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            builder.Entity<Gpx>()
-               .HasOne(g => g.ApplicationUser)
-               .WithMany()
-               .HasForeignKey(g => g.ApplicationUserId)
-               .OnDelete(DeleteBehavior.SetNull);
-
-            builder.Entity<Gpx>()
-              .HasOne(g => g.ApplicationUser)
-              .WithMany(u => u.Gpxs)
-              .HasForeignKey(g => g.ApplicationUserId);
-
-            builder
-                .Entity<Logo>()
-                .HasOne(l => l.ApplicationUser)
-                .WithMany(u => u.Logos)
-                .HasForeignKey(l => l.ApplicationUserId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            builder
-                .Entity<Image>()
-                .HasOne(l => l.ApplicationUser)
-                .WithMany(u => u.Images)
-                .HasForeignKey(l => l.ApplicationUserId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            builder
-                .Entity<Ride>()
-                .HasOne(l => l.ApplicationUser)
-                .WithMany(u => u.CreatedRides)
-                .HasForeignKey(l => l.ApplicationUserId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            builder
-                .Entity<Race>()
-                .HasOne(l => l.ApplicationUser)
-                .WithMany(u => u.CreatedRaces)
-                .HasForeignKey(l => l.ApplicationUserId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            builder
-                .Entity<ApplicationUserRace>()
-                .HasOne(l => l.ApplicationUser)
-                .WithMany(u => u.Races)
-                .HasForeignKey(l => l.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder
-                .Entity<ApplicationUserRide>()
-                .HasOne(l => l.ApplicationUser)
-                .WithMany(u => u.Rides)
-                .HasForeignKey(l => l.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder
-                .Entity<ApplicationUserTrace>()
-                .HasOne(l => l.ApplicationUser)
-                .WithMany(u => u.Traces)
-                .HasForeignKey(l => l.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder
-                .Entity<ApplicationUser>()
-                .HasMany(u => u.Requests)
-                .WithOne(r => r.TargetUser)
-                .HasForeignKey(r => r.TargetUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<ApplicationUser>()
-                .HasOne(u => u.MemberInTeam)
-                .WithMany(t => t.TeamMembers)
-                .HasForeignKey(u => u.MemberInTeamId);
-
-            builder.Entity<ApplicationUser>()
-                .HasMany(a => a.Images)
-                .WithOne(i => i.ApplicationUser)
-                .HasForeignKey(i => i.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Team>()
-                .HasOne(t => t.ApplicationUser)
-                .WithOne(u => u.Team)
-                .HasForeignKey<Team>(t => t.ApplicationUserId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            // user
-            // connection
-            builder
-                .Entity<Connection>()
-                .HasOne(c => c.ApplicationUser)
-                .WithMany(u => u.Connections)
-                .HasForeignKey(u => u.ApplicationUserId);
-
-            builder.Entity<Connection>()
-                .HasOne(c => c.Interlocutor)
-                .WithMany(u => u.InterlocutorConnections)
-                .HasForeignKey(u => u.InterlocutorId);
-
-            // connection
-            builder
-                 .Entity<Image>()
-                 .HasOne(i => i.Team)
-                 .WithMany(t => t.Images)
-                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Logo>()
-                .HasOne(l => l.Race)
-                .WithOne(r => r.Logo)
-                .HasForeignKey<Race>(r => r.LogoId);
-
-            builder
-                .Entity<Trace>()
-                .HasOne(l => l.Ride)
-                .WithOne(r => r.Trace)
-                .HasForeignKey<Ride>(r => r.TraceId);
-
-            builder
-                .Entity<Trace>()
-                .HasOne(t => t.Gpx)
-                .WithOne(g => g.Trace)
-                .HasForeignKey<Trace>(t => t.GpxId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

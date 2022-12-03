@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Data.Models
+﻿namespace RaceCorp.Data.Models.BaseModels
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

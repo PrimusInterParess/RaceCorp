@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221130090437_olemale")]
-    partial class olemale
+    [Migration("20221203083324_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -788,6 +788,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FormatId")
@@ -809,6 +810,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TownId")
@@ -900,6 +902,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FormatId")
@@ -915,6 +918,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TownId")
@@ -1080,6 +1084,9 @@ namespace RaceCorp.Data.Migrations
 
                     b.Property<int>("Length")
                         .HasColumnType("int");
+
+                    b.Property<string>("MapUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -1294,7 +1301,7 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Images")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("RaceCorp.Data.Models.Team", "Team")
                         .WithMany("Images")
@@ -1415,7 +1422,7 @@ namespace RaceCorp.Data.Migrations
                     b.HasOne("RaceCorp.Data.Models.Trace", "Trace")
                         .WithOne("Ride")
                         .HasForeignKey("RaceCorp.Data.Models.Ride", "TraceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
