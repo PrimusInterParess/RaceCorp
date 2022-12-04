@@ -104,12 +104,13 @@
 
             var model = this.raceService.GetById<RaceProfileViewModel>(id);
 
-            this.raceService.UpdateInfo(model, user);
-
             if (model == null)
             {
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
+
+            this.raceService.UpdateInfo(model, user);
+
 
             return this.View(model);
         }
