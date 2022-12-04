@@ -39,5 +39,7 @@ namespace RaceCorp.Common
         public const string AlreadyRegisteredForAnotherTrace = "Cannot register for this trace.You are already registered for {0} and it starts {1}";
 
         public const string TeamDeleted = "Team is deleted!";
+
+        public const string AlreadyHaveTeam = "You are already a member of {0}";
     }
 }

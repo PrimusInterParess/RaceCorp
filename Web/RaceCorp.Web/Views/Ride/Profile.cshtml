@@ -65,7 +65,7 @@
     {
         <li class="me-2  mt-2">
             <form method="post"
-              asp-controller="Event" asp-action="Unregister" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
+              asp-controller="Registration" asp-action="UnregisterRide" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
                 <button class="btn btn-outline-success mb-1 " type="submit">Unregister</button>
             </form>
         </li>
@@ -74,7 +74,7 @@
     {
         <li class="me-2 mt-2">
             <form method="post"
-              asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
+              asp-controller="Registration" asp-action="RegisterRide" asp-route-userId="@currentUserId" asp-route-id="@Model.Id" asp-route-eventType="@GlobalConstants.EventTypeRide">
                 <button class="btn btn-outline-success mb-1" type="submit">Register</button>
             </form>
         </li>

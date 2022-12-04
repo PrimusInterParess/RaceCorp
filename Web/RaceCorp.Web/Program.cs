@@ -94,13 +94,21 @@ namespace RaceCorp.Web
             services.AddTransient<ILogoService, LogoService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IAdminService, AdminService>();
-            services.AddTransient<IEventService, EventService>();
+            services.AddTransient<IApprovalService, ApprovalService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IGroupNameProvider, GroupNameProvider>();
             services.AddTransient<ISearchService, SearchService>();
             services.AddTransient<IDeletePersonelDataService, DeletePersonelDataService>();
+            services.AddTransient<IRegisterUserRaceService, RegisterUserRaceService>();
+            services.AddTransient<IUnregisterUserRaceService, UnregisterUserRaceService>();
+            services.AddTransient<IRegisterUserRideService, RegisterUserRideService>();
+            services.AddTransient<IUnregisterUserRideService, UnregisterUserRideService>();
+            services.AddTransient<IJoinTeamService, JoinTeamService>();
+            services.AddTransient<ILeaveTeamService, LeaveTeamService>();
+            services.AddTransient<IConnectUserService, ConnectUserService>();
+            services.AddTransient<IDisconnectUserService, DisconnectUserService>();
         }
 
         private static void Configure(WebApplication app)

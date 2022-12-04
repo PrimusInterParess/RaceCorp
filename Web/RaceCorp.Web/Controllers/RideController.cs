@@ -17,7 +17,7 @@
     public class RideController : BaseController
     {
         private readonly IRideService rideService;
-        private readonly IEventService eventService;
+        private readonly IApprovalService eventService;
         private readonly IDifficultyService difficultyService;
         private readonly IFormatServices formatServices;
         private readonly IGpxService gpxService;
@@ -26,7 +26,7 @@
 
         public RideController(
             IRideService rideService,
-            IEventService eventService,
+            IApprovalService eventService,
             IDifficultyService difficultyService,
             IFormatServices formatServices,
             IGpxService gpxService,

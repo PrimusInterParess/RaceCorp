@@ -23,6 +23,7 @@
         private readonly IDeletableEntityRepository<Town> townRepo;
         private readonly IFileService fileService;
         private readonly IDeletableEntityRepository<Request> requestRepo;
+        private readonly IDeletableEntityRepository<Connection> connectionRepo;
 
         public UserService(
             SignInManager<ApplicationUser> signInManager,
@@ -30,7 +31,8 @@
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Town> townRepo,
             IFileService fileService,
-            IDeletableEntityRepository<Request> requestRepo)
+            IDeletableEntityRepository<Request> requestRepo,
+            IDeletableEntityRepository<Connection> connectionRepo)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
@@ -38,6 +40,7 @@
             this.townRepo = townRepo;
             this.fileService = fileService;
             this.requestRepo = requestRepo;
+            this.connectionRepo = connectionRepo;
         }
 
         public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
@@ -145,14 +148,18 @@
                 .ToList();
         }
 
+        public bool AreConnected(string currentUserId, string targetUserId)
+        {
+            return this.connectionRepo.AllAsNoTracking().Any(c => c.InterlocutorId == currentUserId && c.ApplicationUserId == targetUserId);
+        }
+
         public bool RequestedConnection(string currentUserId, string targetUserId)
         {
-            return this.userRepo
-                .AllAsNoTracking()
-                .Include(u => u.Requests)
-                .FirstOrDefault(u => u.Id == currentUserId)
-                .Requests
-                .Any(r => r.RequesterId == targetUserId);
+            return this.requestRepo.AllAsNoTracking()
+                 .Any(
+                 r =>
+                 r.TargetUserId == targetUserId && r.RequesterId == currentUserId ||
+                 r.TargetUserId == currentUserId && r.RequesterId == targetUserId);
         }
 
         public string GetUserEmail(string userId)
@@ -180,24 +187,11 @@
                 throw new ArgumentException(GlobalErrorMessages.InvalidRequest);
             }
 
-            userDto.IsConnected = userDto
-                    .Connections
-                    .Any(
-                    c => c.Id == currentUserId + id ||
-                    c.Id == id + currentUserId) ||
-                    currentUserId == id;
+            userDto.IsConnected = this.AreConnected(currentUserId, userDto.Id);
 
-            userDto.RequestedConnection = userDto
-                .ConnectRequest
-                .Any(
-                r => r.RequesterId == currentUserId) ||
-                this.RequestedConnection(currentUserId, userDto.Id);
+            userDto.RequestedConnection = this.RequestedConnection(currentUserId, userDto.Id);
 
-            userDto.CanMessageMe = userDto
-                .Connections
-                .Any(
-                c => c.Id == currentUserId + id ||
-                c.Id == id + currentUserId);
+            userDto.CanMessageMe = this.AreConnected(currentUserId, userDto.Id);
 
             userDto.Connections = userDto
                 .Connections

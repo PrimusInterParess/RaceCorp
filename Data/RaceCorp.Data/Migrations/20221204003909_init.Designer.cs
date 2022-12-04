@@ -12,7 +12,7 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221203083324_init")]
+    [Migration("20221204003909_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

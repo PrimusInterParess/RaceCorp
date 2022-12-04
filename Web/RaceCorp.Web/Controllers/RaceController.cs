@@ -23,7 +23,7 @@
         private readonly IFormatServices formatsList;
         private readonly IDifficultyService difficultyService;
         private readonly IRaceService raceService;
-        private readonly IEventService eventService;
+        private readonly IApprovalService eventService;
         private readonly IGpxService gpxService;
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
@@ -32,7 +32,7 @@
             IFormatServices formatsList,
             IDifficultyService difficultyService,
             IRaceService raceService,
-            IEventService eventService,
+            IApprovalService eventService,
             IGpxService gpxService,
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager)

@@ -12,21 +12,28 @@
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Web.ViewModels.Common;
     using RaceCorp.Web.ViewModels.Team;
 
     public class TeamController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ITeamService teamService;
+        private readonly IJoinTeamService joinTeamService;
+        private readonly ILeaveTeamService leaveTeamService;
         private readonly IWebHostEnvironment environment;
 
         public TeamController(
             UserManager<ApplicationUser> userManager,
             ITeamService teamService,
+            IJoinTeamService joinTeamService,
+            ILeaveTeamService leaveTeamService,
             IWebHostEnvironment environment)
         {
             this.userManager = userManager;
             this.teamService = teamService;
+            this.joinTeamService = joinTeamService;
+            this.leaveTeamService = leaveTeamService;
             this.environment = environment;
         }
 
@@ -195,5 +202,58 @@
 
             return this.View(teamDto);
         }
+
+        public async Task<IActionResult> Join(RequestInputModel model)
+        {
+            try
+            {
+                await this.joinTeamService.RequestJoinTeamAsync(model.TargetId, model.RequesterId);
+
+                this.TempData["Joined"] = GlobalConstants.SuccessfulRequestJoin;
+
+                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+            }
+            catch (Exception e)
+            {
+                if (e.GetType() == typeof(ArgumentException))
+                {
+                    this.TempData["ErrorMessage"] = e.Message;
+
+                    return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+                }
+
+                this.TempData["ErrorMessage"] = e.Message;
+
+                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+            }
+        }
+
+        public async Task<IActionResult> Leave(RequestInputModel model)
+        {
+            try
+            {
+                await this.leaveTeamService.LeaveTeamAsync(model);
+
+                this.TempData["TeamLeave"] = GlobalConstants.SuccessfulTeamLeave;
+
+                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+            }
+            catch (Exception e)
+            {
+                this.TempData["ErrorMessage"] = e.Message;
+
+                if (e.GetType() == typeof(ArgumentException))
+                {
+                    this.TempData["ErrorMessage"] = e.Message;
+
+                    return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+                }
+
+                return this.RedirectToAction("Profile", "Team", new { area = string.Empty, id = model.TargetId });
+            }
+        }
+
+
+
     }
 }

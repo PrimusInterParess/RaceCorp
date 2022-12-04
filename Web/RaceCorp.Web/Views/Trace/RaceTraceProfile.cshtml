@@ -53,7 +53,7 @@
     else if (Model.IsRegistered)
     {
         <li>
-            <form method="post" asp-controller="Event" asp-action="Unregister" asp-route-traceId="@Model.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.RaceId" asp-route-eventType="@GlobalConstants.EventTypeRace">
+            <form method="post" asp-controller="Registration" asp-action="UnregisterRace" asp-route-traceId="@Model.Id" asp-route-userId="@currentUserId" asp-route-id="@Model.RaceId" asp-route-eventType="@GlobalConstants.EventTypeRace">
                 <button class="form-control btn btn-outline-danger mb-1" type="submit">Unregister</button>
             </form>
         </li>
@@ -61,7 +61,7 @@
     else if (Model.IsRegistered == false && currentUserId != null)
     {
         <li>
-            <form method="post" asp-controller="Event" asp-action="Register" asp-route-userId="@currentUserId" asp-route-traceId="@Model.Id" asp-route-id="@Model.RaceId" asp-route-eventType="@GlobalConstants.EventTypeRace">
+            <form method="post" asp-controller="Registration" asp-action="RegisterRace" asp-route-userId="@currentUserId" asp-route-traceId="@Model.Id" asp-route-id="@Model.RaceId" asp-route-eventType="@GlobalConstants.EventTypeRace">
                 <button class="form-control btn btn-outline-success mb-1 btn-block" type="submit">Register</button>
             </form>
         </li>
