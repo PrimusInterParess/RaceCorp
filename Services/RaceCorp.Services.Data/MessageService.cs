@@ -30,7 +30,7 @@
         public async Task<List<T>> GetMessages<T>(string userId, string interlocutorId)
         {
             var user = this.userRepo
-                  
+
                   .All()
                   .Include(u => u.InboxMessages)
                   .FirstOrDefault(u => u.Id == userId);
@@ -66,7 +66,7 @@
             {
                 Id = id,
                 ProfilePicturePath = userDb.ProfilePicturePath,
-                Conversations = userDb.Conversations.Select(c => new UserConversationViewModel
+                Conversations = userDb.Conversations.OrderByDescending(c => DateTime.Parse(c.LastMessageDate)).Select(c => new UserConversationViewModel
                 {
                     Id = c.Id,
                     AuthorId = c.ApplicationUserId,
