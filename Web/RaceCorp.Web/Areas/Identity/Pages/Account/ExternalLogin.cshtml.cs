@@ -194,7 +194,18 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
 
-                var result = await this.userManager.CreateAsync(user);
+                IdentityResult result;
+
+                try
+                {
+                    result = await this.userManager.CreateAsync(user);
+
+                }
+                catch (Exception)
+                {
+                    return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+                }
+
                 if (result.Succeeded)
                 {
                     if (firstName != null)

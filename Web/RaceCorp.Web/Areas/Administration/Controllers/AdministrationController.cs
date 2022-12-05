@@ -3,9 +3,12 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
+
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.Areas.Administration.Infrastructure.Contracts;
@@ -14,35 +17,28 @@
 
     using static RaceCorp.Services.Constants.Common;
 
-    // [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [Area("Administration")]
+    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class AdministrationController : BaseController
     {
         private readonly IWebHostEnvironment environment;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IFileService fileService;
-        private readonly IAdminService adminService;
+        private readonly IAdminFileService adminFileService;
 
         public AdministrationController(
             IWebHostEnvironment environment,
             UserManager<ApplicationUser> userManager,
-            IFileService fileService,
-            IAdminService adminService)
+            IAdminFileService adminFileService)
         {
             this.environment = environment;
             this.userManager = userManager;
-            this.fileService = fileService;
-            this.adminService = adminService;
+            this.adminFileService = adminFileService;
         }
 
         [HttpGet]
-        public IActionResult UploadPicture(string type)
+        public IActionResult UploadPicture()
         {
-            var model = new PictureUploadModel()
-            {
-                Type = type,
-            };
-            return this.View(model);
+            return this.View();
         }
 
         [HttpPost]
@@ -52,13 +48,13 @@
 
             try
             {
-                await this.adminService.UploadingPicture(inputModel, this.environment.WebRootPath, user.Id);
+                await this.adminFileService.ProccessingImageData(inputModel.Picture, inputModel.Type, user.Id, this.environment.WebRootPath, SystemImageFolderName);
             }
             catch (Exception e)
             {
                 this.ModelState.AddModelError(string.Empty, e.Message);
 
-                // return this.View(model);
+                return this.View();
             }
 
             this.TempData["Message"] = "Your picture was successfully added!";

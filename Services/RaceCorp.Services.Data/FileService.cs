@@ -73,6 +73,7 @@
                 ChildFolderName = childrenFolderName,
                 Extension = extension,
                 ApplicationUserId = userId,
+                CreatedOn = DateTime.Now,
             };
 
             var imageRoothPath = $"{roothPath}\\{ImageParentFolderName}";

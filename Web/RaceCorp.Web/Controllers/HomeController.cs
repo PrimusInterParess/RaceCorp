@@ -1,21 +1,13 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.AspNetCore.Authentication.Google;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels;
     using RaceCorp.Web.ViewModels.User;
-    using RaceCorp.Web.ViewModels.CommonViewModels;
 
     public class HomeController : BaseController
     {

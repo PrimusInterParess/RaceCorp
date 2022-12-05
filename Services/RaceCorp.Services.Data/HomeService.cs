@@ -54,18 +54,25 @@
         {
             var townImage = this.imageRepo
                 .AllAsNoTracking()
+                .OrderByDescending(x => x.CreatedOn)
                 .FirstOrDefault(x => x.Name == TownImageName);
 
             var mountainImage = this.imageRepo
                 .AllAsNoTracking()
+                                .OrderByDescending(x => x.CreatedOn)
+
                 .FirstOrDefault(x => x.Name == MountainImageName);
 
             var upcommingRaceImage = this.imageRepo
                 .AllAsNoTracking()
+                                .OrderByDescending(x => x.CreatedOn)
+
                 .FirstOrDefault(x => x.Name == UpcommingRaceImageName);
 
             var upcommingRidesImage = this.imageRepo
                 .AllAsNoTracking()
+                                .OrderByDescending(x => x.CreatedOn)
+
                 .FirstOrDefault(x => x.Name == UpcommingRidesImageName);
 
             var model = new IndexViewModel();

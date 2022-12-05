@@ -76,5 +76,10 @@
         public const string MapUrlTraceGpx = "https://gpx.studio/?state=%7B%22ids%22:%5B%22{0}%22%5D%7D&embed&distance";
 
         public const string SecretText = "Keep 'Secret' save, and remember it. With it you can recover your password in case you forget it.";
+
+        public const string TownImageName = "Town";
+        public const string MountainImageName = "Mountain";
+        public const string UpcommingRaceImageName = "Upcoming Races";
+        public const string UpcommingRidesImageName = "Upcoming Rides";
     }
 }

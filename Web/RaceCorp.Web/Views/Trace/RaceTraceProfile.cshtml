@@ -28,7 +28,7 @@
     this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
     this.User.IsInRole(GlobalConstants.UserRoleName))
     {
-        @if (Model.IsOwner)
+        @if (Model.IsOwner || this.User.IsInRole(GlobalConstants.AdministratorRoleName))
         {
             <li class="me-2">
                 <a class="btn btn-outline-secondary mb-1" asp-controller="Trace" asp-action="EditRaceTrace" asp-route-traceId="@Model.Id" asp-route-raceId="@Model.RaceId">Edit</a>

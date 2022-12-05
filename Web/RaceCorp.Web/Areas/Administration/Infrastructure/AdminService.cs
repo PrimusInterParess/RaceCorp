@@ -14,11 +14,31 @@
     {
         private readonly IFileService fileService;
         private readonly IRepository<Image> imageRepo;
+        private readonly IAdminRideService adminRideService;
+        private readonly IAdminRaceService adminRaceService;
+        private readonly IRaceService raceService;
 
-        public AdminService(IFileService fileService, IRepository<Image> imageRepo)
+        public AdminService(
+            IFileService fileService,
+            IRepository<Image> imageRepo,
+            IAdminRideService adminRideService,
+            IAdminRaceService adminRaceService,
+            IRaceService raceService)
         {
             this.fileService = fileService;
             this.imageRepo = imageRepo;
+            this.adminRideService = adminRideService;
+            this.adminRaceService = adminRaceService;
+            this.raceService = raceService;
+        }
+
+        public DashboardIndexViewModel GetIndexModel()
+        {
+            return new DashboardIndexViewModel
+            {
+                NoOwnerRaces = this.adminRaceService.GetNoOwnerRaces(),
+                NoOwnerRides = this.adminRideService.GetNoOwnerRides(),
+            };
         }
 
         public async Task UploadingPicture(PictureUploadModel inputModel, string roothPath, string userId)

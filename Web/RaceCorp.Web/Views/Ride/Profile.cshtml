@@ -58,7 +58,7 @@
     @if (Model.HasPassed)
     {
         <li>
-            <button class="btn btn-outline-success disabled mb-1">Event has passed! Try it next time!</button>
+            <button class="btn btn-outline-success disabled  me-2 mt-2">Event has passed! Try it next time!</button>
         </li>
     }
     else if (Model.IsRegistered)
@@ -89,7 +89,7 @@
     this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
     this.User.IsInRole(GlobalConstants.UserRoleName))
     {
-        @if (Model.IsOwner)
+        @if (Model.IsOwner || this.User.IsInRole(GlobalConstants.AdministratorRoleName))
         {
             <li class="me-2 mt-2">
                 <form method="get">

@@ -109,6 +109,11 @@ namespace RaceCorp.Web
             services.AddTransient<ILeaveTeamService, LeaveTeamService>();
             services.AddTransient<IConnectUserService, ConnectUserService>();
             services.AddTransient<IDisconnectUserService, DisconnectUserService>();
+            services.AddTransient<IAdminFileService, AdminFileService>();
+            services.AddTransient<IAdminRaceService, AdminRaceService>();
+            services.AddTransient<IAdminRideService, AdminRideService>();
+            services.AddTransient<IAdminUserService, AdminUserService>();
+
         }
 
         private static void Configure(WebApplication app)
