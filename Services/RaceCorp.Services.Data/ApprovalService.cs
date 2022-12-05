@@ -9,6 +9,7 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
+    using RaceCorp.Services.Messaging;
     using RaceCorp.Web.ViewModels.Common;
 
     public class ApprovalService : IApprovalService
@@ -17,17 +18,20 @@
         private readonly IDeletableEntityRepository<Request> requestRepo;
         private readonly IDeletableEntityRepository<Connection> connectionRepo;
         private readonly IDeletableEntityRepository<Conversation> conversationRepo;
+        private readonly IEmailSender emailSender;
 
         public ApprovalService(
             IDeletableEntityRepository<ApplicationUser> userRepo,
             IDeletableEntityRepository<Request> requestRepo,
             IDeletableEntityRepository<Connection> connectionRepo,
-            IDeletableEntityRepository<Conversation> conversationRepo)
+            IDeletableEntityRepository<Conversation> conversationRepo,
+            IEmailSender emailSender)
         {
             this.userRepo = userRepo;
             this.requestRepo = requestRepo;
             this.connectionRepo = connectionRepo;
             this.conversationRepo = conversationRepo;
+            this.emailSender = emailSender;
         }
 
         public async Task ProccesApproval(ApproveRequestModel inputModel)
@@ -96,6 +100,13 @@
 
             try
             {
+                //await this.emailSender.SendEmailAsync(
+                //    GlobalConstants.AdminEmail,
+                //    GlobalConstants.AdminName,
+                //    targetUser.Email,
+                //    string.Format(GlobalConstants.EmailJoinTeamSubject, targetUser.Team.Name),
+                //    string.Format(GlobalConstants.EmailJoinTeamText, $"{requesterDb.FirstName} {requesterDb.LastName}", targetUser.Team.Name, requestDb.CreatedOn.ToString(GlobalConstants.DateStringFormat)));
+
                 await this.userRepo.SaveChangesAsync();
             }
             catch (Exception e)

@@ -34,6 +34,7 @@
     <ProjectReference Include="..\..\RaceCorp.Common\RaceCorp.Common.csproj" />
     <ProjectReference Include="..\..\Web\RaceCorp.Web.ViewModels\RaceCorp.Web.ViewModels.csproj" />
     <ProjectReference Include="..\RaceCorp.Services.Mapping\RaceCorp.Services.Mapping.csproj" />
+    <ProjectReference Include="..\RaceCorp.Services.Messaging\RaceCorp.Services.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

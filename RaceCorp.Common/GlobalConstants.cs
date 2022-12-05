@@ -81,5 +81,12 @@
         public const string MountainImageName = "Mountain";
         public const string UpcommingRaceImageName = "Upcoming Races";
         public const string UpcommingRidesImageName = "Upcoming Rides";
+
+        public const string AdminEmail = "diesonnekind@gmail.com";
+        public const string AdminName = "Dani from RaceCorp";
+
+        public const string EmailJoinTeamSubject = "Request to join {0}";
+
+        public const string EmailJoinTeamText = "{0} wants to join {1}. The Request is created on {2}.\n Have a great day!\n RaceCorp";
     }
 }
