@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaceCorp.Data;
 
@@ -11,9 +12,10 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221206075628_add-admin-contanct")]
+    partial class addadmincontanct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,9 +138,6 @@ namespace RaceCorp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("AdminContactReplyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AdminId")
                         .HasColumnType("nvarchar(450)");
 
@@ -160,9 +159,6 @@ namespace RaceCorp.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsReplied")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -171,53 +167,11 @@ namespace RaceCorp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminContactReplyId");
-
                     b.HasIndex("AdminId");
 
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("AdminContacts");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.AdminContactReply", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AdminContactId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AdminId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdminContactId");
-
-                    b.HasIndex("AdminId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("AdminContactReplies");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationRole", b =>
@@ -878,6 +832,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FormatId")
@@ -991,6 +946,7 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FormatId")
@@ -1259,34 +1215,11 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.AdminContact", b =>
                 {
-                    b.HasOne("RaceCorp.Data.Models.AdminContactReply", "AdminContactReply")
-                        .WithMany()
-                        .HasForeignKey("AdminContactReplyId");
-
                     b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Admin")
                         .WithMany("AdminContacts")
                         .HasForeignKey("AdminId");
 
                     b.Navigation("Admin");
-
-                    b.Navigation("AdminContactReply");
-                });
-
-            modelBuilder.Entity("RaceCorp.Data.Models.AdminContactReply", b =>
-                {
-                    b.HasOne("RaceCorp.Data.Models.AdminContact", "AdminContact")
-                        .WithMany()
-                        .HasForeignKey("AdminContactId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("RaceCorp.Data.Models.ApplicationUser", "Admin")
-                        .WithMany("AdminContactReplies")
-                        .HasForeignKey("AdminId");
-
-                    b.Navigation("Admin");
-
-                    b.Navigation("AdminContact");
                 });
 
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
@@ -1599,8 +1532,6 @@ namespace RaceCorp.Data.Migrations
 
             modelBuilder.Entity("RaceCorp.Data.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("AdminContactReplies");
-
                     b.Navigation("AdminContacts");
 
                     b.Navigation("Claims");

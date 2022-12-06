@@ -41,5 +41,8 @@ namespace RaceCorp.Common
         public const string TeamDeleted = "Team is deleted!";
 
         public const string AlreadyHaveTeam = "You are already a member of {0}";
+
+        public const string NotExistingContent = "The content you are trying to reach does not exists";
+
     }
 }

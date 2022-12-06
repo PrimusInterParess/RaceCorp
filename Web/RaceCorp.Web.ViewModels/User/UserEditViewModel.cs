@@ -35,8 +35,6 @@
 
         public DateTime DateOfBirth { get; set; } = DateTime.UtcNow;
 
-        [Required]
-        [StringLength(GlobalIntValues.DescriptionMaxLegth, ErrorMessage = GlobalErrorMessages.StringLengthError, MinimumLength = GlobalIntValues.DescriptionMinLegth)]
         public string About { get; set; }
 
         [Url]

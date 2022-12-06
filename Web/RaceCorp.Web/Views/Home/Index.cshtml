@@ -10,6 +10,22 @@
         img {
   border-radius: 1%;
 }
+
+.carousel .item>img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    height: 100%;
+}
+
+    .carousel-inner > .item > img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width: 100%;
+        height: 700px;
+    }
     </style>
 
 @if (this.TempData.ContainsKey("Message"))
@@ -22,6 +38,11 @@
     <div class="alert alert-success">@this.TempData["ErrorMessage"]</div>
 }
 
+@if (this.TempData.ContainsKey("AdminContact"))
+{
+    <div class="alert alert-success">@this.TempData["AdminContact"]</div>
+}
+
 <div id="carouselExampleCaptions" class="carousel slide col-md-10 offset-1" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -32,7 +53,7 @@
     <div class="carousel-inner">
 
         <div class="carousel-item active">
-            <img src="@Model.TownImagePath" class="d-block w-100" style="width:400px;height:550px">
+            <img src="@Model.TownImagePath" class="d-block w-100 h-100" >
             <div class="carousel-caption d-none d-md-block">
                 <h5>Welcome!</h5>
                 <p><a class="btn btn-secondary" asp-controller="Town" asp-action="All"><b>Check all towns with registered races</b></a></p>
@@ -42,7 +63,7 @@
 
 
         <div class="carousel-item">
-            <img src="@Model.MountainImagePath" class="d-block w-100" style="width:400px;height:550px">
+            <img src="@Model.MountainImagePath" class="d-block w-100 h-100">
             <div class="carousel-caption d-none d-md-block">
                 <h5>Amazing views!</h5>
                 <p><a class="btn btn-secondary" asp-controller="Mountain" asp-action="All"><b>Check all mountains with registered races</b></a></p>
@@ -52,7 +73,7 @@
 
 
         <div class="carousel-item">
-            <img src="@Model.UpcomingRaceImagePath" class="d-block w-100" style="width:400px;height:550px">
+            <img src="@Model.UpcomingRaceImagePath" class="d-block w-100 h-100">
             <div class="carousel-caption d-none d-md-block">
                 <h5>Great! Time for Racing!</h5>
                 <p><a class="btn btn-secondary" asp-controller="Race" asp-action="UpcomingRaces"><b>Check the upcoming races!</b></a></p>
@@ -60,7 +81,7 @@
         </div>
 
         <div class="carousel-item">
-            <img src="@Model.UpcomingRidesImagePath" class="d-block w-100" style="width:400px;height:550px">
+            <img src="@Model.UpcomingRidesImagePath" class="d-block w-100 h-100">
             <div class="carousel-caption d-none d-md-block">
                 <h5>Great! Time for a ride!</h5>
                 <p><a class="btn btn-secondary" asp-controller="Ride" asp-action="UpcomingRides"><b>Check the upcoming rides!</b></a></p>

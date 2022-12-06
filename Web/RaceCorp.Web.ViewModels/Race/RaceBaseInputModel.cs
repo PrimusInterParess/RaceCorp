@@ -37,7 +37,6 @@
 
         public IFormFile RaceLogo { get; set; }
 
-        [StringLength(DefaultDescriptionMaxValue, MinimumLength = DefaultDescriptionMinValue, ErrorMessage = DefaultStringLengthErrorMessage)]
         public string Description { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> Formats { get; set; } = new List<KeyValuePair<string, string>>();

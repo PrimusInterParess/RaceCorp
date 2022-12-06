@@ -13,7 +13,6 @@
 
         public DateTime Date { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
         public string ApplicationUserId { get; set; }

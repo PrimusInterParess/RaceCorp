@@ -24,10 +24,10 @@
             await dbContext.AddAsync(new ApplicationUser
             {
                 CreatedOn = DateTime.Now,
-                Email = "yborisov@gmail.com",
-                UserName = "yborisov@gmail.com",
-                NormalizedEmail = "yborisov@gmail.com".ToUpper(),
-                NormalizedUserName = "yborisov@gmail.com".ToUpper(),
+                Email = "diesonnekind@gmail.com",
+                UserName = "diesonnekind@gmail.com",
+                NormalizedEmail = "diesonnekind@gmail.com".ToUpper(),
+                NormalizedUserName = "diesonnekind@gmail.com".ToUpper(),
                 FirstName = "Yordan",
                 LastName = "Borisov",
                 TownId = 1,

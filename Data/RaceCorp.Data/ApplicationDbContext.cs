@@ -3,8 +3,6 @@
     using System;
     using System.Linq;
     using System.Reflection;
-    using System.Reflection.Emit;
-    using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -25,6 +23,10 @@
             : base(options)
         {
         }
+
+        public DbSet<AdminContactReply> AdminContactReplies { get; set; }
+
+        public DbSet<AdminContact> AdminContacts { get; set; }
 
         public DbSet<Message> Messages { get; set; }
 

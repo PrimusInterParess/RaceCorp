@@ -113,6 +113,7 @@ namespace RaceCorp.Web
             services.AddTransient<IAdminRaceService, AdminRaceService>();
             services.AddTransient<IAdminRideService, AdminRideService>();
             services.AddTransient<IAdminUserService, AdminUserService>();
+            services.AddTransient<IAdminContactService, AdminContactService>();
 
         }
 

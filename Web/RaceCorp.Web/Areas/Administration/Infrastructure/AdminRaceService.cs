@@ -48,6 +48,7 @@
 
         public List<RaceIndexPageModel> GetNoOwnerRaces()
         {
+
             return this.raceRepo.All()
                 .Include(r => r.ApplicationUser)
                 .Where(r => r.ApplicationUserId == null || r.ApplicationUser == null)

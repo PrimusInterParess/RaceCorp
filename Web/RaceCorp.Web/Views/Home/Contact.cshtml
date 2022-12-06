@@ -1,0 +1,25 @@
+﻿@using RaceCorp.Web.ViewModels.Common;
+@model ContactFormModel
+
+
+@{
+    this.ViewData["Title"] = "Contact page";
+}
+
+<header>Contact form</header>
+
+<form method="post" id="form" class="topBefore">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Name" id="name" type="text" placeholder="Name">
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <input asp-for="Email" id="email" type="text" placeholder="Email">
+    <span asp-validation-for="Email" class="text-danger"></span>
+
+    <input asp-for="Subject" id="subject" type="text" placeholder="Subject">
+    <span asp-validation-for="Subject" class="text-danger"></span>
+
+    <textarea asp-for="Content" id="message" type="text" placeholder="Content"></textarea>
+    <span asp-validation-for="Content" class="text-danger"></span>
+
+    <input id="submit" type="submit" value="Send!">
+</form>

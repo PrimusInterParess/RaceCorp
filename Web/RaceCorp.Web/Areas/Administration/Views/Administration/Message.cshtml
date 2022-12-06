@@ -1,0 +1,88 @@
+﻿@using RaceCorp.Web.Areas.Administration.Models.Message;
+@model MessageProfileModel
+
+<style>
+    /*/* Style inputs with type="text", select elements and textareas */
+    input[type=text], select, textarea {
+        width: 100%; /* Full width */
+        padding: 12px; /* Some padding */
+        border: 1px solid #ccc; /* Gray border */
+        border-radius: 4px; /* Rounded borders */
+        box-sizing: border-box; /* Make sure that padding and width stays in place */
+        margin-top: 6px; /* Add a top margin */
+        margin-bottom: 16px; /* Bottom margin */
+        resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+    }
+
+    /* Style the submit button with a specific background color etc */
+    input[type=submit] {
+        background-color: #04AA6D;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        /* When moving the mouse over the submit button, add a darker green color */
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+    /* Add a background color and some padding around the form */
+    .container {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
+</style>
+
+
+<div class="form-control text-center">
+    <h3>Message</h3>
+
+    <div>
+        <p class="text-decoration text-black"><em>Name:</em> <b>@Model.ContactName</b></p>
+    </div>
+    <div>
+        <p class="text-decoration text-black"><em>Email:</em>  <b>@Model.ContactEmail</b></p>
+    </div>
+    <div>
+        <p class="text-decoration text-black"><em>Subject:</em> <b> @Model.Subject</b></p>
+    </div>
+    <div>
+        <p class="text-decoration text-black"><em>Content: </em> <b>@Model.Content</b></p>
+    </div>
+    <div>
+        <p class="text-decoration text-black"><em>Content: </em> <b>@Model.CreatedOn</b></p>
+    </div>
+
+    @if (Model.ReplyContent == null)
+    {
+       @* <div class="container">
+            <form method="post">
+                <input type="hidden" asp-for="Id"></input>
+                <textarea asp-for="ReplyContent" placeholder="Write something.." style="height:200px"></textarea>
+                <input id="submit" type="submit" value="Reply">
+            </form>
+        </div>*@
+           <form method="post" id="form" class="topBefore">
+        <div asp-validation-summary="All" class="text-danger"></div>
+            <textarea asp-for="ReplyContent" id="message" type="text" placeholder="Content"></textarea>
+            <span asp-validation-for="ReplyContent" class="text-danger"></span>
+        <input id="submit" type="submit" value="Reply">
+    </form>
+    }
+    else
+    {
+        <h3>Reply</h3>
+
+        <div>
+            <p class="text-decoration-underline text-black"><em>Reply :</em> <b>@Model.ReplyContent</b></p>
+        </div>
+        <div>
+            <p class="text-decoration-underline text-black"><em>Date :</em> <b>@Model.ReplyDate</b></p>
+        </div>
+
+    }
+</div>

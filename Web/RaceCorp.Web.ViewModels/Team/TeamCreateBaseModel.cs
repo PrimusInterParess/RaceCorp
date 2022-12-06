@@ -15,9 +15,6 @@
         [StringLength(maximumLength: 20, ErrorMessage = InvalidTeamNameLenghMessage, MinimumLength = 2)]
         public string Name { get; set; }
 
-        [Required]
-        [StringLength(maximumLength: 100, ErrorMessage = DescriptionLenghtErrorMessage, MinimumLength = 15)]
-
         public string Description { get; set; }
 
         [Required]

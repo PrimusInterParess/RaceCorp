@@ -12,8 +12,8 @@
         public const int DefaultStrMaxValueSearch = 20;
 
         // race description
-        public const int DefaultDescriptionMinValue = 20;
-        public const int DefaultDescriptionMaxValue = 300;
+        public const int DefaultDescriptionMinValue = 8;
+        public const int DefaultDescriptionMaxValue = 200;
 
         // race difficulty
         public const double DefaultControlTimeMinValue = 1.0;
