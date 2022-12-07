@@ -117,8 +117,6 @@
                 this.TempData["ErrorMessage"] = e.Message;
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
-
-
         }
     }
 }

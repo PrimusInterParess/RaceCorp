@@ -46,7 +46,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadPictureAsync(PictureUploadModel inputModel)
+        public async Task<IActionResult> UploadPicture(PictureUploadModel inputModel)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 

@@ -98,7 +98,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProfileAsync(int id)
+        public async Task<IActionResult> Profile(int id)
         {
             var model = this.rideService.GetById<RideProfileVIewModel>(id);
 
@@ -166,7 +166,7 @@
 
             this.TempData["Message"] = "Your ride was successfully edited!";
 
-            return this.RedirectToAction(nameof(RideController.ProfileAsync), new { id = model.Id });
+            return this.RedirectToAction(nameof(RideController.Profile), new { id = model.Id });
         }
 
         [HttpPost]

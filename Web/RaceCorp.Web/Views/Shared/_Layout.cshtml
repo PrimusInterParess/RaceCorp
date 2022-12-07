@@ -45,9 +45,9 @@
             }
 
             /*media screen and (max-height: 450px) {
-                    .sidenav{
-                    padding-top: 15px;
-                }*/
+                                    .sidenav{
+                                    padding-top: 15px;
+                                }*/
 
             .sidenav a {
                 font-size: 18px;
@@ -68,53 +68,45 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mt-0">
-            <div class="container">
+
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div class="navbar-container collapse d-sm-inline-flex justify-content-between">
-
-
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav navbar-container me-auto mb-2 mb-lg-0">
                         @if (
                         this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
                         this.User.IsInRole(GlobalConstants.UserRoleName))
                         {
-                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
+                            <li class="nav-item">
                                 <a class="btn btn-outline-success" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Profile</a>
-                            </div>
-
-                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-
-                                <a class="btn btn-outline-success" asp-area="" asp-action="Inbox" asp-controller="Message" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Inbox</a>
-                            </div>
-
-                            <form method="post" class="navbar-form d-flex" asp-action="Search" asp-controller="Search" asp-area="">
+                            </li>
+                           
+                        }
+                    </ul>
+                  @*  <ul class="navbar-nav navbar-container me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <form method="post" class="navbar-form collapse d-flex" asp-action="Search" asp-controller="Search" asp-area="">
                                 <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
                                 </select>
-
                                 <input name="QueryInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
                                 <button class="btn btn-outline-success" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
-
                             </form>
-                        }
+                        </li>
+                    </ul>*@
 
-
-                    </div>
                     <partial name="_LoginPartial" />
+
                 </div>
             </div>
         </nav>
-
-
-
-
     </header>
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -123,6 +115,17 @@
         this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
         this.User.IsInRole(GlobalConstants.UserRoleName))
         {
+
+           
+                <form method="post" class="navbar-form collapse d-flex" asp-action="Search" asp-controller="Search" asp-area="">
+                    <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
+                    </select>
+                    <input name="QueryInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+           
 
             <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AllUsers">Users</a>
 

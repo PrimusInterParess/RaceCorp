@@ -188,7 +188,7 @@
         [HttpGet]
         [Authorize]
 
-        public async Task<IActionResult> ProfileAsync(string id)
+        public async Task<IActionResult> Profile(string id)
         {
             var currentUser = await this.userManager
               .GetUserAsync(this.User);

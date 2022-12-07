@@ -74,7 +74,7 @@
 
             if (expectedFileType == GlobalConstants.Image)
             {
-                if (file.Length > 10 * 1024 * 1024)
+                if (file.Length > 20 * 1024 * 1024)
                 {
                     return null;
                 }
