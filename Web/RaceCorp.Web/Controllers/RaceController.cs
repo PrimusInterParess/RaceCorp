@@ -98,7 +98,7 @@
             return this.RedirectToAction(nameof(RaceController.All));
         }
 
-        public async Task<IActionResult> ProfileAsync(int id)
+        public async Task<IActionResult> Profile(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -160,7 +160,7 @@
             }
 
             this.TempData["Message"] = "Your race was successfully edited!";
-            return this.RedirectToAction(nameof(RaceController.ProfileAsync), new { id = model.Id });
+            return this.RedirectToAction(nameof(RaceController.Profile), new { id = model.Id });
         }
 
         public IActionResult All(int pageId = 1)

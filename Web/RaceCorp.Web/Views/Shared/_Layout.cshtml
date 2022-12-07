@@ -76,7 +76,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div class="navbar-container collapse d-sm-inline-flex justify-content-between">
 
 
                         @if (
@@ -93,7 +93,7 @@
                                 <a class="btn btn-outline-success" asp-area="" asp-action="Inbox" asp-controller="Message" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Inbox</a>
                             </div>
 
-                            <form method="post" class="d-flex" asp-action="Search" asp-controller="Search" asp-area="">
+                            <form method="post" class="navbar-form d-flex" asp-action="Search" asp-controller="Search" asp-area="">
                                 <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
                                 </select>
 
