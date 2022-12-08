@@ -199,7 +199,7 @@
             <div class="card-body">
                 <h5 class="card-title">There are no traces yet!</h5>
                 <p class="card-text">Why don't you add one ?</p>
-                <a class="btn btn-outline-secondary" asp-controller="Trace" asp-action="Create" asp-route-raceId="@Model.Id">Create trace</a>
+                <a class="btn btn-outline-secondary" asp-controller="Trace" asp-action="CreateRaceTrace" asp-route-raceId="@Model.Id">Create trace</a>
             </div>
             <div class="card-footer text-muted">
                 @DateTime.UtcNow

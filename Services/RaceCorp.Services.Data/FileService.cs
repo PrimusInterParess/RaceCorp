@@ -15,11 +15,11 @@
 
     using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
-
+     
     public class FileService : IFileService
     {
         private readonly string[] gpxExtensions = new[] { "gpx" };
-        private readonly string[] imageExtensions = new[] { "jpg", "png", "gif" };
+        private readonly string[] imageExtensions = new[] { "jpg", "png", "gif", "jpeg" };
         private readonly IRepository<Logo> logoRepo;
         private readonly IRepository<Image> imageRepo;
 
@@ -29,7 +29,7 @@
         {
             this.logoRepo = logoRepo;
             this.imageRepo = imageRepo;
-                 }
+        }
 
         public async Task<Logo> ProccessingLogoData(IFormFile file, string userId, string imagePath)
         {
@@ -103,12 +103,17 @@
         {
             string extention;
 
+            if (file == null)
+            {
+                return null;
+            }
+
             extention = Path.GetExtension(file.FileName).TrimStart('.');
 
             if (expectedFileType == GlobalConstants.Gpx)
             {
                 return this.gpxExtensions
-                    .FirstOrDefault(e => e == extention);
+                    .FirstOrDefault(e => e == extention.ToLower());
             }
             else if (expectedFileType == GlobalConstants.Image)
             {
@@ -118,7 +123,7 @@
                 }
 
                 return this.imageExtensions
-                    .FirstOrDefault(e => e == extention);
+                    .FirstOrDefault(e => e == extention.ToLower());
             }
 
             return null;

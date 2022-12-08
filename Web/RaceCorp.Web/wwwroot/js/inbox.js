@@ -44,13 +44,15 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
+    event.preventDefault();
+
     var receiver = document.getElementById("receiverId").value;
     var message = document.getElementById("messageInput").value;
 
+    if (message !== '' && message!== '   ') {
+        var message = document.getElementById("messageInput").value;
 
-    var message = document.getElementById("messageInput").value;
-
-    let send = `<div class="outgoing_msg">
+        let send = `<div class="outgoing_msg">
                       <div class="sent_msg">
                           <p>
                                       ${message}
@@ -59,18 +61,19 @@ document.getElementById("sendButton").addEventListener("click", function (event)
                       </div>
                   </div>`
 
-    $("#msg_history").append(send);
+        $("#msg_history").append(send);
 
-    var objDiv = document.getElementById("msg_history");
-    objDiv.scrollTop = objDiv.scrollHeight;
+        var objDiv = document.getElementById("msg_history");
+        objDiv.scrollTop = objDiv.scrollHeight;
 
-    document.getElementById("messageInput").value = '';
+        document.getElementById("messageInput").value = '';
 
-    connection.invoke("SendMessageToGroup", receiver, message).catch(function (err) {
-        return console.error(err.toString());
-    });
+        connection.invoke("SendMessageToGroup", receiver, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
 
-    event.preventDefault();
+
 });
 
 var eventElements = document.querySelectorAll(".custom").forEach(e => e.addEventListener("click", (evnt) => {
