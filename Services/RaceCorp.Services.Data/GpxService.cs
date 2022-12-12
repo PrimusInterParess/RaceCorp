@@ -67,7 +67,7 @@
                 ChildFolderName = childrenFolderName,
             };
 
-            var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
+            var gpxRoothPath = $"{roothPath}/{GpxFolderName}";
 
             try
             {
@@ -84,7 +84,7 @@
                 throw new Exception(e.Message);
             }
 
-            var gpxFilePath = $"{gpxRoothPath}\\{childrenFolderName}\\{gpxDto.Id}.{extention}";
+            var gpxFilePath = $"{gpxRoothPath}/{childrenFolderName}/{gpxDto.Id}.{extention}";
 
             try
             {

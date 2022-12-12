@@ -7,6 +7,11 @@
     var difficulties = Model.Trace.DifficultiesKVP.Select(t => new SelectListItem(t.Value, t.Key));
 }
 
+@if(this.TempData.ContainsKey("roothPath"))
+{
+    <div class="alert alert-success">@this.TempData["roothPath"]</div>
+}
+
 <div id="formInput" class="text-center" onload="getElements()">
     <h1>@ViewData["Title"]</h1>
     <div class="col-md-4 offset-md-4">

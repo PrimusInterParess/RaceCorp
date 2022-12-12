@@ -84,9 +84,9 @@
                     $"{this.environment.WebRootPath}",
                     user.Id);
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
-                this.ModelState.AddModelError(string.Empty, IvalidOperationMessage);
+                this.ModelState.AddModelError(string.Empty, e.Message);
                 model.Formats = this.formatServices.GetFormatKVP();
                 model.Trace.DifficultiesKVP = this.difficultyService.GetDifficultiesKVP();
                 return this.View(model);

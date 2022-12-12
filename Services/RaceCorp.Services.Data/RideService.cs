@@ -60,7 +60,7 @@
 
             var rides = this.rideRepo
                 .AllAsNoTracking()
-                .OrderBy(r => r.CreatedOn)
+                .OrderByDescending(r => r.CreatedOn)
                 .Include(r => r.Trace)
                 .Select(r => new RideInAllViewModel()
                 {
@@ -93,7 +93,7 @@
             var townDb = await this.townService
                 .ProccesingData(model.Town);
 
-            var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
+            var serviceAccountPath = roothPath + GlobalConstants.GoogleCredentialsFilePath;
 
             var gpx = await this.gpxService
                 .ProccessingData(

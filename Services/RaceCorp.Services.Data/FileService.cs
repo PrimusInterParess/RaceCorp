@@ -76,7 +76,7 @@
                 CreatedOn = DateTime.Now,
             };
 
-            var imageRoothPath = $"{roothPath}\\{ImageParentFolderName}";
+            var imageRoothPath = $"{roothPath}/{ImageParentFolderName}";
 
             await this.SaveFileIntoFileSystem(
                    file,
@@ -92,9 +92,9 @@
 
         public async Task SaveFileIntoFileSystem(IFormFile file, string roothPath, string folderName, string dbId, string extension)
         {
-            Directory.CreateDirectory($"{roothPath}\\{folderName}\\");
+            Directory.CreateDirectory($"{roothPath}/{folderName}/");
 
-            var physicalPath = $"{roothPath}\\{folderName}\\{dbId}.{extension}";
+            var physicalPath = $"{roothPath}/{folderName}/{dbId}.{extension}";
             await using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
             await file.CopyToAsync(fileStream);
         }

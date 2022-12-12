@@ -150,7 +150,9 @@
             }
         }
 
-        public RaceAllViewModel All(int page, int itemsPerPage = GlobalIntValues.ItemsPerPage)
+        public RaceAllViewModel All(
+            int page, 
+            int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var count = this.raceRepo
                 .All()

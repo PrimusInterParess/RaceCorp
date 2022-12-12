@@ -54,16 +54,16 @@
 
         public const string DaniProfilePicturePath = "\\Images\\defaulProfile\\dani.JPEG";
         public const string KariProfilePicturePath = "\\Images\\defaulProfile\\kari.JPEG";
-        public const string NebesnaProfilePicturePath = "\\Images\\defaulProfile\\nebesna.jpg";
-        public const string EstelleProfilePicturePath = "\\Images\\defaulProfile\\estelle.jpg";
-        public const string KrumProfilePicturePath = "\\Images\\defaulProfile\\krum.jpg";
+        public const string NebesnaProfilePicturePath = "/Images/defaulProfile/nebesna.jpg";
+        public const string EstelleProfilePicturePath = "/Images/defaulProfile/estelle.jpg";
+        public const string KrumProfilePicturePath = "/Images/defaulProfile/krum.jpg";
 
         public const string RequestTypeConnectUser = "ConnectUser";
 
         public const string HubGroupNameFormat = "{0}{1}";
 
-        public const string GoogleCredentialsFilePath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
-        public const string CredentialsPath = "\\Credentials\\testproject-366105-9ceb2767de2a.json";
+        public const string GoogleCredentialsFilePath = "/Credentials/testproject-366105-9ceb2767de2a.json";
+        public const string CredentialsPath = "/Credentials/testproject-366105-9ceb2767de2a.json";
 
         public const string PortHome = "44319";
         public const string PortWork = "5001";
