@@ -9,7 +9,6 @@
     {
         public void Configure(EntityTypeBuilder<Team> team)
         {
-
             team
                 .HasOne(t => t.ApplicationUser)
                 .WithOne(u => u.Team)

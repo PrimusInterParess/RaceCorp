@@ -62,6 +62,11 @@
                 .Include(u => u.Conversations)
                 .FirstOrDefault(u => u.Id == id);
 
+            if (userDb == null)
+            {
+                throw new UnauthorizedAccessException(GlobalErrorMessages.UnauthorizedRequest);
+            }
+
             return new UserInboxViewModel
             {
                 Id = id,

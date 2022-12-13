@@ -3,7 +3,9 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
+
     using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
@@ -54,7 +56,9 @@
             {
                 var newOnwer = teamDb.TeamMembers.FirstOrDefault(m => m.Id != requester.Id);
 
-                var requests = teamOnwer.Requests.Where(r => r.Type == GlobalConstants.RequestTypeTeamJoin).ToList();
+                var requests = teamOnwer.Requests.Where(r => r.Type == GlobalConstants.RequestTypeTeamJoin && r.IsApproved == true).ToList();
+
+                var transferRequests = teamOnwer.Requests.Where(r => r.Type == GlobalConstants.RequestTypeTeamJoin && r.IsApproved == false).ToList();
 
                 foreach (var request in requests)
                 {
@@ -66,15 +70,19 @@
                     newOnwer.Team = teamDb;
                     teamDb.ApplicationUser = newOnwer;
                     teamDb.TeamMembers.Remove(teamOnwer);
+
+                    foreach (var request in transferRequests)
+                    {
+                        newOnwer.Requests.Add(request);
+                    }
                 }
                 else
                 {
+                    teamOnwer.Requests.Remove(requestToRemove);
                     this.teamRepo.HardDelete(teamDb);
+                    await this.teamRepo.SaveChangesAsync();
+                    throw new ArgumentException(GlobalErrorMessages.TeamDeleted);
                 }
-
-                await this.teamRepo.SaveChangesAsync();
-
-                throw new ArgumentException(GlobalErrorMessages.TeamDeleted);
             }
 
             if (requestToRemove != null)

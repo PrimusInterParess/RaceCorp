@@ -107,7 +107,10 @@
 
         public List<T> GetRides<T>(string query)
         {
-            var querySplitted = query.Split(' ', ',', '.').Take(2).ToArray();
+            var querySplitted = query
+                .Split(' ', ',', '.')
+                .Take(2)
+                .ToArray();
 
             if (querySplitted.Count() == 2)
             {
@@ -123,14 +126,17 @@
             return this.rideRepo
               .AllAsNoTracking()
               .Where(r =>
-              r.Name.ToLower().Contains(querySplitted[0].ToLower())
-             ).To<T>()
+              r.Name.ToLower().Contains(querySplitted[0].ToLower()))
+              .To<T>()
              .ToList();
         }
 
         public List<T> GetTowns<T>(string query)
         {
-            var querySplitted = query.Split(' ', ',', '.').Take(2).ToArray();
+            var querySplitted = query
+                .Split(' ', ',', '.')
+                .Take(2)
+                .ToArray();
 
             if (querySplitted.Count() == 2)
             {
@@ -138,16 +144,16 @@
                .AllAsNoTracking()
                .Where(t =>
                t.Name.ToLower().Contains(querySplitted[0].ToLower()) ||
-               t.Name.ToLower().Contains(querySplitted[1].ToLower())
-              ).To<T>()
+               t.Name.ToLower().Contains(querySplitted[1].ToLower()))
+               .To<T>()
               .ToList();
             }
 
             return this.townRepo
               .AllAsNoTracking()
               .Where(t =>
-              t.Name.ToLower().Contains(querySplitted[0].ToLower())
-             ).To<T>()
+              t.Name.ToLower().Contains(querySplitted[0].ToLower()))
+              .To<T>()
              .ToList();
         }
 

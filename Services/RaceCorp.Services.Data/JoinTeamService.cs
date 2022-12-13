@@ -46,7 +46,7 @@
                 throw new InvalidOperationException(GlobalErrorMessages.InvalidRequest);
             }
 
-            if (teamOwner.Requests.Any(r => r.RequesterId == requesterId))
+            if (teamOwner.Requests.Any(r => r.RequesterId == requesterId && r.Type == GlobalConstants.RequestTypeTeamJoin))
             {
                 throw new InvalidOperationException(GlobalErrorMessages.AlreadyRequested);
             }

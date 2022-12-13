@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Common;
@@ -35,8 +36,9 @@
                 var model = this.messageService.GetByIdUserInboxViewModel(id);
                 return this.View(model);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                this.TempData["ErrorMessage"] = e.Message;
                 return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
         }
@@ -50,6 +52,8 @@
 
             if (currentUser == null)
             {
+                this.TempData["ErrorMessage"] = GlobalErrorMessages.UnauthorizedRequest;
+
                 this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 
@@ -67,6 +71,8 @@
 
             if (currentUser == null)
             {
+                this.TempData["ErrorMessage"] = GlobalErrorMessages.UnauthorizedRequest;
+
                 this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
             }
 

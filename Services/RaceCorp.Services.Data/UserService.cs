@@ -156,10 +156,8 @@
         public bool RequestedConnection(string currentUserId, string targetUserId)
         {
             return this.requestRepo.AllAsNoTracking()
-                 .Any(
-                 r =>
-                 r.TargetUserId == targetUserId && r.RequesterId == currentUserId ||
-                 r.TargetUserId == currentUserId && r.RequesterId == targetUserId);
+                 .Any(r => r.TargetUserId == targetUserId && r.RequesterId == currentUserId && r.Type == GlobalConstants.RequestTypeConnectUser ||
+                      r.TargetUserId == currentUserId && r.RequesterId == targetUserId && r.Type == GlobalConstants.RequestTypeConnectUser);
         }
 
         public string GetUserEmail(string userId)

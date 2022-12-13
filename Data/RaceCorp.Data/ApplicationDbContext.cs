@@ -117,7 +117,6 @@
             builder.ApplyConfiguration(new RideConfiguration());
             builder.ApplyConfiguration(new TeamConfiguration());
             builder.ApplyConfiguration(new TraceConfiguration());
-
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
