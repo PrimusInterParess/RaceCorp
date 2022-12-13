@@ -185,7 +185,7 @@
             try
             {
                 var gpxFile = this.gpxService.GetGpxById(id);
-                var gpxFilePath = $"{this.environment.WebRootPath}\\{gpxFile.ParentFolderName}\\{gpxFile.ChildFolderName}\\{gpxFile.Id}.{gpxFile.Extension}";
+                var gpxFilePath = $"{this.environment.WebRootPath}/{gpxFile.ParentFolderName}/{gpxFile.ChildFolderName}/{gpxFile.Id}.{gpxFile.Extension}";
                 byte[] fileBytes = System.IO.File.ReadAllBytes(gpxFilePath);
                 string fileName = $"{id}.{gpxFile.Extension}";
                 return this.File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);

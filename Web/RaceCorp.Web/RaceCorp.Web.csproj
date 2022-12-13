@@ -9,10 +9,6 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="Views\Town\All.cshtml" />
-  </ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>
@@ -58,17 +54,5 @@
   <ItemGroup>
     <Folder Include="Views\Event\" />
     <Folder Include="wwwroot\Maps\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Town\All.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Town\All.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Town\All.cshtml" />
   </ItemGroup>
 </Project>
