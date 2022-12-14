@@ -100,7 +100,6 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = GlobalErrorMessages.PasswordConfirmPassowrdDontMatch)]
             public string ConfirmPassword { get; set; }
 
-            [Required]
             [StringLength(GlobalIntValues.DescriptionMaxLegth, ErrorMessage = GlobalErrorMessages.StringLengthError, MinimumLength = GlobalIntValues.DescriptionMinLegth)]
             public string About { get; set; }
         }
@@ -125,6 +124,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 user.CreatedOn = DateTime.Now;
                 user.DateOfBirth = this.Input.DateOfBirth;
                 user.Gender = this.Input.Gender;
+                user.CreatedOn = DateTime.UtcNow;
 
                 await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);

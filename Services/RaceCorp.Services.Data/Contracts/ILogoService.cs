@@ -7,6 +7,6 @@
 
     public interface ILogoService
     {
-        Task<Logo> ProccessingData(IFormFile logoInputFile, string userId, string imagePath);
+        Task<Logo> ProccessingData(IFormFile logoInputFile, string userId);
     }
 }

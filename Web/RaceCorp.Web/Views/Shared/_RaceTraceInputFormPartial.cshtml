@@ -3,41 +3,49 @@
 @{
     var difficulties = Model.DifficultiesKVP.Select(t => new SelectListItem(t.Value, t.Key));
 }
+
+<style>
+    .myform .required:after {
+        content: " *";
+        color: red;
+        font-weight: 100;
+    }
+</style>
 <h1>@ViewData["Title"]</h1>
 <div asp-validation-summary="All" class="text-danger"></div>
-<form method="post" class="form-group" enctype="multipart/form-data">
+<form method="post" class="form-group myform" enctype="multipart/form-data">
     <div class="form-control mb-3">
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">Trace name</span>
+            <span class="input-group-text required" id="basic-addon1">Trace name</span>
             <input asp-for="Name" class="form-control" placeholder="Trace Name">
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">Length</span>
+            <span class="input-group-text required" id="basic-addon1">Length</span>
             <input asp-for="Length" class="form-control" placeholder="Trace Length in kilometers">
             <span asp-validation-for="Length" class="text-danger"></span>
         </div>
 
         <div class="input-group mb-3">
 
-            <span class="input-group-text" id="basic-addon1">Difficulty</span>
+            <span class="input-group-text required" id="basic-addon1">Difficulty</span>
             <select asp-for="DifficultyId" class="form-control" asp-items="@difficulties">
             </select>
             <span asp-validation-for="DifficultyId" class="text-danger"></span>
         </div>
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon2">Control time</span>
+            <span class="input-group-text required" id="basic-addon2">Control time</span>
             <input asp-for="ControlTime" class="form-control" placeholder="Trace Control time in hours">
             <span asp-validation-for="ControlTime" class="text-danger"></span>
         </div>
 
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon3">Start Time</span>
+            <span class="input-group-text required" id="basic-addon3">Start Time</span>
             <input asp-for="StartTime" class="form-control" placeholder="">
             <span asp-validation-for="StartTime" class="text-danger"></span>
         </div>
         <div class="input-group mb-3">
-            <span class="input-group-text">Gpx</span>
+            <span class="input-group-text required">Gpx</span>
             <input asp-for="GpxFile" class="form-control" placeholder="Trace gpx">
             <span asp-validation-for="GpxFile" class="text-danger"></span>
         </div>

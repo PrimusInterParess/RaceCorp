@@ -1,20 +1,15 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
-    using System.Diagnostics;
-    using System.IO;
     using System.Linq;
-    using System.Security.Claims;
     using System.Threading.Tasks;
-    using RaceCorp.Common;
 
+    using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.RaceViewModels;
-
-    using static RaceCorp.Services.Constants.Common;
 
     public class RaceService : IRaceService
     {
@@ -47,7 +42,7 @@
             this.townService = townService;
         }
 
-        public async Task CreateAsync(RaceCreateModel model, string rootPath, string userId)
+        public async Task CreateAsync(RaceCreateModel model, string userId)
         {
             var race = new Race
             {
@@ -98,8 +93,7 @@
                 var logo = await this.logoService
                 .ProccessingData(
                 model.RaceLogo,
-                userId,
-                rootPath);
+                userId);
 
                 race.LogoPath = $"/{logo.ParentFolderName}/{logo.ChildFolderName}/{logo.Id}.{logo.Extension}";
                 race.Logo = logo;
@@ -111,8 +105,6 @@
 
             if (model.Traces.Count != 0)
             {
-                var serviceAccountPath = rootPath + GlobalConstants.GoogleCredentialsFilePath;
-
                 foreach (var traceInputModel in model.Traces)
                 {
                     try
@@ -121,9 +113,7 @@
                         .ProccessingData(
                         traceInputModel.GpxFile,
                         userId,
-                        model.Name,
-                        rootPath,
-                        serviceAccountPath);
+                        model.Name);
 
                         var trace = await this.traceService
                         .ProccedingData(traceInputModel, gpx.GoogleDriveId);
@@ -208,7 +198,7 @@
                 .Any(r => r.Id == id);
         }
 
-        public async Task EditAsync(RaceEditViewModel model, string roothPath, string userId)
+        public async Task EditAsync(RaceEditViewModel model,string userId)
         {
             var raceDb = this.raceRepo
                 .All()
@@ -230,10 +220,9 @@
                     var logo = await this.logoService
                     .ProccessingData(
                     model.RaceLogo,
-                    userId,
-                    roothPath);
+                    userId);
 
-                    raceDb.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
+                    raceDb.LogoPath = $"/{logo.ParentFolderName}/{logo.ChildFolderName}/{logo.Id}.{logo.Extension}";
                     raceDb.Logo = logo;
                 }
                 catch (Exception e)

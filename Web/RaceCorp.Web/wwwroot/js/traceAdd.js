@@ -45,31 +45,33 @@ function addAnotherItem(event) {
                 var childElement = `
             <div class="form-control mb-3" id=block${count}>
                <div  class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon1">Trace name</span>
+              <span class="input-group-text required" id="basic-addon1">Trace name</span>
                <input type="text" class="form-control" name='Traces[${count}].Name' placeholder="Trace Name">
                <span asp-validation-for='Traces[${count}].Name' class="text-danger"></span>
              </div>
+               
+            
              <div  class="input-group mb-3">
-               <span class="input-group-text" id="basic-addon1">Length</span>
+               <span class="input-group-text required" id="basic-addon1">Length</span>
                <input type="text" class="form-control" name='Traces[${count}].Length' placeholder="Trace Length in kilometers">
                <span asp-validation-for='Traces[${count}].Length' class="text-danger"></span>
              </div>
              <div id="select${count}" class="input-group mb-3">
-               <span class="input-group-text" id="basic-addon3">Traces</span>
+               <span class="input-group-text required" id="basic-addon3">Difficulty</span>
                <span asp-validation-for='Traces[${count}].DifficultyId' class="text-danger"></span>
              </div>
              <div class="input-group mb-3">
-               <span class="input-group-text" id="basic-addon2">Control time</span>
-               <input type="text" class="form-control" name='Traces[${count}].ControlTime'  placeholder="Trace Control time in hours">
+               <span class="input-group-text required" id="basic-addon2">Control time</span>
+               <input type="text" class="form-control" name='Traces[${count}].ControlTime'  placeholder="Trace Control time in hours :1 , 2 , 3">
                <span asp-validation-for='Traces[${count}].ControlTime' class="text-danger"></span>
              </div>
              <div class="input-group mb-3">
-               <span class="input-group-text" id="basic-addon3">Start Time</span>
+               <span class="input-group-text required" id="basic-addon3">Start Time</span>
                        <input type="datetime-local" class="form-control" name='Traces[${count}].StartTime' placeholder="">
                <span asp-validation-for='Traces[${count}].StartTime' class="text-danger"></span>
              </div>
              <div class="input-group mb-3">
-                <span class="input-group-text">Gpx</span>
+                <span class="input-group-text required">Gpx</span>
                 <input  type="file" name='Traces[${count}].GpxFile' class="form-control" id='Traces[${count}].GpxFile' >
              </div>
              </div>`;

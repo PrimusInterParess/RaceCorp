@@ -37,7 +37,7 @@
             this.gpxService = gpxService;
         }
 
-        public async Task EditAsync(RaceTraceEditModel model, string roothPath, string userId)
+        public async Task EditAsync(RaceTraceEditModel model, string userId)
         {
             var trace = this.traceRepo
                 .All()
@@ -62,9 +62,7 @@
                      .ProccessingData(
                      model.GpxFile,
                      userId,
-                     raceName,
-                     roothPath,
-                     serviceAccountPath);
+                     raceName);
 
                     trace.MapUrl = string.Format(GlobalConstants.MapUrlTraceGpx, gpx.GoogleDriveId);
 
@@ -92,7 +90,7 @@
                 .FirstOrDefault();
         }
 
-        public async Task CreateRaceTraceAsync(RaceTraceEditModel model, string roothPath, string userId)
+        public async Task CreateRaceTraceAsync(RaceTraceEditModel model,string userId)
         {
             var raceName = this.raceRepo
                 .All()
@@ -103,17 +101,13 @@
                 throw new NullReferenceException(GlobalErrorMessages.InvalidInputData);
             }
 
-            var serviceAccountPath = Path.GetFullPath(GlobalConstants.ServiceAccountPath);
-
             try
             {
                 var gpx = await this.gpxService
                .ProccessingData(
                model.GpxFile,
                userId,
-               raceName,
-               roothPath,
-               serviceAccountPath);
+               raceName);
 
                 var trace = await this.ProccedingData(model, gpx.GoogleDriveId);
                 trace.Gpx = gpx;

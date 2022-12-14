@@ -1,15 +1,13 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
-    using RaceCorp.Data.Models;
-    using RaceCorp.Web.ViewModels.Common;
 
+    using RaceCorp.Data.Models;
     using RaceCorp.Web.ViewModels.RaceViewModels;
 
     public interface IRaceService
     {
-        Task CreateAsync(RaceCreateModel model, string roothPath, string userId);
+        Task CreateAsync(RaceCreateModel model, string userId);
 
         RaceAllViewModel All(int page, int itemsPerPage = 3);
 
@@ -19,7 +17,7 @@
 
         bool ValidateId(int id);
 
-        Task EditAsync(RaceEditViewModel model, string logoPath, string userId);
+        Task EditAsync(RaceEditViewModel model, string userId);
 
         RaceAllViewModel GetUpcomingRaces(int page, int itemsPerPage = 3);
 

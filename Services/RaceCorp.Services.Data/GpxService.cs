@@ -4,7 +4,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
@@ -22,15 +22,18 @@
         private readonly IRepository<Gpx> gpxRepo;
         private readonly IGoogleDriveService googleDriveService;
         private readonly IFileService fileService;
+        private readonly IWebHostEnvironment environment;
 
         public GpxService(
             IRepository<Gpx> gpxRepo,
             IGoogleDriveService googleDriveService,
-            IFileService fileService)
+            IFileService fileService,
+            IWebHostEnvironment environment)
         {
             this.gpxRepo = gpxRepo;
             this.googleDriveService = googleDriveService;
             this.fileService = fileService;
+            this.environment = environment;
         }
 
         public Gpx GetGpxById(string id)
@@ -43,9 +46,7 @@
         public async Task<Gpx> ProccessingData(
             IFormFile file,
             string userId,
-            string childrenFolderName,
-            string roothPath,
-            string pathToServiceAccountKeyFile)
+            string childrenFolderName)
         {
             if (file == null)
             {
@@ -67,14 +68,14 @@
                 ChildFolderName = childrenFolderName,
             };
 
-            var gpxRoothPath = $"{roothPath}/{GpxFolderName}";
+            var gpxRootPath = $"{this.environment.WebRootPath}/{GpxFolderName}";
 
             try
             {
                 await this.fileService
                     .SaveFileIntoFileSystem(
                     file,
-                    gpxRoothPath,
+                    gpxRootPath,
                     childrenFolderName,
                     gpxDto.Id,
                     extention);
@@ -84,16 +85,14 @@
                 throw new Exception(e.Message);
             }
 
-            var gpxFilePath = $"{gpxRoothPath}/{childrenFolderName}/{gpxDto.Id}.{extention}";
+            var gpxFilePath = $"{gpxRootPath}/{childrenFolderName}/{gpxDto.Id}.{extention}";
 
             try
             {
                 var googleId = await this.googleDriveService
                .UloadGpxFileToDrive(
                gpxFilePath,
-               pathToServiceAccountKeyFile,
-               childrenFolderName,
-               DirectoryId);
+               childrenFolderName);
 
                 gpxDto.GoogleDriveId = googleId;
                 gpxDto.GoogleDriveDirectoryId = DirectoryId;

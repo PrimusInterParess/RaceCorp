@@ -4,7 +4,7 @@ namespace RaceCorp.Data.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.AspNetCore.Identity;
 
     using RaceCorp.Data.Common.Models;
@@ -34,7 +34,8 @@ namespace RaceCorp.Data.Models
 
         public string TwitterLink { get; set; }
 
-        public Gender Gender { get; set; }
+        [AllowNull]
+        public Gender? Gender { get; set; }
 
         public DateTime DateOfBirth { get; set; }
 

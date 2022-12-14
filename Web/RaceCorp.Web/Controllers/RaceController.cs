@@ -1,8 +1,6 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
     using System;
-    using System.ComponentModel;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -12,11 +10,7 @@
 
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.Common;
-    using RaceCorp.Web.ViewModels.EventRegister;
     using RaceCorp.Web.ViewModels.RaceViewModels;
-
-    using static RaceCorp.Services.Constants.Common;
 
     public class RaceController : BaseController
     {
@@ -83,7 +77,6 @@
             {
                 await this.raceService.CreateAsync(
                     model,
-                    this.environment.WebRootPath,
                     user.Id);
             }
             catch (Exception e)
@@ -149,7 +142,6 @@
             {
                 await this.raceService.EditAsync(
                     model,
-                    this.environment.WebRootPath,
                     user.Id);
             }
             catch (Exception e)

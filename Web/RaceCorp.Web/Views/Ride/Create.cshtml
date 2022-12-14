@@ -12,10 +12,18 @@
     <div class="alert alert-success">@this.TempData["roothPath"]</div>
 }
 
+<style>
+    .myform .required:after {
+        content: " *";
+        color: red;
+        font-weight: 100;
+    }
+</style>
+
 <div id="formInput" class="text-center" onload="getElements()">
     <h1>@ViewData["Title"]</h1>
     <div class="col-md-4 offset-md-4">
-        <form method="post" class="form-group" enctype="multipart/form-data">
+        <form method="post" class="form-group myform" enctype="multipart/form-data">
             <partial name="_RideInputFormPartial" model="@Model" />
             <button class="btn btn-outline-secondary" type="submit">@ViewData["ButtonName"]</button>
 

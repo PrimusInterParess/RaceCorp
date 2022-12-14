@@ -81,7 +81,6 @@
                 await this.rideService
                     .CreateAsync(
                     model,
-                    $"{this.environment.WebRootPath}",
                     user.Id);
             }
             catch (System.Exception e)
@@ -153,7 +152,6 @@
             {
                 await this.rideService.EditAsync(
                     model,
-                    $"{this.environment.WebRootPath}",
                     user.Id);
             }
             catch (Exception e)

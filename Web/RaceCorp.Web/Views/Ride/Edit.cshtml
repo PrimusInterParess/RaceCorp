@@ -4,11 +4,18 @@
     this.ViewData["Title"] = "Edit Ride";
     this.ViewData["ButtonName"] = "Edit";
 }
+<style>
+    .myform .required:after {
+        content: " *";
+        color: red;
+        font-weight: 100;
+    }
+</style>
 
 <div class="text-center">
     <h1>@ViewData["Title"]</h1>
     <div class="col-md-4 offset-md-4">
-        <form method="post" class="form-group" enctype="multipart/form-data">
+        <form method="post" class="form-group myform" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="TraceId" />
             <partial name="_RideInputFormPartial" model="@Model" />

@@ -10,20 +10,40 @@
     using Google.Apis.Drive.v3;
     using Google.Apis.Services;
     using Google.Apis.Upload;
-    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Hosting;
+    using RaceCorp.Common;
     using RaceCorp.Services.Data.Contracts;
+
+    using static RaceCorp.Services.Constants.Drive;
 
     public class GoogleDriveService : IGoogleDriveService
     {
+        private readonly IWebHostEnvironment environment;
+
+        public GoogleDriveService(IWebHostEnvironment environment)
+        {
+            this.environment = environment;
+        }
+
         public async Task<string> UloadGpxFileToDrive(
             string gpxFilePath,
-            string serviceAccountKeyPath,
-            string uploadFileName,
-            string directoryId)
+            string uploadFileName)
         {
+            string serviceAccountPath = null;
+
+            if (this.environment.IsDevelopment())
+            {
+                serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
+            }
+            else if (this.environment.IsProduction())
+            {
+                serviceAccountPath = this.environment.WebRootPath + GlobalConstants.GoogleCredentialsFilePath;
+            }
+
             try
             {
-                var credentials = GoogleCredential.FromFile(serviceAccountKeyPath).CreateScoped(DriveService.ScopeConstants.Drive);
+                var credentials = GoogleCredential.FromFile(serviceAccountPath).CreateScoped(DriveService.ScopeConstants.Drive);
                 var service = new DriveService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credentials,
@@ -32,7 +52,7 @@
                 var fileMetadata = new Google.Apis.Drive.v3.Data.File()
                 {
                     Name = uploadFileName + ".gpx",
-                    Parents = new List<string>() { directoryId },
+                    Parents = new List<string>() { DirectoryId },
                 };
 
                 string uploadFileId;

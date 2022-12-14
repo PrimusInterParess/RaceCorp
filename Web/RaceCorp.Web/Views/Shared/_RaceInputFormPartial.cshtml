@@ -5,33 +5,41 @@
     var formats = Model.Formats.Select(t => new SelectListItem(t.Value, t.Key));
 }
 
+<style>
+    .myform .required:after {
+        content: " *";
+        color: red;
+        font-weight: 100;
+    }
+</style>
+
 <div id="formInput" class="text-center" onload="getElements()">
     <h1>@ViewData["Title"]</h1>
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="col-md-4 offset-md-4">
-        <form method="post" class="form-group" enctype="multipart/form-data">
+        <form method="post" class="form-group myform" enctype="multipart/form-data">
             <div class="form-group">
-                <label class="label" asp-for="Name"></label>
+                <label  class="label required" asp-for="Name"></label>
                 <input asp-for="Name" class="form-control  mb-1" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="label" asp-for="Town"></label>
+                <label class="label required" asp-for="Town"></label>
                 <input asp-for="Town" class="form-control  mb-1" />
                 <span asp-validation-for="Town" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="label" asp-for="Mountain"></label>
+                <label class="label required" asp-for="Mountain"></label>
                 <input asp-for="Mountain" class="form-control mb-1" />
                 <span asp-validation-for="Mountain" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="label" asp-for="Date"></label>
+                <label class="label required" asp-for="Date"></label>
                 <input type="date" asp-for="Date" class="form-control mb-1" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="label" asp-for="FormatId"></label>
+                <label class="label required" asp-for="FormatId"></label>
                 <select asp-for="FormatId" class="form-control" asp-items="@formats">
                 </select>
                 <span asp-validation-for="FormatId" class="text-danger"></span>
@@ -42,7 +50,7 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group mb-1">
-                <label asp-for="RaceLogo">Upload Race Logo:</label>           
+                <label class="required" asp-for="RaceLogo">Upload Race Logo:</label>           
                 <input asp-for="RaceLogo" name="RaceLogo" class="form-control mb-1" style="width: 100%;" />
             </div>
             <div class="form-group mb-1" id="attachHere">

@@ -11,9 +11,9 @@
 
     public interface ITraceService
     {
-        Task EditAsync(RaceTraceEditModel model, string gxpFileRoothPath, string userId);
+        Task EditAsync(RaceTraceEditModel model, string userId);
 
-        Task CreateRaceTraceAsync(RaceTraceEditModel model, string roothPath, string userId);
+        Task CreateRaceTraceAsync(RaceTraceEditModel model, string userId);
 
         T GetById<T>(int raceId, int traceId);
 

@@ -92,7 +92,6 @@
                 await this.traceService
                     .EditAsync(
                     model,
-                    $"{this.environment.WebRootPath}",
                     user.Id);
             }
             catch (Exception e)
@@ -149,7 +148,6 @@
             {
                 await this.traceService.CreateRaceTraceAsync(
                model,
-               $"{this.environment.WebRootPath}",
                user.Id);
             }
             catch (Exception e)

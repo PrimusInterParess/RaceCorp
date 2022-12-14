@@ -85,7 +85,7 @@
             };
         }
 
-        public async Task CreateAsync(RideCreateViewModel model, string roothPath, string userId)
+        public async Task CreateAsync(RideCreateViewModel model, string userId)
         {
             var mountainDb = await this.mountanService
                 .ProccesingData(model.Mountain);
@@ -93,15 +93,11 @@
             var townDb = await this.townService
                 .ProccesingData(model.Town);
 
-            var serviceAccountPath = roothPath + GlobalConstants.GoogleCredentialsFilePath;
-
             var gpx = await this.gpxService
                 .ProccessingData(
                 model.Trace.GpxFile,
                 userId,
-                model.Name,
-                roothPath,
-                serviceAccountPath);
+                model.Name);
 
             var trace = await this.traceService
                 .ProccedingData(model.Trace, gpx.GoogleDriveId);
@@ -132,7 +128,7 @@
             }
         }
 
-        public async Task EditAsync(RideEditVIewModel model, string roothPath, string userId)
+        public async Task EditAsync(RideEditVIewModel model, string userId)
         {
             var rideDb = this.rideRepo
                 .All()
@@ -171,17 +167,11 @@
 
             if (model.Trace.GpxFile != null)
             {
-                var gpxRoothPath = $"{roothPath}\\{GpxFolderName}";
-
-                var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
-
                 var gpx = await this.gpxService
                 .ProccessingData(
                 model.Trace.GpxFile,
                 userId,
-                model.Name,
-                gpxRoothPath,
-                serviceAccountPath);
+                model.Name);
 
                 await this.gpxRepo
                     .AddAsync(gpx);
