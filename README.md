@@ -22,4 +22,5 @@ Technologies
 - Automapper
 - SendGrid
 - Bootstrap templetes
+- Google for authentication and uloading .gpx files
 - Hosted in Azure - https://racecorp.azurewebsites.net/
