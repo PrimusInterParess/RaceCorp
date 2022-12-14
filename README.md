@@ -19,5 +19,7 @@ Technologies
 - EntityFramework Core
 - SQL Database
 - SignlaR
+- Automapper
+- SendGrid
 - Bootstrap templetes
 - Hosted in Azure - https://racecorp.azurewebsites.net/
