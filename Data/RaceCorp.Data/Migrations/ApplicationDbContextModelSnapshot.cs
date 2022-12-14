@@ -564,8 +564,8 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("LastMessageContent")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastMessageDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("LastMessageDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");

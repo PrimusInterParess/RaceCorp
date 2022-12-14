@@ -12,8 +12,8 @@ using RaceCorp.Data;
 namespace RaceCorp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221206120525_add-admin-contanct-add-isReplied")]
-    partial class addadmincontanctaddisReplied
+    [Migration("20221213144731_Initial_Createtion")]
+    partial class Initial_Createtion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -566,8 +566,8 @@ namespace RaceCorp.Data.Migrations
                     b.Property<string>("LastMessageContent")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastMessageDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("LastMessageDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -880,7 +880,6 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FormatId")
@@ -994,7 +993,6 @@ namespace RaceCorp.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FormatId")

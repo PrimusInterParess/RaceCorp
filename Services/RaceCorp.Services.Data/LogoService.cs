@@ -34,7 +34,7 @@
                 throw new ArgumentNullException(InvalidImageMessage);
             }
 
-            var logoRoothPath = $"{roothPath}\\{ImageParentFolderName}";
+            var logoRoothPath = $"{roothPath}/{ImageParentFolderName}";
 
             var logoDto = new Logo()
             {

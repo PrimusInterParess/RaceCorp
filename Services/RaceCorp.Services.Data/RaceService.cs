@@ -47,7 +47,7 @@
             this.townService = townService;
         }
 
-        public async Task CreateAsync(RaceCreateModel model, string roothPath, string userId)
+        public async Task CreateAsync(RaceCreateModel model, string rootPath, string userId)
         {
             var race = new Race
             {
@@ -99,8 +99,9 @@
                 .ProccessingData(
                 model.RaceLogo,
                 userId,
-                roothPath);
-                race.LogoPath = $"\\{logo.ParentFolderName}\\{logo.ChildFolderName}\\{logo.Id}.{logo.Extension}";
+                rootPath);
+
+                race.LogoPath = $"/{logo.ParentFolderName}/{logo.ChildFolderName}/{logo.Id}.{logo.Extension}";
                 race.Logo = logo;
             }
             catch (Exception e)
@@ -110,7 +111,7 @@
 
             if (model.Traces.Count != 0)
             {
-                var serviceAccountPath = Path.GetFullPath(GlobalConstants.GoogleCredentialsFilePath);
+                var serviceAccountPath = rootPath + GlobalConstants.GoogleCredentialsFilePath;
 
                 foreach (var traceInputModel in model.Traces)
                 {
@@ -121,13 +122,13 @@
                         traceInputModel.GpxFile,
                         userId,
                         model.Name,
-                        roothPath,
+                        rootPath,
                         serviceAccountPath);
 
                         var trace = await this.traceService
                         .ProccedingData(traceInputModel, gpx.GoogleDriveId);
 
-                        trace.GpxPath = $"\\{gpx.ParentFolderName}\\{gpx.ChildFolderName}\\{gpx.Id}.{gpx.Extension}";
+                        trace.GpxPath = $"/{gpx.ParentFolderName}/{gpx.ChildFolderName}/{gpx.Id}.{gpx.Extension}";
                         trace.Gpx = gpx;
 
                         race.Traces.Add(trace);
@@ -151,7 +152,7 @@
         }
 
         public RaceAllViewModel All(
-            int page, 
+            int page,
             int itemsPerPage = GlobalIntValues.ItemsPerPage)
         {
             var count = this.raceRepo

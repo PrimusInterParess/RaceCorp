@@ -71,7 +71,7 @@
             {
                 Id = id,
                 ProfilePicturePath = userDb.ProfilePicturePath,
-                Conversations = userDb.Conversations.OrderByDescending(c => DateTime.Parse(c.LastMessageDate)).Select(c => new UserConversationViewModel
+                Conversations = userDb.Conversations.OrderByDescending(c => c.LastMessageDate).Select(c => new UserConversationViewModel
                 {
                     Id = c.Id,
                     AuthorId = c.ApplicationUserId,
@@ -81,7 +81,7 @@
                     UserFirstName = c.UserFirstName,
                     UserLastName = c.UserLastName,
                     UserProfilePicturePath = c.UserProfilePicturePath,
-                    LastMessageDate = c.LastMessageDate,
+                    LastMessageDate = c.LastMessageDate.ToString(GlobalConstants.DateStringFormat),
                     UnreadMessages = userDb.InboxMessages.Where(m => m.SenderId == c.InterlocutorId && m.IsRead == false).ToList().Count(),
                 }).ToList(),
             };
@@ -183,7 +183,7 @@
         private void UpdateConversation(Conversation conversation, Message message, ApplicationUser user)
         {
             conversation.LastMessageContent = message.Content;
-            conversation.LastMessageDate = message.CreatedOn.ToString(GlobalConstants.DateMessageFormat);
+            conversation.LastMessageDate = message.CreatedOn;
             conversation.UserProfilePicturePath = user.ProfilePicturePath;
             conversation.ModifiedOn = message.CreatedOn;
             conversation.UserEmail = user.Email;

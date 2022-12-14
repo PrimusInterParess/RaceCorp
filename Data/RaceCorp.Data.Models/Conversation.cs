@@ -19,7 +19,7 @@
 
         public string LastMessageContent { get; set; }
 
-        public string LastMessageDate { get; set; }
+        public DateTime LastMessageDate { get; set; }
 
         public string UserFirstName { get; set; }
 

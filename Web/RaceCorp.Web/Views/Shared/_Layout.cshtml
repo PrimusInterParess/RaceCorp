@@ -6,6 +6,57 @@
 <head>
 
     <style>
+body {
+  font-family: "Lato", sans-serif;
+  transition: background-color .5s;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #EACFC9;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 50px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #4D4745;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+ media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+
+@*    <style>
         body {
             font-family: "Lato", sans-serif;
         }
@@ -45,15 +96,15 @@
             }
 
             /*media screen and (max-height: 450px) {
-                                    .sidenav{
-                                    padding-top: 15px;
-                                }*/
+                                            .sidenav{
+                                            padding-top: 15px;
+                                        }*/
 
             .sidenav a {
                 font-size: 18px;
             }
 
-    </style>
+    </style>*@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
@@ -68,7 +119,6 @@
 </head>
 <body>
     <header>
-
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -86,20 +136,20 @@
                             <li class="nav-item">
                                 <a class="btn btn-outline-success" asp-area="" asp-action="Profile" asp-controller="User" asp-route-id="@this.User.FindFirst(ClaimTypes.NameIdentifier).Value">Profile</a>
                             </li>
-                           
+
                         }
                     </ul>
-                  @*  <ul class="navbar-nav navbar-container me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <form method="post" class="navbar-form collapse d-flex" asp-action="Search" asp-controller="Search" asp-area="">
-                                <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
-                                </select>
-                                <input name="QueryInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </form>
-                        </li>
+                    @*  <ul class="navbar-nav navbar-container me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                    <form method="post" class="navbar-form collapse d-flex" asp-action="Search" asp-controller="Search" asp-area="">
+                    <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
+                    </select>
+                    <input name="QueryInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">
+                    <i class="fas fa-search"></i>
+                    </button>
+                    </form>
+                    </li>
                     </ul>*@
 
                     <partial name="_LoginPartial" />
@@ -116,16 +166,16 @@
         this.User.IsInRole(GlobalConstants.UserRoleName))
         {
 
-           
-                <form method="post" class="navbar-form collapse d-flex" asp-action="Search" asp-controller="Search" asp-area="">
-                    <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
-                    </select>
-                    <input name="QueryInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-           
+
+            <form method="post" class="navbar-form collapse d-flex" asp-action="Search" asp-controller="Search" asp-area="">
+                <select name="Area" asp-items="Html.GetEnumSelectList<SearchCategory>()" class="form-select">
+                </select>
+                <input name="QueryInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+
 
             <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AllUsers">Users</a>
 
@@ -169,9 +219,9 @@
 
     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; menu</span>
 
-    <div class="container">
+    <div  class="container">
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main id="main" role="main" class="pb-3">
             @this.RenderBody()
         </main>
     </div>
@@ -185,10 +235,14 @@
     <script>
         function openNav() {
             document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+            document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
         }
 
         function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+            document.body.style.backgroundColor = "white";
         }
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>

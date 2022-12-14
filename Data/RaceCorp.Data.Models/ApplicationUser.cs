@@ -66,7 +66,6 @@ namespace RaceCorp.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-
         public virtual ICollection<AdminContactReply> AdminContactReplies { get; set; } = new HashSet<AdminContactReply>();
 
         public virtual ICollection<AdminContact> AdminContacts { get; set; } = new HashSet<AdminContact>();

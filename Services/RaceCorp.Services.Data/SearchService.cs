@@ -46,16 +46,15 @@
                .AllAsNoTracking()
                .Where(t =>
                t.Name.ToLower().Contains(querySplitted[0].ToLower()) ||
-               t.Name.ToLower().Contains(querySplitted[1].ToLower())
-              ).To<T>()
+               t.Name.ToLower().Contains(querySplitted[1].ToLower()))
+               .To<T>()
               .ToList();
             }
 
             return this.teamRepo
               .AllAsNoTracking()
               .Where(r =>
-              r.Name.ToLower().Contains(querySplitted[0].ToLower())
-             ).To<T>()
+              r.Name.ToLower().Contains(querySplitted[0].ToLower())).To<T>()
              .ToList();
         }
 
