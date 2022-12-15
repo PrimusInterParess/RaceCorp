@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.Common
+﻿namespace RaceCorp.Web.ViewModels.Request
 {
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;

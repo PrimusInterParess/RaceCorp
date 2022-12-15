@@ -125,6 +125,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 user.DateOfBirth = this.Input.DateOfBirth;
                 user.Gender = this.Input.Gender;
                 user.CreatedOn = DateTime.UtcNow;
+                user.ProfilePicturePath = GlobalConstants.AvatarProfilePicturePath;
 
                 await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);

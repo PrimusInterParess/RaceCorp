@@ -1,4 +1,4 @@
-﻿namespace RaceCorp.Web.ViewModels.Common
+﻿namespace RaceCorp.Web.ViewModels.Message
 {
     using AutoMapper;
     using RaceCorp.Data.Models;

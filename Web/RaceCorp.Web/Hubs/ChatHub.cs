@@ -9,14 +9,12 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.Message;
 
     public class ChatHub : Hub
     {
         private readonly IGroupNameProvider groupNameProvider;
-        private readonly IDeletableEntityRepository<Data.Models.Message> messageRepo;
         private readonly IDeletableEntityRepository<ApplicationUser> userRepo;
-        private readonly IUserService userService;
         private readonly IMessageService messageService;
 
         public ChatHub(
@@ -27,9 +25,7 @@
             IMessageService messageService)
         {
             this.groupNameProvider = groupNameProvider;
-            this.messageRepo = messageRepo;
             this.userRepo = userRepo;
-            this.userService = userService;
             this.messageService = messageService;
         }
 

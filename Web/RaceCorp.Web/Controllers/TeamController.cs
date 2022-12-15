@@ -12,7 +12,7 @@
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.Request;
     using RaceCorp.Web.ViewModels.Team;
 
     public class TeamController : BaseController

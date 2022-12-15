@@ -9,9 +9,7 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.Common;
-    using RaceCorp.Web.ViewModels.CommonViewModels;
-
+    using RaceCorp.Web.ViewModels.Home;
     using static RaceCorp.Services.Constants.Common;
 
     public class HomeService : IHomeService

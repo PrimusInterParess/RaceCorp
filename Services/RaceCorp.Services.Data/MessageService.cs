@@ -11,7 +11,7 @@
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.Message;
     using RaceCorp.Web.ViewModels.User;
 
     public class MessageService : IMessageService

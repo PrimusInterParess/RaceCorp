@@ -1,7 +1,6 @@
 ﻿namespace RaceCorp.Services.Data.Contracts
 {
-    using RaceCorp.Web.ViewModels.Common;
-    using RaceCorp.Web.ViewModels.CommonViewModels;
+    using RaceCorp.Web.ViewModels.Home;
 
     public interface IHomeService
     {

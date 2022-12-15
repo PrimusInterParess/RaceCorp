@@ -8,7 +8,7 @@
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.Request;
 
     public class DisconnectUserService : IDisconnectUserService
     {

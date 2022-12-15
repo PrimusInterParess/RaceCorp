@@ -9,7 +9,7 @@
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.Message;
 
     public class MessageController : BaseController
     {

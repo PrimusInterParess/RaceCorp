@@ -1,9 +1,9 @@
 ﻿namespace RaceCorp.Web.ViewModels.User
 {
+    using System;
+
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-
-    using System;
 
     public class UserConnectionsViewModel : IMapFrom<Connection>
     {

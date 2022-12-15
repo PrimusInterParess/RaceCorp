@@ -4,12 +4,12 @@
 
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.Request;
+    using RaceCorp.Web.ViewModels.Connection;
 
-    public class UserAllRequestsViewModel : IMapFrom<ApplicationUser>
+    public class UserAllConnectionsViewModel : IMapFrom<ApplicationUser>
     {
         public string Id { get; set; }
 
-        public ICollection<RequestBaseModel> Requests { get; set; }
+        public ICollection<UserConnectionInAllViewModel> Connections { get; set; }
     }
 }

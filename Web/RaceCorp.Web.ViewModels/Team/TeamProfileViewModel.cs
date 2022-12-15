@@ -7,7 +7,7 @@
     using RaceCorp.Common;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Mapping;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.Request;
     using RaceCorp.Web.ViewModels.User;
 
     public class TeamProfileViewModel : IMapFrom<Team>, IHaveCustomMappings

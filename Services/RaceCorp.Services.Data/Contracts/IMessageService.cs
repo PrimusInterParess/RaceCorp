@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
 
     using RaceCorp.Data.Models;
-    using RaceCorp.Web.ViewModels.Common;
+    using RaceCorp.Web.ViewModels.Message;
     using RaceCorp.Web.ViewModels.User;
 
     public interface IMessageService

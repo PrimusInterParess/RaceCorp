@@ -182,6 +182,12 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 var photosResponse = await httpClient.GetFromJsonAsync<PeopleApiPhotos>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=photos&key={peopleApiKey}");
 
                 pictureUri = photosResponse?.photos.FirstOrDefault()?.url;
+
+            }
+
+            if (string.IsNullOrEmpty(pictureUri))
+            {
+                pictureUri = GlobalConstants.AvatarProfilePicturePath;
             }
 
             var firstName = info.Principal.FindFirst(ClaimTypes.GivenName).Value;
