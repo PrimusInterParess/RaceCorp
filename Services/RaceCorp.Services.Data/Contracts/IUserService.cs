@@ -19,8 +19,6 @@
 
         List<T> GetAllAsync<T>();
 
-        bool RequestedConnection(string currentUserId, string targetUserId);
-
         string GetUserEmail(string userId);
     }
 }

@@ -15,7 +15,7 @@
 
     using static RaceCorp.Services.Constants.Common;
     using static RaceCorp.Services.Constants.Messages;
-     
+
     public class FileService : IFileService
     {
         private readonly string[] gpxExtensions = new[] { "gpx" };

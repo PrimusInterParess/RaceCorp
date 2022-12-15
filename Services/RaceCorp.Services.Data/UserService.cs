@@ -59,7 +59,7 @@
                     roothPath,
                     inputModel.FirstName + inputModel.LastName + GlobalConstants.ProfilePicterPostFix);
 
-                user.ProfilePicturePath = $"\\{image.ParentFolderName}\\{image.ChildFolderName}\\{image.Id}.{image.Extension}";
+                user.ProfilePicturePath = $"/{image.ParentFolderName}/{image.ChildFolderName}/{image.Id}.{image.Extension}";
                 image.Name = GlobalConstants.ProfilePictire;
                 user.Images.Add(image);
             }
@@ -148,18 +148,6 @@
                 .ToList();
         }
 
-        public bool AreConnected(string currentUserId, string targetUserId)
-        {
-            return this.connectionRepo.AllAsNoTracking().Any(c => c.InterlocutorId == currentUserId && c.ApplicationUserId == targetUserId);
-        }
-
-        public bool RequestedConnection(string currentUserId, string targetUserId)
-        {
-            return this.requestRepo.AllAsNoTracking()
-                 .Any(r => r.TargetUserId == targetUserId && r.RequesterId == currentUserId && r.Type == GlobalConstants.RequestTypeConnectUser ||
-                      r.TargetUserId == currentUserId && r.RequesterId == targetUserId && r.Type == GlobalConstants.RequestTypeConnectUser);
-        }
-
         public string GetUserEmail(string userId)
         {
             return this.userRepo
@@ -236,6 +224,18 @@
                     .Where(c => c.ClaimType == claimType)
                     .FirstOrDefault().ClaimValue = value;
             }
+        }
+
+        private bool RequestedConnection(string currentUserId, string targetUserId)
+        {
+            return this.requestRepo.AllAsNoTracking()
+                 .Any(r => r.TargetUserId == targetUserId && r.RequesterId == currentUserId && r.Type == GlobalConstants.RequestTypeConnectUser ||
+                      r.TargetUserId == currentUserId && r.RequesterId == targetUserId && r.Type == GlobalConstants.RequestTypeConnectUser);
+        }
+
+        private bool AreConnected(string currentUserId, string targetUserId)
+        {
+            return this.connectionRepo.AllAsNoTracking().Any(c => c.InterlocutorId == currentUserId && c.ApplicationUserId == targetUserId);
         }
     }
 }
