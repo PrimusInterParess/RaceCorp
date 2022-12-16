@@ -14,6 +14,8 @@
 
 }
 
+
+
 @if (this.TempData.ContainsKey("ErrorMessage"))
 {
     <div class="alert alert-danger">@this.TempData["ErrorMessage"]</div>
@@ -21,13 +23,42 @@
 
 @if (this.TempData.ContainsKey("Connect"))
 {
-    <div class="alert alert-danger">@this.TempData["Connect"]</div>
+    <div class="alert alert-success">@this.TempData["Connect"]</div>
 }
 
 @if (this.TempData.ContainsKey("Disconnect"))
 {
     <div class="alert alert-danger">@this.TempData["Disconnect"]</div>
 }
+
+<style>
+    .avatar.avatar-xl {
+        width: 20rem;
+        height: 20rem;
+    }
+
+    .avatar {
+        width: 2rem;
+        height: 2rem;
+        line-height: 2rem;
+        border-radius: 50%;
+        display: inline-block;
+        background: #ced4da no-repeat center/cover;
+        position: relative;
+        text-align: center;
+        color: #868e96;
+        font-weight: 600;
+        vertical-align: bottom;
+    }
+
+        .avatar.avatar-sl {
+            width: 4rem;
+            height: 4rem;
+        }
+
+    
+</style>
+
 <partial name="_UserNavPartial" model="@this.Model" />
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -39,13 +70,12 @@
                 @if (isOwner)
                 {
                     <a asp-action="Edit" asp-controller="User" asp-area="" asp-route-id="@Model.Id">
-                        <img style="width:30rem" ; class="media-object mw150" src="@Model.ProfilePicturePath">
+                        <span style="background-image: url(@Model.ProfilePicturePath)" class="avatar avatar-xl mr-3"></span>
                     </a>
                 }
                 else
                 {
-                    <img style="width:30rem" ; class="media-object mw150" src="@Model.ProfilePicturePath">
-
+                    <span style="background-image: url(@Model.ProfilePicturePath)" class="avatar avatar-xl mr-3"></span>
                 }
 
             </div>
@@ -134,19 +164,17 @@
                     <div class="panel">
                         @if (isOwner)
                         {
-                            <a class="btn" asp-action="All" asp-controller="Connection" asp-route-userId="@Model.Id">View all</a>
+                            <a class="btn" asp-action="All" asp-controller="Connection" asp-route-userId="@Model.Id">All</a>
 
                         }
-                        <div class="panel-heading">
+                        <span class="panel-title">Connections</span>
 
-                            <span class="panel-icon">
-                                <i class="fa fa-trophy"></i>
-                            </span>
-                            <span class="panel-title">My Connections</span>
+                        <div>
+
                             @foreach (var connection in Model.Connections)
                             {
                                 <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@connection.InterlocutorId">
-                                    <img class="media-object mn thumbnail mw50" src="@connection.InterlocutorProfilePicturePath">
+                                    <span style="background-image: url(@connection.InterlocutorProfilePicturePath)" class="avatar avatar-sl mr-3"></span>
 
                                 </a>
                             }

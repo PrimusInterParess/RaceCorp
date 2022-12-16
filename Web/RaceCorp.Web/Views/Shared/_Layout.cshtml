@@ -6,59 +6,9 @@
 <head>
 
     <style>
-body {
-  font-family: "Lato", sans-serif;
-  transition: background-color .5s;
-}
-
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #EACFC9;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 50px;
-}
-
-.sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #4D4745;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidenav a:hover {
-  color: #f1f1f1;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-#main {
-  transition: margin-left .5s;
-  padding: 16px;
-}
-
- media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-</style>
-
-@*    <style>
         body {
             font-family: "Lato", sans-serif;
+            transition: background-color .5s;
         }
 
         .sidenav {
@@ -71,7 +21,7 @@ body {
             background-color: #EACFC9;
             overflow-x: hidden;
             transition: 0.5s;
-            padding-top: 120px;
+            padding-top: 50px;
         }
 
             .sidenav a {
@@ -95,16 +45,24 @@ body {
                 margin-left: 50px;
             }
 
-            /*media screen and (max-height: 450px) {
-                                            .sidenav{
-                                            padding-top: 15px;
-                                        }*/
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
 
-            .sidenav a {
-                font-size: 18px;
-            }
+        media screen and (max-height: 450px) {
+            .sidenav
+        {
+            padding-top: 15px;
+        }
 
-    </style>*@
+        .sidenav a {
+            font-size: 18px;
+        }
+
+        }
+    </style>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
@@ -219,7 +177,7 @@ body {
 
     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; menu</span>
 
-    <div  class="container">
+    <div class="container">
         <partial name="_CookieConsentPartial" />
         <main id="main" role="main" class="pb-3">
             @this.RenderBody()
@@ -228,7 +186,7 @@ body {
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a class="me-2" asp-area="" asp-controller="home" asp-action="privacy">privacy</a> <a asp-area="" asp-controller="Home" asp-action="Contact">Contacts</a>
+            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a class="me-2" asp-area="" asp-controller="home" asp-action="privacy">Privacy</a> <a asp-area="" asp-controller="Home" asp-action="Contact">Contacts</a>
         </div>
     </footer>
 

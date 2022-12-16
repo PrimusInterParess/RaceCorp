@@ -3,8 +3,10 @@
     using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using RaceCorp.Common;
+    using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Request;
     using RaceCorp.Web.ViewModels.User;
@@ -14,18 +16,22 @@
         private readonly IConnectUserService connectUserService;
         private readonly IDisconnectUserService disconnectUserService;
         private readonly IUserService userService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public ConnectionController(
             IConnectUserService connectUserService,
             IDisconnectUserService disconnectUserService,
-            IUserService userService)
+            IUserService userService,
+            UserManager<ApplicationUser> userManager)
         {
             this.connectUserService = connectUserService;
             this.disconnectUserService = disconnectUserService;
             this.userService = userService;
+            this.userManager = userManager;
         }
 
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Connect(RequestInputModel model)
         {
             try
@@ -52,6 +58,7 @@
         }
 
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Diconnect(RequestInputModel model)
         {
             try
@@ -78,8 +85,17 @@
         }
 
         [Authorize]
-        public IActionResult All(string userId)
+        public async Task<IActionResult> All(string userId)
         {
+            var currentUser = await this.userManager
+               .GetUserAsync(this.User);
+
+            if (currentUser == null || currentUser.Id != userId)
+            {
+                this.TempData["ErrorMessage"] = GlobalErrorMessages.InvalidRequest;
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
             try
             {
                 var model = this.userService.GetById<UserAllConnectionsViewModel>(userId);

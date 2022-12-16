@@ -18,7 +18,7 @@
     }
 </style>
 
-@if(Model.Conversations.Count==0)
+@if (Model.Conversations.Count == 0)
 {
     <div class="text-center">
         <a class="btn btn-outline" asp-action="AllUsers" asp-controller="Home"><h4><em>You have no connections yet! Go and connect with someone!</em></h4></a>
@@ -80,73 +80,73 @@
 else
 {
     <div id="divContainer" class="container-messages mb-0">
-    <div class="messaging">
-        <div class="inbox_msg">
-            <div class="inbox_people">
-                <div class="headind_srch">
-                    <div class="recent_heading">
-                        <h4>Inbox</h4>
-                    </div>
-                </div>
-                <div class="inbox_chat">
-                    @foreach (var conversation in Model.Conversations)
-                    {
-                        <div class="chat_list active_chat" interlocutorId="@conversation.InterlocutorId" userId="@Model.Id">
-                            <div class="chat_people">
-                                <div class="chat_img">
-                                    <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@conversation.InterlocutorId">
-                                        <img src="@conversation.UserProfilePicturePath" alt="@conversation.UserFirstName">
-
-                                    </a>
-
-                                </div>
-
-                                <div class="chat_ib">
-                                    <h5><b>@conversation.UserFirstName @conversation.UserLastName</b></h5>
-                                    <span><b>@conversation.LastMessageContent</b> |  @conversation.LastMessageDate</span>
-                                    @if (@conversation.UnreadMessages == 0)
-                                    {
-                                        <span class="badge badge-mine">
-                                            <b>@conversation.UnreadMessages unread</b>
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-success">
-                                            <b>@conversation.UnreadMessages unread</b>
-                                        </span>
-
-                                    }
-                                </div>
-                            </div>
-                            <button class="custom form-control border mt-1 button4 ">
-                                Open chat
-
-                            </button>
+        <div class="col-md messaging">
+            <div class="inbox_msg">
+                <div class="inbox_people">
+                    <div class="headind_srch">
+                        <div class="recent_heading">
+                            <h4>Inbox</h4>
                         </div>
+                    </div>
+                    <div class="inbox_chat">
+                        @foreach (var conversation in Model.Conversations)
+                        {
+                            <div class="chat_list active_chat" interlocutorId="@conversation.InterlocutorId" userId="@Model.Id">
+                                <div class="chat_people">
+                                    <div class="chat_img">
+                                        <a asp-action="Profile" asp-controller="User" asp-area="" asp-route-id="@conversation.InterlocutorId">
+                                            <img src="@conversation.UserProfilePicturePath" alt="@conversation.UserFirstName">
 
-                    }
-                </div>
-            </div>
-            <div class="mesgs" id="mesgs">
-                <div class="msg_history" id="msg_history">
-                </div>
-                <div class="type_msg">
-                    <div class="input_msg_write">
-                        <input type="text" class="write_msg" id="messageInput" placeholder="Type a message" />
-                        <input type="hidden" id="receiverId" name="custId">
-                        <input type="hidden" id="senderId" name="custId">
+                                        </a>
 
-                        <button class="msg_send_btn" id="sendButton" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                                    </div>
+
+                                    <div class="chat_ib">
+                                        <h5><b>@conversation.UserFirstName @conversation.UserLastName</b></h5>
+                                        <span><b>@conversation.LastMessageContent</b> |  @conversation.LastMessageDate</span>
+                                        @if (@conversation.UnreadMessages == 0)
+                                        {
+                                            <span class="badge badge-mine">
+                                                <b>@conversation.UnreadMessages unread</b>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-success">
+                                                <b>@conversation.UnreadMessages unread</b>
+                                            </span>
+
+                                        }
+                                    </div>
+                                </div>
+                                <button class="custom form-control border mt-1 button4 ">
+                                    Open chat
+
+                                </button>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+                <div class="mesgs" id="mesgs">
+                    <div class="msg_history" id="msg_history">
+                    </div>
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                            <input type="text" class="write_msg" id="messageInput" placeholder="Type a message" />
+                            <input type="hidden" id="receiverId" name="custId">
+                            <input type="hidden" id="senderId" name="custId">
+
+                            <button class="msg_send_btn" id="sendButton" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
+
         </div>
-
-
-
     </div>
-</div>
 }
 
 

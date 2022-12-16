@@ -12,5 +12,11 @@
         public string LastName { get; set; }
 
         public string ProfilePicturePath { get; set; }
+
+        public bool IsConnected { get; set; }
+
+        public bool RequestedConnection { get; set; }
+
+        public bool CanMessageMe { get; set; } = false;
     }
 }

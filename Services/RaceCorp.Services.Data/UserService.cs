@@ -128,6 +128,26 @@
                 .ToList();
         }
 
+        public List<UserAllViewModel> GetAllAsyncHomePage(string currentUserId)
+        {
+            var listUsers = this.userRepo
+                .AllAsNoTracking()
+                .Where(u => u.Id != currentUserId)
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .To<UserAllViewModel>()
+                .ToList();
+
+            foreach (var user in listUsers)
+            {
+                user.IsConnected = this.AreConnected(user.Id, currentUserId);
+                user.RequestedConnection = this.RequestedConnection(user.Id, currentUserId);
+                user.CanMessageMe = this.AreConnected(user.Id, currentUserId);
+            }
+
+            return listUsers;
+        }
+
         public T GetById<T>(string id)
         {
             return this.userRepo

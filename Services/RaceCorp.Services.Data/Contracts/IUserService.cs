@@ -19,6 +19,8 @@
 
         List<T> GetAllAsync<T>();
 
+        List<UserAllViewModel> GetAllAsyncHomePage(string currentUserId);
+
         string GetUserEmail(string userId);
     }
 }

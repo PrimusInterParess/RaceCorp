@@ -3,9 +3,13 @@
     using System;
     using System.Diagnostics;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+
     using RaceCorp.Common;
+    using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels;
     using RaceCorp.Web.ViewModels.Common;
@@ -16,15 +20,18 @@
         private readonly IHomeService homeService;
         private readonly IUserService userService;
         private readonly IAdminContactService adminContactService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public HomeController(
             IHomeService homeService,
             IUserService userService,
-            IAdminContactService adminContactService)
+            IAdminContactService adminContactService,
+            UserManager<ApplicationUser> userManager)
         {
             this.homeService = homeService;
             this.userService = userService;
             this.adminContactService = adminContactService;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -37,9 +44,16 @@
 
         [HttpGet]
         [Authorize]
-        public IActionResult AllUsers()
+        public async Task<IActionResult> AllUsers()
         {
-            var allUsers = this.userService.GetAllAsync<UserAllViewModel>();
+            var currentUser = await this.userManager.GetUserAsync(this.User);
+
+            if (currentUser == null)
+            {
+                return this.Redirect("/Identity/Account/Login");
+            }
+
+            var allUsers = this.userService.GetAllAsyncHomePage(currentUser.Id);
 
             return this.View(allUsers);
         }

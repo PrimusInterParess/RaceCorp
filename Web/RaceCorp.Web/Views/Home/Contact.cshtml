@@ -6,20 +6,46 @@
     this.ViewData["Title"] = "Contact page";
 }
 
-<header>Contact form</header>
+<div class="text-center mb-4">
+    <h3>Contact form</h3>
+</div>
+<div class="col-md-4 offset-4">
+    <form method="post" id="form" class="topBefore">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input asp-for="Name" id="name" type="text" placeholder="Name">
+        <span asp-validation-for="Name" class="text-danger"></span>
+        <input asp-for="Email" id="email" type="text" placeholder="Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
 
-<form method="post" id="form" class="topBefore">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <input asp-for="Name" id="name" type="text" placeholder="Name">
-    <span asp-validation-for="Name" class="text-danger"></span>
-    <input asp-for="Email" id="email" type="text" placeholder="Email">
-    <span asp-validation-for="Email" class="text-danger"></span>
+        <input asp-for="Subject" id="subject" type="text" placeholder="Subject">
+        <span asp-validation-for="Subject" class="text-danger"></span>
 
-    <input asp-for="Subject" id="subject" type="text" placeholder="Subject">
-    <span asp-validation-for="Subject" class="text-danger"></span>
+        <textarea asp-for="Content" id="message" type="text" placeholder="Content"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
 
-    <textarea asp-for="Content" id="message" type="text" placeholder="Content"></textarea>
-    <span asp-validation-for="Content" class="text-danger"></span>
+        <input id="submit" type="submit" value="Send!">
+    </form>
+</div>
+<div class="row mb-4 offset-4">
+    <div class="col-md-2">
+        <div class="dbox w-100 text-center">
+            <div class="icon d-flex align-items-center justify-content-center">
+                <span class="fa fa-phone"></span>
+            </div>
+            <div class="text">
+                <p><span>Phone:</span> <a href="tel://+359885949154">+359885949154</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 offset-2">
+        <div class="dbox w-100 text-center">
+            <div class="icon d-flex align-items-center justify-content-center">
+                <span class="fa fa-paper-plane"></span>
+            </div>
+            <div class="text">
+                <p><span>Email:</span> <a href="mailto:diesonnekind@gmail.com">diesonnekind@gmail.com</a></p>
+            </div>
+        </div>
+    </div>
 
-    <input id="submit" type="submit" value="Send!">
-</form>
+</div>
