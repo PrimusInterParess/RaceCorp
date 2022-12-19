@@ -24,6 +24,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using RaceCorp.Data.Models;
     using RaceCorp.Data.Models.Enums;
     using RaceCorp.Services.Messaging;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Service.Contracts;
 
     public class RegisterModel : PageModel
     {
@@ -34,6 +35,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> emailStore;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IAccountService accountService;
 
         public RegisterModel(
             IDeletableEntityRepository<Town> townRepo,
@@ -41,7 +43,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IAccountService accountService)
         {
             this.townRepo = townRepo;
             this.userManager = userManager;
@@ -50,6 +53,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.accountService = accountService;
         }
 
         [BindProperty]
@@ -125,7 +129,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 user.DateOfBirth = this.Input.DateOfBirth;
                 user.Gender = this.Input.Gender;
                 user.CreatedOn = DateTime.UtcNow;
-                user.ProfilePicturePath = GlobalConstants.AvatarProfilePicturePath;
+                user.ProfilePicturePath = this.accountService.GetProfilePicturePath(this.Input.Gender.ToString());
 
                 await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);

@@ -30,6 +30,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Messaging;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Dtos;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Service.Contracts;
 
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
@@ -42,6 +43,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
         private readonly IDeletableEntityRepository<ApplicationRole> roleRepo;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IConfiguration configuration;
+        private readonly IAccountService accountService;
         private readonly ILogger<ExternalLoginModel> logger;
 
         public ExternalLoginModel(
@@ -52,7 +54,8 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             IEmailSender emailSender,
             IDeletableEntityRepository<ApplicationRole> roleRepo,
             IHttpClientFactory httpClientFactory,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IAccountService accountService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
@@ -63,6 +66,7 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             this.roleRepo = roleRepo;
             this.httpClientFactory = httpClientFactory;
             this.configuration = configuration;
+            this.accountService = accountService;
         }
 
         /// <summary>
@@ -182,12 +186,6 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 var photosResponse = await httpClient.GetFromJsonAsync<PeopleApiPhotos>($"https://people.googleapis.com/v1/people/{googleAccountId}?personFields=photos&key={peopleApiKey}");
 
                 pictureUri = photosResponse?.photos.FirstOrDefault()?.url;
-
-            }
-
-            if (string.IsNullOrEmpty(pictureUri))
-            {
-                pictureUri = GlobalConstants.AvatarProfilePicturePath;
             }
 
             var firstName = info.Principal.FindFirst(ClaimTypes.GivenName).Value;
@@ -197,6 +195,11 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
             {
                 var user = this.CreateUser();
 
+                if (string.IsNullOrEmpty(pictureUri))
+                {
+                    pictureUri = this.accountService.GetProfilePicturePath("Secret");
+                }
+
                 await this.userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
 
@@ -205,7 +208,6 @@ namespace RaceCorp.Web.Areas.Identity.Pages.Account
                 try
                 {
                     result = await this.userManager.CreateAsync(user);
-
                 }
                 catch (Exception)
                 {

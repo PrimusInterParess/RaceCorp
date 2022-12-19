@@ -5,12 +5,18 @@
 @{
     this.ViewData["Title"] = "Contact page";
 }
+<style>
+        .center_div{
+        margin: 0 auto;
+        width:80% /* value of your choice which suits your alignment */
+    }
+</style>
 
 <div class="text-center mb-4">
     <h3>Contact form</h3>
 </div>
-<div class="col-md-4 offset-4">
-    <form method="post" id="form" class="topBefore">
+<div class="col-md-4 offset-3 text-center">
+    <form method="post" class="topBefore">
         <div asp-validation-summary="All" class="text-danger"></div>
         <input asp-for="Name" id="name" type="text" placeholder="Name">
         <span asp-validation-for="Name" class="text-danger"></span>
@@ -26,8 +32,8 @@
         <input id="submit" type="submit" value="Send!">
     </form>
 </div>
-<div class="row mb-4 offset-4">
-    <div class="col-md-2">
+<div class="row">
+    <div class="container center_div">
         <div class="dbox w-100 text-center">
             <div class="icon d-flex align-items-center justify-content-center">
                 <span class="fa fa-phone"></span>
@@ -37,7 +43,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 offset-2">
+
+    <div class=" container center_div">
         <div class="dbox w-100 text-center">
             <div class="icon d-flex align-items-center justify-content-center">
                 <span class="fa fa-paper-plane"></span>
@@ -47,5 +54,4 @@
             </div>
         </div>
     </div>
-
 </div>

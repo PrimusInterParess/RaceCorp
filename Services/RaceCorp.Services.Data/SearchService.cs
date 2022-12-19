@@ -10,6 +10,7 @@
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.Search;
+    using RaceCorp.Web.ViewModels.User;
 
     public class SearchService : ISearchService
     {
@@ -19,6 +20,8 @@
         private readonly IDeletableEntityRepository<Race> raceRepo;
         private readonly IDeletableEntityRepository<Ride> rideRepo;
         private readonly IDeletableEntityRepository<Team> teamRepo;
+        private readonly IDeletableEntityRepository<Request> requestRepo;
+        private readonly IDeletableEntityRepository<Connection> connectionRepo;
 
         public SearchService(
             IDeletableEntityRepository<Town> townRepo,
@@ -26,7 +29,9 @@
             IDeletableEntityRepository<Mountain> mountainRepo,
             IDeletableEntityRepository<Race> raceRepo,
             IDeletableEntityRepository<Ride> rideRepo,
-            IDeletableEntityRepository<Team> teamRepo)
+            IDeletableEntityRepository<Team> teamRepo,
+            IDeletableEntityRepository<Request> requestRepo,
+            IDeletableEntityRepository<Connection> connectionRepo)
         {
             this.townRepo = townRepo;
             this.userRepo = userRepo;
@@ -34,6 +39,8 @@
             this.raceRepo = raceRepo;
             this.rideRepo = rideRepo;
             this.teamRepo = teamRepo;
+            this.requestRepo = requestRepo;
+            this.connectionRepo = connectionRepo;
         }
 
         public List<T> GetTeams<T>(string query)
@@ -76,8 +83,8 @@
             return this.mountainRepo
               .AllAsNoTracking()
               .Where(m =>
-              m.Name.ToLower().Contains(querySplitted[0].ToLower())
-             ).To<T>()
+              m.Name.ToLower().Contains(querySplitted[0].ToLower()))
+              .To<T>()
              .ToList();
         }
 
@@ -91,16 +98,16 @@
                .AllAsNoTracking()
                .Where(r =>
                r.Name.ToLower().Contains(querySplitted[0].ToLower()) ||
-               r.Name.ToLower().Contains(querySplitted[1].ToLower())
-              ).To<T>()
+               r.Name.ToLower().Contains(querySplitted[1].ToLower()))
+               .To<T>()
               .ToList();
             }
 
             return this.raceRepo
               .AllAsNoTracking()
               .Where(r =>
-              r.Name.ToLower().Contains(querySplitted[0].ToLower())
-             ).To<T>()
+              r.Name.ToLower().Contains(querySplitted[0].ToLower()))
+              .To<T>()
              .ToList();
         }
 
@@ -117,8 +124,8 @@
                .AllAsNoTracking()
                .Where(r =>
                r.Name.ToLower().Contains(querySplitted[0].ToLower()) ||
-               r.Name.ToLower().Contains(querySplitted[1].ToLower())
-              ).To<T>()
+               r.Name.ToLower().Contains(querySplitted[1].ToLower()))
+               .To<T>()
               .ToList();
             }
 
@@ -156,28 +163,61 @@
              .ToList();
         }
 
-        public List<T> GetUsers<T>(string query)
+        public List<UserAllViewModel> GetUsers(string query, string currentUserId)
         {
             var querySplitted = query.Split(' ', ',', '.').Take(2).ToArray();
 
             if (querySplitted.Count() == 2)
             {
-                return this.userRepo
+                var listUsers = this.userRepo
                      .AllAsNoTracking()
-                     .Where(t => t.FirstName.ToLower().Contains(querySplitted[0].ToLower()) ||
-                     t.FirstName.ToLower().Contains(querySplitted[1].ToLower()) ||
-                    t.LastName.ToLower().Contains(querySplitted[1].ToLower()) ||
-                    t.LastName.ToLower().Contains(querySplitted[0].ToLower()))
-                     .To<T>().ToList();
+                     .Where(u => u.FirstName.ToLower().Contains(querySplitted[0].ToLower()) && u.Id != currentUserId ||
+                     u.FirstName.ToLower().Contains(querySplitted[1].ToLower()) && u.Id != currentUserId ||
+                     u.LastName.ToLower().Contains(querySplitted[1].ToLower()) && u.Id != currentUserId ||
+                     u.LastName.ToLower().Contains(querySplitted[0].ToLower()) && u.Id != currentUserId)
+                     .OrderBy(u => u.FirstName)
+                     .ThenBy(u => u.LastName)
+                     .To<UserAllViewModel>()
+                     .ToList();
+
+                foreach (var user in listUsers)
+                {
+                    user.IsConnected = this.AreConnected(user.Id, currentUserId);
+                    user.RequestedConnection = this.RequestedConnection(user.Id, currentUserId);
+                    user.CanMessageMe = this.AreConnected(user.Id, currentUserId);
+                }
+
+                return listUsers;
             }
 
-            return this.userRepo
+            var usersList = this.userRepo
                      .AllAsNoTracking()
-                     .Where(
-                    t => t.FirstName.ToLower().Contains(querySplitted[0].ToLower()) ||
-                    t.LastName.ToLower().Contains(querySplitted[0].ToLower()))
-                     .To<T>().ToList();
+                     .Where(u => u.FirstName.ToLower().Contains(querySplitted[0].ToLower()) && u.Id != currentUserId ||
+                      u.LastName.ToLower().Contains(querySplitted[0].ToLower()) && u.Id != currentUserId)
+                     .OrderBy(u => u.FirstName)
+                     .ThenBy(u => u.LastName)
+                     .To<UserAllViewModel>().ToList();
 
+            foreach (var user in usersList)
+            {
+                user.IsConnected = this.AreConnected(user.Id, currentUserId);
+                user.RequestedConnection = this.RequestedConnection(user.Id, currentUserId);
+                user.CanMessageMe = this.AreConnected(user.Id, currentUserId);
+            }
+
+            return usersList;
+        }
+
+        private bool RequestedConnection(string currentUserId, string targetUserId)
+        {
+            return this.requestRepo.AllAsNoTracking()
+                 .Any(r => r.TargetUserId == targetUserId && r.RequesterId == currentUserId && r.Type == GlobalConstants.RequestTypeConnectUser ||
+                      r.TargetUserId == currentUserId && r.RequesterId == targetUserId && r.Type == GlobalConstants.RequestTypeConnectUser);
+        }
+
+        private bool AreConnected(string currentUserId, string targetUserId)
+        {
+            return this.connectionRepo.AllAsNoTracking().Any(c => c.InterlocutorId == currentUserId && c.ApplicationUserId == targetUserId);
         }
     }
 }

@@ -24,6 +24,8 @@ namespace RaceCorp.Web
     using RaceCorp.Web.Areas.Administration.Infrastructure.Contracts;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Manage.Services;
     using RaceCorp.Web.Areas.Identity.Pages.Account.Manage.Services.Contracts;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Service;
+    using RaceCorp.Web.Areas.Identity.Pages.Account.Service.Contracts;
     using RaceCorp.Web.Hubs;
     using RaceCorp.Web.ViewModels;
 
@@ -114,6 +116,7 @@ namespace RaceCorp.Web
             services.AddTransient<IAdminRideService, AdminRideService>();
             services.AddTransient<IAdminUserService, AdminUserService>();
             services.AddTransient<IAdminContactService, AdminContactService>();
+            services.AddTransient<IAccountService, AccountService>();
         }
 
         private static void Configure(WebApplication app)

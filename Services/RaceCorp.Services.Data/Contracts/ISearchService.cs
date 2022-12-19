@@ -3,11 +3,12 @@
     using System.Collections.Generic;
 
     using RaceCorp.Web.ViewModels.Search;
+    using RaceCorp.Web.ViewModels.User;
 
     public interface ISearchService
     {
 
-        List<T> GetUsers<T>(string query);
+        List<UserAllViewModel> GetUsers(string query, string currentUserId);
 
         List<T> GetRaces<T>(string query);
 

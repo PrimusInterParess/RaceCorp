@@ -54,7 +54,9 @@
 
         public const string DaniProfilePicturePath = "/Images/defaulProfile/dani.JPEG";
         public const string KariProfilePicturePath = "/Images/defaulProfile/kari.JPEG";
-        public const string AvatarProfilePicturePath = "/Images/defaulProfile/avatar.png";
+        public const string MaleProfilePicturePath = "/Images/defaulProfile/Male.png";
+        public const string FemaleProfilePicturePath = "/Images/defaulProfile/Female.png";
+        public const string SecretProfilePicturePath = "/Images/defaulProfile/Secret.png";
         public const string NebesnaProfilePicturePath = "/Images/defaulProfile/nebesna.jpg";
         public const string EstelleProfilePicturePath = "/Images/defaulProfile/estelle.jpg";
         public const string KrumProfilePicturePath = "/Images/defaulProfile/krum.jpg";

@@ -1,19 +1,26 @@
 ﻿namespace RaceCorp.Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RaceCorp.Data.Models;
     using RaceCorp.Data.Models.Enums;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Web.ViewModels.Search;
-    using System;
 
     public class SearchController : BaseController
     {
         private readonly ISearchService searchService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public SearchController(ISearchService searchService)
+        public SearchController(
+            ISearchService searchService,
+            UserManager<ApplicationUser> userManager)
         {
             this.searchService = searchService;
+            this.userManager = userManager;
         }
 
         [HttpPost]
@@ -33,9 +40,17 @@
 
         [HttpGet]
         [Authorize]
-        public IActionResult UserSearch(string input)
+        public async Task<IActionResult> UserSearch(string input)
         {
-            var result = this.searchService.GetUsers<UserSearchViewModel>(input);
+            var currentUser = await this.userManager
+            .GetUserAsync(this.User);
+
+            if (currentUser == null)
+            {
+                return this.RedirectToAction("ErrorPage", "Home", new { area = string.Empty });
+            }
+
+            var result = this.searchService.GetUsers(input, currentUser.Id);
 
             if (result.Count == 0)
             {
