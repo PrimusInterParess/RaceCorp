@@ -23,4 +23,3 @@ Technologies
 - SendGrid
 - Bootstrap templetes
 - Google for authentication and uploading .gpx files
-- Hosted in Azure - https://racecorp.azurewebsites.net/
