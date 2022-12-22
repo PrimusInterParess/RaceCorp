@@ -6,22 +6,22 @@
 
     public class HomeControllerTests
     {
-        [Fact]
-        public void ErrorPageShouldReturnView()
-        {
-            // arange
-            var homeController = new HomeController(null, null, null, null);
+        //[Fact]
+        //public void ErrorPageShouldReturnView()
+        ////{
+        ////    // arange
+        ////    var homeController = new HomeController(null, null, null, null);
 
-            // act
-            var result = homeController.;
+        ////    // act
+        ////    //var result = homeController.;
 
-            var type = result.GetType();
+        ////    var type = result.GetType();
 
-            var value = result.ToString();
+        ////    var value = result.ToString();
 
-            // assert
-            Assert.NotNull(result);
-            Assert.IsType<ViewResult>(result);
-        }
+        ////    // assert
+        ////    Assert.NotNull(result);
+        ////    Assert.IsType<ViewResult>(result);
+        //}
     }
 }

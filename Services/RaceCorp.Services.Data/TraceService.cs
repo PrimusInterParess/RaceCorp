@@ -1,22 +1,16 @@
 ﻿namespace RaceCorp.Services.Data
 {
     using System;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using Microsoft.EntityFrameworkCore;
     using RaceCorp.Common;
     using RaceCorp.Data.Common.Repositories;
     using RaceCorp.Data.Models;
     using RaceCorp.Services.Data.Contracts;
     using RaceCorp.Services.Mapping;
     using RaceCorp.Web.ViewModels.Trace;
-
-    using static RaceCorp.Services.Constants.Common;
-    using static RaceCorp.Services.Constants.Messages;
 
     public class TraceService : ITraceService
     {

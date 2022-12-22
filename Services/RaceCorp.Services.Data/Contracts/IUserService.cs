@@ -15,8 +15,6 @@
 
         Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath);
 
-        List<T> GetRequest<T>(string userId);
-
         List<T> GetAllAsync<T>();
 
         List<UserAllViewModel> GetAllAsyncHomePage(string currentUserId);

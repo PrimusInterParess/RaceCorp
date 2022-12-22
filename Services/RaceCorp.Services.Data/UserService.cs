@@ -43,7 +43,7 @@
             this.connectionRepo = connectionRepo;
         }
 
-        public async Task<bool> EditAsync(UserEditViewModel inputModel, string roothPath)
+        public async Task<bool> EditAsync(UserEditViewModel inputModel, string rootPath)
         {
             var user = this.userRepo.All()
                 .Include(u => u.Images)
@@ -56,7 +56,7 @@
                     .ProccessingImageData(
                     inputModel.UserProfilePicture,
                     inputModel.Id,
-                    roothPath,
+                    rootPath,
                     inputModel.FirstName + inputModel.LastName + GlobalConstants.ProfilePicterPostFix);
 
                 user.ProfilePicturePath = $"/{image.ParentFolderName}/{image.ChildFolderName}/{image.Id}.{image.Extension}";
@@ -155,17 +155,6 @@
                 .Where(u => u.Id == id)
                 .To<T>()
                 .FirstOrDefault();
-        }
-
-        public List<T> GetRequest<T>(string userId)
-        {
-            return this.requestRepo
-                .AllAsNoTracking()
-                .Include(r => r.TargetUser)
-                .Where(r => r.TargetUserId == userId)
-                .OrderBy(r => r.IsApproved)
-                .To<T>()
-                .ToList();
         }
 
         public string GetUserEmail(string userId)
