@@ -1,3 +1,4 @@
+
 # RaceCrop
 Asp.Net-Core application
 
@@ -23,3 +24,8 @@ Technologies
 - SendGrid
 - Bootstrap templetes
 - Google for authentication and uploading .gpx files
+
+
+Database diagram
+
+![db](https://user-images.githubusercontent.com/77731733/214388526-1a473231-72ee-4642-80a7-0552c9a46e58.png)
