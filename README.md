@@ -162,6 +162,13 @@ The **SideBar** contains
 
   - Upcoming Events ect.
 
+**### Connect**
+
+Users can connect to each other by sending requests and can have **live** conversation between them
+
+<img width="1081" alt="User" src="https://user-images.githubusercontent.com/77731733/216337230-43a80380-cb64-430d-87df-6f92ca60c258.png">
+
+<img width="1081" alt="convers" src="https://user-images.githubusercontent.com/77731733/216337541-646d778c-a458-45b8-ace1-a7d5a7820faf.png">
 
 
 
