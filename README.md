@@ -27,7 +27,7 @@ Technologies
 - Google for authentication and uploading .gpx files
 
 ## Solution
-Contains for main layers
+Contains 4 main layers
 
 **1. Data - logic regarding database, configuration, models**
 
@@ -38,13 +38,9 @@ Contains for main layers
 >      - Migrations
 >      - Repositories classes
 >      - Configuration classes
-
-
 > -  **RaceCorp.Common** - contains common logic regarding
 >      - Abstract classes
 >      - Interfaces
-
-
 > -  **RaceCorp.Models** - contains entity models classes
 
 **2. Services - logic regarding services, AutoMapper, Messages**
@@ -86,12 +82,6 @@ Contains for main layers
 >     - App settings
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
-
-
-
-
-
-
 
 Database diagram
 
