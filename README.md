@@ -24,7 +24,8 @@ Technologies
 - Automapper
 - SendGrid
 - Bootstrap templetes
-- Google for authentication and uploading .gpx files
+- Google Auth API
+- Google Service API
 
 ## Solution
 Contains 4 main layers
