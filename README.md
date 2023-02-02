@@ -41,8 +41,8 @@ Contains for main layers
 
 
 > -  **RaceCorp.Common** - contains common logic regarding
->      -Abstract classes
->      -Interfaces
+>      - Abstract classes
+>      - Interfaces
 
 
 > -  **RaceCorp.Models** - contains entity models classes
@@ -53,18 +53,18 @@ Contains for main layers
 
 > - **RaceCorp.Services** - contains common business logic
 >    - Contains constants regarding services
->    -Validation attributes
+>    - Validation attributes
 >  -  RaceCorp.Data - contains main business logic 
->     -Interfaces
->     -Service classes
+>     - Interfaces
+>     - Service classes
 >   - RaceCorp.Mapping - contains logic regarding AutoMapper
->     -AutoMapper cofinguration class
->     -Interfaces
->     -Custom mapping
+>     - AutoMapper cofinguration class
+>     - Interfaces
+>     - Custom mapping
 > -  RaceCorp.Messages - contains email-sender logic
->     -Interfaces
->     -SendGrid class
->     -NullEmailSender class
+>     - Interfaces
+>     - SendGrid class
+>     - NullEmailSender class
 
 **3. Test**
 
@@ -78,14 +78,16 @@ Contains for main layers
 <img width="192" alt="Web" src="https://user-images.githubusercontent.com/77731733/216325016-9dbe28fa-ab82-4ae1-a122-f5d95013212e.png">
 
 > - **RaceCorp.Web** - contains main web logic
->     -Controllers
->     -API's
->     -Areas
->     -Hubs
->     -Views
->     -App settings
+>     - Controllers
+>     - API's
+>     - Areas
+>     - Hubs
+>     - Views
+>     - App settings
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
+
+
 
 
 
