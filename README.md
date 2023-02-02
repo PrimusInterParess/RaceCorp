@@ -172,3 +172,19 @@ Users can connect to each other by sending requests and can have **live** conver
 
 ## Create forms
 
+After user is registered and logged in, they could **create** 
+
+ - **Team** - user can only participate in one team. Users who've crated teams are also team members. Team owners approve request from other users to be add to the team. They manage team activity. If team owner leaves the team, the first user added to the team becomes team owner. 
+
+![Create team form](https://user-images.githubusercontent.com/77731733/216419259-fd40365a-0849-4d9d-b093-4c16330839b3.png)
+
+![TeamAllUsers](https://user-images.githubusercontent.com/77731733/216420160-6feb22a0-10ce-4604-90da-75176eb0bfa6.png)
+
+
+ - **Ride** - user can create ride by filling the form. The field **GPX** expects file with .gpx extension for the ride trace. After the form is submitted and the input data is valid, the ride is created and users is redirected to **All rides** page.
+
+![Ride form](https://user-images.githubusercontent.com/77731733/216419060-f96a89b3-8054-41aa-822f-ddd628fa52c1.png)
+
+ - **Race** - user can create ride by filling the form. Many traces could be created for one race. Each trace has field **GPX** that expects file with .gpx extension for the trace. After the form is submitted and the input data is valid, the ride is created and users is redirected to **All races** page. Race could be created with no trace add, it could be added later.
+
+![CreateRace](https://user-images.githubusercontent.com/77731733/216420444-029174a0-6aec-444b-861f-8e12a1ca3d28.png)
