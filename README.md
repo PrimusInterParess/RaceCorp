@@ -27,7 +27,7 @@ Technologies
 - Google for authentication and uploading .gpx files
 
 ## Solution
-
+<img width="237" alt="SolutionRC" src="https://user-images.githubusercontent.com/77731733/216318809-fd9be70f-bc93-48fa-b680-8b0184899e90.png">
 
 Database diagram
 
