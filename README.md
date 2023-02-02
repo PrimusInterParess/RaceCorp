@@ -26,7 +26,8 @@ Technologies
 - Bootstrap templetes
 - Google for authentication and uploading .gpx files
 
-https://github.com/PrimusInterParess/RaceCorp/issues/8#issue-1567907073
+## Solution
+
 
 Database diagram
 
