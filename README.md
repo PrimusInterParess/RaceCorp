@@ -193,7 +193,8 @@ After user is registered and logged in, they could **create**
 
 Users can regiter for as many events as they want.Altoght they cannnot register for two traces of one race if there is not enough time for them to finish the first they have singh up for.
 
-![RaceRegister](https://user-images.githubusercontent.com/77731733/216421618-3082d7be-91bb-47d7-ac54-1df314e164a5.png)
+
+![RaceRegisterd2](https://user-images.githubusercontent.com/77731733/216422075-9a4d5ded-9026-4124-81a2-166df75ef327.png)
 
 
-![RaceRegisterd2](https://user-images.githubusercontent.com/77731733/216421638-e3e7379b-2179-4d05-b816-a54ca75211b9.png)
+![RaceRegisterd](https://user-images.githubusercontent.com/77731733/216422078-07f0d09e-42c9-44f6-a3e4-800288eb8360.png)
