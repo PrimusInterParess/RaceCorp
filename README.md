@@ -87,4 +87,4 @@ Database diagram
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
 
-
+##**Usage**
