@@ -26,21 +26,31 @@ Technologies
 - Bootstrap templetes
 - Google for authentication and uploading .gpx files
 
-## SolutionContains for main layers
+## Solution
+
+Contains for main layers
 
 1. Data - logic regarding database, configuration, models
 
 <img width="198" alt="DataLayer" src="https://user-images.githubusercontent.com/77731733/216320648-a2b99e97-67de-417a-83ae-3883a2efea65.png">
 
->   *RaceCorp.Data - contains database logins regarding 
+>   
+
+- [ ] RaceCorp.Data - contains database logins regarding 
+
 >      -Database context
 >      -Migrations
 >      -Repositories classes
 >      -Configuration classes
->   *RaceCorp.Common - contains common logic regarding
+>   
+
+- [ ] RaceCorp.Common - contains common logic regarding
+
 >      -Abstract classes
 >      -Interfaces
->   *RaceCorp.Models - contains entity models classes
+>  
+
+- [ ]  RaceCorp.Models - contains entity models classes
 
 2. Services - logic regarding services, AutoMapper, Messages
 
@@ -83,7 +93,6 @@ Technologies
 >     -App settings
 >    *RaceCorp.Web.Infrasructure - contains common web logic
 >    *RaceCorp.Web.ViewModels - contains all classes regarding UI 
-
 
 
 
