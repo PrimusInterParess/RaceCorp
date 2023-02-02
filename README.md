@@ -185,6 +185,15 @@ After user is registered and logged in, they could **create**
 
 ![Ride form](https://user-images.githubusercontent.com/77731733/216419060-f96a89b3-8054-41aa-822f-ddd628fa52c1.png)
 
- - **Race** - user can create ride by filling the form. Many traces could be created for one race. Each trace has field **GPX** that expects file with .gpx extension for the trace. After the form is submitted and the input data is valid, the ride is created and users is redirected to **All races** page. Race could be created with no trace add, it could be added later.
+ - **Race** - user can create race by filling the form. Many traces could be created for one race. Each trace has field **GPX** that expects file with .gpx extension for the trace. After the form is submitted and the input data is valid, the ride is created and users is redirected to **All races** page. Race could be created with no trace add, it could be added later.
 
 ![CreateRace](https://user-images.githubusercontent.com/77731733/216420444-029174a0-6aec-444b-861f-8e12a1ca3d28.png)
+
+## **Register for event**
+
+Users can regiter for as many events as they want.Altoght they cannnot register for two traces of one race if there is not enough time for them to finish the first they have singh up for.
+
+![RaceRegister](https://user-images.githubusercontent.com/77731733/216421618-3082d7be-91bb-47d7-ac54-1df314e164a5.png)
+
+
+![RaceRegisterd2](https://user-images.githubusercontent.com/77731733/216421638-e3e7379b-2179-4d05-b816-a54ca75211b9.png)
