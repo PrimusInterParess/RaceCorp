@@ -38,6 +38,10 @@ Contains 4 main layers
 >      - Migrations
 >      - Repositories classes
 >      - Configuration classes
+
+Database diagram
+
+![db](https://user-images.githubusercontent.com/77731733/214388526-1a473231-72ee-4642-80a7-0552c9a46e58.png)
 > -  **RaceCorp.Common** - contains common logic regarding
 >      - Abstract classes
 >      - Interfaces
@@ -83,6 +87,4 @@ Contains 4 main layers
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
 
-Database diagram
 
-![db](https://user-images.githubusercontent.com/77731733/214388526-1a473231-72ee-4642-80a7-0552c9a46e58.png)
