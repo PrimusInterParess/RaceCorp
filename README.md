@@ -34,16 +34,16 @@ Contains for main layers
 <img width="198" alt="DataLayer" src="https://user-images.githubusercontent.com/77731733/216320648-a2b99e97-67de-417a-83ae-3883a2efea65.png">
 
 > - **RaceCorp.Data** - contains database logins regarding 
->      -Database context
->      -Migrations
->      -Repositories classes
->      -Configuration classes
->   
+>      - Database context
+>      - Migrations
+>      - Repositories classes
+>      - Configuration classes
+
 
 > -  **RaceCorp.Common** - contains common logic regarding
 >      -Abstract classes
 >      -Interfaces
->  
+
 
 > -  **RaceCorp.Models** - contains entity models classes
 
@@ -52,12 +52,12 @@ Contains for main layers
 <img width="195" alt="Services" src="https://user-images.githubusercontent.com/77731733/216322496-c70b169f-5415-4859-905c-239fe1863bba.png">
 
 > - **RaceCorp.Services** - contains common business logic
->    -Contains constants regarding services
+>    - Contains constants regarding services
 >    -Validation attributes
 >  -  RaceCorp.Data - contains main business logic 
 >     -Interfaces
 >     -Service classes
->   - [ ] RaceCorp.Mapping - contains logic regarding AutoMapper
+>   - RaceCorp.Mapping - contains logic regarding AutoMapper
 >     -AutoMapper cofinguration class
 >     -Interfaces
 >     -Custom mapping
@@ -86,6 +86,10 @@ Contains for main layers
 >     -App settings
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
+
+
+
+
 
 Database diagram
 
