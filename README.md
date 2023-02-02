@@ -87,4 +87,36 @@ Database diagram
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
 
-## **Usage**
+##**Usage**
+
+- [ ] There are two main roles - **Admin** and **User** 
+
+> **### 1. Admin account -** 
+>  - Email: diesonnekind@gmail.com 
+>  - Password: 123456
+>  
+>  **### 2.Users Accounts -** 
+>  -Email: kborisova@gmail.com
+>  -Password: 123456
+> 
+>  -Email: kborisov@gmail.com
+>  -Password: 123456
+
+ **Register**
+
+Users can register with their emails or with external login provider - Google.
+
+<img width="845" alt="register" src="https://user-images.githubusercontent.com/77731733/216332501-1397bb83-b1c0-49b8-8063-ad55d7becf96.png">
+
+<img width="1506" alt="LOGINeXTERNAL" src="https://user-images.githubusercontent.com/77731733/216332510-beb45703-490e-45b7-bf5c-051bb3468d5c.png">
+
+When Register or Login Users is directed to the Home Page .Where if you are an Admin you count have access to the Admin Panel
+
+<img width="992" alt="AdminHome" src="https://user-images.githubusercontent.com/77731733/216333421-94eec577-391c-4054-b35d-039b1b27a427.png">
+
+Administrator can manage all the events and can receive messages send from the website contact form.
+
+<img width="991" alt="AdminPanel" src="https://user-images.githubusercontent.com/77731733/216333899-bad7d2ed-76d7-4900-86f0-3305396d863e.png">
+
+
+
