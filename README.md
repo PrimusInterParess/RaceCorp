@@ -88,22 +88,22 @@ Database diagram
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
 
-## **Usage**
+### **Usage**
 
 - [ ] There are two main roles - **Admin** and **User** 
 
-> **### 1. Admin account -** 
+> ## **1. Admin account -** 
 >  - Email: diesonnekind@gmail.com 
 >  - Password: 123456
 >  
->  **### 2.Users Accounts -** 
+> ## **2.Users Accounts -** 
 >  -Email: kborisova@gmail.com
 >  -Password: 123456
 > 
 >  -Email: kborisov@gmail.com
 >  -Password: 123456
 
- **Register**
+ ### **Register**
 
 
 
@@ -114,7 +114,7 @@ Database diagram
 
 <img width="1506" alt="LOGINeXTERNAL" src="https://user-images.githubusercontent.com/77731733/216332510-beb45703-490e-45b7-bf5c-051bb3468d5c.png">
 
-When Register or Login Users is directed to the Home Page .Where if you are an Admin you count have access to the Admin Panel
+> **When Register or Login Users is directed to the Home Page .Where if you are an Admin you count have access to the Admin Panel**
 
 <img width="992" alt="AdminHome" src="https://user-images.githubusercontent.com/77731733/216333421-94eec577-391c-4054-b35d-039b1b27a427.png">
 
