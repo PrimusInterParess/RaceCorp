@@ -90,7 +90,7 @@ Database diagram
 
 ### **Usage**
 
-- [ ] There are two main roles - **Admin** and **User** 
+- There are two main roles - **Admin** and **User** 
 
 > ## **1. Admin account -** 
 >  - Email: diesonnekind@gmail.com 
