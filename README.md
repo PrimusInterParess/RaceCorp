@@ -132,15 +132,15 @@ Database diagram
 
 <img width="990" alt="Side bar" src="https://user-images.githubusercontent.com/77731733/216334715-3d4840d3-a010-44cd-bdd0-65b0a2fd27fc.png">
 
-The **SideBar** contains 
- - Search
- - Hrefs
-   - **Users**
+> The **SideBar** contains 
+> - Search
+> - Hrefs
+> - **Users**
    
 <img width="992" alt="AllUsers" src="https://user-images.githubusercontent.com/77731733/216335384-a90016a6-ee40-42a8-b347-4cd140e657ce.png">
 
 
-  - Teams
+  - **Teams**
   
 <img width="993" alt="teams" src="https://user-images.githubusercontent.com/77731733/216335739-3f8b1469-284b-4650-9333-d1067671defe.png">
 
@@ -163,7 +163,7 @@ The **SideBar** contains
 
 ### Connect
 
-Users can connect to each other by sending requests and can have **live** conversation between them
+> Users can connect to each other by sending requests and can have **live** conversation between them
 
 <img width="1081" alt="User" src="https://user-images.githubusercontent.com/77731733/216337230-43a80380-cb64-430d-87df-6f92ca60c258.png">
 
@@ -171,26 +171,26 @@ Users can connect to each other by sending requests and can have **live** conver
 
 ## Create forms
 
-After user is registered and logged in, they could **create** 
-
- - **Team** - user can only participate in one team. Users who've crated teams are also team members. Team owners approve request from other users to be add to the team. They manage team activity. If team owner leaves the team, the first user added to the team becomes team owner. 
+> After user is registered and logged in, they could **create** 
+>
+> - **Team** - user can only participate in one team. Users who've crated teams are also team members. Team owners approve request from other users to be add to the   > team. They manage team activity. If team owner leaves the team, the first user added to the team becomes team owner. 
 
 ![Create team form](https://user-images.githubusercontent.com/77731733/216419259-fd40365a-0849-4d9d-b093-4c16330839b3.png)
 
 ![TeamAllUsers](https://user-images.githubusercontent.com/77731733/216420160-6feb22a0-10ce-4604-90da-75176eb0bfa6.png)
 
 
- - **Ride** - user can create ride by filling the form. The field **GPX** expects file with .gpx extension for the ride trace. After the form is submitted and the input data is valid, the ride is created and users is redirected to **All rides** page.
+> - **Ride** - user can create ride by filling the form. The field **GPX** expects file with .gpx extension for the ride trace. After the form is submitted and the     > input data is valid, the ride is created and users is redirected to **All rides** page.
 
 ![Ride form](https://user-images.githubusercontent.com/77731733/216419060-f96a89b3-8054-41aa-822f-ddd628fa52c1.png)
 
- - **Race** - user can create race by filling the form. Many traces could be created for one race. Each trace has field **GPX** that expects file with .gpx extension for the trace. After the form is submitted and the input data is valid, the ride is created and users is redirected to **All races** page. Race could be created with no trace add, it could be added later.
+> - **Race** - user can create race by filling the form. Many traces could be created for one race. Each trace has field **GPX** that expects file with .gpx extension  > for the trace. After the form is submitted and the input data is valid, the ride is created and users is redirected to **All races** page. Race could be created with  > no trace add, it could be added later.
 
 ![CreateRace](https://user-images.githubusercontent.com/77731733/216420444-029174a0-6aec-444b-861f-8e12a1ca3d28.png)
 
 ## **Register for event**
 
-Users can regiter for as many events as they want.Altoght they cannnot register for two traces of one race if there is not enough time for them to finish the first they have singh up for.
+> Users can regiter for as many events as they want.Altoght they cannnot register for two traces of one race if there is not enough time for them to finish the first   > they have singh up for.
 
 ![RaceRegisterd](https://user-images.githubusercontent.com/77731733/216422078-07f0d09e-42c9-44f6-a3e4-800288eb8360.png)
 
