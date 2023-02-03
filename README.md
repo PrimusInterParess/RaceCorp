@@ -4,7 +4,7 @@ Asp.Net-Core application
 
 > RC is web based applicaiton for sharing mountain bike rides and races. Users can easely login, register and connect to each other.
 > Registered users can create race and ride event where other users could register for. Also registered users could create team and other users could join them.
-> Users can connect to each other by sending and receiving request for connection.Can send messages one-another,troughout the chat system using live chat communication >using SignalR connection. Registerd users can upload pictures and manage content on their profile.
+> Users can connect to each other by sending and receiving request for connection.Can send messages one-another,troughout the chat system using live chat communication > using SignalR connection. Registerd users can upload pictures and manage content on their profile.
 
 Technologies
 
