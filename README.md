@@ -97,11 +97,11 @@ Database diagram
 >  - Password: 123456
 >  
 > ## **2.Users Accounts -** 
->  -Email: kborisova@gmail.com
->  -Password: 123456
+>  - Email: kborisova@gmail.com
+>  - Password: 123456
 > 
->  -Email: kborisov@gmail.com
->  -Password: 123456
+>  - Email: kborisov@gmail.com
+>  - Password: 123456
 
  ### **Register**
 
