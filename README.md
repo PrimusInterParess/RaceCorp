@@ -4,16 +4,6 @@ Asp.Net-Core application
 
 RC is web based applicaiton for sharing mountain bike rides and races. Users can easely login, register and connect to each other.
 
-## **Project Overview**
-
-Create
-
-- Races
-- Rides
-- Teams
-- Connection between users
-- Conversation between users
-
 Technologies
 
 - .Net Core 6.0
@@ -27,6 +17,17 @@ Technologies
 - Bootstrap templetes
 - Google Auth API
 - Google Service API
+
+## **Project Overview**
+
+Create
+
+- Races
+- Rides
+- Teams
+- Connection between users
+- Conversation between users
+
 
 ## Solution
 Contains 4 main layers
