@@ -88,7 +88,7 @@ Database diagram
 > - **RaceCorp.Web.Infrasructure** - contains common web logic
 > - **RaceCorp.Web.ViewModels** - contains all classes regarding UI 
 
-##**Usage**
+## **Usage**
 
 - [ ] There are two main roles - **Admin** and **User** 
 
@@ -105,11 +105,10 @@ Database diagram
 
  **Register**
 
-**
 
-> Users can register with their emails or with external login provider - Google.
 
-**
+> **Users can register with their emails or with external login provider - Google.**
+
 
 <img width="845" alt="register" src="https://user-images.githubusercontent.com/77731733/216332501-1397bb83-b1c0-49b8-8063-ad55d7becf96.png">
 
@@ -119,26 +118,24 @@ When Register or Login Users is directed to the Home Page .Where if you are an A
 
 <img width="992" alt="AdminHome" src="https://user-images.githubusercontent.com/77731733/216333421-94eec577-391c-4054-b35d-039b1b27a427.png">
 
-**
 
-> Administrator can manage all the events and can receive messages send from the website contact form.
 
-**
+> **Administrator can manage all the events and can receive messages send from the website contact form.**
+
+
 
 <img width="991" alt="AdminPanel" src="https://user-images.githubusercontent.com/77731733/216333899-bad7d2ed-76d7-4900-86f0-3305396d863e.png">
 
-**
 
-> On the left there is Side-bar where users can navigate themselves trough the website
+> **On the left there is Side-bar where users can navigate themselves trough the website**
 
-**
 
 <img width="990" alt="Side bar" src="https://user-images.githubusercontent.com/77731733/216334715-3d4840d3-a010-44cd-bdd0-65b0a2fd27fc.png">
 
 The **SideBar** contains 
  - Search
  - Hrefs
-  -  **Users**
+   - **Users**
    
 <img width="992" alt="AllUsers" src="https://user-images.githubusercontent.com/77731733/216335384-a90016a6-ee40-42a8-b347-4cd140e657ce.png">
 
@@ -148,22 +145,23 @@ The **SideBar** contains
 <img width="993" alt="teams" src="https://user-images.githubusercontent.com/77731733/216335739-3f8b1469-284b-4650-9333-d1067671defe.png">
 
 
-  - Rides
-  - 
+  - **Rides**
+  
 <img width="987" alt="rides" src="https://user-images.githubusercontent.com/77731733/216335919-d41a1ef8-bd32-439a-98e9-548457ec81f4.png">
 
-  - Races
+  - **Races**
+  
 <img width="993" alt="races" src="https://user-images.githubusercontent.com/77731733/216336129-fea5f3db-fbb1-4798-afa8-114c5684c59b.png">
 
 
-  - Towns
+  - **Towns**
 
 <img width="1082" alt="Towns" src="https://user-images.githubusercontent.com/77731733/216336367-3237bd04-900c-44e1-9d4a-19b5482c5fd5.png">
 
 
-  - Upcoming Events ect.
+  - **Upcoming Events ect.**
 
-**### Connect**
+### Connect
 
 Users can connect to each other by sending requests and can have **live** conversation between them
 
